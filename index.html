@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daily Life 교재 시안 E</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --purple:#5D4BE2; --purple-dark:#4C3BCE; --purple-tint:#EEEDFC; --purple-tint2:#E0E7FF;
+  --icon-active:#7C3AED;
+  --bg:#F4F6FB; --header-bg:#FAF8F5; --track:#EBE7DF; --card:#FFFFFF;
+  --ink:#1C1917; --sub:#78716C; --sub2:#57534E; --line:#E7E5E4; --line-soft:#F5F5F4;
+  --badge-bg:#F5F2EC; --badge-text:#78716C; --dot-inactive:#E3DED6; --b-tag-bg:#F4F2EE;
+  --shadow-2xs:0 1px 2px rgba(28,25,23,.05);
+  --font-weight-semibold:600;
+  /* surface tokens — all content-box backgrounds trace back to one of these three */
+  --surface-subtle:var(--header-bg);
+  --surface-brand-light:var(--purple-tint);
+  --surface-warm-start:#FFF8EE; --surface-warm-end:#FFF3E2; --surface-warm-tag:#FFFBEB;
+  /* line-height tiers — tight: KR translation/secondary text, base: EN body text.
+     A few longer-form blocks (1.65~1.75) stay literal on purpose for reading comfort. */
+  --lh-tight:1.5; --lh-base:1.6;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Inter','Noto Sans KR',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.f-sora{ font-family:'Sora','Inter',sans-serif; }
+button{ font:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+button:focus{ outline:none; }
+button:focus-visible{ outline:2px solid rgba(93,75,226,.45); outline-offset:2px; border-radius:8px; }
+::selection{ background:var(--purple-tint2); color:var(--purple); }
+
+/* ---------- header ---------- */
+.rc-header{ background:var(--header-bg); border-bottom:1px solid rgba(231,229,228,.7); position:sticky; top:0; z-index:20; }
+.rc-header-inner{ max-width:1280px; margin:0 auto; padding:0 16px; height:56px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+@media (min-width:640px){ .rc-header-inner{ padding:0 24px; height:64px; } }
+.rc-left{ display:flex; align-items:center; gap:9px; min-width:0; }
+.rc-back{ flex:none; width:32px; height:32px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; color:var(--sub2); background:none; border:0; transition:background .15s,color .15s; }
+.rc-back:hover{ background:rgba(231,229,228,.6); color:var(--purple); }
+.rc-back svg{ width:20px; height:20px; }
+.rc-crumb{ display:flex; align-items:baseline; gap:8px; min-width:0; }
+.rc-type{ font-family:'Sora',sans-serif; font-weight:800; font-size:14px; color:var(--purple); flex:none; }
+.rc-lname{ font-weight:800; font-size:14px; color:#0F0D0B; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:none; }
+@media (min-width:640px){ .rc-lname{ display:inline; font-size:15px; } }
+.rc-right{ display:flex; align-items:center; gap:8px; flex:none; }
+.rc-pill{ display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 13px; border-radius:12px; background:var(--card); border:0; font-size:12px; font-weight:800; color:var(--sub2); white-space:nowrap; transition:background .15s,color .15s; box-shadow:var(--shadow-2xs); }
+.rc-pill:hover{ background:#FAFAF9; }
+.rc-pill.book:hover{ color:var(--purple); }
+.rc-pill .pdot{ width:6px; height:6px; border-radius:50%; background:var(--dot-inactive); transition:background .15s,box-shadow .15s; }
+.rc-pill svg{ width:14px; height:14px; color:var(--sub); transition:color .15s; }
+.rc-pill#tgBtn.on{ background:var(--purple); color:#fff; box-shadow:0 4px 10px rgba(93,75,226,.3); }
+.rc-pill#tgBtn.on .pdot{ background:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.35); }
+.rc-pill.book:active{ transform:scale(.97); }
+
+.rc-progress-inner{ max-width:1280px; margin:0 auto; padding:0 16px 8px; display:flex; align-items:center; gap:12px; }
+@media (min-width:640px){ .rc-progress-inner{ padding:0 24px 9px; } }
+.rc-track{ flex:1; height:4px; border-radius:99px; background:var(--track); overflow:hidden; }
+.rc-fill{ height:100%; border-radius:99px; background:var(--purple); transition:width .3s ease-out; }
+.rc-frac{ font-size:12px; font-weight:800; display:flex; align-items:center; gap:2px; flex:none; }
+.rc-frac b{ color:var(--purple); font-weight:900; }
+.rc-frac .sl{ color:#A8A29E; }
+
+/* ---------- body layout ---------- */
+.rc-body{ max-width:1280px; margin:0 auto; padding:20px 16px calc(120px + env(safe-area-inset-bottom)); display:flex; flex-direction:column; gap:20px; }
+@media (min-width:640px){ .rc-body{ padding:24px 24px calc(130px + env(safe-area-inset-bottom)); } }
+@media (min-width:860px){ .rc-body{ flex-direction:row; align-items:flex-start; gap:24px; padding-bottom:60px; } }
+
+.rc-sidebar{ display:none; }
+@media (min-width:860px){
+  .rc-sidebar{ display:flex; flex-direction:column; width:264px; flex:none; position:sticky; top:96px;
+    background:var(--card); border:1px solid var(--line); border-radius:24px; padding:20px; box-shadow:var(--shadow-2xs); }
+}
+.rc-sidebar-head{ display:flex; align-items:center; justify-content:space-between; padding-bottom:14px; border-bottom:1px solid var(--line-soft); margin-bottom:10px; }
+.rc-sidebar-head .lbl{ font-size:11px; font-weight:800; letter-spacing:.08em; color:#A8A29E; text-transform:uppercase; }
+.rc-sidebar-head .frac{ font-size:12px; font-weight:800; display:flex; gap:2px; }
+.rc-sidebar-head .frac b{ color:var(--purple); font-size:14px; }
+.rc-sidebar-head .frac .sl{ color:#A8A29E; font-weight:700; }
+.rc-plist{ display:flex; flex-direction:column; gap:5px; max-height:calc(100vh - 230px); overflow-y:auto; }
+.rc-pitem{ width:100%; text-align:left; padding:9px 10px; border-radius:16px; display:flex; align-items:center; justify-content:space-between; gap:8px; background:none; border:0; color:var(--sub2); font-weight:600; transition:background .15s,color .15s; }
+.rc-pitem .l{ display:flex; align-items:center; gap:10px; min-width:0; }
+.rc-pitem .dot{ width:8px; height:8px; border-radius:50%; flex:none; background:var(--dot-inactive); transition:background .15s,box-shadow .15s; }
+.rc-pitem .name{ font-size:13px; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rc-pitem:not(.cur):not(:disabled):hover{ background:#FAFAF9; color:var(--ink); }
+.rc-pitem.cur{ background:var(--purple-tint); color:var(--purple); font-weight:800; }
+.rc-pitem.cur .dot{ background:var(--purple); box-shadow:0 0 0 3px rgba(93,75,226,.2); }
+.rc-pitem:disabled{ cursor:default; opacity:.5; }
+
+.rc-main{ flex:1; min-width:0; max-width:720px; width:100%; }
+
+/* ---------- hero ---------- */
+.rc-hero{ position:relative; background:var(--purple); color:#fff; padding:20px 20px 30px; border-radius:26px 26px 14px 14px; }
+@media (min-width:640px){ .rc-hero{ padding:22px 28px 34px; border-radius:32px 32px 16px 16px; } }
+.rc-hero-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:10px; }
+.rc-hero-badge{ display:inline-block; padding:3px 10px; background:rgba(255,255,255,.2); border-radius:7px; font-size:10.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; flex:none; }
+.rc-hero-top-right{ display:flex; align-items:center; gap:10px; flex:none; }
+.rc-hero-frac{ font-size:11px; color:rgba(224,231,255,.9); font-weight:600; }
+@media (min-width:640px){ .rc-hero-frac{ display:none; } }
+.rc-hero h1{ font-size:26px; font-weight:var(--font-weight-semibold); letter-spacing:-.01em; margin:0 0 6px; line-height:1.24; }
+@media (min-width:640px){ .rc-hero h1{ font-size:32px; } }
+.rc-hero p{ margin:0; font-size:14px; color:rgba(255,255,255,.9); line-height:var(--lh-base); max-width:52ch; }
+@media (min-width:640px){ .rc-hero p{ font-size:15.5px; } }
+.rc-trans{ display:inline-flex; align-items:center; gap:6px; margin-top:0; padding:6px 14px 6px 12px; border-radius:99px; background:rgba(255,255,255,.92); color:var(--purple); font-size:11.5px; font-weight:800; border:0; transition:background .15s,box-shadow .15s; }
+.rc-trans:hover{ background:#fff; box-shadow:0 4px 10px rgba(0,0,0,.12); }
+.rc-trans svg{ width:14px; height:14px; stroke-width:2.5; }
+.rc-trans:not(.guide-mode){ width:32px; height:32px; padding:0; justify-content:center; }
+.rc-trans:not(.guide-mode) .ttl{ display:none; }
+.rc-trans:not(.guide-mode) svg{ width:16px; height:16px; }
+.rc-trans:not(.guide-mode).on{ color:#fff; background:var(--purple); }
+
+/* ---------- content card ---------- */
+.rc-card{ position:relative; z-index:1; background:var(--card); border:1px solid var(--line); border-radius:22px; margin-top:-16px; padding:18px 16px 22px; box-shadow:0 10px 25px -8px rgba(28,25,23,.08),0 4px 8px -4px rgba(28,25,23,.04); }
+@media (min-width:640px){ .rc-card{ border-radius:26px; padding:24px 22px 26px; margin-top:-20px; } }
+.rc-instruction{ font-size:14px; font-weight:700; color:#292524; margin:0 0 14px; }
+
+/* ---------- word cards ---------- */
+.rc-wgrid{ display:flex; flex-direction:column; }
+.rc-wcard{ padding:18px 10px; margin:0 -10px; }
+.rc-wcard-top{ display:flex; align-items:flex-start; gap:10px; }
+.rc-num{ flex:none; width:29px; height:29px; border-radius:10px; background:var(--purple-tint); border:1px solid rgba(93,75,226,.2); color:var(--purple); font-weight:800; font-size:12.5px; display:flex; align-items:center; justify-content:center; font-family:'Sora',sans-serif; font-variant-numeric:tabular-nums; margin-top:1px; }
+.rc-wbody{ flex:1; min-width:0; }
+.rc-wword-row{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+.rc-wword{ font-family:'Sora',sans-serif; font-weight:800; font-size:21px; color:var(--ink); }
+.rc-wpos{ font-size:10.5px; font-weight:800; color:var(--badge-text); background:var(--badge-bg); border-radius:6px; padding:2px 7px; }
+.rc-wpho{ font-size:12px; color:var(--sub); }
+.rc-wmean{ margin:8px 0 0; font-size:14px; font-weight:500; color:rgba(93,75,226,.72); font-family:'Noto Sans KR',sans-serif; }
+.rc-wmean[hidden]{ display:none; }
+.rc-wex-row{ display:flex; align-items:flex-start; gap:8px; margin-top:9px; }
+.rc-wex{ flex:1; min-width:0; font-size:14.5px; font-style:italic; color:#292524; line-height:1.55; margin:0; }
+.rc-wex-play{ flex:none; background:none; border:0; color:var(--badge-text); font-size:10.5px; font-weight:700; padding:2px; white-space:nowrap; transition:color .15s; }
+.rc-wex-play:hover{ color:var(--purple); }
+.rc-wexkr{ margin:6px 0 0; font-size:14px; font-weight:500; color:var(--purple); line-height:var(--lh-tight); font-family:'Noto Sans KR',sans-serif; }
+.rc-wexkr[hidden]{ display:none; }
+
+/* ---------- bottom icon row (shared: word cards + qa rows) ---------- */
+.rc-icon-row{ display:flex; justify-content:flex-end; margin-top:10px; gap:10px; }
+.rc-icon-btn{ position:relative; background:none; border:0; padding:4px; display:inline-flex; align-items:center; justify-content:center; color:color-mix(in srgb, var(--sub) 62%, white); transition:color .15s; }
+.rc-icon-btn svg{ width:18px; height:18px; stroke-width:2.2; }
+.rc-icon-btn:hover{ color:var(--purple); }
+.rc-icon-btn.active{ color:var(--icon-active); }
+.rc-icon-btn.active::after{ content:''; position:absolute; left:50%; bottom:-1px; width:4px; height:4px; border-radius:50%; background:var(--icon-active); transform:translateX(-50%); }
+.rc-icon-btn.playing{ color:var(--icon-active); }
+.rc-icon-btn .eq{ display:none; align-items:flex-end; gap:2.5px; height:14px; }
+.rc-icon-btn.playing .eq{ display:inline-flex; }
+.rc-icon-btn.playing .spk{ display:none; }
+.eq i{ width:3px; background:currentColor; border-radius:2px; animation:eq .9s ease-in-out infinite; }
+.eq i:nth-child(1){ height:6px; }
+.eq i:nth-child(2){ height:13px; animation-delay:.15s; }
+.eq i:nth-child(3){ height:9px; animation-delay:.3s; }
+@keyframes eq{ 0%,100%{ transform:scaleY(.5); } 50%{ transform:scaleY(1); } }
+
+/* ---------- inline icon row (number+content+icons on one line) ---------- */
+.rc-row-icons{ display:flex; align-items:center; gap:2px; flex:none; }
+
+/* ---------- Q&A rows ---------- */
+.rc-qalist{ display:flex; flex-direction:column; gap:28px; }
+.rc-qarow{ padding:0 10px; margin:0 -10px; }
+.rc-qa-top{ display:flex; align-items:flex-start; gap:10px; }
+.rc-qa-top .rc-num{ margin-top:2px; }
+.rc-qa-row{ flex:1; min-width:0; display:flex; align-items:center; gap:10px; }
+.rc-qa-row .rc-icon-row{ flex:none; margin-top:0; }
+.rc-qa-body{ flex:1; min-width:0; display:flex; flex-direction:column; gap:10px; }
+.rc-dline-row{ display:flex; align-items:baseline; gap:7px; }
+.rc-dtag{ flex:none; font-size:12px; font-weight:800; letter-spacing:.02em; font-family:'Sora',sans-serif; }
+.rc-dline.a .rc-dtag{ color:var(--purple); }
+.rc-dline.b .rc-dtag{ color:var(--sub2); opacity:.85; }
+.rc-dtext-col{ flex:1; min-width:0; }
+.rc-den{ margin:0; color:var(--ink); line-height:var(--lh-base); letter-spacing:-.003em; }
+.rc-dline.a .rc-den{ font-weight:700; font-size:18px; }
+.rc-dline.b .rc-den{ font-weight:400; font-size:16px; }
+.rc-dkr{ margin:5px 0 0; font-size:14px; font-weight:500; color:var(--purple); line-height:var(--lh-tight); font-family:'Noto Sans KR',sans-serif; }
+.rc-dkr[hidden]{ display:none; }
+
+/* ---------- floating nav (mobile only — tablet/desktop use the sidebar) ---------- */
+.rc-fnav{ position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:40; }
+@media (min-width:860px){ .rc-fnav{ display:none; } }
+.rc-fnav-inner{ display:flex; align-items:center; gap:13px; background:rgba(255,255,255,.95); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); padding:7px 9px; border-radius:99px; box-shadow:0 20px 40px -10px rgba(28,25,23,.22); border:1px solid var(--line); }
+.rc-nb{ width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--card); border:1px solid var(--line); color:#44403C; box-shadow:var(--shadow-2xs); transition:background .15s,border-color .15s,transform .1s; }
+.rc-nb:hover:not(:disabled){ background:var(--purple-tint); border-color:rgba(93,75,226,.3); color:var(--purple); }
+.rc-nb:active:not(:disabled){ transform:scale(.9); }
+.rc-nb:disabled{ opacity:.35; }
+.rc-nb svg{ width:19px; height:19px; stroke-width:2.5; }
+.rc-nb-menu{ width:56px; height:56px; background:linear-gradient(135deg, var(--purple), var(--purple-dark)); border:0; color:#fff; box-shadow:0 10px 20px -4px rgba(93,75,226,.5); }
+.rc-nb-menu:hover{ box-shadow:0 12px 24px -4px rgba(93,75,226,.55); }
+.rc-nb-menu svg{ width:22px; height:22px; }
+
+/* ---------- quick-jump nav: bottom sheet on mobile, centered popup on tablet/desktop ---------- */
+.rc-modal-scrim{ position:fixed; inset:0; background:rgba(15,23,42,.5); -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); z-index:48; display:flex; align-items:flex-end; justify-content:center; padding:0; opacity:0; pointer-events:none; transition:opacity .2s; }
+.rc-modal-scrim.on{ opacity:1; pointer-events:auto; }
+.rc-modal{ width:100%; max-width:none; max-height:78vh; background:var(--card); border-radius:22px 22px 0 0; box-shadow:0 -16px 40px -12px rgba(0,0,0,.3); border:1px solid #F1F5F9; border-bottom:0; overflow:hidden; display:flex; flex-direction:column; transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); }
+.rc-modal-scrim.on .rc-modal{ transform:translateY(0); }
+.rc-modal-handle{ display:flex; justify-content:center; padding:12px 0 4px; background:var(--card); flex:none; }
+.rc-modal-handle span{ width:36px; height:4px; border-radius:99px; background:var(--line); }
+.rc-modal-cap{ font-size:11.5px; font-weight:800; letter-spacing:.06em; color:var(--sub); padding:2px 18px 8px; text-transform:uppercase; flex:none; }
+@media (min-width:860px){
+  .rc-modal-scrim{ align-items:center; padding:16px; }
+  .rc-modal{ max-width:480px; max-height:80vh; border-radius:24px; border-bottom:1px solid #F1F5F9; transform:scale(.96); transition:transform .18s; }
+  .rc-modal-scrim.on .rc-modal{ transform:scale(1); }
+  .rc-modal-handle{ display:none; }
+  .rc-modal-cap{ display:none; }
+}
+.rc-modal-head{ display:none; padding:16px 18px; background:var(--purple); color:#fff; align-items:center; justify-content:space-between; flex:none; }
+@media (min-width:860px){ .rc-modal-head{ display:flex; } }
+.rc-modal-head h3{ margin:0; font-size:15px; font-weight:800; }
+.rc-modal-head .l{ display:flex; align-items:center; gap:9px; min-width:0; }
+.rc-modal-head .l svg{ width:19px; height:19px; flex:none; }
+.rc-modal-close{ background:none; border:0; color:rgba(255,255,255,.85); padding:6px; border-radius:10px; display:flex; flex:none; }
+.rc-modal-close:hover{ background:rgba(255,255,255,.18); color:#fff; }
+.rc-modal-close svg{ width:19px; height:19px; }
+.rc-modal-body{ padding:10px; overflow-y:auto; display:flex; flex-direction:column; gap:4px; }
+.rc-mitem{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 12px; border-radius:16px; background:none; border:0; text-align:left; color:#44403C; transition:background .15s; }
+.rc-mitem:not(:disabled):hover{ background:#FAFAF9; }
+.rc-mitem .l{ display:flex; align-items:center; gap:12px; min-width:0; }
+.rc-mitem .ptag{ font-size:11px; font-weight:800; color:var(--sub); flex:none; min-width:20px; font-family:'Sora',sans-serif; }
+.rc-mitem .info{ display:flex; flex-direction:column; min-width:0; gap:1px; }
+.rc-mitem .nm{ font-weight:800; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rc-mitem .desc{ font-size:11px; color:var(--sub); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rc-mitem svg{ width:16px; height:16px; color:#A8A29E; flex:none; }
+.rc-mitem:disabled{ opacity:.45; cursor:default; }
+.rc-mitem.cur{ background:var(--purple-tint); }
+.rc-mitem.cur .nm{ color:var(--purple); }
+
+/* ---------- 교재 표지 (교재 바로가기) ---------- */
+.rc-cover{ position:fixed; inset:0; z-index:49; background:var(--bg); transform:translateX(-100%); transition:transform .32s cubic-bezier(.3,.8,.3,1); }
+.rc-cover.on{ transform:none; }
+.rc-cover-scroll{ height:100%; overflow-y:auto; }
+@media (min-width:860px){ .rc-cover-scroll{ max-width:1060px; margin:0 auto; } }
+.rc-chero{ position:relative; background:linear-gradient(135deg, var(--purple), var(--purple-dark)); padding:14px 20px 46px 16px; overflow:hidden; color:#fff; }
+.rc-cwave{ position:absolute; inset:0; width:100%; height:100%; }
+.rc-chero-top{ position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; }
+.rc-cback{ width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.16); color:#fff; border:0; transition:background .15s; }
+.rc-cback:hover{ background:rgba(255,255,255,.26); }
+.rc-cback svg{ width:17px; height:17px; }
+.rc-clang{ width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Sora',sans-serif; font-size:11.5px; font-weight:800; letter-spacing:.01em; background:rgba(255,255,255,.22); border:1px solid rgba(255,255,255,.3); }
+.rc-chero-in{ position:relative; z-index:1; margin-top:26px; }
+.rc-ctype{ font-size:12px; font-weight:700; color:rgba(255,255,255,.8); letter-spacing:.01em; }
+.rc-ctitle{ font-family:'Sora',sans-serif; font-weight:800; font-size:30px; line-height:1.2; letter-spacing:-.01em; margin:10px 0 0; }
+.rc-cdesc{ margin:12px 0 0; font-size:14px; line-height:var(--lh-base); color:rgba(255,255,255,.85); max-width:34ch; }
+.rc-clist{ margin:26px 18px calc(24px + env(safe-area-inset-bottom)); }
+@media (min-width:640px){ .rc-clist{ margin:26px 24px calc(24px + env(safe-area-inset-bottom)); } }
+.rc-clist-cap{ font-size:11.5px; font-weight:800; letter-spacing:.06em; color:var(--sub); padding:6px 10px 8px; text-transform:uppercase; }
+.rc-clist-item{ display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:12px 10px; border-radius:14px; background:none; border:0; transition:background .15s; }
+.rc-clist-item:not(:disabled):hover{ background:#FAFAF9; }
+.rc-clist-item:disabled{ opacity:.45; cursor:default; }
+.rc-clist-item .sn{ flex:none; width:30px; height:30px; border-radius:11px; background:var(--badge-bg); color:var(--sub2); display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; font-family:'Sora',sans-serif; font-variant-numeric:tabular-nums; }
+.rc-clist-item.cur .sn{ background:linear-gradient(135deg, var(--purple), var(--purple-dark)); color:#fff; }
+.rc-clist-item .st{ min-width:0; flex:1; }
+.rc-clist-item .st b{ display:block; font-family:'Sora',sans-serif; font-weight:700; font-size:14.5px; letter-spacing:-.005em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rc-clist-item.cur .st b{ color:var(--purple); }
+.rc-clist-item .st span{ display:block; font-size:12px; color:var(--sub); margin-top:2px; }
+.rc-clist-item .dot{ flex:none; width:6px; height:6px; border-radius:99px; background:var(--dot-inactive); margin-left:auto; }
+.rc-clist-item.cur .dot{ background:linear-gradient(135deg, var(--purple), var(--purple-dark)); }
+
+/* ---------- shared: subtitle group header ---------- */
+.rc-subtitle{ display:flex; align-items:center; padding:0 2px; margin:0 0 10px; }
+.rc-wgrid .rc-subtitle:not(:first-child){ margin-top:23px; }
+.rc-subtitle h4{ margin:0; font-size:13px; font-weight:600; color:var(--sub2); letter-spacing:.01em; }
+.rc-group{ margin-bottom:16px; }
+.rc-group:last-child{ margin-bottom:0; }
+
+/* ---------- shared: TIP line ---------- */
+.rc-tip{ display:flex; align-items:flex-start; gap:7px; margin-top:8px; flex-wrap:wrap; }
+.rc-tip-tag{ flex:none; display:inline-flex; align-items:center; gap:3px; font-size:10.5px; font-weight:800; color:#B45309; letter-spacing:.02em; background:var(--surface-warm-tag); padding:2px 6px; border-radius:6px; margin-top:1px; }
+.rc-tip-tag svg{ width:11px; height:11px; color:#D97706; }
+.rc-tip-text{ flex:1; min-width:0; font-size:14px; font-weight:600; color:var(--ink); line-height:var(--lh-tight); }
+.rc-item-label{ font-size:12px; font-weight:500; letter-spacing:.02em; color:var(--sub2); margin:0 0 4px; }
+.rc-blank{ display:inline-block; min-width:38px; height:1em; border-bottom:2.5px solid var(--purple); vertical-align:baseline; margin:0 1px; }
+
+/* ---------- shared: scenario chip + box ---------- */
+.rc-chip{ display:inline-flex; align-items:center; color:var(--purple); font-size:12px; font-weight:700; letter-spacing:.02em; margin-bottom:12px; }
+.rc-scenario{ background:var(--header-bg); border-radius:16px; padding:15px 16px; margin-bottom:20px; }
+.rc-scenario p{ margin:0; }
+.rc-scenario .en{ font-size:16px; font-weight:400; color:#292524; line-height:1.65; }
+.rc-scenario .kr{ font-size:14px; font-weight:500; color:var(--sub); line-height:var(--lh-tight); margin-top:5px; }
+
+/* ---------- shared: big Q badge card ---------- */
+.rc-qcard{ padding:18px 10px; margin:0 -10px; }
+.rc-qcard.hl{ background:rgba(238,237,252,.45); }
+.rc-qcard-top{ display:flex; align-items:flex-start; gap:10px; }
+.rc-qbody{ flex:1; min-width:0; }
+.rc-qbadge{ flex:none; min-width:29px; height:29px; padding:0 6px; border-radius:10px; background:var(--purple-tint); border:1px solid rgba(93,75,226,.2); color:var(--purple); font-weight:800; font-size:12px; white-space:nowrap; display:flex; align-items:center; justify-content:center; font-family:'Sora',sans-serif; margin-top:1px; font-variant-numeric:tabular-nums; }
+.rc-qtext{ flex:1; min-width:0; font-size:18px; font-weight:700; color:var(--ink); line-height:var(--lh-base); margin:0; }
+.rc-qtext.muted{ color:var(--sub); font-style:italic; font-weight:500; }
+.rc-sentence{ margin:0; font-size:18px; font-weight:700; color:var(--ink); line-height:1.7; letter-spacing:-.005em; text-wrap:pretty; }
+.rc-sentence + .rc-wmean{ margin-top:9px; }
+.rc-eye-btn{ flex:none; display:inline-flex; align-items:center; gap:5px; padding:6px 10px; border-radius:11px; border:0; background:var(--header-bg); color:var(--sub2); font-size:12px; font-weight:700; transition:background .15s,color .15s; }
+.rc-eye-btn:hover{ background:var(--purple-tint); color:var(--purple); }
+.rc-eye-btn svg{ width:13px; height:13px; }
+
+/* ---------- shared: passage / article ---------- */
+.rc-passage-tag{ display:flex; align-items:center; color:var(--sub); font-size:12px; font-weight:700; letter-spacing:.02em; margin-bottom:8px; opacity:.7; }
+
+/* ---------- shared: answer guide box ---------- */
+.rc-guide{ margin-top:10px; background:linear-gradient(135deg,var(--surface-warm-start),var(--surface-warm-end)); border-radius:14px; padding:12px 14px; }
+.rc-guide.rc-guide-plain{ background:none; padding:0; border-radius:0; }
+.rc-guide-tt{ margin:0 0 6px; font-size:10.5px; font-weight:700; color:#B45309; letter-spacing:.02em; }
+.rc-guide .en{ margin:0; font-size:14.5px; font-weight:600; color:#292524; line-height:var(--lh-base); }
+.rc-guide .kr{ margin:5px 0 0; font-size:13px; color:var(--sub); line-height:var(--lh-tight); }
+
+/* ---------- shared: speaking tip group (comprehension check) ---------- */
+.rc-sptip-group{ margin-bottom:18px; }
+.rc-sptip-group:last-child{ margin-bottom:0; }
+.rc-sptip-box{ background:var(--header-bg); border-radius:14px; padding:12px 14px; margin-top:8px; }
+.rc-sptip-list{ margin:0; padding-left:18px; display:flex; flex-direction:column; gap:5px; }
+.rc-sptip-list li{ font-size:14.5px; font-weight:400; color:#292524; line-height:1.65; }
+
+/* ---------- shared: brainstorming box (describe-the-picture guide) ---------- */
+.rc-brainstorm{ margin-top:14px; background:linear-gradient(135deg,var(--surface-warm-start),var(--surface-warm-end)); border-radius:16px; padding:16px; }
+.rc-brainstorm-tt{ margin:0 0 12px; font-size:13.5px; font-weight:800; color:#292524; }
+.rc-bs-group{ margin-bottom:14px; }
+.rc-bs-group:last-child{ margin-bottom:0; }
+.rc-bs-group h5{ margin:0 0 6px; font-size:11px; font-weight:800; color:#B45309; letter-spacing:.02em; text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(180,83,9,.35); }
+.rc-bs-group p{ margin:0 0 4px; font-size:13.5px; font-weight:500; color:#44403C; line-height:var(--lh-base); }
+.rc-bs-group p:last-child{ margin-bottom:0; }
+.rc-passage{ background:var(--header-bg); border:1.5px solid transparent; border-radius:16px; padding:15px 16px; margin-bottom:16px; transition:background .15s,border-color .15s; }
+.rc-passage p.body{ margin:0; font-size:16px; color:#292524; line-height:1.75; white-space:pre-line; }
+.rc-passage .rc-icon-row{ margin-top:14px; }
+.rc-passage:has(.rc-wexkr:not([hidden])){ background:var(--purple-tint); border-color:rgba(93,75,226,.25); }
+
+/* ---------- shared: fill-in-blank sentence ---------- */
+.rc-blank-word{ display:inline-block; min-width:52px; height:1em; border-bottom:2px dashed var(--purple); margin:0 2px -3px; vertical-align:baseline; }
+
+/* ---------- shared: speaking blank line ---------- */
+.rc-speakline{ margin:0 0 14px; }
+.rc-speakline-fill{ display:inline-block; width:100%; height:1em; border-bottom:2px solid color-mix(in srgb, var(--purple) 22%, var(--line)); vertical-align:baseline; }
+
+
+/* ---------- shared: example line ---------- */
+.rc-exbox{ margin-top:6px; }
+.rc-exbox p{ margin:0; font-size:13.5px; font-style:italic; color:var(--sub2); line-height:var(--lh-base); }
+
+/* ---------- shared: messenger dialogue ---------- */
+.rc-msg-list{ display:flex; flex-direction:column; gap:12px; }
+.rc-msg-turn{ display:flex; flex-direction:column; gap:5px; align-items:flex-start; max-width:88%; }
+.rc-msg-turn.me{ align-items:flex-end; margin-left:auto; }
+.rc-msg-who{ display:flex; align-items:center; gap:7px; }
+.rc-msg-turn.me .rc-msg-who{ flex-direction:row-reverse; }
+.rc-msg-avatar{ width:29px; height:29px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex:none; }
+.rc-msg-avatar.you{ background:var(--purple-tint); color:var(--purple); border:1px solid rgba(93,75,226,.2); }
+.rc-msg-avatar.me{ background:var(--badge-bg); color:#44403C; border:1px solid rgba(214,211,209,.8); }
+.rc-msg-avatar svg{ width:15px; height:15px; }
+.rc-msg-name{ font-size:11.5px; font-weight:800; }
+.rc-msg-turn.you .rc-msg-name{ color:var(--purple); }
+.rc-msg-turn.me .rc-msg-name{ color:#44403C; }
+.rc-msg-bubble{ border-radius:16px; padding:12px 13px; }
+.rc-msg-turn.you .rc-msg-bubble{ background:rgba(238,237,252,.55); }
+.rc-msg-turn.me .rc-msg-bubble{ background:var(--header-bg); }
+.rc-msg-bubble p.en{ margin:0; font-size:18px; font-weight:700; color:var(--ink); line-height:1.55; }
+.rc-msg-bubble-row{ display:flex; align-items:center; gap:8px; }
+.rc-msg-bubble-text{ flex:1; min-width:0; }
+.rc-msg-bubble-row .rc-icon-row{ flex:none; margin-top:0; }
+
+/* ---------- shared: numbered sentence grid (grammar practice) ---------- */
+.rc-sgrid{ display:grid; grid-template-columns:1fr; gap:8px; }
+@media (min-width:520px){ .rc-sgrid{ grid-template-columns:1fr 1fr; } }
+.rc-schip{ background:var(--header-bg); border-radius:11px; padding:10px 12px; font-size:13.5px; font-weight:600; color:#292524; }
+
+/* ---------- shared: picture placeholder ---------- */
+.rc-pic-box{ display:flex; align-items:center; justify-content:center; height:150px; margin-bottom:16px; border-radius:16px; background:linear-gradient(135deg,rgba(93,75,226,.08),rgba(224,231,255,.5)); border:1px solid var(--line-soft); }
+.rc-pic-box svg{ width:34px; height:34px; color:var(--purple); opacity:.55; stroke-width:1.6; }
+
+/* ---------- shared: info box (reference material) ---------- */
+.rc-infobox{ background:var(--header-bg); border-radius:16px; padding:14px 15px; margin-bottom:16px; }
+.rc-infobox .rows{ display:flex; flex-direction:column; gap:10px; margin-top:2px; }
+.rc-infobox .row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; font-size:12.5px; }
+.rc-infobox .row .k{ font-weight:700; color:var(--sub2); }
+.rc-infobox .row .v{ font-weight:800; color:#292524; text-align:right; }
+
+footer.credit{ text-align:center; font-size:11.5px; color:var(--sub); padding:26px 0 0; }
+</style>
+</head>
+<body>
+
+<header class="rc-header">
+  <div class="rc-header-inner">
+    <div class="rc-left">
+      <div class="rc-crumb">
+        <span class="rc-type">Lesson 01</span>
+        <span class="rc-lname">My Morning Routine</span>
+      </div>
+    </div>
+    <div class="rc-right">
+      <button class="rc-pill" id="tgBtn" title="강사용 보기(TG) 전환 — 답변 가이드가 항상 노출됩니다"><span class="pdot"></span>TG</button>
+      <button class="rc-pill book" id="bookBtn" title="파트 목록 열기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>교재 바로가기</button>
+    </div>
+  </div>
+  <div class="rc-progress-inner">
+    <div class="rc-track"><div class="rc-fill" id="progFill"></div></div>
+    <div class="rc-frac"><b id="curNo">1</b><span class="sl">/12</span></div>
+  </div>
+</header>
+
+<div class="rc-body">
+  <aside class="rc-sidebar">
+    <div class="rc-sidebar-head"><span class="lbl">Part list</span><span class="frac"><b id="sideCur">1</b><span class="sl">/12</span></span></div>
+    <div class="rc-plist" id="sidebarList"></div>
+  </aside>
+
+  <main class="rc-main">
+    <div class="panel" data-part="1">
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 01</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">1 / 12</span><button class="rc-trans" id="transToggle1" data-panel="1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          <span class="ttl">해석</span>
+        </button></div>
+        </div>
+        <h1>Vocabulary</h1>
+        <p>주요 단어와 표현을 소리 내어 읽고 예문과 함께 익혀보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div class="rc-wgrid" id="wordGrid"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="2" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 02</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">2 / 12</span><button class="rc-trans" id="transToggle2" data-panel="2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          <span class="ttl">해석</span>
+        </button></div>
+        </div>
+        <h1>Q&amp;A Warm-up</h1>
+        <p>질문(A)과 답변(B)이 한 세트로 묶이는 구성이에요. 강사의 질문에 답해보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div class="rc-qalist" id="qaList"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="3" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 03</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">3 / 12</span><button class="rc-trans" id="transToggle3" data-panel="3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="ttl">해석</span></button></div>
+        </div>
+        <h1>Choose &amp; Complete</h1>
+        <p>알맞은 단어를 골라 빈칸을 채우고 문장을 완성해 보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div id="drillList"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="4" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 04</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">4 / 12</span><button class="rc-trans" id="transToggle4" data-panel="4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="ttl">해석</span></button></div>
+        </div>
+        <h1>Pattern Practice</h1>
+        <p>TIP의 단어 순서를 참고해 빈 줄에 맞추어 스피킹 해보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div id="patternList"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="5" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 05</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">5 / 12</span><button class="rc-trans" id="transToggle5" data-panel="5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="ttl">해석</span></button></div>
+        </div>
+        <h1>Talk About You</h1>
+        <p>주제에 관한 질문을 확인하고 강사님과 자유롭게 대화해 보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div id="topicGroup"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="6" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 06</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">6 / 12</span><button class="rc-trans" id="transToggle6" data-panel="6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="ttl">해석</span></button></div>
+        </div>
+        <h1>Main Dialogue</h1>
+        <p>두 사람의 대화를 역할을 나누어 소리 내어 연습해 보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div class="rc-msg-list" id="dialogueList"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="7" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 07</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">7 / 12</span><button class="rc-trans" id="transToggle7" data-panel="7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="ttl">해석</span></button></div>
+        </div>
+        <h1>Key Expressions</h1>
+        <p>일상에서 자주 쓰는 표현을 뜻과 예문으로 익혀보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div id="keyExprList"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="8" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 08</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">8 / 12</span><button class="rc-trans" id="transToggle8" data-panel="8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="ttl">해석</span></button></div>
+        </div>
+        <h1>Comprehension Check</h1>
+        <p>위 지문의 주제와 내용을 충분히 이해하셨나요? 읽으신 내용을 간단히 요약해서 말씀해 보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div id="compCheckBlock"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="9" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 09</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">9 / 12</span><button class="rc-trans" id="transToggle9" data-panel="9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="ttl">해석</span></button></div>
+        </div>
+        <h1>Reading: Minji's Morning</h1>
+        <p>지문을 읽고 이어지는 핵심 질문에 답해 보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div id="readingBlock"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="10" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 10</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">10 / 12</span><button class="rc-trans guide-mode" id="transToggle10" data-panel="10"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg><span class="ttl">Guide</span></button></div>
+        </div>
+        <h1>Describe the Picture</h1>
+        <p>사진을 보고 자유롭게 묘사해 보세요. Guide를 참고하여 말씀하셔도 좋습니다.</p>
+      </section>
+      <section class="rc-card">
+        <div id="describeBlock"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="11" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 11</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">11 / 12</span><button class="rc-trans guide-mode" id="transToggle11" data-panel="11"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg><span class="ttl">Guide</span></button></div>
+        </div>
+        <h1>Respond to Questions</h1>
+        <p>상황을 확인하고 이어지는 질문에 순서대로 답해 보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div id="respondBlock"></div>
+      </section>
+    </div>
+    <div class="panel" data-part="12" hidden>
+      <section class="rc-hero">
+        <div class="rc-hero-top">
+          <span class="rc-hero-badge">PART 12</span>
+          <div class="rc-hero-top-right"><span class="rc-hero-frac">12 / 12</span><button class="rc-trans guide-mode" id="transToggle12" data-panel="12"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg><span class="ttl">Guide</span></button></div>
+        </div>
+        <h1>Phone Survey</h1>
+        <p>제공된 정보를 참고해 전화 설문 질문에 답해 보세요.</p>
+      </section>
+      <section class="rc-card">
+        <div id="surveyBlock"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<footer class="credit">Daily Life 시안 E · <span id="footerPart">Vocabulary</span> · YBM net 플랫폼사업부</footer>
+
+<div class="rc-fnav">
+  <div class="rc-fnav-inner">
+    <button class="rc-nb" id="prevB" disabled aria-label="이전 파트"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+    <button class="rc-nb rc-nb-menu" id="listB" aria-label="목차 열기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg></button>
+    <button class="rc-nb" id="nextB" aria-label="다음 파트"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+  </div>
+</div>
+
+<div class="rc-modal-scrim" id="scrim">
+  <div class="rc-modal" onclick="event.stopPropagation()">
+    <div class="rc-modal-handle"><span></span></div>
+    <div class="rc-modal-cap">Part List</div>
+    <div class="rc-modal-head">
+      <div class="l">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+        <h3>교재 파트 바로가기 (12 Parts)</h3>
+      </div>
+      <button class="rc-modal-close" id="modalClose" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+    </div>
+    <div class="rc-modal-body" id="modalList"></div>
+  </div>
+</div>
+
+<div class="rc-cover" id="coverView">
+  <div class="rc-cover-scroll">
+    <div class="rc-chero">
+      <svg class="rc-cwave" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,130 C110,190 290,70 400,120 L400,300 L0,300 Z" fill="rgba(255,255,255,.09)"/>
+        <path d="M0,170 C130,100 270,230 400,160 L400,300 L0,300 Z" fill="rgba(255,255,255,.13)"/>
+      </svg>
+      <div class="rc-chero-top">
+        <button class="rc-cback" id="coverBack" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+        <span class="rc-clang">EN</span>
+      </div>
+      <div class="rc-chero-in">
+        <span class="rc-ctype">전화영어 · 초급</span>
+        <h1 class="rc-ctitle">일상회화<br>Daily Life</h1>
+        <p class="rc-cdesc">매일 마주치는 순간을 자연스러운 영어로 말해보는 왕초보 회화 코스예요.</p>
+      </div>
+    </div>
+    <div class="rc-clist">
+      <p class="rc-clist-cap">Lesson List</p>
+      <button class="rc-clist-item cur" id="coverLesson1"><span class="sn">01</span><span class="st"><b>My Morning Routine</b><span>아침 일과 말하기</span></span><i class="dot"></i></button>
+      <button class="rc-clist-item" disabled><span class="sn">02</span><span class="st"><b>Ordering Coffee</b><span>카페에서 주문하기</span></span><i class="dot"></i></button>
+      <button class="rc-clist-item" disabled><span class="sn">03</span><span class="st"><b>Talking About Weather</b><span>날씨 표현 익히기</span></span><i class="dot"></i></button>
+      <button class="rc-clist-item" disabled><span class="sn">04</span><span class="st"><b>Weekend Plans</b><span>주말 계획 말하기</span></span><i class="dot"></i></button>
+      <button class="rc-clist-item" disabled><span class="sn">05</span><span class="st"><b>At the Grocery Store</b><span>장보기 표현</span></span><i class="dot"></i></button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var parts = [
+    '1TYPE','2TYPE','3TYPE','5TYPE','6TYPE',
+    '7TYPE','8TYPE','9TYPE','10TYPE','11TYPE',
+    '12TYPE','13TYPE'
+  ];
+  var BUILT = 12; // all 12 parts now built
+  var cur = 1;
+  var total = parts.length;
+
+  function partTag(n){ return 'PART ' + (n < 10 ? '0'+n : n); }
+
+  function renderSidebar(){
+    var el = document.getElementById('sidebarList');
+    parts.forEach(function(name, i){
+      if(i === 3){
+        var gap = document.createElement('button');
+        gap.className = 'rc-pitem';
+        gap.disabled = true;
+        gap.innerHTML = '<span class="l"><span class="dot"></span><span class="name">4TYPE</span></span>';
+        el.appendChild(gap);
+      }
+      var n = i + 1;
+      var btn = document.createElement('button');
+      btn.className = 'rc-pitem' + (n === cur ? ' cur' : '');
+      btn.dataset.goto = n;
+      if(n > BUILT) btn.disabled = true;
+      btn.innerHTML = '<span class="l"><span class="dot"></span><span class="name">'+name+'</span></span>';
+      el.appendChild(btn);
+    });
+  }
+  function renderModal(){
+    var el = document.getElementById('modalList');
+    parts.forEach(function(name, i){
+      if(i === 3){
+        var gap = document.createElement('button');
+        gap.className = 'rc-mitem';
+        gap.disabled = true;
+        gap.innerHTML =
+          '<span class="l"><span class="ptag">&ndash;</span>'+
+          '<span class="info"><span class="nm">4TYPE</span><span class="desc">콘텐츠 준비중</span></span></span>';
+        el.appendChild(gap);
+      }
+      var n = i + 1;
+      var btn = document.createElement('button');
+      btn.className = 'rc-mitem' + (n === cur ? ' cur' : '');
+      btn.dataset.goto = n;
+      if(n > BUILT) btn.disabled = true;
+      btn.innerHTML =
+        '<span class="l"><span class="ptag">'+(n<10?'0'+n:n)+'</span>'+
+        '<span class="info"><span class="nm">'+name+'</span></span></span>'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+      el.appendChild(btn);
+    });
+  }
+  renderSidebar();
+  renderModal();
+
+  var words = [
+    { word:'spice', mean:'향신료, 양념' },
+    { word:'mild', mean:'순한, 약한' },
+    { word:'allergic', mean:'알레르기가 있는' },
+    { word:'routine', mean:'(정해진) 일과, 루틴' }
+  ];
+  var part1Sentences = [
+    { en:'I wake up early every morning.', kr:'저는 매일 아침 일찍 일어나요.' },
+    { en:'I get ready for work in twenty minutes.', kr:'저는 20분 만에 출근 준비를 해요.' }
+  ];
+
+  var TR_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+
+    '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>';
+
+  var TTS_ICON = '<svg class="spk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+
+    '<path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/></svg>'+
+    '<span class="eq"><i></i><i></i><i></i></span>';
+
+  function playTts(btn){
+    clearTimeout(btn._playTimer);
+    btn.classList.add('playing');
+    btn._playTimer = setTimeout(function(){ btn.classList.remove('playing'); }, 1800);
+  }
+
+  // shared wiring for translate(reveal)+audio icon row used by parts 3-13
+  function wireTrTts(unit, revealSelectors){
+    var trBtn = unit.querySelector('.tr-btn');
+    var ttsBtn = unit.querySelector('.tts-btn');
+    var revealEls = [];
+    (revealSelectors||[]).forEach(function(sel){
+      unit.querySelectorAll(sel).forEach(function(el){ revealEls.push(el); });
+    });
+    function setOpen(open){
+      revealEls.forEach(function(el){ el.hidden = !open; });
+      if(trBtn){ trBtn.classList.toggle('active', open); trBtn.setAttribute('aria-pressed', open ? 'true' : 'false'); }
+    }
+    unit._setOpen = setOpen;
+    setOpen(false);
+    if(trBtn) trBtn.addEventListener('click', function(){ setOpen(!trBtn.classList.contains('active')); });
+    if(ttsBtn) ttsBtn.addEventListener('click', function(){ playTts(ttsBtn); });
+    return setOpen;
+  }
+
+  var EYE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>';
+  var USER_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+  var FILE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>';
+  var SPARKLE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>';
+  var IMAGE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>';
+
+  function iconRowHTML(){
+    return '<div class="rc-icon-row">'+
+      '<button class="rc-icon-btn tr-btn" aria-label="해석">'+TR_ICON+'</button>'+
+      '<button class="rc-icon-btn tts-btn" aria-label="음성 듣기">'+TTS_ICON+'</button>'+
+    '</div>';
+  }
+  // icons inline within a number+content row (vs. iconRowHTML's standalone trailing row)
+  function rowIconsHTML(){
+    return '<div class="rc-row-icons">'+
+      '<button class="rc-icon-btn tr-btn" aria-label="해석">'+TR_ICON+'</button>'+
+      '<button class="rc-icon-btn tts-btn" aria-label="음성 듣기">'+TTS_ICON+'</button>'+
+    '</div>';
+  }
+  function subtitleHTML(title){
+    return '<div class="rc-subtitle"><h4>'+title+'</h4></div>';
+  }
+
+  var grid = document.getElementById('wordGrid');
+  grid.insertAdjacentHTML('beforeend', subtitleHTML('핵심 단어 익히기'));
+  words.forEach(function(w, idx){
+    var card = document.createElement('div');
+    card.className = 'rc-wcard rc-unit';
+    card.dataset.idx = idx;
+    card.innerHTML =
+      '<div class="rc-wcard-top">'+
+        '<span class="rc-num">'+(idx+1)+'</span>'+
+        '<div class="rc-wbody">'+
+          '<div class="rc-wword-row"><span class="rc-wword">'+w.word+'</span></div>'+
+          '<p class="rc-wmean" hidden>'+w.mean+'</p>'+
+        '</div>'+
+        rowIconsHTML()+
+      '</div>';
+    grid.appendChild(card);
+    wireTrTts(card, ['.rc-wmean']);
+  });
+
+  grid.insertAdjacentHTML('beforeend', subtitleHTML('문장으로 말해보기'));
+  part1Sentences.forEach(function(s, idx){
+    var card = document.createElement('div');
+    card.className = 'rc-wcard rc-unit';
+    card.innerHTML =
+      '<div class="rc-wcard-top">'+
+        '<span class="rc-num">'+(words.length+idx+1)+'</span>'+
+        '<div class="rc-wbody">'+
+          '<p class="rc-sentence">'+s.en+'</p>'+
+          '<p class="rc-wmean" hidden>'+s.kr+'</p>'+
+        '</div>'+
+        rowIconsHTML()+
+      '</div>';
+    grid.appendChild(card);
+    wireTrTts(card, ['.rc-wmean']);
+  });
+
+  // ---------- Part 2: Q&A Warm-up ----------
+  var qas = [
+    { a:'What time do you leave home?', akr:'몇 시에 집에서 나가세요?',
+      b:'I usually leave around eight.', bkr:'보통 8시쯤 나가요.' },
+    { a:'How do you usually get to work?', akr:'보통 어떻게 출근하세요?',
+      b:'I take the subway, it&rsquo;s about 30 minutes.', bkr:'지하철을 타요, 30분 정도 걸려요.' },
+    { a:'Do you eat breakfast every morning?', akr:'매일 아침을 드세요?',
+      b:'Not always &mdash; I skip it when I&rsquo;m in a hurry.', bkr:'항상은 아니에요 &mdash; 바쁠 땐 걸러요.' },
+    { a:'What&rsquo;s the first thing you do after waking up?', akr:'일어나서 가장 먼저 하는 일이 뭐예요?',
+      b:'I check my phone and then make some coffee.', bkr:'휴대폰을 확인하고 커피를 내려요.' }
+  ];
+
+  var qaList = document.getElementById('qaList');
+  qas.forEach(function(qa, idx){
+    var row = document.createElement('div');
+    row.className = 'rc-qarow rc-unit';
+    row.dataset.idx = idx;
+    row.innerHTML =
+      '<div class="rc-qa-top">'+
+        '<span class="rc-num">'+(idx+1)+'</span>'+
+        '<div class="rc-qa-row">'+
+          '<div class="rc-qa-body">'+
+            '<div class="rc-dline a"><div class="rc-dline-row"><span class="rc-dtag">A</span><div class="rc-dtext-col"><p class="rc-den">'+qa.a+'</p><p class="rc-dkr" hidden>'+qa.akr+'</p></div></div></div>'+
+            '<div class="rc-dline b"><div class="rc-dline-row"><span class="rc-dtag">B</span><div class="rc-dtext-col"><p class="rc-den">'+qa.b+'</p><p class="rc-dkr" hidden>'+qa.bkr+'</p></div></div></div>'+
+          '</div>'+
+          iconRowHTML()+
+        '</div>'+
+      '</div>';
+    qaList.appendChild(row);
+    wireTrTts(row, ['.rc-dkr']);
+  });
+
+  // ---------- Part 4: Key Expressions ----------
+  var keyExprs = [
+    { phrase:'get out of bed', mean:'잠자리에서 일어나다', ex:'"I get out of bed at seven every day."', exkr:'저는 매일 7시에 잠자리에서 일어나요.' },
+    { phrase:'get ready', mean:'준비하다, 채비하다', ex:'"It takes me twenty minutes to get ready."', exkr:'준비하는 데 20분이 걸려요.' },
+    { phrase:'in a rush', mean:'서둘러서, 급하게', ex:'"I&rsquo;m always in a rush in the morning."', exkr:'저는 항상 아침에 서둘러요.' },
+    { phrase:'on time', mean:'제시간에', ex:'"I try to leave home on time."', exkr:'저는 제시간에 집을 나서려고 해요.' }
+  ];
+  (function(){
+    var wrap = document.createElement('div');
+    wrap.className = 'rc-wgrid';
+    document.getElementById('keyExprList').appendChild(wrap);
+    keyExprs.forEach(function(item, idx){
+      var card = document.createElement('div');
+      card.className = 'rc-wcard rc-unit';
+      card.innerHTML =
+        '<div class="rc-wcard-top">'+
+          '<span class="rc-num">'+(idx+1)+'</span>'+
+          '<div class="rc-wbody">'+
+            '<div class="rc-wword-row"><span class="rc-wword">'+item.phrase+'</span></div>'+
+            '<p class="rc-wmean" hidden>'+item.mean+'</p>'+
+            '<div class="rc-wex-row"><p class="rc-wex">'+item.ex+'</p></div>'+
+            '<p class="rc-wexkr" hidden>'+item.exkr+'</p>'+
+          '</div>'+
+          rowIconsHTML()+
+        '</div>';
+      wrap.appendChild(card);
+      wireTrTts(card, ['.rc-wmean', '.rc-wexkr']);
+    });
+  })();
+
+  // ---------- Part 5: Main Dialogue (messenger) ----------
+  // (comments below were renumbered to match the actual on-screen part order)
+  var dialogue = [
+    { who:'you', name:'Teacher', en:'Good morning! What time do you usually wake up?', kr:'좋은 아침이에요! 보통 몇 시에 일어나세요?' },
+    { who:'me', name:'Me', en:'I usually wake up around 6:30.', kr:'저는 보통 6시 30분쯤 일어나요.' },
+    { who:'you', name:'Teacher', en:"That's early! What do you do first?", kr:'이르시네요! 가장 먼저 뭘 하세요?' },
+    { who:'me', name:'Me', en:'I drink a glass of water and stretch a little.', kr:'물 한 잔 마시고 스트레칭을 조금 해요.' },
+    { who:'you', name:'Teacher', en:'Sounds like a healthy routine!', kr:'건강한 루틴이네요!' },
+    { who:'me', name:'Me', en:'Thanks! I try to keep it simple.', kr:'감사해요! 최대한 단순하게 하려고 해요.' }
+  ];
+  (function(){
+    var list = document.getElementById('dialogueList');
+    dialogue.forEach(function(turn){
+      var el = document.createElement('div');
+      el.className = 'rc-msg-turn ' + turn.who + ' rc-unit';
+      el.innerHTML =
+        '<div class="rc-msg-who">'+
+          '<span class="rc-msg-avatar '+turn.who+'">'+USER_ICON+'</span>'+
+          '<span class="rc-msg-name">'+turn.name+'</span>'+
+        '</div>'+
+        '<div class="rc-msg-bubble">'+
+          '<div class="rc-msg-bubble-row">'+
+            '<div class="rc-msg-bubble-text">'+
+              '<p class="en">'+turn.en+'</p>'+
+              '<p class="rc-wexkr" hidden style="margin-top:4px">'+turn.kr+'</p>'+
+            '</div>'+
+            iconRowHTML()+
+          '</div>'+
+        '</div>';
+      list.appendChild(el);
+      wireTrTts(el, ['.rc-wexkr']);
+    });
+  })();
+
+  // ---------- Part 6: Talk About You ----------
+  var topicQs = [
+    { q:'What time do you usually get up on weekdays?', kr:'평일에는 보통 몇 시에 일어나세요?' },
+    { q:'Do you eat breakfast every day? Why or why not?', kr:'매일 아침을 드세요? 이유는 무엇인가요?' },
+    { q:"What's the hardest part of your morning?", kr:'아침에 가장 힘든 부분은 무엇인가요?' },
+    { q:'How do you feel right before you leave home?', kr:'집을 나서기 직전엔 기분이 어떠세요?' }
+  ];
+  (function(){
+    var root = document.getElementById('topicGroup');
+    var gwrap = document.createElement('div');
+    gwrap.className = 'rc-group';
+    gwrap.innerHTML = subtitleHTML('아침 루틴에 대해 이야기해 보세요');
+    var col = document.createElement('div');
+    gwrap.appendChild(col);
+    topicQs.forEach(function(item, idx){
+      var card = document.createElement('div');
+      card.className = 'rc-qcard rc-unit';
+      card.innerHTML =
+        '<div class="rc-qcard-top">'+
+          '<span class="rc-qbadge">Q'+(idx+1)+'</span>'+
+          '<div class="rc-qbody">'+
+            '<p class="rc-qtext">'+item.q+'</p>'+
+            '<p class="rc-wexkr" hidden style="margin-top:8px">'+item.kr+'</p>'+
+          '</div>'+
+          rowIconsHTML()+
+        '</div>';
+      col.appendChild(card);
+      wireTrTts(card, ['.rc-wexkr']);
+    });
+    root.appendChild(gwrap);
+  })();
+
+  // ---------- Part 3: Choose & Complete ----------
+  var drills = [
+    { title:'아침 기상 시간 말하기', sentence:'I usually ( ) up at 7 AM.', tip:'wake / get / take', kr:'저는 보통 오전 7시에 일어나요.' },
+    { title:'아침 식사 여부 말하기', sentence:'She ( ) breakfast every morning.', tip:'has / take / do', kr:'그녀는 매일 아침 아침 식사를 해요.' },
+    { title:'집을 나서는 시간 말하기', sentence:'We are ( ) home by 8.', tip:'leaving / leave / left', kr:'우리는 8시까지 집을 나서요.' },
+    { title:'옷 입는 속도 표현하기', sentence:'He ( ) dressed quickly.', tip:'get / gets / getting', kr:'그는 빠르게 옷을 입어요.' }
+  ];
+  (function(){
+    var root = document.getElementById('drillList');
+    var grid = document.createElement('div');
+    root.appendChild(grid);
+    function blankify(s){ return s.replace('( )', '<span class="rc-blank"></span>'); }
+    drills.forEach(function(item, idx){
+      var card = document.createElement('div');
+      card.className = 'rc-wcard rc-unit';
+      card.innerHTML =
+        '<div class="rc-wcard-top">'+
+          '<span class="rc-num">'+(idx+1)+'</span>'+
+          '<div class="rc-wbody">'+
+            (item.title ? '<p class="rc-item-label">'+item.title+'</p>' : '')+
+            '<p class="rc-sentence">'+blankify(item.sentence)+'</p>'+
+            '<p class="rc-wmean" hidden>'+item.kr+'</p>'+
+            '<div class="rc-tip"><span class="rc-tip-tag">'+SPARKLE_ICON+'TIP</span><span class="rc-tip-text">'+item.tip+'</span></div>'+
+          '</div>'+
+          rowIconsHTML()+
+        '</div>';
+      grid.appendChild(card);
+      wireTrTts(card, ['.rc-wmean']);
+    });
+  })();
+
+  // ---------- Pattern Practice ----------
+  var patterns = [
+    { lead:'I take', tip:'a shower.', full:'I take a shower.' },
+    { lead:'I brush', tip:'my teeth.', full:'I brush my teeth.' },
+    { lead:'I catch', tip:'the bus.', full:'I catch the bus.' }
+  ];
+  (function(){
+    var root = document.getElementById('patternList');
+    var grid = document.createElement('div');
+    root.appendChild(grid);
+    patterns.forEach(function(item, idx){
+      var card = document.createElement('div');
+      card.className = 'rc-wcard rc-unit';
+      card.innerHTML =
+        '<div class="rc-wcard-top">'+
+          '<span class="rc-num">'+(idx+1)+'</span>'+
+          '<div class="rc-wbody">'+
+            '<p class="rc-sentence rc-speakline"><span class="rc-speakline-fill"></span></p>'+
+            '<div class="rc-tip"><span class="rc-tip-tag">'+SPARKLE_ICON+'TIP</span><span class="rc-tip-text">'+item.lead+' / '+item.tip+'</span></div>'+
+            '<p class="rc-wmean" hidden style="margin-top:8px">'+item.full+'</p>'+
+          '</div>'+
+          '<div class="rc-row-icons"><button class="rc-icon-btn tts-btn" aria-label="정답 음성 듣기">'+TTS_ICON+'</button></div>'+
+        '</div>';
+      grid.appendChild(card);
+      wireTrTts(card, []);
+      // tap the card to self-check the spoken answer
+      var mean = card.querySelector('.rc-wmean');
+      card.addEventListener('click', function(e){
+        if(e.target.closest('.tts-btn')) return;
+        mean.hidden = !mean.hidden;
+      });
+      card.style.cursor = 'pointer';
+    });
+  })();
+
+  // ---------- Part 9: Reading — Minji's Morning ----------
+  (function(){
+    var root = document.getElementById('readingBlock');
+    var passage = "Minji wakes up at 6:30 every morning. She drinks a glass of water and stretches for five minutes. After that, she takes a quick shower and gets dressed. She usually has toast and coffee for breakfast before leaving for work at 8 o'clock.";
+    var passageKr = '민지는 매일 아침 6시 30분에 일어납니다. 그녀는 물 한 잔을 마시고 5분간 스트레칭을 합니다. 그 후 빠르게 샤워를 하고 옷을 입습니다. 보통 토스트와 커피로 아침을 먹은 뒤 8시에 출근합니다.';
+    var qs = [
+      { q:'What does Minji do right after she wakes up?', kr:'민지는 일어나자마자 무엇을 하나요?' },
+      { q:'What time does Minji leave for work?', kr:'민지는 몇 시에 출근하나요?' }
+    ];
+    var html = '<div class="rc-passage rc-unit"><p class="body">'+passage+'</p><p class="rc-wexkr" hidden style="margin-top:8px">'+passageKr+'</p>'+iconRowHTML()+'</div>';
+    var qHtml = '<div>';
+    qs.forEach(function(item, idx){
+      qHtml += '<div class="rc-qcard rc-unit">'+
+        '<div class="rc-qcard-top"><span class="rc-qbadge">Q'+(idx+1)+'</span>'+
+          '<div class="rc-qbody"><p class="rc-qtext">'+item.q+'</p>'+
+          '<p class="rc-wexkr" hidden style="margin-top:8px">'+item.kr+'</p></div>'+
+          rowIconsHTML()+
+        '</div>'+
+      '</div>';
+    });
+    qHtml += '</div>';
+    root.innerHTML = html + qHtml;
+    root.querySelectorAll('.rc-unit').forEach(function(unit){ wireTrTts(unit, ['.rc-wexkr']); });
+  })();
+
+  // ---------- Part 10: Comprehension Check ----------
+  (function(){
+    var root = document.getElementById('compCheckBlock');
+    var tips = [
+      { q:'다음과 같이 시작해보면 어떨까요?', phrases:['This passage is about ~', 'This paragraph is about ~'] },
+      { q:'조금 더 이어가 보시겠어요?', phrases:['so ~', 'then ~', 'therefore ~', 'as a result ~'] }
+    ];
+    var html = '';
+    tips.forEach(function(t){
+      html += '<div class="rc-sptip-group">'+
+        '<div class="rc-tip" style="margin-top:0"><span class="rc-tip-tag">'+SPARKLE_ICON+'TIP</span><span class="rc-tip-text">'+t.q+'</span></div>'+
+        '<div class="rc-sptip-box"><ul class="rc-sptip-list">';
+      t.phrases.forEach(function(p){ html += '<li>'+p+'</li>'; });
+      html += '</ul></div>'+
+      '</div>';
+    });
+    root.innerHTML = html;
+  })();
+
+  // ---------- Part 11: Describe the Picture (2 variants) ----------
+  (function(){
+    var root = document.getElementById('describeBlock');
+    var sentences = [
+      'She is sitting at the table.', 'She is drinking coffee.', 'There is a plate on the table.',
+      "She is wearing a blue shirt.", 'The window is open.', "It's a sunny morning."
+    ];
+    var circled = ['①','②','③','④','⑤','⑥'];
+    var brainstorm = [
+      { tt:'사진소개 (Intro)', qs:[
+        '이곳은 어디인가요? (Where is this place?)',
+        '사진 속에 몇 명이 있나요? (How many people do you see?)',
+        '무엇이 보이나요? (What do you see in this picture?)'
+      ]},
+      { tt:'중심소개 (Center)', qs:[
+        '가운데 있는 사람은 무엇을 하고 있나요? (What is she doing?)',
+        '테이블 위에 무엇이 있나요? (What is on the table?)'
+      ]},
+      { tt:'주변/분위기 (Surrounding)', qs:[
+        '창문 밖 날씨는 어떤가요? (What is the weather like outside?)',
+        '전체적인 분위기는 어떤가요? (How does the scene feel?)'
+      ]}
+    ];
+
+    // variant 1 — Grammar Check style: 단어(문장 목록) + 예문이미지
+    var html = '<span class="rc-chip">Part 2 (Q3~4) of the test</span>'+
+      subtitleHTML('문장 구조 익히기 (Grammar Practice)')+
+      '<div class="rc-sgrid">';
+    sentences.forEach(function(s, idx){ html += '<div class="rc-schip">'+circled[idx]+' '+s+'</div>'; });
+    html += '</div>'+
+      '<div class="rc-guide rc-guide-plain" hidden><div class="rc-pic-box" style="height:110px">'+IMAGE_ICON+'</div></div>';
+
+    // variant 2 — Describe a Picture: 사진 + Guide → Brainstorming
+    html += '<span class="rc-chip" style="margin-top:22px">Part 3 (Q5~7) of the test</span>'+
+      '<div class="rc-pic-box">'+IMAGE_ICON+'</div>'+
+      '<div class="rc-brainstorm" hidden><p class="rc-brainstorm-tt">Brainstorming</p>';
+    brainstorm.forEach(function(g){
+      html += '<div class="rc-bs-group"><h5>'+g.tt+'</h5>';
+      g.qs.forEach(function(q){ html += '<p>'+q+'</p>'; });
+      html += '</div>';
+    });
+    html += '</div>';
+    root.innerHTML = html;
+  })();
+
+  // ---------- Part 12: Respond to Questions ----------
+  (function(){
+    var root = document.getElementById('respondBlock');
+    var scenarioEn = 'Imagine that a friend is asking about your morning routine over the phone.';
+    var scenarioKr = '친구가 전화로 당신의 아침 루틴에 대해 묻고 있다고 상상해 보세요.';
+    var qs = [
+      { q:'What time do you usually wake up on weekdays?', kr:'평일에는 보통 몇 시에 일어나세요?',
+        guideEn:'I usually wake up at (7 AM) on weekdays.', guideKr:'저는 평일에 보통 (오전 7시)에 일어나요.' },
+      { q:'What is the first thing you do after waking up?', kr:'일어난 후 가장 먼저 하는 일은 무엇인가요?',
+        guideEn:'The first thing I do is (check my phone).', guideKr:'일어나서 가장 먼저 하는 일은 (휴대폰을 확인하는 것)이에요.' },
+      { q:'Do you think your morning routine is healthy? Why or why not?', kr:'당신의 아침 루틴이 건강하다고 생각하세요? 이유는 무엇인가요?',
+        guideEn:'I think it is (pretty healthy) because (I eat breakfast every day).', guideKr:'제 아침 루틴은 (꽤 건강하다고) 생각해요, (매일 아침을 먹기) 때문이에요.' }
+    ];
+    var html = '<span class="rc-chip">Part 3 (Q5~7) of the test</span>'+
+      '<div class="rc-scenario rc-unit"><span class="rc-passage-tag">Scenario &amp; Directions</span><p class="en">'+scenarioEn+'</p><p class="rc-wexkr" hidden>'+scenarioKr+'</p>'+iconRowHTML()+'</div>';
+    var qHtml = '<div>';
+    qs.forEach(function(item, idx){
+      qHtml += '<div class="rc-qcard rc-unit">'+
+        '<div class="rc-qcard-top"><span class="rc-qbadge">Q'+(idx+5)+'</span>'+
+          '<div class="rc-qbody"><p class="rc-qtext">'+item.q+'</p>'+
+          '<p class="rc-wexkr" hidden style="margin-top:8px">'+item.kr+'</p>'+
+          '</div>'+
+          rowIconsHTML()+
+        '</div>'+
+        '<div class="rc-guide" hidden><p class="rc-guide-tt">답변 가이드</p><p class="en">A: '+item.guideEn+'</p><p class="kr">A: '+item.guideKr+'</p></div>'+
+      '</div>';
+    });
+    qHtml += '</div>';
+    root.innerHTML = html + qHtml;
+    root.querySelectorAll('.rc-unit').forEach(function(unit){ wireTrTts(unit, ['.rc-wexkr']); });
+  })();
+
+  // ---------- Part 13: Phone Survey ----------
+  (function(){
+    var root = document.getElementById('surveyBlock');
+    var dirEn = "Hello, I'm calling about the morning wellness survey. Can I ask you a few questions?";
+    var dirKr = '안녕하세요, 아침 웰빙 설문 조사로 전화드렸습니다. 몇 가지 질문 드려도 될까요?';
+    var qs = [
+      { q:'What time do you usually wake up on weekdays?',
+        guideEn:'I usually wake up at (7 AM) on weekdays.', guideKr:'저는 평일에 보통 (오전 7시)에 일어나요.' },
+      { q:'How long does it take you to get ready in the morning?',
+        guideEn:'It takes me about (20 minutes) to get ready.', guideKr:'준비하는 데 약 (20분) 정도 걸려요.' },
+      { q:"What's one thing you'd like to change about your morning routine?",
+        guideEn:"I'd like to (wake up earlier) in the morning.", guideKr:'아침에 (더 일찍 일어나고) 싶어요.' }
+    ];
+    var html = '<span class="rc-chip">Part 4 (Q8~10) of the test</span>'+
+      '<div class="rc-scenario rc-unit"><span class="rc-passage-tag">Directions</span><p class="en">'+dirEn+'</p><p class="rc-wexkr" hidden>'+dirKr+'</p>'+iconRowHTML()+'</div>'+
+      '<div class="rc-pic-box">'+IMAGE_ICON+'</div>';
+    var qHtml = '<div>';
+    qs.forEach(function(item, idx){
+      qHtml += '<div class="rc-qcard" data-q="'+(idx+8)+'">'+
+        '<div class="rc-qcard-top">'+
+          '<div style="display:flex;align-items:flex-start;gap:10px;flex:1;min-width:0">'+
+            '<span class="rc-qbadge">Q'+(idx+8)+'</span>'+
+            '<p class="rc-qtext muted qline">Listen to the question</p>'+
+          '</div>'+
+          '<button class="rc-eye-btn" type="button">'+EYE_ICON+'<span>질문 보기</span></button>'+
+        '</div>'+
+        '<div class="rc-guide" hidden><p class="rc-guide-tt">답변 가이드</p><p class="en">A: '+item.guideEn+'</p><p class="kr">A: '+item.guideKr+'</p></div>'+
+      '</div>';
+    });
+    qHtml += '</div>';
+    root.innerHTML = html + qHtml;
+    root.querySelectorAll('.rc-unit').forEach(function(unit){ wireTrTts(unit, ['.rc-wexkr']); });
+    root.querySelectorAll('.rc-qcard').forEach(function(card, idx){
+      var btn = card.querySelector('.rc-eye-btn');
+      var line = card.querySelector('.qline');
+      var shown = false;
+      btn.addEventListener('click', function(){
+        shown = !shown;
+        line.textContent = shown ? qs[idx].q : 'Listen to the question';
+        line.classList.toggle('muted', !shown);
+        btn.querySelector('span').textContent = shown ? '숨기기' : '질문 보기';
+      });
+    });
+  })();
+
+  // per-panel translate-all toggle
+  document.querySelectorAll('.rc-trans').forEach(function(btn){
+    var panel = btn.closest('.panel');
+    var label = btn.querySelector('.ttl');
+    var isGuide = btn.classList.contains('guide-mode');
+    btn.addEventListener('click', function(){
+      var willOpen = !btn.classList.contains('on');
+      btn.classList.toggle('on', willOpen);
+      if(isGuide){
+        label.textContent = willOpen ? 'Hide' : 'Guide';
+        panel.querySelectorAll('.rc-guide, .rc-brainstorm').forEach(function(g){ g.hidden = !willOpen; });
+      } else {
+        label.textContent = willOpen ? '해석 끄기' : '해석';
+        panel.querySelectorAll('.rc-unit').forEach(function(it){ if(it._setOpen) it._setOpen(willOpen); });
+      }
+    });
+  });
+
+  // ---------- quick-jump modal ----------
+  var scrim = document.getElementById('scrim');
+  var listB = document.getElementById('listB');
+  var modalClose = document.getElementById('modalClose');
+  function openModal(){ scrim.classList.add('on'); document.body.style.overflow='hidden'; }
+  function closeModal(){ scrim.classList.remove('on'); document.body.style.overflow=''; }
+  listB.addEventListener('click', openModal);
+  modalClose.addEventListener('click', closeModal);
+  scrim.addEventListener('click', closeModal);
+
+  // ---------- 교재 바로가기 (표지) ----------
+  var bookBtn = document.getElementById('bookBtn');
+  var coverView = document.getElementById('coverView');
+  var coverBack = document.getElementById('coverBack');
+  var coverLesson1 = document.getElementById('coverLesson1');
+  function openCover(){ coverView.classList.add('on'); document.body.style.overflow='hidden'; }
+  function closeCover(){ coverView.classList.remove('on'); document.body.style.overflow=''; }
+  if(bookBtn) bookBtn.addEventListener('click', openCover);
+  if(coverBack) coverBack.addEventListener('click', closeCover);
+  if(coverLesson1) coverLesson1.addEventListener('click', closeCover);
+
+  // ---------- TG (강사용 보기: 답변 가이드 상시 노출) ----------
+  var tgBtn = document.getElementById('tgBtn');
+  if(tgBtn){
+    tgBtn.addEventListener('click', function(){
+      var on = !tgBtn.classList.contains('on');
+      tgBtn.classList.toggle('on', on);
+      document.querySelectorAll('.rc-trans.guide-mode').forEach(function(b){
+        if(b.classList.contains('on') !== on) b.click();
+      });
+    });
+  }
+
+  // ---------- part navigation ----------
+  var progFill = document.getElementById('progFill');
+  var curNo = document.getElementById('curNo');
+  var sideCur = document.getElementById('sideCur');
+  var footerPart = document.getElementById('footerPart');
+  var prevB = document.getElementById('prevB');
+  var nextB = document.getElementById('nextB');
+  var panels = document.querySelectorAll('.panel');
+  var heroFracs = document.querySelectorAll('.rc-hero-frac');
+
+  function go(n){
+    if(n < 1 || n > BUILT) return;
+    cur = n;
+    panels.forEach(function(p){ p.hidden = (+p.dataset.part !== n); });
+    progFill.style.width = (Math.round((n/total)*1000)/10) + '%';
+    curNo.textContent = n;
+    sideCur.textContent = n;
+    footerPart.textContent = parts[n-1];
+    prevB.disabled = (n === 1);
+    nextB.disabled = (n === BUILT);
+    document.querySelectorAll('[data-goto]').forEach(function(b){
+      b.classList.toggle('cur', +b.dataset.goto === n);
+    });
+    closeModal();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+
+  prevB.addEventListener('click', function(){ go(cur-1); });
+  nextB.addEventListener('click', function(){ go(cur+1); });
+  document.querySelectorAll('[data-goto]').forEach(function(b){
+    b.addEventListener('click', function(){ if(!b.disabled) go(+b.dataset.goto); });
+  });
+
+  go(1);
+})();
+</script>
+</body>
+</html>
