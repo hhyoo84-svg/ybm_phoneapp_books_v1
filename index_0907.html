@@ -159,11 +159,13 @@
       /* ---------- header (시안 H 이식: Lesson crumb + 표지 버튼) ---------- */
       .hd-top {
         background: var(--header-bg);
-        padding: 6px 18px;
+        flex-shrink: 0;
+      }
+      .hd-top-inner {
+        padding: 6px 20px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        flex-shrink: 0;
       }
       .crumb {
         font-family: var(--font-disp);
@@ -175,8 +177,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         background: none;
         border: 0;
         padding: 0;
@@ -187,8 +189,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         background: var(--purple);
         border-radius: 50%;
         color: var(--card);
@@ -198,20 +200,28 @@
           background 0.15s;
       }
       .cover-btn .ic {
-        font-size: 20px;
+        font-size: 16px;
       }
       .cover-btn:active .cover-btn-hit {
         transform: scale(0.86);
         background: var(--purple-dark);
       }
       @media (min-width: 640px) {
+        /* 헤더 배경은 화면 끝까지 풀블리드로 두되, 안쪽 콘텐츠(크럼·표지버튼)는
+     본문(.rc-body)과 같은 max-width:1280px로 맞춰서 폭이 넓은 PC 화면에서도
+     헤더의 버튼/텍스트가 아래 본문 좌우 끝과 정렬되도록 한다. */
         .hd-top {
           position: sticky;
           top: 0;
           z-index: 20;
-          padding: 0 24px;
-          height: 50px;
+          height: 60px;
           border-bottom: 1px solid rgba(231, 229, 228, 0.7);
+        }
+        .hd-top-inner {
+          max-width: 1060px;
+          margin: 0 auto;
+          padding: 0 24px;
+          height: 100%;
         }
       }
 
@@ -313,9 +323,9 @@
           flex: none;
           overflow-y: visible;
           background: transparent;
-          max-width: 1280px;
+          max-width: 1060px;
           margin: 0 auto;
-          padding: 24px 24px calc(180px + env(safe-area-inset-bottom));
+          padding: 24px 24px calc(32px + env(safe-area-inset-bottom));
           display: flex;
           flex-direction: column;
           gap: 20px;
@@ -339,7 +349,7 @@
           width: 264px;
           flex: none;
           position: sticky;
-          top: 96px;
+          top: 77px;
           background: var(--card);
           border: 1px solid var(--line);
           border-radius: 24px;
@@ -1122,7 +1132,17 @@
         }
       }
       @media (min-width: 640px) {
+        /* 640px 이상(=.app 프레임이 풀리고 창 전체가 스크롤되는 모드)에서는 내비를
+     position:fixed로 두면 뷰포트 바닥에 고정되어, 콘텐츠가 짧은 파트에서는
+     내비가 콘텐츠와 멀리 떨어져 "아래로 뚝 떨어진" 것처럼 보인다.
+     position:sticky로 바꿔 내비가 콘텐츠 바로 아래(짧은 파트)나
+     뷰포트 하단(긴 파트, 스크롤 시)에 자연스럽게 붙도록 한다. */
         .rc-fnav {
+          position: sticky;
+          left: auto;
+          transform: none;
+          width: fit-content;
+          margin: 0 auto;
           bottom: calc(28px + env(safe-area-inset-bottom));
         }
       }
@@ -1316,9 +1336,16 @@
       .rc-chero {
         position: relative;
         background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-        padding: 14px 20px 46px 16px;
+        padding: 6px 20px 46px;
         overflow: hidden;
         color: #fff;
+      }
+      @media (min-width: 640px) {
+        .rc-chero {
+          padding-left: 24px;
+          padding-right: 24px;
+          padding-top: 8px;
+        }
       }
       .rc-cwave {
         position: absolute;
@@ -1334,8 +1361,8 @@
         justify-content: space-between;
       }
       .rc-cback {
-        width: 34px;
-        height: 34px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -1353,14 +1380,14 @@
         height: 17px;
       }
       .rc-clang {
-        width: 34px;
-        height: 34px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
-        font-size: 11.5px;
+        font-size: 12.5px;
         font-weight: 800;
         letter-spacing: 0.01em;
         background: rgba(255, 255, 255, 0.22);
@@ -1369,7 +1396,7 @@
       .rc-chero-in {
         position: relative;
         z-index: 1;
-        margin-top: 26px;
+        margin-top: 30px;
       }
       .rc-ctype {
         font-size: 12px;
@@ -1941,6 +1968,15 @@
         opacity: 0.55;
         stroke-width: 1.4;
       }
+      .rc-pic-img {
+        display: block;
+        width: 100%;
+        height: 390px;
+        object-fit: cover;
+        border-radius: 16px;
+        margin-bottom: 16px;
+        border: 1px solid var(--line-soft);
+      }
 
       /* ---------- shared: info box (reference material) ---------- */
       .rc-infobox {
@@ -1985,17 +2021,18 @@
       <div class="rc-toast" id="toast"></div>
 
       <header class="hd-top">
-        <span class="crumb">Lesson 01</span>
-        <button class="cover-btn" id="bookBtn" aria-label="표지">
-          <span class="cover-btn-hit"
-            ><svg class="ic" viewBox="0 0 24 24">
-              <path d="M3 19a9 9 0 0 1 9 0 9 9 0 0 1 9 0" />
-              <path d="M3 6a9 9 0 0 1 9 0 9 9 0 0 1 9 0" />
-              <line x1="3" y1="6" x2="3" y2="19" />
-              <line x1="12" y1="6" x2="12" y2="19" />
-              <line x1="21" y1="6" x2="21" y2="19" /></svg
-          ></span>
-        </button>
+        <div class="hd-top-inner">
+          <span class="crumb">Lesson 01</span>
+          <button class="cover-btn" id="bookBtn" aria-label="표지">
+            <span class="cover-btn-hit"
+              ><svg class="ic" viewBox="0 0 24 24">
+                <path d="M12 7v14" />
+                <path
+                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+                /></svg
+            ></span>
+          </button>
+        </div>
       </header>
       <div class="rc-progress">
         <div class="rc-progress-fill" id="progressFill"></div>
@@ -2704,26 +2741,38 @@
         }
 
         // PC/태블릿 좌측 사이드바 (기존 시안 G 구조 복귀)
+        // 파트 이동할 때마다 innerHTML을 통째로 새로 그리면, 자체 스크롤이 있는
+        // .rc-plist의 scrollTop이 0으로 초기화되어 "메뉴가 움직인다"는 느낌을 준다.
+        // 그래서 버튼 DOM은 최초 1회만 만들고, 이후엔 class/disabled만 갱신한다.
+        var sidebarBtns = [];
         function renderSidebar() {
           var el = document.getElementById("sidebarList");
           if (!el) return;
+          if (!el.dataset.built) {
+            el.dataset.built = "1";
+            el.innerHTML = "";
+            parts.forEach(function (p, i) {
+              var n = i + 1;
+              var btn = document.createElement("button");
+              btn.innerHTML =
+                '<span class="l"><span class="dot"></span><span class="name">' +
+                p[0] +
+                "</span></span>";
+              btn.addEventListener("click", function () {
+                if (!btn.disabled) go(n);
+              });
+              sidebarBtns[n] = btn;
+              el.appendChild(btn);
+            });
+          }
           var sideCur = document.getElementById("sideCur");
           if (sideCur) sideCur.textContent = cur;
-          el.innerHTML = "";
           parts.forEach(function (p, i) {
-            var n = i + 1;
-            var btn = document.createElement("button");
+            var n = i + 1,
+              btn = sidebarBtns[n];
             btn.className =
               "rc-pitem" + (n === cur ? " cur" : n < cur ? " done" : "");
-            if (n > BUILT) btn.disabled = true;
-            btn.innerHTML =
-              '<span class="l"><span class="dot"></span><span class="name">' +
-              p[0] +
-              "</span></span>";
-            btn.addEventListener("click", function () {
-              if (!btn.disabled) go(n);
-            });
-            el.appendChild(btn);
+            btn.disabled = n > BUILT;
           });
         }
 
@@ -3374,9 +3423,7 @@
           // variant 2 — Describe a Picture: 사진 + Guide → Brainstorming
           html +=
             '<span class="rc-chip" style="margin-top:22px">Part 3 (Q5~7) of the test</span>' +
-            '<div class="rc-pic-box">' +
-            IMAGE_ICON +
-            "</div>" +
+            '<img class="rc-pic-img" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="">' +
             '<div class="rc-brainstorm" hidden><p class="rc-brainstorm-tt">Brainstorming</p>';
           brainstorm.forEach(function (g) {
             html += '<div class="rc-bs-group"><h5>' + g.tt + "</h5>";
@@ -3491,9 +3538,7 @@
             "</p>" +
             iconRowHTML() +
             "</div>" +
-            '<div class="rc-pic-box">' +
-            IMAGE_ICON +
-            "</div>";
+            '<img class="rc-pic-img" src="https://hhyoo84-svg.github.io/ybm_phoneapp_books_v1/photo-2.jpg" alt="">';
           var qHtml = "<div>";
           qs.forEach(function (item, idx) {
             qHtml +=
