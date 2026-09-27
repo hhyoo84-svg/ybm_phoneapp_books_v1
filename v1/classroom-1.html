@@ -1,0 +1,1817 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>전화영어 클래스룸</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap"
+    />
+    <style>
+      /* ===== Tokens (Role Based Color) ===== */
+      :root {
+        /* brand */
+        --purple: #6d42bf;
+        --purple-dark: #4c2e96;
+        --purple-deep: #241246;
+        --marker-idle: #4e2f99;
+        --purple-tint: #f4eeff;
+        --selection-bg: #e0e7ff;
+        /* text */
+        --ink: #1c1917;
+        --sub: #6b655f;
+        --sub2: #8a8580;
+        /* surface */
+        --bg: #f4f6fb;
+        --header-bg: #ffffff;
+        --card: #ffffff;
+        --surface-subtle: #f8f7fb;
+        /* border */
+        --line: #caafff;
+        --line-soft: #f1eff9;
+        /* tone */
+        --mint-bg: #dcf5ec;
+        --mint-text: #037a55;
+        --badge-1: #533099;
+        --badge-2: #533099;
+        /* elevation */
+        --shadow-card: 0 10px 26px -12px rgba(76, 46, 150, 0.16);
+        --shadow-btn: 0 14px 26px -10px rgba(76, 46, 150, 0.55);
+        --r-card: 20px;
+        --r-pill: 999px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --ink: #f3f1fa;
+          --sub: #c7c1d6;
+          --sub2: #9e97b3;
+          --bg: #131019;
+          --header-bg: #1b1726;
+          --card: #1e1a2c;
+          --surface-subtle: #241f35;
+          --line: #332c49;
+          --line-soft: #2a2438;
+          --mint-bg: #123328;
+          --mint-text: #4ade9c;
+          --purple-tint: #2b1f52;
+          --selection-bg: #332b5c;
+          --shadow-card: 0 10px 26px -12px rgba(0, 0, 0, 0.5);
+        }
+      }
+      :root[data-theme="dark"] {
+        --ink: #f3f1fa;
+        --sub: #c7c1d6;
+        --sub2: #9e97b3;
+        --bg: #131019;
+        --header-bg: #1b1726;
+        --card: #1e1a2c;
+        --surface-subtle: #241f35;
+        --line: #332c49;
+        --line-soft: #2a2438;
+        --mint-bg: #123328;
+        --mint-text: #4ade9c;
+        --purple-tint: #2b1f52;
+        --selection-bg: #332b5c;
+        --shadow-card: 0 10px 26px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          "Noto Sans KR",
+          "Pretendard",
+          -apple-system,
+          sans-serif;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      button {
+        font-family: inherit;
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: inherit;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      p {
+        margin: 0;
+        text-wrap: balance;
+      }
+      .num {
+        font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .rc-app {
+        max-width: 390px;
+        margin: 0 auto;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: var(--bg);
+      }
+
+      /* ---------- Header ---------- */
+      /* ---------- Header ---------- */
+      .rc-topbar {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 16px;
+        background: var(--header-bg);
+        border-bottom: 1px solid var(--line-soft);
+      }
+      .rc-logo {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+        justify-self: start;
+      }
+      .rc-logo-img {
+        height: 26px;
+        width: auto;
+        flex: none;
+      }
+      /* 로고 이미지 로드 실패 시 대비용 대체 마크 — 실제 이미지 경로가 확정되면 .rc-logo-fallback 블록은 삭제 가능 */
+      .rc-logo-fallback {
+        display: none;
+        align-items: flex-end;
+        gap: 2px;
+        height: 22px;
+        flex: none;
+      }
+      .rc-logo-fallback .y {
+        width: 8px;
+        height: 22px;
+        background: #e31c3d;
+        border-radius: 3px 3px 0 0;
+        transform: skewX(-6deg);
+      }
+      .rc-logo-fallback .b1 {
+        width: 4px;
+        height: 18px;
+        background: #16296b;
+      }
+      .rc-logo-fallback .b2 {
+        width: 4px;
+        height: 22px;
+        background: #16296b;
+      }
+      .rc-logo-fallback .b3 {
+        width: 4px;
+        height: 14px;
+        background: #16296b;
+      }
+
+      .rc-topbar-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--ink);
+        white-space: nowrap;
+        justify-self: center;
+      }
+
+      .rc-topbar-info {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--purple);
+        display: flex;
+        align-items: center;
+        gap: 1px;
+        white-space: nowrap;
+        padding: 3px 2px;
+        margin-top: 1px;
+        justify-self: end;
+        font-family: inherit;
+        border: none;
+        background: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .rc-topbar-info svg {
+        width: 12px;
+        height: 12px;
+        margin-top: 1px;
+      }
+      .rc-topbar-info:active {
+        opacity: 0.6;
+      }
+
+      .rc-tabs {
+        position: relative;
+        display: flex;
+        background: var(--header-bg);
+        border-bottom: 1px solid var(--line-soft);
+        padding: 0 16px;
+      }
+      .rc-tabs button {
+        flex: 1;
+        padding: 12px 4px 13px;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--sub2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: color 0.15s;
+        font-family: inherit;
+        border: none;
+        background: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .rc-tabs button .c {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--sub2);
+      }
+      .rc-tabs button.on {
+        color: var(--ink);
+      }
+      .rc-tabs button.on .c {
+        color: var(--purple);
+      }
+      .rc-tabs .ind {
+        position: absolute;
+        left: 16px;
+        bottom: -1px;
+        height: 2.5px;
+        width: calc((100% - 32px) / 3);
+        background: linear-gradient(90deg, var(--purple), var(--purple-dark));
+        border-radius: 2px;
+        transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .rc-body {
+        flex: 1;
+        padding: 14px 16px calc(90px + env(safe-area-inset-bottom, 0px));
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      /* ---------- Tutor card ---------- */
+      .rc-tutor {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 12px 14px 13px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: var(--shadow-card);
+      }
+      .rc-tutor-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .rc-tutor-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        flex: none;
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: 0.3px;
+        background: linear-gradient(150deg, #8e7bef, #5b3fbe);
+      }
+      .rc-tutor-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .rc-tutor-info .name {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.3;
+      }
+      .rc-tutor-info .name b {
+        font-weight: 500;
+        color: var(--sub);
+        margin-left: 2px;
+      }
+      .rc-tutor-info .role {
+        font-size: 12px;
+        color: var(--sub);
+        line-height: 1.3;
+        margin-top: 2px;
+      }
+      .rc-cal-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        flex: none;
+        color: #fff;
+        background: linear-gradient(150deg, var(--purple), var(--purple-dark));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-btn);
+      }
+      .rc-cal-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      /* 다른 수강 중인 강의로 넘어가는 페이징(캐러셀 dot) — 진행률이 아니라 "여러 강의 중 몇 번째"를 나타냄, 그래서 모두 같은 크기의 점으로 표현.
+     카드 전체를 좌우로 스와이프해도 같은 방식으로 넘어간다. */
+      .rc-progress {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+      }
+      .rc-progress button {
+        width: 7px;
+        height: 7px;
+        padding: 0;
+        border-radius: 50%;
+        background: var(--selection-bg);
+        transition:
+          background 0.15s,
+          transform 0.15s;
+      }
+      .rc-progress button.on {
+        background: var(--purple);
+      }
+      .rc-progress button:active {
+        transform: scale(1.2);
+      }
+
+      /* ---------- Hero card ---------- */
+      /* 캐릭터 영상은 '정보'가 아니라 '감성/브랜드' 요소 — 행동에 필요한 정보(시간·CTA)보다 면적이 커지지 않도록
+     비율을 넓고 낮게 잡아 캐릭터를 시각적으로 낮춘다. */
+      .rc-hero {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 14px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .rc-hero-top {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .rc-hero-tag {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--mint-text);
+        background: var(--mint-bg);
+        padding: 5px 11px;
+        border-radius: var(--r-pill);
+      }
+      /* 환경 테스트: 수업 입장 전 카메라/마이크 점검 진입점. 현재는 디자인 검토용으로 4가지 수업 상태
+     (예정/임박/진행중/종료)를 순환 미리보기하는 동작이 연결되어 있음 — 실제 기능 연결 시 교체 필요 */
+      .rc-hero-preview {
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--sub2);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .rc-hero-media {
+        width: 100%;
+        aspect-ratio: 3/1;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        transition: opacity 0.25s ease;
+      }
+      .rc-hero-media video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #fff;
+      }
+      .rc-hero-media.is-ended {
+        opacity: 0.55;
+      }
+
+      /* 상태별 색상 : 보라=행동(CTA 전용), 회색/잉크=정보, 민트=진행중 상태 → 예정/임박은 중립톤으로 */
+      .rc-hero-status {
+        display: flex;
+        align-items: baseline;
+        gap: 7px;
+        justify-content: center;
+        color: var(--purple);
+      }
+      .rc-hero-status[data-state="soon"] {
+        color: var(--ink);
+      }
+      .rc-hero-status[data-state="live"] {
+        color: var(--mint-text);
+      }
+      .rc-hero-status[data-state="ended"] {
+        color: var(--sub2);
+      }
+      .rc-hero-status svg {
+        width: 18px;
+        height: 18px;
+        align-self: center;
+        margin-right: -2px;
+      }
+      .rc-hero-status .num {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+      }
+      .rc-hero-status .suffix,
+      .rc-hero-status .txt {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--sub);
+      }
+      .rc-hero-status[data-state="live"] .txt {
+        color: var(--mint-text);
+        font-weight: 700;
+      }
+      .rc-hero-status[data-state="ended"] .txt {
+        color: var(--sub2);
+        font-weight: 700;
+      }
+      .rc-live-dot {
+        position: relative;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--mint-text);
+        flex: none;
+      }
+      .rc-live-dot::after {
+        content: "";
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+        background: var(--mint-text);
+        opacity: 0.4;
+        animation: rcLivePulse 1.4s ease-out infinite;
+      }
+      @keyframes rcLivePulse {
+        0% {
+          transform: scale(0.5);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(2.1);
+          opacity: 0;
+        }
+      }
+
+      .rc-hero-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+        text-align: center;
+      }
+      .rc-hero-cta {
+        width: 100%;
+        padding: 13px 18px;
+        border-radius: 14px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        background: linear-gradient(
+          120deg,
+          var(--purple) 0%,
+          var(--purple-dark) 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        box-shadow: var(--shadow-btn);
+      }
+      .rc-hero-cta svg {
+        width: 15px;
+        height: 15px;
+      }
+      .rc-hero-cta:active {
+        transform: translateY(1px);
+        filter: brightness(0.97);
+      }
+      .rc-hero-cta.is-ended {
+        background: linear-gradient(120deg, #8a8580 0%, #6b655f 100%);
+        box-shadow: none;
+      }
+
+      /* ---------- Section heading : 강/약 위계 ---------- */
+      /* 타이틀-콘텐츠 간격: "타이틀과 그 위 콘텐츠 사이"는 margin-top으로 32px 균일하게,
+     "타이틀과 그 아래 자기 내용" 사이는 gap 10px로 타이틀이 자기 내용에 붙도록 유지 */
+      .rc-block {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 16px;
+      } /* .rc-body의 gap 16px + 여기 16px = 위쪽 총 32px */
+      .rc-block-title {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .rc-block-title .eyebrow {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--sub);
+        letter-spacing: 0.1px;
+      }
+      .rc-block-title .headline {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--ink);
+        line-height: 1.3;
+        letter-spacing: -0.3px;
+      }
+      /* "해야 한다"는 압박감이 들지 않도록 가볍게 안내하는 한 줄 — 예습이 필수 체크리스트처럼 보이지 않게 톤을 낮춘다 */
+
+      /* ---------- Diagram card : 3단계 예습 플로우 (고정 위치, 클릭 시 크기만 확대/축소) ---------- */
+      .rc-diagram {
+        background: var(--card);
+        border-radius: 18px;
+        box-shadow: var(--shadow-card);
+        position: relative;
+        overflow: hidden;
+        padding: 22px 14px 24px;
+      }
+      .rc-flow {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+      .rc-flow svg.link {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+      /* 순서(flow)가 아니라 "선택 가능한 준비 메뉴"라는 인상을 주기 위해 선을 30~40% 더 약하게 낮춘다 */
+      .rc-flow svg.link path {
+        fill: none;
+        stroke: var(--purple);
+        stroke-width: 2;
+        stroke-dasharray: 5 7;
+        opacity: 0.28;
+      }
+
+      /* 각 단계는 항상 같은 순서·같은 자리를 지킨다 — 클릭해도 위치는 그대로, 크기만 바뀐다.
+     좌/우 정렬 오프셋은 마커·라벨에만 마진으로 주고 .rc-step 자체에는 패딩을 주지 않는다 —
+     그래야 팝업(너비 100%)이 정렬과 무관하게 항상 카드 전체 폭을 꽉 채운다. */
+      .rc-step {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+      .rc-step + .rc-step {
+        margin-top: 16px;
+      }
+      .rc-step[data-align="center"] {
+        align-items: center;
+      }
+      .rc-step[data-align="right"] {
+        align-items: flex-end;
+      }
+      .rc-step[data-align="left"] {
+        align-items: flex-start;
+      }
+      .rc-step[data-align="right"] .rc-step-marker,
+      .rc-step[data-align="right"] .rc-step-label {
+        margin-right: 13%;
+      }
+      .rc-step[data-align="left"] .rc-step-marker,
+      .rc-step[data-align="left"] .rc-step-label {
+        margin-left: 9%;
+      }
+
+      .rc-step-marker {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(
+          --marker-idle
+        ); /* 그라데이션 없이 단색 — 기본(닫힌) 상태 */
+        box-shadow: 0 8px 16px -8px rgba(40, 20, 90, 0.4);
+        flex: none;
+        transition:
+          width 0.28s ease,
+          height 0.28s ease,
+          background 0.2s ease;
+      }
+      .rc-step-marker img {
+        width: 82%;
+        height: auto;
+      }
+      .rc-step[data-active="true"] .rc-step-marker {
+        width: 120px;
+        height: 120px;
+        background: var(--purple-deep);
+      }
+      .rc-step-marker:hover {
+        filter: brightness(1.08);
+      }
+      /* 완료 뱃지 — 완료한 단계에만 표시 */
+      .rc-step-badge-done {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--mint-text);
+        border: 2px solid #fff;
+        box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.35);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+      }
+      .rc-step[data-completed="true"] .rc-step-badge-done {
+        display: flex;
+      }
+      .rc-step-badge-done svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      .rc-step-label {
+        margin-top: 7px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--marker-idle);
+        padding: 4px 9px;
+        border-radius: var(--r-pill);
+        white-space: nowrap;
+      }
+      .rc-step[data-active="true"] .rc-step-label {
+        display: none;
+      }
+
+      /* 말풍선처럼 마커 '아래'에서 카드 폭을 꽉 채우며 나타나는 팝업. 모두 1단계(레슨) 팝업 높이에 맞춰 JS로 동일한 min-height를 부여받고,
+     내용이 짧은 팝업은 세로 중앙정렬로 빈 공간을 채운다. 위쪽엔 캐릭터를 향한 말풍선 꼬리(.rc-popup-tail)가 붙는다. */
+      .rc-step-popup {
+        display: none;
+        position: relative;
+        width: 100%;
+        margin-top: -16px;
+        background: linear-gradient(
+          150deg,
+          #7c51d6 0%,
+          var(--purple-dark) 100%
+        );
+        border-radius: 16px;
+        padding: 13px 16px;
+        box-shadow: 0 18px 30px -14px rgba(50, 25, 110, 0.5);
+        text-align: center;
+        flex-direction: column;
+        justify-content: center;
+        box-sizing: border-box;
+      }
+      .rc-step[data-active="true"] .rc-step-popup {
+        display: flex;
+      }
+      /* 꼬리는 팝업과 동일한 그라데이션을 그대로 이어받아 색이 끊기지 않고 한 몸처럼 보인다 */
+      .rc-popup-tail {
+        position: absolute;
+        top: -7px;
+        left: 50%;
+        width: 16px;
+        height: 16px;
+        background: linear-gradient(150deg, #7c51d6 0%, #6a44be 100%);
+        transform: translateX(-50%) rotate(45deg);
+      }
+      .rc-step-popup .sub {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.72);
+        text-align: center;
+      }
+
+      /* 유닛 선택 드롭다운 — 닫혔을 땐 현재 회차만 텍스트로, 펼치면 목록이 박스로 나타난다 */
+      .rc-unit-select {
+        width: 100%;
+        margin-top: 4px;
+      }
+      .rc-unit-toggle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+      .rc-unit-toggle .unit-label {
+        font-size: 15px;
+        font-weight: 800;
+        color: #fff;
+      }
+      .rc-unit-toggle svg {
+        width: 14px;
+        height: 14px;
+        color: #fff;
+        flex: none;
+        transition: transform 0.18s ease;
+      }
+      .rc-unit-toggle[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+      }
+      .rc-unit-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 11px;
+        padding: 5px;
+        margin-top: 9px;
+      }
+      .rc-unit-menu[hidden] {
+        display: none;
+      }
+      .rc-unit-menu button {
+        padding: 8px 9px;
+        border-radius: 8px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+        text-align: center;
+      }
+      .rc-unit-menu button.cur {
+        background: rgba(255, 255, 255, 0.18);
+        color: #fff;
+        font-weight: 700;
+      }
+      .rc-popup-go {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        padding: 10px 8px;
+        border-radius: 11px;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+        background: #fff;
+        color: var(--purple-dark);
+      }
+      .rc-popup-go:active {
+        transform: scale(0.98);
+      }
+      /* 레슨 팝업 전용: 교재 보기 / 영상 보기 두 가지 액션을 나란히 노출 */
+      .rc-popup-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .rc-popup-actions .rc-popup-go {
+        margin-top: 0;
+        flex: 1;
+      }
+
+      /* ---------- Pill list ---------- */
+      .rc-pill-list {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+      }
+      .rc-pill-row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        background: var(--purple-tint);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .rc-pill-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(150deg, var(--badge-1), var(--badge-2));
+      }
+      .rc-pill-badge img {
+        width: 26px;
+        height: auto;
+      }
+      .rc-pill-row .rc-pill-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        text-align: left;
+        min-width: 0;
+      }
+      .rc-pill-row .label {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .rc-pill-row .desc {
+        font-size: 11.5px;
+        font-weight: 500;
+        color: var(--sub2);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .rc-pill-row .go {
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+        background: linear-gradient(120deg, var(--purple), var(--purple-dark));
+        padding: 6px 13px;
+        border-radius: var(--r-pill);
+        flex: none;
+      }
+      .rc-pill-row:active {
+        filter: brightness(0.98);
+      }
+
+      /* ---------- Icon grid (질문하기 · AI 히스토리 · 만족도 평가 3종, 낮은 우선순위라 시각 무게 축소) ---------- */
+      .rc-icon-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .rc-icon-tile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 13px 6px;
+        background: var(--card);
+        border: 1px solid var(--line-soft);
+        border-radius: 13px;
+      }
+      .rc-icon-tile svg {
+        width: 19px;
+        height: 19px;
+        color: var(--sub2);
+        flex: none;
+      }
+      .rc-icon-tile span {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--sub);
+        text-align: center;
+      }
+      .rc-icon-tile:active {
+        transform: translateY(1px);
+      }
+
+      /* ---------- Bottom nav ---------- */
+      .rc-bottom-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 30;
+        max-width: 430px;
+        margin: 0 auto;
+        display: flex;
+        background: var(--card);
+        border-top: 1px solid var(--line-soft);
+        padding: 10px 24px calc(10px + env(safe-area-inset-bottom, 0px));
+      }
+      .rc-nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--sub2);
+        white-space: nowrap;
+      }
+      .rc-nav-item svg {
+        width: 23px;
+        height: 23px;
+      }
+      .rc-nav-item.on {
+        color: var(--purple);
+      }
+
+      /* ---------- Tablet / desktop (same as tablet) ---------- */
+      @media (min-width: 640px) {
+        .rc-app {
+          max-width: 560px;
+          border-radius: 28px;
+          overflow: hidden;
+          box-shadow: 0 30px 60px -30px rgba(30, 15, 70, 0.25);
+        }
+        .rc-bottom-nav {
+          max-width: 560px;
+        } /* position:sticky였을 때 .rc-app의 overflow:hidden/둥근 모서리에 잘려 배경이 끊겨 보이던 문제 — fixed 유지로 수정 */
+        .rc-body {
+          padding-inline: 28px;
+        }
+        .rc-hero-media {
+          aspect-ratio: 30/9;
+        }
+        .rc-block-title .headline {
+          font-size: 20px;
+        }
+        .rc-block-title .eyebrow {
+          font-size: 13px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .rc-hero-cta,
+        .rc-icon-tile,
+        .rc-pill-row,
+        .rc-step-marker,
+        .rc-step-popup {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="rc-app">
+      <header class="rc-topbar">
+        <div class="rc-logo">
+          <img
+            class="rc-logo-img"
+            src="https://phone.ybmclass.com/img/logo_ybmphone.png"
+            alt="와이비엠 전화화상"
+            onerror="
+              this.style.display = 'none';
+              this.nextElementSibling.style.display = 'flex';
+            "
+          />
+          <div class="rc-logo-fallback">
+            <span class="y"></span><span class="b1"></span
+            ><span class="b2"></span><span class="b3"></span>
+          </div>
+        </div>
+        <span class="rc-topbar-title">클래스룸</span>
+        <button class="rc-topbar-info" type="button">
+          과정 안내
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
+      </header>
+
+      <nav class="rc-tabs" data-rc-tabs>
+        <button class="on" data-i="0">수강중 <span class="c">2</span></button>
+        <button data-i="1">예정 <span class="c">1</span></button>
+        <button data-i="2">종료 <span class="c">5</span></button>
+        <span class="ind"></span>
+      </nav>
+
+      <main class="rc-body">
+        <!-- 튜터 카드 -->
+        <section class="rc-tutor">
+          <div class="rc-tutor-row">
+            <div class="rc-tutor-avatar" id="tutorAvatar">SJ</div>
+            <div class="rc-tutor-info">
+              <p class="name" id="tutorName">Sarah Jenkins <b>튜터</b></p>
+              <p class="role" id="tutorRole">비즈니스 실전 회화</p>
+            </div>
+            <button class="rc-cal-btn" aria-label="일정 보기">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="4.5" width="18" height="16" rx="3" />
+                <path d="M8 2.5v4M16 2.5v4M3 9.5h18" />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="rc-progress"
+            id="tutorPager"
+            role="tablist"
+            aria-label="수강 중인 다른 강의"
+          >
+            <button
+              class="on"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-label="비즈니스 실전 회화, 1 / 3"
+            ></button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-label="데일리 프리토킹, 2 / 3"
+            ></button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-label="여행 영어 회화, 3 / 3"
+            ></button>
+          </div>
+        </section>
+
+        <!-- 히어로 카드 : 캐릭터 영상은 감성 요소, 핵심은 시간·CTA. 수업 진행 단계에 따라 상태가 바뀐다 -->
+        <section class="rc-hero">
+          <div class="rc-hero-top">
+            <span class="rc-hero-tag">화 / 목 10:00 – 10:25</span>
+            <button type="button" class="rc-hero-preview" id="statusPreview">
+              환경 테스트
+            </button>
+          </div>
+          <div class="rc-hero-media" id="heroMedia">
+            <video id="heroVideo" autoplay muted loop playsinline>
+              <source
+                src="https://hhyoo84-svg.github.io/ybm_phoneapp_v1/images/video.mp4"
+                type="video/mp4"
+              />
+            </video>
+          </div>
+          <div class="rc-hero-status" id="heroStatus" data-state="upcoming">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="13" r="8" />
+              <path d="M12 9v4l3 2M9 2h6" />
+            </svg>
+            <span class="num" id="countdown">03:20</span>
+            <span class="suffix">남음</span>
+          </div>
+          <h3 class="rc-hero-title">
+            Lesson.01 &nbsp;Small Talk &amp; Ice Breaking
+          </h3>
+          <button class="rc-hero-cta" id="heroCta" type="button">
+            <span class="label">강의실 바로 입장하기</span>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </button>
+        </section>
+
+        <!-- 예습 : 순서가 아니라 "고르는 준비 메뉴" — 각 단계는 고정된 자리를 지키고, 고른 단계만 커지며 그 아래로 말풍선이 열린다.
+         번호·필수·추천·선택 배지로 위계를 주고, 점선은 약하게 낮춰 강제된 순서처럼 보이지 않게 한다. -->
+        <section class="rc-block">
+          <h2 class="rc-block-title">
+            <span class="eyebrow">학습 전에</span
+            ><span class="headline">미리 예습해 보아요</span>
+          </h2>
+          <div class="rc-diagram">
+            <div class="rc-flow" id="flow">
+              <svg
+                class="link"
+                viewBox="0 0 326 478"
+                preserveAspectRatio="none"
+              >
+                <path d="" />
+              </svg>
+
+              <!-- 오늘의 Lesson (항상 중앙, 첫 화면엔 팝업이 닫혀 있음) -->
+              <div
+                class="rc-step"
+                data-step-id="lesson"
+                data-align="center"
+                data-active="false"
+                data-completed="false"
+              >
+                <button
+                  class="rc-step-marker"
+                  type="button"
+                  aria-label="오늘의 Lesson 열기"
+                >
+                  <img
+                    src="https://hhyoo84-svg.github.io/ybm_phoneapp_v1/images/character04.png"
+                    alt=""
+                  />
+                  <span class="rc-step-badge-done" aria-hidden="true"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 13l4 4L19 7" /></svg
+                  ></span>
+                </button>
+                <span class="rc-step-label">오늘의 Lesson</span>
+                <div class="rc-step-popup">
+                  <span class="rc-popup-tail" aria-hidden="true"></span>
+                  <p class="sub">비즈니스 영어회화</p>
+                  <div class="rc-unit-select">
+                    <button
+                      type="button"
+                      class="rc-unit-toggle"
+                      aria-expanded="false"
+                    >
+                      <span class="unit-label">Lesson 01</span>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
+                    </button>
+                    <div class="rc-unit-menu" hidden>
+                      <button type="button" class="cur" data-unit="Lesson 01">
+                        Lesson 01 · Small Talk &amp; Ice Breaking
+                      </button>
+                      <button type="button" data-unit="Lesson 02">
+                        Lesson 02 · Meeting Schedule
+                      </button>
+                      <button type="button" data-unit="Lesson 03">
+                        Lesson 03 · Email Etiquette
+                      </button>
+                    </div>
+                  </div>
+                  <div class="rc-popup-actions">
+                    <button type="button" class="rc-popup-go">교재 보기</button>
+                    <button type="button" class="rc-popup-go">영상 보기</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 내용 익히기 (항상 오른쪽) -->
+              <div
+                class="rc-step"
+                data-step-id="review"
+                data-align="right"
+                data-active="false"
+                data-completed="false"
+              >
+                <button
+                  class="rc-step-marker"
+                  type="button"
+                  aria-label="내용 익히기 열기"
+                >
+                  <img
+                    src="data:image/png;base64,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"
+                    alt=""
+                  />
+                  <span class="rc-step-badge-done" aria-hidden="true"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 13l4 4L19 7" /></svg
+                  ></span>
+                </button>
+                <span class="rc-step-label">내용 익히기</span>
+                <div class="rc-step-popup">
+                  <span class="rc-popup-tail" aria-hidden="true"></span>
+                  <p class="sub">예습 콘텐츠</p>
+                  <div class="rc-unit-select">
+                    <button
+                      type="button"
+                      class="rc-unit-toggle"
+                      aria-expanded="false"
+                    >
+                      <span class="unit-label">UNIT 1</span>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
+                    </button>
+                    <div class="rc-unit-menu" hidden>
+                      <button type="button" class="cur" data-unit="UNIT 1">
+                        UNIT 1 · 오늘 배울 내용 미리보기
+                      </button>
+                      <button type="button" data-unit="UNIT 2">
+                        UNIT 2 · 핵심 표현 미리보기
+                      </button>
+                      <button type="button" data-unit="UNIT 3">
+                        UNIT 3 · 롤플레이 대본 미리보기
+                      </button>
+                    </div>
+                  </div>
+                  <button type="button" class="rc-popup-go">영상 보기</button>
+                </div>
+              </div>
+
+              <!-- AI로 말해보기 (항상 왼쪽) -->
+              <div
+                class="rc-step"
+                data-step-id="ai"
+                data-align="left"
+                data-active="false"
+                data-completed="false"
+              >
+                <button
+                  class="rc-step-marker"
+                  type="button"
+                  aria-label="AI로 말해보기 열기"
+                >
+                  <img
+                    src="https://hhyoo84-svg.github.io/ybm_phoneapp_v1/images/character02.png"
+                    alt=""
+                  />
+                  <span class="rc-step-badge-done" aria-hidden="true"
+                    ><svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 13l4 4L19 7" /></svg
+                  ></span>
+                </button>
+                <span class="rc-step-label">AI로 말해보기</span>
+                <div class="rc-step-popup">
+                  <span class="rc-popup-tail" aria-hidden="true"></span>
+                  <p class="sub">AI 튜터와 함께</p>
+                  <div class="rc-unit-select">
+                    <button
+                      type="button"
+                      class="rc-unit-toggle"
+                      aria-expanded="false"
+                    >
+                      <span class="unit-label">UNIT 1</span>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
+                    </button>
+                    <div class="rc-unit-menu" hidden>
+                      <button type="button" class="cur" data-unit="UNIT 1">
+                        UNIT 1 · Small Talk 연습하기
+                      </button>
+                      <button type="button" data-unit="UNIT 2">
+                        UNIT 2 · Daily Routine 연습하기
+                      </button>
+                      <button type="button" data-unit="UNIT 3">
+                        UNIT 3 · Ordering Food 연습하기
+                      </button>
+                    </div>
+                  </div>
+                  <button type="button" class="rc-popup-go">
+                    AI 대화 시작
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 리뷰 / 리포트 -->
+        <section class="rc-block" id="reviewSection">
+          <h2 class="rc-block-title">
+            <span class="eyebrow">학습 후</span
+            ><span class="headline">확인해 보아요</span>
+          </h2>
+          <div class="rc-pill-list">
+            <button class="rc-pill-row">
+              <span class="rc-pill-badge"
+                ><img
+                  src="https://hhyoo84-svg.github.io/ybm_phoneapp_v1/images/character09.png"
+                  alt=""
+              /></span>
+              <span class="rc-pill-text">
+                <span class="label">수업리뷰</span>
+              </span>
+              <span class="go">보기</span>
+            </button>
+            <button class="rc-pill-row">
+              <span class="rc-pill-badge"
+                ><img
+                  src="https://hhyoo84-svg.github.io/ybm_phoneapp_v1/images/character07.png"
+                  alt=""
+              /></span>
+              <span class="rc-pill-text">
+                <span class="label">Class Report</span>
+              </span>
+              <span class="go">보기</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 아이콘 그리드 -->
+        <section class="rc-block">
+          <h2 class="rc-block-title">
+            <span class="eyebrow">수업 서포트</span
+            ><span class="headline">확인해 보아요</span>
+          </h2>
+          <div class="rc-icon-grid">
+            <button class="rc-icon-tile">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M9.1 9a3 3 0 1 1 4.6 2.4c-.9.6-1.7 1-1.7 2.3" />
+                <path d="M12 17h.01" />
+              </svg>
+              <span>질문하기</span>
+            </button>
+            <button class="rc-icon-tile">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="4" width="18" height="16" rx="3" />
+                <circle cx="9" cy="10" r="1.6" />
+                <path
+                  d="M4 17l4.5-4.5a2 2 0 0 1 2.8 0L14 15.3l1.7-1.7a2 2 0 0 1 2.8 0L21 16.5"
+                />
+              </svg>
+              <span>만족도 평가</span>
+            </button>
+            <button class="rc-icon-tile">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3.5 12a8.5 8.5 0 1 0 2.7-6.2" />
+                <path d="M3.5 4.5v4.3h4.3" />
+                <path d="M12 8v4.5l3 2" />
+              </svg>
+              <span>AI 히스토리</span>
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <nav class="rc-bottom-nav">
+        <button class="rc-nav-item on" data-tab="classroom" aria-current="page">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M3 8.5A2.5 2.5 0 0 1 5.5 6h7A2.5 2.5 0 0 1 15 8.5v7A2.5 2.5 0 0 1 12.5 18h-7A2.5 2.5 0 0 1 3 15.5v-7Z"
+            />
+            <path
+              d="M15 10.5l5.1-3a.9.9 0 0 1 1.4.75v7.5a.9.9 0 0 1-1.4.75l-5.1-3"
+            />
+          </svg>
+          클래스룸
+        </button>
+        <button class="rc-nav-item" data-tab="schedule">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4.5" width="18" height="16" rx="3" />
+            <path d="M8 2.5v4M16 2.5v4M3 9.5h18" />
+          </svg>
+          스케줄
+        </button>
+      </nav>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        var reduceMotion =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var video = document.getElementById("heroVideo");
+        if (video && reduceMotion) {
+          video.removeAttribute("autoplay");
+          video.pause();
+        }
+
+        /* 튜터 카드 페이징: 진행률이 아니라 "내가 수강 중인 다른 강의들" 사이 이동.
+     하단 점 클릭뿐 아니라 카드 자체를 좌우로 스와이프해도 같은 방식으로 넘어간다. */
+        var courses = [
+          { initials: "SJ", name: "Sarah Jenkins", role: "비즈니스 실전 회화" },
+          { initials: "DP", name: "Daniel Park", role: "데일리 프리토킹" },
+          { initials: "EC", name: "Emily Cho", role: "여행 영어 회화" },
+        ];
+        var tutorCard = document.querySelector(".rc-tutor");
+        var pager = document.getElementById("tutorPager");
+        var avatarEl = document.getElementById("tutorAvatar");
+        var nameEl = document.getElementById("tutorName");
+        var roleEl = document.getElementById("tutorRole");
+        var dots = Array.prototype.slice.call(pager.querySelectorAll("button"));
+        var courseIndex = 0;
+
+        function setCourse(i) {
+          if (i < 0 || i >= courses.length || i === courseIndex) return;
+          courseIndex = i;
+          var c = courses[i];
+          avatarEl.textContent = c.initials;
+          nameEl.innerHTML = c.name + " <b>튜터</b>";
+          roleEl.textContent = c.role;
+          dots.forEach(function (d, j) {
+            d.classList.toggle("on", j === i);
+            d.setAttribute("aria-selected", j === i ? "true" : "false");
+          });
+        }
+        dots.forEach(function (dot, i) {
+          dot.addEventListener("click", function () {
+            setCourse(i);
+          });
+        });
+
+        /* 좌우 스와이프: 왼쪽으로 밀면 다음 강의, 오른쪽으로 밀면 이전 강의 */
+        var touchStartX = null,
+          touchStartY = null;
+        tutorCard.addEventListener(
+          "touchstart",
+          function (e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+          },
+          { passive: true },
+        );
+        tutorCard.addEventListener("touchend", function (e) {
+          if (touchStartX === null) return;
+          var dx = e.changedTouches[0].clientX - touchStartX;
+          var dy = e.changedTouches[0].clientY - touchStartY;
+          touchStartX = null;
+          if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return; // 짧거나 세로 위주의 움직임은 무시
+          setCourse(dx < 0 ? courseIndex + 1 : courseIndex - 1);
+        });
+
+        /* 수업 상태 머신: 예정(upcoming) → 임박(soon, ≤60초) → 진행중(live) → 종료(ended).
+     "00:00 남음"에서 멈추는 문제를 없애기 위해, 카운트다운이 끝나면 반드시 다음 상태로 넘어간다.
+     LIVE_DURATION_SEC은 데모 확인을 위해 짧게 잡은 값 — 실서비스에서는 실제 수업 시간(예: 25분=1500)으로 교체한다. */
+        var LIVE_DURATION_SEC = 20;
+        var totalSeconds = 3 * 60 + 20; // 수업 시작까지 남은 시간(데모값)
+        var liveElapsed = 0;
+        var lessonState = "upcoming";
+
+        var heroStatus = document.getElementById("heroStatus");
+        var heroMedia = document.getElementById("heroMedia");
+        var heroCta = document.getElementById("heroCta");
+        var heroCtaLabel = heroCta.querySelector(".label");
+
+        function mmss(sec) {
+          var m = Math.floor(sec / 60),
+            s = sec % 60;
+          return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+        }
+
+        function renderHero() {
+          if (lessonState === "upcoming") {
+            heroStatus.setAttribute("data-state", "upcoming");
+            heroStatus.innerHTML =
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>' +
+              '<span class="num" id="countdown">' +
+              mmss(totalSeconds) +
+              '</span><span class="suffix">남음</span>';
+            heroMedia.classList.remove("is-ended");
+            heroCtaLabel.textContent = "강의실 바로 입장하기";
+            heroCta.classList.remove("is-ended");
+          } else if (lessonState === "soon") {
+            heroStatus.setAttribute("data-state", "soon");
+            heroStatus.innerHTML =
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>' +
+              '<span class="txt">잠시 후 시작</span>';
+            heroMedia.classList.remove("is-ended");
+            heroCtaLabel.textContent = "강의실 바로 입장하기";
+            heroCta.classList.remove("is-ended");
+          } else if (lessonState === "live") {
+            heroStatus.setAttribute("data-state", "live");
+            heroStatus.innerHTML =
+              '<span class="rc-live-dot" aria-hidden="true"></span><span class="txt">지금 수업 중</span>';
+            heroMedia.classList.remove("is-ended");
+            heroCtaLabel.textContent = "지금 입장하기";
+            heroCta.classList.remove("is-ended");
+          } else {
+            // ended
+            heroStatus.setAttribute("data-state", "ended");
+            heroStatus.innerHTML =
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>' +
+              '<span class="txt">수업이 종료되었습니다</span>';
+            heroMedia.classList.add("is-ended");
+            heroCtaLabel.textContent = "수업 결과 확인하기";
+            heroCta.classList.add("is-ended");
+          }
+        }
+
+        function tick() {
+          if (lessonState === "ended") return;
+          if (totalSeconds > 60) {
+            totalSeconds -= 1;
+            lessonState = "upcoming";
+          } else if (totalSeconds > 0) {
+            totalSeconds -= 1;
+            lessonState = "soon";
+          } else if (liveElapsed < LIVE_DURATION_SEC) {
+            liveElapsed += 1;
+            lessonState = "live";
+          } else {
+            lessonState = "ended";
+          }
+          renderHero();
+        }
+        renderHero();
+        var timerId = setInterval(tick, 1000);
+
+        heroCta.addEventListener("click", function () {
+          if (lessonState !== "ended") return;
+          var target = document.getElementById("reviewSection");
+          if (target)
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        /* 상태 미리보기(데모/QA 전용): 예정→임박→진행중→종료 순으로 강제 전환해 검토할 수 있게 한다 */
+        var previewStates = [
+          { totalSeconds: 200, liveElapsed: 0, lessonState: "upcoming" },
+          { totalSeconds: 8, liveElapsed: 0, lessonState: "soon" },
+          { totalSeconds: 0, liveElapsed: 0, lessonState: "live" },
+          {
+            totalSeconds: 0,
+            liveElapsed: LIVE_DURATION_SEC,
+            lessonState: "ended",
+          },
+        ];
+        var previewIndex = 0;
+        document
+          .getElementById("statusPreview")
+          .addEventListener("click", function () {
+            previewIndex = (previewIndex + 1) % previewStates.length;
+            var s = previewStates[previewIndex];
+            totalSeconds = s.totalSeconds;
+            liveElapsed = s.liveElapsed;
+            lessonState = s.lessonState;
+            renderHero();
+          });
+
+        /* 3단계 예습 플로우: 각 단계는 항상 같은 자리를 지키고, 클릭하면 크기만 커지고(활성) 나머지는 작아진다(톤다운).
+     말풍선(팝업)은 항상 자신의 마커 '아래'에서 카드 폭을 꽉 채우며 나타나고, 꼬리가 마커를 향하며,
+     크기는 1단계(레슨) 팝업 높이에 맞춰 통일된다. 점선 연결선은 캐릭터 '아래쪽'을 지나가도록 마커의 하단을 기준으로 그린다. */
+        var flow = document.getElementById("flow");
+        var steps = Array.prototype.slice.call(
+          flow.querySelectorAll(".rc-step"),
+        );
+        var linkPath = flow.querySelector("svg.link path");
+
+        function drawLink() {
+          var flowRect = flow.getBoundingClientRect();
+          if (!flowRect.width || !flowRect.height) return;
+          var svg = flow.querySelector("svg.link");
+          svg.setAttribute(
+            "viewBox",
+            "0 0 " + flowRect.width + " " + flowRect.height,
+          );
+          var points = steps.map(function (step) {
+            var m = step.querySelector(".rc-step-marker");
+            var r = m.getBoundingClientRect();
+            // 마커의 '아래쪽 가장자리'를 기준점으로 잡아, 선이 캐릭터 아래를 지나가도록 한다
+            return {
+              x: r.left + r.width / 2 - flowRect.left,
+              y: r.bottom - 4 - flowRect.top,
+            };
+          });
+          var d = "M" + points[0].x.toFixed(1) + " " + points[0].y.toFixed(1);
+          for (var i = 1; i < points.length; i++) {
+            var prev = points[i - 1],
+              cur = points[i],
+              midY = (prev.y + cur.y) / 2;
+            d +=
+              " C " +
+              prev.x.toFixed(1) +
+              " " +
+              midY.toFixed(1) +
+              ", " +
+              cur.x.toFixed(1) +
+              " " +
+              midY.toFixed(1) +
+              ", " +
+              cur.x.toFixed(1) +
+              " " +
+              cur.y.toFixed(1);
+          }
+          linkPath.setAttribute("d", d);
+        }
+
+        /* 모든 팝업의 높이를 "현재 열려 있는" 팝업 높이에 맞춘다 (처음엔 아무것도 안 열려 있으므로 그대로 둠).
+     측정 전에 반드시 min-height를 먼저 비워야 한다 — 비우지 않으면 이전에 적용된 min-height가
+     "바닥"으로 남아있어서, 드롭다운을 닫아 콘텐츠가 줄어도 measured height가 줄지 않고
+     계속 키만 커지는(줄어들지 않는) 버그가 생긴다. */
+        function syncPopupHeights() {
+          steps.forEach(function (step) {
+            step.querySelector(".rc-step-popup").style.minHeight = "";
+          });
+          var activeStep = steps.find(function (s) {
+            return s.getAttribute("data-active") === "true";
+          });
+          if (!activeStep) return;
+          var h = activeStep
+            .querySelector(".rc-step-popup")
+            .getBoundingClientRect().height;
+          if (!h) return;
+          steps.forEach(function (step) {
+            step.querySelector(".rc-step-popup").style.minHeight = h + "px";
+          });
+        }
+
+        /* 각 팝업의 꼬리를 자신의 캐릭터 쪽으로 이동 */
+        function syncTails() {
+          steps.forEach(function (step) {
+            var popup = step.querySelector(".rc-step-popup");
+            if (getComputedStyle(popup).display === "none") return;
+            var marker = step.querySelector(".rc-step-marker");
+            var mRect = marker.getBoundingClientRect();
+            var pRect = popup.getBoundingClientRect();
+            if (!pRect.width) return;
+            var x = mRect.left + mRect.width / 2 - pRect.left;
+            x = Math.max(22, Math.min(pRect.width - 22, x));
+            popup.querySelector(".rc-popup-tail").style.left = x + "px";
+          });
+        }
+
+        function refreshFlow() {
+          drawLink();
+          syncPopupHeights();
+          syncTails();
+        }
+
+        function setActiveStep(id) {
+          var clickedStep = steps.find(function (s) {
+            return s.getAttribute("data-step-id") === id;
+          });
+          var wasActive =
+            clickedStep && clickedStep.getAttribute("data-active") === "true";
+          steps.forEach(function (step) {
+            // 이미 열려 있는 걸 다시 클릭하면 닫는다(전부 닫힌 초기 상태로 되돌아갈 수 있게)
+            step.setAttribute(
+              "data-active",
+              !wasActive && step.getAttribute("data-step-id") === id
+                ? "true"
+                : "false",
+            );
+          });
+          refreshFlow();
+          setTimeout(refreshFlow, 300); // 크기 전환(.28s)이 끝난 뒤 좌표 다시 계산
+        }
+        steps.forEach(function (step) {
+          var marker = step.querySelector(".rc-step-marker");
+          marker.addEventListener("click", function () {
+            setActiveStep(step.getAttribute("data-step-id"));
+          });
+        });
+        window.addEventListener("resize", refreshFlow);
+        window.addEventListener("load", refreshFlow);
+        refreshFlow();
+
+        /* 완료 뱃지 — 팝업의 액션 버튼(교재보기/영상보기/AI 대화 시작)을 실제로 눌러야 그 단계가 "완료"로 표시된다 */
+        steps.forEach(function (step) {
+          step.querySelectorAll(".rc-popup-go").forEach(function (btn) {
+            btn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              step.setAttribute("data-completed", "true");
+            });
+          });
+        });
+
+        /* 유닛 선택 드롭다운 (팝업마다 1개씩 — 스크롤 목록 대신 "한 줄 + 펼치기") */
+        document.querySelectorAll(".rc-unit-select").forEach(function (sel) {
+          var toggle = sel.querySelector(".rc-unit-toggle");
+          var menu = sel.querySelector(".rc-unit-menu");
+          var labelEl = toggle.querySelector(".unit-label");
+          toggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            var open = toggle.getAttribute("aria-expanded") === "true";
+            toggle.setAttribute("aria-expanded", String(!open));
+            menu.hidden = open;
+            setTimeout(refreshFlow, 200); // 펼침으로 팝업 높이가 바뀌면 점선 좌표도 다시 계산
+          });
+          menu.querySelectorAll("button").forEach(function (btn) {
+            btn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              menu.querySelectorAll("button").forEach(function (b) {
+                b.classList.remove("cur");
+              });
+              btn.classList.add("cur");
+              labelEl.textContent = btn.getAttribute("data-unit");
+              menu.hidden = true;
+              toggle.setAttribute("aria-expanded", "false");
+              setTimeout(refreshFlow, 200);
+            });
+          });
+        });
+
+        /* 하단 내비 탭 */
+        document.querySelectorAll(".rc-nav-item").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll(".rc-nav-item").forEach(function (b) {
+              b.classList.remove("on");
+              b.removeAttribute("aria-current");
+            });
+            btn.classList.add("on");
+            btn.setAttribute("aria-current", "page");
+          });
+        });
+      })();
+    </script>
+    <script>
+      // 탭 전환 스크립트 — 헤더/탭 마크업과 함께 옮기면 됩니다.
+      document.querySelectorAll("[data-rc-tabs]").forEach(function (group) {
+        var buttons = Array.prototype.slice.call(
+          group.querySelectorAll("button[data-i]"),
+        );
+        var ind = group.querySelector(".ind");
+        buttons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            buttons.forEach(function (b) {
+              b.classList.remove("on");
+            });
+            btn.classList.add("on");
+            ind.style.transform =
+              "translateX(" + Number(btn.getAttribute("data-i")) * 100 + "%)";
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
