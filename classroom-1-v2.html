@@ -1,0 +1,2715 @@
+<title>전화영어 클래스룸 (폰트 확대)</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<style>
+  /* ===== Tokens (Role Based Color) ===== */
+  :root{
+    /* brand */
+    --purple:#5D4BE2;
+    --purple-light:#8B7BF5; /* 그래프 등 짧은 면적에서도 그라데이션이 또렷하게 보이도록 --purple보다 밝은 보조 톤 */
+    --purple-dark:#4F46E5;
+    --purple-deep:#30312C;
+    --marker-idle:#F6F4F2;
+    --purple-tint:#FFFFFF;
+    --selection-bg:#E7E4FC;
+    /* text */
+    --ink:#1C1917;
+    --sub:#6B655F;
+    --sub2:#8A8580;
+    /* surface */
+    --bg:#F6F4F2;
+    --header-bg:#FFFFFF;
+    --card:#FFFFFF;
+    --surface-subtle:#F8F6F4;
+    /* border */
+    --line:#E7E2DD;
+    --line-soft:#F2EEEA;
+    /* tone */
+    --mint-bg:#DCF5EC;
+    --mint-text:#037A55;
+    --amber-bg:#FDECC8;
+    --amber-text:#9A5B00;
+    --danger:#EF4444;
+    --danger-soft:#FEE2E2;
+    --holiday:#E4633B; /* 공휴일 표시 전용 — 일요일(#EF4444)·결석(--danger)과 헷갈리지 않도록 채도를 낮춘 별도 톤 */
+    --badge-1:#5D4BE2;
+    --badge-2:#4F46E5;
+    /* elevation */
+    --shadow-card:0 10px 26px -12px rgb(206 206 206 / 16%);
+    --shadow-btn:0 14px 26px -10px rgb(150 142 224 / 45%);
+    --r-card:18px;
+    --r-pill:999px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#F3F1FA; --sub:#C7C1D6; --sub2:#9E97B3;
+      --bg:#131019; --header-bg:#1B1726; --card:#1E1A2C;
+      --surface-subtle:#241F35; --line:#332C49; --line-soft:#2A2438;
+      --mint-bg:#123328; --mint-text:#4ADE9C;
+      --amber-bg:#3D2C0F; --amber-text:#F2B84B;
+      --danger-soft:rgba(239,68,68,.16);
+      --holiday:#FF7A50;
+      --purple-tint:#241F3D; --selection-bg:#322B5E;
+      --shadow-card:0 10px 26px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#F3F1FA; --sub:#C7C1D6; --sub2:#9E97B3;
+    --bg:#131019; --header-bg:#1B1726; --card:#1E1A2C;
+    --surface-subtle:#241F35; --line:#332C49; --line-soft:#2A2438;
+    --mint-bg:#123328; --mint-text:#4ADE9C;
+    --amber-bg:#3D2C0F; --amber-text:#F2B84B;
+    --danger-soft:rgba(239,68,68,.16);
+    --holiday:#FF7A50;
+    --purple-tint:#241F3D; --selection-bg:#322B5E;
+    --shadow-card:0 10px 26px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;} /* 클래스 기반 display 규칙이 hidden 속성을 덮어쓰지 않도록 명시 */
+  /* 2026-09-30: 앱 전체에서 스크롤바를 시각적으로 숨김(스크롤 기능은 유지) — 네이티브 앱 느낌을 위해 */
+  *{scrollbar-width:none; -ms-overflow-style:none;}
+  *::-webkit-scrollbar{display:none; width:0; height:0;}
+  /* html/body에 실제 높이를 줘야 .rc-app의 min-height:100%가 뷰포트 기준으로 동작한다 —
+     이게 없으면 컨텐츠가 짧을 때 화면 하단 내비 바로 위에서 배경이 뚝 끊겨 "짤린" 것처럼 보인다 */
+  html,body{height:100%;}
+  body{background:var(--bg); color:var(--ink); font-family:"Pretendard Variable","Pretendard",-apple-system,"Noto Sans KR",sans-serif;}
+  img{max-width:100%; display:block;}
+  button{font-family:inherit; border:none; background:none; cursor:pointer; color:inherit;}
+  h1,h2,h3,h4,p{margin:0; text-wrap:balance;}
+  .num{font-family:"Plus Jakarta Sans","Noto Sans KR",sans-serif; font-variant-numeric:tabular-nums;}
+
+  .rc-app{max-width:390px; margin:0 auto; min-height:100%; display:flex; flex-direction:column; background:var(--bg);}
+
+  /* ---------- Header ---------- */
+  /* 헤더는 스크롤에 같이 흘러가고(고정 X), 그 아래 상태탭 바만 상단에 고정된다 — 참고 이미지처럼 헤더 높이는 48px */
+  .rc-topbar{
+    height:48px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px;
+    padding:0 16px; background:var(--header-bg);
+  }
+  .rc-logo{display:flex; align-items:center; gap:8px; justify-self:start;}
+  .rc-logo-img{height:22px; width:auto; display:block;}
+  .rc-topbar-title{font-size:18px; font-weight:800; color:var(--ink); white-space:nowrap; justify-self:center;}
+  .rc-topbar .rc-icon-btn{justify-self:end;}
+  .rc-icon-btn{
+    width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--surface-subtle); color:var(--sub); flex:none;
+  }
+  .rc-icon-btn:active{transform:scale(.92);}
+  .rc-icon-btn svg{width:18px; height:18px;}
+
+  /* 2026-10-01: 하단 고정 네비(.rc-bottom-nav, 실측 약 45px)보다 거의 2배(90px)나 여유를 둬서 페이지 끝에
+     불필요하게 큰 공백이 생기던 것을 "네비 실측 높이 + 적당한 숨통(20px)" 수준인 65px로 좁힘 —
+     클래스룸·스케줄 두 페이지가 이 클래스 하나를 공유하므로 값 하나만 바꿔도 둘 다 동일하게 반영된다 */
+  .rc-body{flex:1; padding:20px 8px calc(65px + env(safe-area-inset-bottom,0px)); display:flex; flex-direction:column; gap:18px;}
+
+  /* ---------- Tutor + Hero : 하나의 카드로 묶어 튜터 정보와 입장 영역이 한 덩어리로 보이게 한다 ---------- */
+  .rc-tutor-hero-card{
+    background:var(--card); border-radius:var(--r-card); box-shadow:var(--shadow-card);
+    padding:20px; display:flex; flex-direction:column; gap:16px;
+  }
+  .rc-tutor-row{display:flex; align-items:center; gap:12px;}
+  .rc-tutor-avatar{
+    width:32px; height:32px; border-radius:50%; flex:none; overflow:hidden;
+  }
+  .rc-tutor-avatar img{width:100%; height:100%; object-fit:cover; display:block;}
+  .rc-tutor-info{flex:1; min-width:0;}
+  /* 2026-09-30: 튜터 이름보다 "수업 요일·시간"이 실제로 더 중요한 정보라는 피드백 —
+     이름은 톤을 낮추고(회색) 작게, 요일·시간은 보라 굵은 글자로 승격해 먼저 눈에 띄게 한다.
+     (칩 배경/패딩은 사용자가 직접 다듬은 뒤 텍스트만 강조하는 쪽으로 최종 결정 — 배경 없이 순수 텍스트) */
+  .rc-tutor-info .name{font-size:14px; font-weight:600; color:var(--sub); line-height:1.2;}
+  .rc-tutor-info .schedule{
+    display:inline-flex; align-items:center;
+    font-size:14px; font-weight:800; color:var(--purple); line-height:1.4;
+  }
+  /* 너무 둥글지 않게 스퀘어에 가까운 라운드 사각형으로 — 원형 아이콘 버튼과 구분 */
+  .rc-cal-btn{
+    width:46px; height:46px; border-radius:14px; flex:none; color:#fff;
+    background:linear-gradient(150deg,var(--purple),var(--purple-dark));
+    display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-btn);
+  }
+  .rc-cal-btn svg{width:21px; height:21px;}
+
+  /* 강좌명 스크롤 래퍼 — 카드 박스 없이 배경 위에 바로 배치, 카드들과 좌우 정렬만 맞춘다
+     2026-10-01: 스케줄 쪽(.sc-course-tabs-wrap)과 상단 padding이 0 vs 2px로 미묘하게 달라 탭 위치가
+     페이지마다 살짝 어긋나 보였음 — 두 래퍼를 동일한 값(0 2px)으로 통일 */
+  .rc-course-tabs-wrap{display:flex; flex-direction:column; gap:10px; padding:0 2px;}
+
+  /* 강좌 상태 탭(진행/예정/완료) — 평소엔 헤더 바로 아래 틈 없이 붙어 있다가, 스크롤하면 헤더는 지나가고
+     이 바만 상단에 고정된다. 헤더와 같은 흰 배경 + 하단 구분선으로 하나의 상단 영역처럼 보이게 하고,
+     선택 여부는 텍스트 폭에 꼭 맞는 얇은 브랜드 컬러 밑줄로만 표시한다 */
+  .rc-status-bar{
+    position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+    padding:0 16px; background:var(--header-bg); border-bottom:1px solid var(--line-soft);
+  }
+  .rc-tutor-tabs{display:flex; align-items:center; gap:20px;}
+  .rc-tutor-tabs button{position:relative; padding:15px 0; font-size:19px; font-weight:600; color:var(--sub2);}
+  .rc-tutor-tabs button.on{color:var(--ink); font-weight:800;}
+  .rc-tutor-tabs button.on::after{content:''; position:absolute; left:0; right:0; bottom:0; height:3px; background:var(--purple); border-radius:2px;}
+
+  /* 강좌명 좌우 스크롤 — 2단계 탭. 참고 이미지처럼 알약(pill) 버튼 형태: 선택된 강좌는 검정 배경 + 흰 글자,
+     선택되지 않은 강좌는 옅은 테두리만 있는 아웃라인 알약으로 표시한다. */
+  /* 우측은 페이지·래퍼 패딩만큼 음수 마진을 줘서 스크롤 끝까지 여백 없이 꽉 차게 굴러가도록 한다(좌측은 그대로) */
+  .rc-course-scroll{position:relative; display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; margin-right:-10px; scrollbar-width:none;}
+  .rc-course-scroll::-webkit-scrollbar{display:none;}
+  .rc-course-scroll button{
+    /* 2026-10-01: 선택/비선택 탭이 둘 다 700이라 구분이 안 됐음 — 비선택은 500으로 낮춰 선택된 탭(700)만 또렷하게
+       같은 날 위아래 패딩도 9px→7px로 줄여 탭 알약이 불필요하게 두꺼워 보이지 않도록 함 */
+    flex:none; padding:7px 18px; border-radius:50vw; font-size:14.5px; line-height:16px; font-weight:500;
+    color:var(--sub); background:var(--card); border:1.5px solid var(--line-soft); white-space:nowrap;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .rc-course-scroll button.on{color:#fff; font-weight:700; background:var(--ink); border-color:var(--ink);}
+  .rc-course-scroll button[hidden]{display:none;}
+
+  /* 스크롤 힌트 — 탭이 화면 끝에서 뚝 잘려 보이는 문제 보완. 더 볼 탭이 있는 방향에만 배경색 그라데이션 페이드를 겹쳐
+     "여기서 끝이 아니다"를 알려준다. 스크롤 컨테이너 자체의 pseudo-element라 스크롤해도 화면상 위치는 고정된다. */
+  .rc-course-scroll::before, .rc-course-scroll::after{
+    content:''; position:absolute; top:0; bottom:2px; width:28px; pointer-events:none; z-index:1;
+    opacity:0; transition:opacity .15s ease;
+  }
+  .rc-course-scroll::before{left:0; background:linear-gradient(to right, var(--bg), rgba(246,244,242,0));}
+  .rc-course-scroll::after{right:0; background:linear-gradient(to left, var(--bg), rgba(246,244,242,0));}
+  .rc-course-scroll.has-scroll-l::before{opacity:1;}
+  .rc-course-scroll.has-scroll-r::after{opacity:1;}
+
+  /* ---------- Hero (튜터 카드 내부 영역) ---------- */
+  /* 캐릭터 영상은 '정보'가 아니라 '감성/브랜드' 요소 — 행동에 필요한 정보(시간·CTA)보다 면적이 커지지 않도록
+     비율을 더 넓고 낮게 잡아 캐릭터를 시각적으로 더 낮춘다. 튜터 정보 영역과의 구분선은 없애 하나로 이어지게 한다. */
+  .rc-hero-inner{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    padding-top:6px;
+  }
+  /* 환경 테스트: 수업 입장 전 카메라/마이크 점검 진입점. 현재는 디자인 검토용으로 4가지 수업 상태
+     (예정/임박/진행중/종료)를 순환 미리보기하는 동작이 연결되어 있음 — 실제 기능 연결 시 교체 필요.
+     CTA 아래 하단 링크로 위치 이동 */
+  .rc-hero-preview{
+    font-size:13px; font-weight:600; color:var(--sub2); text-decoration:underline; text-underline-offset:2px;
+  }
+  /* 영상은 카드 안쪽 패딩을 무시하고 카드 폭 전체로 채운다(내용은 full) — 타이틀/버튼 등 텍스트만 카드 패딩(20px)을 유지(내용은 약간) */
+  .rc-hero-media{
+    width:calc(100% + 40px); margin:0 -20px; aspect-ratio:3.8/1; border-radius:0; overflow:hidden; background:#fff;
+    position:relative; transition:opacity .25s ease;
+  }
+  .rc-hero-media video{width:100%; height:100%; object-fit:contain; background:#fff;}
+  /* 상태별 색상 : 보라=행동(CTA 전용), 회색/잉크=정보 → 예정/임박 두 상태만 사용 */
+  .rc-hero-status{display:flex; align-items:baseline; gap:7px; justify-content:center; color:var(--ink);}
+  .rc-hero-status[data-state="soon"]{color:var(--ink);}
+  .rc-hero-status svg{width:19px; height:19px; align-self:center; margin-right:-2px;}
+  .rc-hero-status .num{font-size:28px; font-weight:800; letter-spacing:.5px;}
+  .rc-hero-status .suffix, .rc-hero-status .txt{font-size:15.5px; font-weight:500; color:var(--sub);}
+
+  .rc-hero-lesson{display:flex; flex-direction:column; align-items:center; gap:4px;}
+  .rc-hero-lesson-num{font-size:13.5px; font-weight:500; color:var(--sub2); text-align:center;}
+  .rc-hero-title{font-size:21px; font-weight:700; color:var(--ink); text-align:center; line-height:1.35;}
+  .rc-hero-cta{
+    padding:16px 32px; border-radius:14px; color:#fff; font-size:16.5px; font-weight:700;
+    background:linear-gradient(120deg,var(--purple) 0%,var(--purple-dark) 100%);
+    display:flex; align-items:center; justify-content:center; gap:7px; box-shadow:var(--shadow-btn);
+  }
+  .rc-hero-cta svg{width:15px; height:15px;}
+  .rc-hero-cta:active{transform:translateY(1px); filter:brightness(.97);}
+
+  /* ---------- Section heading : 강/약 위계 ---------- */
+  /* 타이틀-콘텐츠 간격: "타이틀과 그 위 콘텐츠 사이"는 margin-top으로 여유 있게,
+     "타이틀과 그 아래 자기 내용" 사이는 gap 12px로 타이틀이 자기 내용에 붙도록 유지 */
+  .rc-block{display:flex; flex-direction:column; gap:12px; margin-top:20px;} /* .rc-body의 gap 18px + 여기 20px = 위쪽 총 38px */
+  .rc-block-title{font-size:23.5px; font-weight:700; color:var(--ink); line-height:1.4; letter-spacing:-.3px;}
+  /* "해야 한다"는 압박감이 들지 않도록 가볍게 안내하는 한 줄 — 예습이 필수 체크리스트처럼 보이지 않게 톤을 낮춘다 */
+
+  /* ---------- Diagram card : 3단계 예습 플로우 (고정 위치, 클릭 시 크기만 확대/축소) ---------- */
+  .rc-diagram{
+    background:var(--card); border-radius:var(--r-card); box-shadow:var(--shadow-card);
+    position:relative; overflow:hidden; padding:36px 30px 38px;
+  }
+  .rc-flow{position:relative; display:flex; flex-direction:column;}
+  .rc-flow svg.link{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none;}
+  /* 순서(flow)가 아니라 "선택 가능한 준비 메뉴"라는 인상을 주기 위해 선을 30~40% 더 약하게 낮춘다 */
+  .rc-flow svg.link path{fill:none; stroke:var(--purple); stroke-width:2; stroke-dasharray:5 7; opacity:.28;}
+
+  /* 각 단계는 항상 같은 순서·같은 자리를 지킨다 — 캐릭터는 좌-우-좌 순으로 번갈아 배치되고,
+     말풍선은 캐릭터와 반대쪽(우-좌-우)으로 열려 서로 마주보듯 안쪽을 향해 펼쳐진다.
+     닫지 않은 기본 상태에서는 세 팝업이 모두 열려 있다. */
+  .rc-step{position:relative; display:flex; align-items:center; justify-content:center; gap:32px;}
+  .rc-step + .rc-step{margin-top:52px;}
+  .rc-step[data-align="left"]{flex-direction:row;}
+  .rc-step[data-align="right"]{flex-direction:row-reverse;}
+
+  .rc-step-marker{
+    position:relative; width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--marker-idle); /* 그라데이션 없이 단색 — 기본(닫힌) 상태 */
+    flex:none; transform:scale(1);
+    /* width/height 대신 transform:scale로 커지게 해서 링 애니메이션과 같은 곡선으로 한 동작처럼 매끄럽게 이어지게 한다 */
+    transition:transform .36s cubic-bezier(.22,1,.36,1), background .3s cubic-bezier(.22,1,.36,1);
+  }
+  /* 캐릭터 주변 링 — 완료 전엔 테두리 없이 작은 원 그대로 두고, 실제로 완료(data-completed)됐을 때만
+     보라 톤 이중선이 원을 따라 그려지는(stroke-dashoffset) 모션으로 나타난다. */
+  .rc-marker-ring{
+    position:absolute; inset:-9px; width:calc(100% + 18px); height:calc(100% + 18px);
+    transform:rotate(-90deg); /* 12시 방향에서 시계방향으로 그려지도록 시작점을 위로 보정 */
+    pointer-events:none;
+  }
+  .rc-marker-ring circle{fill:none;}
+  .rc-marker-ring .ring-idle{display:none;}
+  .rc-marker-ring .ring-outer,
+  .rc-marker-ring .ring-inner{stroke-linecap:round; opacity:0;}
+  /* 두 링의 반지름 차이(5)를 두께(5)와 맞춰 안쪽·바깥쪽 선이 사이 흰 여백 없이 서로 맞닿도록 한다 */
+  .rc-marker-ring .ring-outer{stroke:var(--purple); stroke-width:5; stroke-dasharray:295.3; stroke-dashoffset:295.3;}
+  .rc-marker-ring .ring-inner{stroke:var(--selection-bg); stroke-width:5; stroke-dasharray:263.9; stroke-dashoffset:263.9;}
+  @keyframes rcRingDraw{ to{stroke-dashoffset:0;} }
+  .rc-step[data-completed="true"] .rc-marker-ring .ring-outer{
+    opacity:1; animation:rcRingDraw .7s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .rc-step[data-completed="true"] .rc-marker-ring .ring-inner{
+    opacity:1; animation:rcRingDraw .7s cubic-bezier(.22,1,.36,1) .1s forwards;
+  }
+  .rc-step-marker img{position:relative; width:82%; height:auto;}
+  .rc-step[data-active="true"] .rc-step-marker{transform:scale(1.14); background:#fff;}
+  .rc-step-marker:hover{filter:brightness(.97); background:#fff;}
+
+  /* 팝업이 닫혀 있을 때(활성 상태가 아닐 때) 항상 노출되는 캡슐 칩 — 완료 여부와 무관하게 문구·높이는
+     동일하고, 실제 완료 여부는 캐릭터 테두리(보라 링)로만 구분한다. 세 칩 모두 같은 규격이라 높이가 맞는다. */
+  /* 캐릭터를 다시 눌러야만 팝업이 열리던 것과 달리, 이제 칩 자체도 버튼이라 텍스트를 눌러도 같은 팝업이
+     다시 열린다 — 캐릭터 하나에만 의존하지 않고 칩(텍스트)도 동일한 히트 타겟이 되도록 한다 */
+  .rc-step-done-chip{
+    display:none; align-items:center; gap:6px; padding:10px 16px; border-radius:var(--r-pill);
+    background:var(--purple); color:#fff; font-size:14px; font-weight:700; white-space:nowrap;
+    box-shadow:var(--shadow-btn); transition:transform .12s ease, filter .12s ease;
+  }
+  .rc-step-done-chip svg{width:14px; height:14px; flex:none;}
+  .rc-step-done-chip:active{transform:translateY(1px); filter:brightness(.97);}
+  /* 완료 칩(체크 아이콘 + "완료")은 실제로 완료(data-completed)됐을 때만 노출 */
+  .rc-step:not([data-active="true"])[data-completed="true"] .rc-step-done-chip{display:flex;}
+
+  /* 완료 전에 팝업만 닫은 상태 — 체크 아이콘·"완료" 문구 없이 단계 타이틀만 칩으로 노출.
+     완료 칩과 패딩·폰트 크기·굵기를 동일하게 맞춰 3개 칩의 높이가 항상 같게 유지된다 */
+  .rc-step-title-chip{
+    display:none; align-items:center; padding:10px 16px; border-radius:var(--r-pill);
+    background:var(--surface-subtle); color:var(--sub); font-size:14px; font-weight:700; white-space:nowrap;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .rc-step-title-chip:active{transform:translateY(1px); filter:brightness(.97);}
+  .rc-step:not([data-active="true"])[data-completed="false"] .rc-step-title-chip{display:flex;}
+
+  /* 말풍선처럼 캐릭터 '옆'에서 나타나는 팝업 — 카드 폭을 꽉 채우지 않고 고정폭만 차지하며,
+     캐릭터와 반대쪽으로 열려 서로 마주보듯 안쪽을 향한다. 꼬리(.rc-popup-tail)는 캐릭터를 향한
+     쪽 옆면에 붙는다. */
+  /* 진한 레드 그라데이션 대신 연핑크 톤(--selection-bg)으로 — 레드는 아래 CTA 버튼에만 남겨
+     카드 전체가 아니라 "누를 수 있는 지점"에만 시선이 가도록 한다 */
+  .rc-step-popup{
+    display:none; position:relative; width:196px; flex:none;
+    background:var(--selection-bg);
+    border-radius:16px; padding:20px 18px; box-shadow:0 14px 26px -16px rgba(79,70,229,.35);
+    text-align:center; flex-direction:column; justify-content:center; gap:8px; box-sizing:border-box;
+  }
+  .rc-step[data-active="true"] .rc-step-popup{display:flex;}
+  /* 꼬리는 팝업과 동일한 톤을 그대로 이어받아 색이 끊기지 않고 한 몸처럼 보인다 */
+  .rc-popup-tail{
+    position:absolute; top:50%; width:14px; height:14px;
+    background:var(--selection-bg);
+    transform:translateY(-50%) rotate(45deg);
+  }
+  .rc-step[data-align="left"] .rc-popup-tail{left:-6px;}
+  .rc-step[data-align="right"] .rc-popup-tail{right:-6px;}
+  /* 배경이 밝아졌으니 흰 반투명 텍스트 대신 잉크 톤으로 — 어두운 카드 전용이던 색을 밝은 카드에 맞게 반전 */
+  .rc-step-popup .sub{font-size:12.5px; font-weight:500; color:var(--sub); text-align:center; line-height:1.4;}
+
+  /* 현재 회차 표시 — 드롭다운 없이 지금 진행할 회차만 텍스트로 안내 (선택할 다른 회차가 없음) */
+  .rc-unit-current{font-size:14.5px; font-weight:600; color:var(--ink); text-align:center; line-height:1.5; word-break:keep-all; overflow-wrap:break-word;}
+  /* CTA 버튼만 솔리드 레드로 — 카드 안에서 유일하게 눌러야 할 지점임을 명확히 한다 */
+  .rc-popup-go{
+    display:block; width:100%; margin-top:8px; padding:14px 10px; border-radius:13px;
+    font-size:16px; font-weight:700; text-align:center; background:var(--purple); color:#fff;
+  }
+  .rc-popup-go:active{transform:scale(.98);}
+
+  /* ---------- Feedback cards : 수업리뷰 + Class Report, 위아래 배치 + 실제 데이터 미리보기 (높이 통일) ---------- */
+  .rc-fb-list{display:flex; flex-direction:column; gap:12px;}
+  .rc-fb-card{
+    position:relative; width:100%; text-align:left; display:flex; flex-direction:column; gap:16px;
+    justify-content:space-between; /* 두 카드의 높이를 통일 — 내용이 짧은 카드는 아래 여백만큼 행 사이 간격이 균등하게 벌어져 위·아래가 맞아 보인다 */
+    min-height:196px; padding:18px; background:var(--purple-tint); border-radius:16px;
+  }
+  /* 2026-09-30: 우측 화살표만이 아니라 타이틀 줄 전체(라벨+칩+화살표)가 하나의 탭 영역이 되도록
+     <span>이던 .rc-fb-top을 버튼으로 변경 — 라벨을 직접 눌러도 팝업이 열린다 */
+  .rc-fb-top{display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; background:none; border:none; padding:0; text-align:left; cursor:pointer;}
+  .rc-fb-top:active{opacity:.7;}
+  .rc-fb-top-left{display:flex; align-items:center; gap:6px; min-width:0;}
+  /* 라벨(수업리뷰/Class Report)을 카드 안에서 가장 굵고 큰 글자로 키워 "제목"임이 한눈에 보이게 한다 */
+  .rc-fb-top .label{font-size:19.5px; font-weight:800; color:var(--ink); letter-spacing:-.2px;}
+  /* Class Report 카드의 기간(07.01–07.31)을 알약형 칩으로 — 예전 발음/교정 개수 칩과 같은 톤을 이어받아
+     "정보 표시"라는 성격을 그대로 유지한다(2026-09-30) */
+  .rc-fb-date{font-size:13px; font-weight:600; padding:5px 11px; border-radius:999px; background:var(--surface-subtle); color:var(--sub2); white-space:nowrap;}
+  /* 인용문은 라벨(수업리뷰)보다 한 단계 낮은 톤으로 — 카드 안에서 "제목(강) → 인용(약)"의 위계가 보이게 한다 */
+  .rc-fb-quote{
+    font-size:17px; font-weight:500; color:var(--sub); line-height:1.45;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    word-break:keep-all; overflow-wrap:break-word;
+  }
+  /* 발음/교정 개수 칩을 없애 카드가 한결 단순해졌으므로, 다시듣기 버튼은 오른쪽 끝에 붙인다 */
+  .rc-fb-footer{display:flex; align-items:center; justify-content:flex-end; gap:8px; flex-wrap:wrap;}
+  /* "다시듣기"는 실제 누르는 액션 — 보라 배경을 꽉 채우고 흰 글자로 강하게 대비를 줘서
+     옆의 회색 칩(정보)과 뚜렷하게 다른 무게로 보이게 한다 */
+  .rc-fb-replay{
+    display:flex; align-items:center; gap:5px; flex:none; white-space:nowrap;
+    font-size:13.5px; font-weight:700; color:#fff;
+    background:linear-gradient(150deg,var(--purple),var(--purple-dark));
+    padding:8px 13px; border-radius:999px; box-shadow:var(--shadow-btn);
+  }
+  .rc-fb-replay svg{width:15px; height:15px;}
+  .rc-fb-replay:active{transform:translateY(1px); filter:brightness(.97);}
+  /* 텍스트("바로가기") 없이 화살표 아이콘만으로 표기 — 탭 영역 확보를 위해 아이콘 주변 여백을 넉넉히 두고,
+     아이콘 하나로만 표현되므로 눈에 잘 띄도록 크기를 키운다(2026-09-30) */
+  .rc-fb-goto{
+    flex:none; display:flex; align-items:center; justify-content:center; padding:7px;
+    color:var(--purple);
+  }
+  .rc-fb-goto svg{width:22px; height:22px;}
+  .rc-vbar-row{display:flex; align-items:flex-end; gap:8px;}
+  .rc-vbar-item{flex:1; display:flex; flex-direction:column; align-items:center; gap:7px; min-width:0;}
+  /* 막대 위 숫자는 이 카드에서 가장 중요한 데이터라 라벨보다 확실히 크고 굵게 — 숫자(강) vs 항목명(약)의 대비를 키운다 */
+  .rc-vbar-val{font-size:15.5px; font-weight:800; color:var(--ink); line-height:1;}
+  .rc-vbar-track{width:18px; height:48px; border-radius:5px 5px 2px 2px; background:var(--line-soft); display:flex; align-items:flex-end; overflow:hidden; flex:none;}
+  /* 막대 위쪽은 밝게, 아래쪽은 진하게 — 단색 대신 또렷한 그라데이션으로 세련된 느낌을 준다 */
+  .rc-vbar-fill{width:100%; height:0; border-radius:5px 5px 2px 2px; background:linear-gradient(180deg,var(--purple-light),var(--purple-dark)); transition:height .8s cubic-bezier(.22,1,.36,1);}
+  .rc-vbar-row.in .rc-vbar-item:nth-child(1) .rc-vbar-fill{height:var(--h); transition-delay:0s;}
+  .rc-vbar-row.in .rc-vbar-item:nth-child(2) .rc-vbar-fill{height:var(--h); transition-delay:.08s;}
+  .rc-vbar-row.in .rc-vbar-item:nth-child(3) .rc-vbar-fill{height:var(--h); transition-delay:.16s;}
+  .rc-vbar-row.in .rc-vbar-item:nth-child(4) .rc-vbar-fill{height:var(--h); transition-delay:.24s;}
+  .rc-vbar-row.in .rc-vbar-item:nth-child(5) .rc-vbar-fill{height:var(--h); transition-delay:.32s;}
+  /* 항목명(이해력·유창성...)은 숫자보다 작고 얇게 낮춰 숫자 쪽으로 시선이 먼저 가도록 한다 */
+  .rc-vbar-label{font-size:12.5px; font-weight:500; color:var(--sub2); white-space:nowrap;}
+
+  /* ---------- Icon grid (질문하기 · 만족도 평가 · AI 히스토리 3종, 낮은 우선순위라 시각 무게 축소) ---------- */
+  .rc-icon-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+  .rc-icon-tile{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; padding:18px 6px;
+    background:var(--card); border:1px solid var(--line-soft); border-radius:16px;
+  }
+  .rc-icon-tile svg{width:22px; height:22px; color:var(--sub2); flex:none;}
+  .rc-icon-tile span{font-size:14.5px; font-weight:500; color:var(--sub); text-align:center;}
+  .rc-icon-tile:active{transform:translateY(1px);}
+
+  /* ---------- Bottom nav ---------- */
+  /* 아이콘+라벨 좌우 배치로 변경 — 세로 배치보다 바 높이를 덜 차지하게 함 */
+  .rc-bottom-nav{
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    max-width:430px; margin:0 auto;
+    display:flex; background:var(--card); border-top:1px solid var(--line-soft);
+    padding:10px 24px calc(10px + env(safe-area-inset-bottom,0px));
+  }
+  .rc-nav-item{
+    flex:1; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:7px;
+    font-size:13.5px; font-weight:700; color:var(--sub2); white-space:nowrap;
+  }
+  .rc-nav-item svg{width:22px; height:22px;}
+  .rc-nav-item.on{color:var(--purple);}
+
+  /* ---------- Schedule screen : 클래스룸 화면과 동일한 컬러 토큰·타이포 스케일을 그대로 이어받는다 ---------- */
+  /* 강좌 선택 — 클래스룸의 강좌명 스크롤 탭과 동일한 형태(아바타·드롭다운 없이 알약 탭만)
+     2026-10-01: 클래스룸 쪽(.rc-course-tabs-wrap)과 동일한 값(0 2px)으로 통일 — 상단 2px 차이 제거 */
+  .sc-course-tabs-wrap{display:flex; flex-direction:column; gap:10px; padding:0 2px;}
+  /* 우측은 페이지·래퍼 패딩만큼 음수 마진을 줘서 스크롤 끝까지 여백 없이 꽉 차게 굴러가도록 한다(좌측은 그대로) */
+  .sc-course-scroll{position:relative; display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; margin-right:-10px; scrollbar-width:none;}
+  .sc-course-scroll::-webkit-scrollbar{display:none;}
+  .sc-course-scroll button{
+    /* 2026-10-01: 클래스룸 탭과 동일하게 비선택 500/선택 700으로 대비를 줌 + 위아래 패딩도 7px로 통일 */
+    flex:none; padding:7px 18px; border-radius:50vw; font-size:14.5px; line-height:16px; font-weight:500;
+    color:var(--sub); background:var(--card); border:1.5px solid var(--line-soft); white-space:nowrap;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .sc-course-scroll button.on{color:#fff; font-weight:700; background:var(--ink); border-color:var(--ink);} /* 클래스룸 탭과 동일한 검정 톤 */
+
+  /* 상단 년월 내비 + 연기/보강 안내 영역 : 페이지 여백과 무관하게 배경이 화면 끝까지 꽉 차 보이도록
+     좌우로 음수 마진을 줘서 .rc-body의 좌우 패딩만큼 밖으로 뺀 뒤, 같은 값을 다시 패딩으로 채운다.
+     (카드형으로도 만들어봤지만, 월간 보기의 날짜별 배경 박스와 겹쳐 "박스 안에 박스"로 답답해 보여
+     원래의 풀와이드 방식으로 되돌림) */
+  .sc-topbar-card{background:var(--card); display:flex; flex-direction:column; gap:16px; margin-inline:-8px; padding:16px 8px 18px;}
+  .sc-week-topbar{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 2px;}
+  .sc-week-label-group{display:flex; align-items:center; gap:9px; min-width:0;}
+  /* 이전/다음 화살표 대신 라벨을 탭하면 바텀시트로 년월을 고른다 */
+  .sc-month-trigger{display:flex; align-items:center; gap:3px; padding:4px 2px; flex:none;}
+  .sc-month-trigger .m-label{font-size:19px; font-weight:800; letter-spacing:-.15px; color:var(--ink);}
+  .sc-month-trigger svg{width:17px; height:17px; color:var(--sub2); flex:none; margin-top:1px;}
+  .sc-month-trigger:active svg{color:var(--sub);}
+  /* 오늘로 바로 이동하는 보조 버튼 — 참고 이미지 기준 회색 알약 배지 형태로 변경(2026-09-30).
+     .ls-today(레슨 시트의 TODAY 배지)와 같은 톤(surface-subtle 배경 + sub2 텍스트)을 재사용해
+     "정보성 보조 버튼"이라는 성격을 명확히 하고, 보라색은 남기지 않는다.
+     2026-10-01: locate 아이콘을 붙였다가 "이상하다"는 피드백으로 제거, 텍스트만 남김 */
+  .sc-today-btn{
+    flex:none; font-size:12px; font-weight:700; letter-spacing:.3px; color:var(--sub2);
+    background:var(--surface-subtle); padding:5px 11px; border-radius:var(--r-pill); line-height:1.3;
+  }
+  .sc-today-btn:active{opacity:.7;}
+  /* 주간/월간 전환 — 세그먼트 컨트롤 형태로 선택된 쪽만 배경이 채워진다 */
+  .sc-view-toggle{display:flex; align-items:center; background:var(--surface-subtle); border-radius:var(--r-pill); padding:3px; gap:2px; flex:none;}
+  .sc-view-seg{padding:7px 16px; border-radius:var(--r-pill); font-size:14px; font-weight:700; color:var(--sub); transition:background .15s ease, color .15s ease;}
+  .sc-view-seg.on{background:var(--card); color:var(--ink); box-shadow:0 1px 3px rgba(28,25,23,.12);}
+
+  /* 연기/보강 안내 + 수업 루틴 변경 — 둘 다 버튼, 텍스트 액션 톤(.rc-fb-goto/.sc-today-btn과 같은
+     폰트 굵기 700·인터랙션 opacity .7)은 그대로 유지. 연기/보강 안내는 보라색으로 강조하고,
+     수업 루틴 변경은 톤을 낮춰 회색(text/tertiary)으로 둔다.
+     2026-10-01: 카드 밖에 따로 떠 있어 리스트 바로 위에서 붕 뜬 느낌이라는 피드백으로, 캘린더 카드
+     안의 푸터 줄로 옮기고 구분선(border-top)으로만 위와 분리 — 카드 하나의 덩어리로 정리 */
+  .sc-quicklinks{
+    display:flex; align-items:center; flex-wrap:wrap; row-gap:6px; gap:11px;
+    padding:14px 2px 0; border-top:1px solid var(--line-soft);
+  }
+  .sc-quicklinks .sq-item{display:flex; align-items:center; gap:5px; padding:0; font-size:13.5px; font-weight:600; color:var(--purple); white-space:nowrap;}
+  .sc-quicklinks .sq-item svg{width:15px; height:15px; flex:none; opacity:.85;}
+  .sc-quicklinks .sq-item:active{opacity:.7;}
+  .sc-quicklinks .sq-action{flex:none; margin-left:auto; color:var(--sub); font-weight:600;}
+  .sc-quicklinks .sq-action svg{opacity:.7;}
+
+  /* ---------- 년월 선택 바텀시트 : 상단 라벨을 탭하면 열리는 iOS 스타일 스크롤 휠 피커 ---------- */
+  .sc-picker-overlay{
+    position:fixed; inset:0; z-index:50; display:flex; align-items:flex-end; justify-content:center;
+    background:rgba(28,25,23,.45); opacity:0; transition:opacity .2s ease;
+  }
+  .sc-picker-overlay.on{opacity:1;}
+  .sc-picker-sheet{
+    width:100%; max-width:390px; background:var(--card); border-radius:22px 22px 0 0;
+    box-shadow:0 -20px 40px -20px rgba(0,0,0,.3); transform:translateY(100%);
+    transition:transform .25s cubic-bezier(.32,.72,0,1); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .sc-picker-overlay.on .sc-picker-sheet{transform:translateY(0);}
+  .sc-picker-header{display:flex; align-items:center; justify-content:space-between; padding:16px 8px; border-bottom:1px solid var(--line-soft);}
+  .sc-picker-cancel{font-size:15px; font-weight:600; color:var(--sub); padding:6px 10px;}
+  .sc-picker-title{font-size:23.5px; font-weight:700; letter-spacing:-.3px; color:var(--ink);}
+  .sc-picker-confirm{
+    font-size:15px; font-weight:800; color:#fff; padding:7px 16px; border-radius:var(--r-pill);
+    background:linear-gradient(150deg,var(--purple),var(--purple-dark));
+  }
+  .sc-picker-wheels{position:relative; display:flex; padding:6px 8px 18px;}
+  .sc-picker-highlight{position:absolute; left:8px; right:8px; top:90px; height:36px; border-radius:12px; background:var(--surface-subtle); pointer-events:none; z-index:0;}
+  .sc-picker-col{position:relative; z-index:1; flex:1; height:216px; overflow-y:auto; scroll-snap-type:y mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+  .sc-picker-col::-webkit-scrollbar{display:none;}
+  .sc-picker-col-inner{padding:90px 0;}
+  .sc-picker-item{
+    height:36px; display:flex; align-items:center; justify-content:center; scroll-snap-align:center;
+    font-size:17.5px; font-weight:600; color:var(--sub2); transition:color .1s ease, font-size .1s ease;
+  }
+  .sc-picker-item.active{font-size:19.5px; font-weight:800; color:var(--ink);}
+
+  /* ---------- 레슨별 전체보기 바텀시트 : 예습 3단계(교재/사전 학습/AI 학습) 팝업의 "전체 보기"를 누르면
+     뜨는 공용 시트. 년월 선택 바텀시트(.sc-picker-*)와 같은 셸(라운드·그림자·슬라이드업)을 그대로 쓰고,
+     본문만 휠 대신 레슨별 이동 버튼 목록으로 바꾼다 */
+  .lesson-sheet-overlay{
+    position:fixed; inset:0; z-index:55; display:flex; align-items:flex-end; justify-content:center;
+    background:rgba(28,25,23,.45); opacity:0; transition:opacity .2s ease;
+  }
+  .lesson-sheet-overlay.on{opacity:1;}
+  .lesson-sheet-panel{
+    width:100%; max-width:390px; max-height:min(74vh,600px); display:flex; flex-direction:column;
+    background:var(--card); border-radius:22px 22px 0 0; box-shadow:0 -20px 40px -20px rgba(0,0,0,.3);
+    transform:translateY(100%); transition:transform .25s cubic-bezier(.32,.72,0,1);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .lesson-sheet-overlay.on .lesson-sheet-panel{transform:translateY(0);}
+  .lesson-sheet-head{
+    flex:none; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+    padding:16px 8px; border-bottom:1px solid var(--line-soft);
+  }
+  .lesson-sheet-title{grid-column:2; font-size:23.5px; font-weight:700; letter-spacing:-.3px; color:var(--ink); text-align:center; white-space:nowrap;}
+  .lesson-sheet-close{grid-column:3; justify-self:end; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--sub2); flex:none; margin-right:6px;}
+  .lesson-sheet-close:active{background:var(--surface-subtle);}
+  .lesson-sheet-close svg{width:19px; height:19px;}
+  .lesson-sheet-body{flex:1; overflow-y:auto; padding:4px 18px calc(20px + env(safe-area-inset-bottom,0px));}
+  .lesson-sheet-item{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 0; border-bottom:1px solid var(--line-soft);}
+  .lesson-sheet-item:last-child{border-bottom:none;}
+  .ls-info{display:flex; flex-direction:column; gap:4px; min-width:0;}
+  .ls-row{display:flex; align-items:center; gap:7px;}
+  .ls-num{font-size:15.5px; font-weight:800; color:var(--ink);}
+  /* TODAY는 "지금 수업할 레슨"이라는 정보 표시일 뿐 행동(CTA)이 아니므로, 보라 대신 다른 칩들과 같은
+     회색 톤 캡슐로 — 번호 옆에 나란히 붙어 한 줄에서 바로 눈에 띈다 */
+  .ls-today{
+    flex:none; font-size:10.5px; font-weight:800; letter-spacing:.4px; color:var(--sub2);
+    background:var(--surface-subtle); padding:3px 7px; border-radius:999px; line-height:1.3;
+  }
+  /* 오늘 레슨의 주제 — 번호 아래 두 번째 줄에 회색 톤 보조 텍스트로 노출 */
+  .ls-topic{font-size:13px; font-weight:500; color:var(--sub); line-height:1.4; word-break:keep-all; overflow-wrap:break-word;}
+  .ls-go{
+    flex:none; font-size:13.5px; font-weight:700; color:#fff; white-space:nowrap;
+    background:linear-gradient(150deg,var(--purple),var(--purple-dark));
+    padding:9px 16px; border-radius:999px; box-shadow:var(--shadow-btn);
+  }
+  .ls-go:active{transform:translateY(1px); filter:brightness(.97);}
+  /* 아직 수업하지 않은 미래 레슨은 번호·버튼 모두 회색 톤으로 낮추고 버튼은 실제로 비활성화한다 */
+  .lesson-sheet-item.disabled .ls-num{color:var(--sub2);}
+  .ls-go:disabled{background:var(--surface-subtle); color:var(--sub2); box-shadow:none; cursor:not-allowed;}
+  .ls-go:disabled:active{transform:none; filter:none;}
+
+  /* 흰 카드 밖에서 요일별 수업을 나열하는 영역 — 주간 스트립은 카드 안으로 옮겨져 여기엔 리스트만 남는다 */
+  .sc-agenda-section{flex:1;}
+  /* 월간 그리드(.sc-month-grid)와 완전히 같은 컬럼 구조(display:grid, 7칸 1fr, column-gap 없음)를 써서
+     요일별 칼럼의 x좌표가 항상 픽셀 단위로 일치하도록 한다. 이전에는 flex+gap이라 칼럼 폭 계산식이
+     grid와 달라 요일 위치가 아주 조금씩 어긋나 보였음 — 두 영역 모두 같은 그리드 트랙 위에 놓는 것으로 해결 */
+  /* 2026-09-30: 선택일이 항상 가운데(4번째) 칸에 오도록 scRenderWeek()가 ±3일 롤링 윈도우로 다시 그린다.
+     화살표 버튼 대신 좌우 스와이프 제스처로 하루씩 이동(날짜칸이 얇아진다는 피드백으로 화살표 제거) */
+  .sc-week-strip{display:grid; grid-template-columns:repeat(7,1fr); touch-action:pan-y;}
+  /* 월간 셀과 동일한 원형 배지 지름 등 크기는 통일하고, 셀 좌우 마진을 월간(2px)보다 조금 더 줘서
+     주간 쪽 칸은 그만큼 살짝 좁게 — 마진이 좌우 대칭이라 칸 중앙(숫자 배지) 위치 자체는 그대로 정렬된다 */
+  .sc-week-day{display:flex; flex-direction:column; align-items:center; gap:6px; padding:8px 0 6px; margin:0 3px; border-radius:6px; background:var(--card); position:relative;}
+  .sc-week-day .wd-label{font-size:12.5px; font-weight:600; color:var(--sub2);}
+  .sc-week-day .wd-num{font-size:17px; font-weight:700; color:var(--ink); width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1.5px solid transparent;}
+  .sc-week-day.today{background:var(--selection-bg); border-color:transparent;} /* 선택되지 않았을 때도 오늘은 한 번 더 포인트 */
+  .sc-week-day.today .wd-num{color:var(--purple);} /* 배경 강조만으로 충분해서 숫자 테두리 링은 제거 */
+  .sc-week-day.selected{background:var(--purple); border-color:transparent;}
+  .sc-week-day.selected .wd-label,.sc-week-day.selected .wd-num{color:#fff; border-color:transparent;}
+  .sc-week-day .wd-dot{width:5px; height:5px; border-radius:50%; background:var(--purple);}
+  .sc-week-day .wd-dot.hidden{visibility:hidden;}
+  .sc-week-day.selected .wd-dot{background:#fff;}
+  /* 2026-10-01: 요일 텍스트(월~일)는 토/일 빨강·파랑 구분 없이 모노톤으로 통일 요청 — sun/sat 전용 color 규칙 제거,
+     기본 .wd-label 색(--sub2)을 그대로 따른다. 공휴일 색(아래)은 요일색이 아니라 별도 기능이라 유지. */
+  /* 공휴일 — 칩과 별도로, 라벨·숫자를 옅은 산호색으로 표시.
+     선택된 날은 배경이 이미 보라로 채워지므로 공휴일 색은 선택 상태에서만 양보한다 */
+  .sc-week-day.holiday .wd-label,.sc-week-day.holiday .wd-num{color:var(--holiday);}
+  .sc-week-day.selected.holiday .wd-label,.sc-week-day.selected.holiday .wd-num{color:#fff;}
+
+  /* 흰 박스 카드 대신 구분선만 있는 리스트 — 그 주의 수업을 요일 구분 없이 날짜순으로 모두 보여준다.
+     항목을 클릭하면 위쪽 주간 스트립의 선택일이 그 날짜로 이동한다 */
+  .sc-agenda-list{display:flex; flex-direction:column; gap:0;}
+  .sc-agenda-empty{padding:34px 20px; text-align:center; color:var(--sub2); font-size:14.5px; font-weight:500; background:var(--surface-subtle); border-radius:16px;}
+  .sc-class-card{
+    display:flex; flex-wrap:wrap; align-items:center; gap:14px; padding:18px 4px;
+    border-bottom:1px solid var(--line-soft); cursor:pointer;
+  }
+  .sc-class-card:last-child{border-bottom:none;}
+  .sc-class-card .cc-time{flex:none; width:56px; display:flex; flex-direction:column; align-items:flex-start; gap:4px;}
+  .sc-class-card .cc-date{font-size:12px; font-weight:600; color:var(--sub2); white-space:nowrap;}
+  .sc-class-card .cc-time-val{font-size:15.5px; font-weight:800; color:var(--ink); letter-spacing:-.1px;}
+  /* 배지(칩)와 강좌명을 세로로 쌓지 않고 한 줄에 나란히 배치 — 참고 이미지 기준(2026-09-30) */
+  .sc-class-card .cc-body{flex:1; min-width:0; display:flex; flex-direction:row; align-items:center; gap:8px;}
+  .sc-class-card .cc-badge{flex:none; font-size:12px; font-weight:700; padding:4px 9px; border-radius:var(--r-pill); white-space:nowrap; line-height:1.3;}
+  .sc-class-card .cc-badge.badge-upcoming{background:var(--selection-bg); color:var(--purple);}
+  .sc-class-card .cc-badge.badge-attended{background:var(--mint-bg); color:var(--mint-text);}
+  .sc-class-card .cc-badge.badge-postponed{background:var(--amber-bg); color:var(--amber-text);}
+  .sc-class-card .cc-badge.badge-absent{background:var(--danger-soft); color:var(--danger);}
+  .sc-class-card .cc-subject{flex:1; min-width:0; font-size:15.5px; font-weight:800; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  /* CTA는 색으로 상태를 나누지 않고(상태 배지가 이미 색으로 구분해 줌) 블랙 하나로 통일 —
+     페이지 전체에서 보라색은 오늘 표시·주요 CTA 등 한두 군데로만 남긴다(2026-09-30).
+     2026-10-01: 다만 "리뷰보기"(이미 끝난 수업 확인)와 "연기신청/보강신청/보강취소"(아직 실행하지
+     않은 행동)가 똑같은 검정 필 버튼이라 리스트를 훑을 때 뭘 먼저 봐야 할지 구분이 안 된다는 피드백 —
+     지난 수업(출석 완료)의 "리뷰보기"만 톤을 낮춘 고스트 버튼으로 바꿔, 아직 해야 할 행동(연기/보강)이
+     먼저 눈에 들어오도록 위계를 나눈다. 색(블랙 단일)은 그대로 유지하고 굵기(필↔고스트)로만 구분 */
+  .sc-class-card .cc-cta{flex:none; font-size:14px; font-weight:700; border-radius:11px; padding:11px 14px; white-space:nowrap; background:var(--ink); color:#fff;}
+  .sc-class-card .cc-cta.ghost{background:var(--surface-subtle); color:var(--sub);}
+
+  /* 보강 취소 안내 — 박스형 콜아웃 대신 리스트의 다른 항목들과 같은 톤의 평범한 캡션 두 줄로.
+     좌측을 cc-body(Time 칼럼 56px + gap 14px)와 맞춰 리스트 흐름에서 어긋나지 않게 한다.
+     (※ "②" 같은 번호는 기획 문서용 설명 넘버링일 뿐 실제 화면에는 표기하지 않음) */
+  .sc-class-card .cc-makeup-note{flex:0 0 100%; padding-left:70px; display:flex; flex-direction:column; gap:2px;}
+  .sc-class-card .cc-makeup-note .cc-note-line{font-size:12px; font-weight:600; color:var(--sub2); line-height:1.4; word-break:keep-all; overflow-wrap:break-word;}
+  .sc-class-card .cc-makeup-note .cc-note-sub{font-size:11.5px; font-weight:500; color:var(--sub2); opacity:.75; line-height:1.4; word-break:keep-all; overflow-wrap:break-word;}
+
+  /* ---------- 풀스크린 팝업 공통 셸 : 질문하기·만족도 평가·AI 히스토리·수업리뷰·Class Report처럼
+     내용이 긴 화면에 쓴다. 앱 프레임(.rc-app)과 같은 최대폭·라운딩·그림자를 그대로 이어받아
+     페이지 전환처럼 화면 전체를 덮는다. (년월 선택처럼 가벼운 선택 UI는 기존 바텀시트 .sc-picker-*를 그대로 쓴다) */
+  .pop-overlay{
+    position:fixed; inset:0; z-index:60; display:flex; align-items:flex-start; justify-content:center;
+    background:var(--bg); opacity:0; visibility:hidden; pointer-events:none; transition:opacity .2s ease;
+  }
+  .pop-overlay.on{opacity:1; visibility:visible; pointer-events:auto;}
+  /* 팝업 배경은 2026-09-29부터 --bg(옅은 회색)가 아닌 --card(흰색, 다크모드에서는 카드 톤)로 —
+     --surface-subtle 박스들(.rev-feedback/.rev-lesson 등)이 바탕과 또렷이 대비되어 "박스 구성"이 잘 보이도록 */
+  .pop-panel{
+    width:100%; max-width:390px; height:100%; display:flex; flex-direction:column;
+    background:var(--card); opacity:0; transform:translateY(14px);
+    transition:transform .22s cubic-bezier(.22,1,.36,1), opacity .22s ease;
+  }
+  .pop-overlay.on .pop-panel{opacity:1; transform:translateY(0);}
+  .pop-head{
+    flex:none; height:60px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+    padding:0 10px; background:var(--header-bg); border-bottom:1px solid var(--line-soft);
+  }
+  /* 타이틀 크기는 클래스룸 섹션 타이틀(.rc-block-title, "학습 전에 미리 예습해 보아요")과 동일하게 맞춘다.
+     grid-row를 명시적으로 1로 고정 — 지정하지 않으면(auto) 3개 아이템이 각자 다른 암시적 행으로
+     배치되어 세로 중앙정렬이 깨지는 문제가 있어(2026-09-29 발견) 셋 다 grid-row:1로 고정한다 */
+  .pop-title{grid-column:2; grid-row:1; font-size:23.5px; font-weight:700; letter-spacing:-.3px; color:var(--ink); text-align:center; white-space:nowrap;}
+  /* 닫기 버튼은 2026-09-29부터 좌상단이 아닌 우상단 — 오른쪽 끝(grid-column:3)으로, 빈 스페이서가
+     왼쪽(grid-column:1)에서 타이틀 중앙 정렬을 맞춰준다. 탭하기 쉽도록 버튼·아이콘도 2026-09-29 여러 차례에
+     걸쳐 조정(32→38→76→48px) */
+  /* 참고 이미지 기준 진한 잉크 톤 X — sub2(연한 회색)는 타이틀 옆에서 너무 흐려 보여 ink로 변경(2026-09-30) */
+  .pop-close{grid-column:3; grid-row:1; justify-self:end; width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--ink); flex:none;}
+  .pop-close:active{background:var(--surface-subtle);}
+  .pop-close svg{width:26px; height:26px;}
+  .pop-close--spacer{grid-column:1; grid-row:1; visibility:hidden;}
+  /* 클래스룸 상단 상태 탭(진행/예정/완료)과 같은 밑줄 탭 스타일 — 팝업 안에서도 글자 크기(19px)와
+     선택 표시(브랜드 컬러 밑줄)를 그대로 이어받아, 알약 세그먼트보다 크고 또렷하게 보이게 한다 */
+  .pop-tabs-wrap{flex:none; padding:0 18px; border-bottom:1px solid var(--line-soft);}
+  /* 2026-10-01: 푸터 없는 팝업/시트의 "맨 아래 숨통" 값을 20px 하나로 통일(레슨 시트와 동일) — 기존 24px는
+     별다른 이유 없이 다른 값이라 화면마다 여백이 미묘하게 달라 보였음 */
+  .pop-body{flex:1; overflow-y:auto; padding:18px 18px calc(20px + env(safe-area-inset-bottom,0px));}
+  /* 2026-10-01: 수업리뷰 섹션 서브텍스트(.rev-section-desc)와 톤 통일 — 안내문은 본문보다 한 단계 낮은 톤으로 */
+  .pop-guide{font-size:15px; font-weight:500; color:var(--sub2); line-height:1.5; margin:0 0 18px; word-break:keep-all; overflow-wrap:break-word;}
+
+  /* 참고 이미지 기준 박스 없이 아이콘+회색 텍스트만 — 회색 박스(surface-subtle)를 얹으면
+     3개 팝업(학습질문/만족도평가/수업리뷰) 모두에서 참고 이미지와 달라 보여 제거(2026-09-30) */
+  /* 앱 전체 공통 안내문 스타일 — 박스 없이 아이콘+회색 텍스트만(2026-09-30).
+     이전엔 학습질문 "나의 질문 내역" 탭만 별도로 .qa-info-banner(라벤더 박스+보라 텍스트)를 썼는데,
+     페이지마다 안내문 톤이 제각각이라는 피드백에 따라 .pop-note 하나로 통일하고 .qa-info-banner는 제거함 */
+  .pop-note{display:flex; align-items:flex-start; gap:8px; margin-bottom:18px;}
+  .pop-note svg{width:14px; height:14px; color:var(--sub2); flex:none; margin-top:1.5px;}
+  .pop-note span{font-size:13.5px; font-weight:500; color:var(--sub2); line-height:1.55; word-break:keep-all; overflow-wrap:break-word;}
+
+  .pop-foot{display:flex; gap:10px; padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line-soft); flex:none; background:var(--card);}
+  .pop-btn-ghost{flex:none; padding:14px 18px; border-radius:13px; font-size:19px; font-weight:600; color:var(--sub); background:var(--surface-subtle);}
+  .pop-btn-ghost:active{opacity:.7;}
+  .pop-btn-primary{
+    flex:1; padding:14px 18px; border-radius:13px; font-size:19px; font-weight:800; color:#fff; text-align:center;
+    background:linear-gradient(150deg,var(--purple),var(--purple-dark)); box-shadow:var(--shadow-btn);
+  }
+  .pop-btn-primary:active{transform:translateY(1px);}
+
+  /* 결과 화면(제출 완료 / 잠김 등 공통) — 질문하기·만족도 평가가 함께 쓴다 */
+  .pop-result{display:flex; flex-direction:column; align-items:center; text-align:center; padding:26px 8px 4px;}
+  .pop-result-icon{
+    width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(150deg,var(--purple),var(--purple-dark)); color:#fff; margin-bottom:18px; flex:none;
+  }
+  .pop-result-icon svg{width:26px; height:26px;}
+  .pop-result h3{font-size:22px; font-weight:800; color:var(--ink); margin-bottom:8px;}
+  .pop-result p{font-size:18px; font-weight:500; color:var(--sub); line-height:1.6; word-break:keep-all; overflow-wrap:break-word;}
+
+  /* ---------- 학습 질문(질문하기) — 위 풀스크린 셸 위에서 "질문하기"(작성)·"나의 질문 내역"
+     두 화면을 상단 탭(주간/월간과 같은 세그먼트 컨트롤 재사용)으로 오간다 */
+  .qa-field{margin-bottom:16px;}
+  .qa-field label{display:block; font-size:18px; font-weight:600; color:var(--ink); margin-bottom:8px;}
+  .qa-field label .req{color:var(--purple); margin-left:2px;}
+  .qa-field input,.qa-field textarea{
+    width:100%; border:1.5px solid var(--line); border-radius:12px; padding:12px 13px;
+    font-size:18.5px; font-family:inherit; color:var(--ink); background:var(--surface-subtle);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .qa-field input::placeholder,.qa-field textarea::placeholder{color:var(--sub2);}
+  .qa-field textarea{resize:none; min-height:108px; line-height:1.55;}
+  .qa-field input:focus,.qa-field textarea:focus{outline:none; border-color:var(--purple); background:var(--card);}
+  .qa-field .qa-err{display:none; font-size:16px; font-weight:600; color:var(--danger); margin-top:6px;}
+  .qa-field.error input,.qa-field.error textarea{border-color:var(--danger);}
+  .qa-field.error .qa-err{display:block;}
+
+  /* 나의 질문 내역 */
+  .qa-history-list{display:flex; flex-direction:column; gap:0;}
+  .qa-history-item{padding:16px 2px; border-bottom:1px solid var(--line-soft);}
+  .qa-history-item:last-child{border-bottom:none;}
+  .qa-h-date{font-size:16px; font-weight:500; color:var(--sub2); margin-bottom:6px;}
+  .qa-h-title{font-size:19px; font-weight:700; color:var(--ink); margin-bottom:5px;}
+  .qa-h-content{font-size:17.5px; font-weight:500; color:var(--sub); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; word-break:keep-all; overflow-wrap:break-word;}
+  .qa-history-empty{padding:40px 20px; text-align:center; color:var(--sub2); font-size:18.5px; font-weight:500; word-break:keep-all; overflow-wrap:break-word;}
+
+  /* ---------- 만족도 평가 — 문항 6개, 각 문항 1~5단계를 "채워지는" 방식으로 평가
+     (예: 3번째 원을 누르면 1·2·3이 모두 채워짐) */
+  .sat-error-banner{display:none; padding:12px 13px; border-radius:12px; background:var(--danger-soft); color:var(--danger); font-size:17.5px; font-weight:700; margin-bottom:18px; word-break:keep-all; overflow-wrap:break-word;}
+  .sat-error-banner.on{display:block;}
+  .sat-list{display:flex; flex-direction:column;}
+  .sat-item{padding-bottom:26px; margin-bottom:26px; border-bottom:1px solid var(--line-soft);}
+  .sat-item:last-child{border-bottom:none; margin-bottom:0; padding-bottom:0;}
+  /* 문항 번호("2.")를 별도 칸으로 분리한 행잉 인덴트 — 줄바꿈되는 문항도 번호 아래가 아니라
+     텍스트 시작 위치에 맞춰 둘째 줄이 정렬되어 훨씬 정돈되어 보인다 */
+  .sat-q{display:flex; gap:6px; font-size:19px; font-weight:700; color:var(--ink); line-height:1.5; margin-bottom:14px; transition:color .15s ease;}
+  .sat-q .sat-q-num{flex:none;}
+  .sat-q .sat-q-text{flex:1; min-width:0; word-break:keep-all; overflow-wrap:break-word;}
+  .sat-item.error .sat-q{color:var(--danger);}
+  /* 각진 별 대신 모서리가 살짝 둥근 별 — fill과 stroke를 같은 색으로 주고 stroke-linejoin:round로
+     뾰족한 꼭짓점을 둥글려서 부드러운 인상을 준다(색만 다른 두 상태: 채워짐/비어있음).
+     2026-09-28: 별을 눈에 더 잘 띄게 확 키움(26px→36px) */
+  /* 2026-09-30: flex:1로 카드 전체 너비에 균등 분배하던 방식을 폐기 — 문항 텍스트 길이와 무관하게
+     칩 너비가 넓어 별과 별 사이 여백이 아이콘 크기보다 훨씬 커 보이는 문제가 있었음.
+     고정 크기(44px, 접근성 최소 탭 영역)로 촘촘하게 묶어 하나의 평가 그룹처럼 보이게 함 */
+  .sat-stars{display:flex; justify-content:center; gap:6px;}
+  .sat-star{flex:none; width:44px; height:44px; display:flex; align-items:center; justify-content:center;}
+  .sat-star svg{width:32px; height:32px; transition:transform .15s ease;}
+  .sat-star path{fill:var(--surface-subtle); stroke:var(--line); stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; transition:fill .15s ease, stroke .15s ease;}
+  .sat-star.filled path{fill:var(--purple); stroke:var(--purple);}
+  .sat-star.filled svg{transform:scale(1.06);}
+  .sat-item.error .sat-star path{stroke:var(--danger-soft);}
+
+  /* ---------- 수업 리뷰 — 오늘 수업 다시듣기(하단 푸터로 이동, 2026-09-29) · Tutor Feedback · 발음 확인(원문/교정문+막대 재평가) · 교정 문장 */
+  /* 2026-09-30: 회색 박스(카드) 톤을 다시 걷어내고 — 아래 Tutor Feedback 등 섹션과는 박스가 아니라
+     밑줄 구분선만으로 가볍게 분리하는 쪽으로 최종 변경. 배경/라운드 없이 하단 보더 하나로 영역을 나눔 */
+  .rev-lesson{margin-bottom:32px; display:flex; flex-direction:column; align-items:flex-start; gap:10px; border-bottom:1px solid var(--surface-subtle); padding:16px 0;}
+  /* 상단 줄 = "어떤 강좌의 무엇인지"(강좌 칩 + 날짜/기간), 그 아래 줄 = 레슨명(타이틀) — 둘을 줄로 분리해
+     한눈에 나눠 인식하게 한다. 강좌 칩은 스케줄 리스트의 상태 배지(.cc-badge.badge-upcoming)와 같은
+     톤(퍼플 텍스트+연보라 배경 selection-bg)을 재사용해 새 보라 포인트를 늘리지 않는다.
+     ※ --purple-tint는 라이트 모드에서 흰색이라(카드 배경과 구분 안 됨) 칩 배경으로 쓰면 안 됨 — selection-bg 사용(2026-09-30 수정) */
+  .rev-lesson-top{display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%;}
+  .rev-course-chip{flex:none; font-size:13px; font-weight:800; color:var(--purple); background:var(--selection-bg); padding:5px 12px; border-radius:var(--r-pill); line-height:1.3; white-space:nowrap;}
+  .rev-lesson-date{flex:none; font-size:13px; font-weight:600; color:var(--sub2); white-space:nowrap;}
+  .rev-lesson-title{font-size:16.5px; font-weight:600; color:var(--ink); line-height:1.4; word-break:keep-all; overflow-wrap:break-word;}
+  /* 2026-09-30: "오늘 수업 다시 듣기"가 이 화면의 핵심 액션이라는 피드백으로 "닫기" 자리(우측, 보라
+     그라데이션 primary)와 역할을 맞바꿈 — 다시 듣기가 항상 활성화된 primary 버튼으로 오른쪽을 채우고,
+     "닫기"는 다른 팝업들과 같은 회색 ghost(.pop-btn-ghost)로 왼쪽 고정폭 자리로 이동(마크업도 순서 변경).
+     재생 중에는 아이콘을 정지 막대 2개 대신, 전화영어 교재에서 쓰던 것과 같은 리듬감 있는 이퀄라이저
+     막대 3개가 통통 튀는 모션으로 바꿔 "지금 재생 중"임을 더 직관적으로 보여준다 */
+  .rev-replay{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:7px;
+    padding:14px 16px; border-radius:13px; color:#fff;
+    background:linear-gradient(150deg,var(--purple),var(--purple-dark)); box-shadow:var(--shadow-btn);
+    font-size:17.5px; font-weight:700; white-space:nowrap; transition:transform .12s ease, filter .12s ease;
+  }
+  .rev-replay svg{width:16px; height:16px; flex:none;}
+  .rev-replay svg.ic-pause{display:none;}
+  .rev-replay .rev-eq{display:none; align-items:flex-end; gap:3px; height:15px; flex:none;}
+  .rev-replay .rev-eq i{display:block; width:3px; border-radius:2px; background:#fff; animation:revEqBounce .9s ease-in-out infinite;}
+  .rev-replay .rev-eq i:nth-child(1){animation-delay:0s;}
+  .rev-replay .rev-eq i:nth-child(2){animation-delay:.15s;}
+  .rev-replay .rev-eq i:nth-child(3){animation-delay:.3s;}
+  @keyframes revEqBounce{ 0%,100%{height:5px;} 50%{height:15px;} }
+  .rev-replay.playing svg.ic-play{display:none;}
+  .rev-replay.playing .rev-eq{display:flex;}
+  .rev-replay:active{transform:translateY(1px); filter:brightness(.97);}
+
+  /* Tutor Feedback / Class Report 텍스트 섹션 공용 "옅은 회색 박스" — 타이틀은 박스 밖(.rev-section-title/.cr-heading),
+     박스 안에는 본문만. 2026-09-29: 참고 이미지 반영해 보라 틴트 카드에서 톤 낮춘 회색 박스로 변경 */
+  .rev-feedback{padding:16px; border-radius:16px; background:var(--surface-subtle); margin-bottom:36px;}
+  /* 클래스룸 메인 카드의 인용문(.rc-fb-quote)과 크기·컬러를 동일하게 맞춰, 같은 내용이 카드에서 팝업으로
+     이어질 때 톤이 바뀌지 않게 한다(2026-09-30) */
+  .rev-feedback-text{font-size:17px; font-weight:500; color:var(--sub); line-height:1.65; word-break:keep-all; overflow-wrap:break-word;}
+  /* Class Report의 .cr-section 안에 쓰일 때는 부모가 이미 섹션 간격(32px)을 맡고 있어 중복 여백 방지 */
+  .cr-section .rev-feedback{margin-bottom:0;}
+
+  /* 섹션(Pronunciation/Grammar) 사이 간격을 넉넉히 벌려 서로 다른 덩어리임이 분명하게 보이게 한다.
+     타이틀도 개수 칩을 떼어내고(2026-09-28, 사용자 요청) 더 크고 굵게.
+     타이틀(강)과 설명 문장(약) 사이 위계를 분명히 하기 위해 설명 문장은 더 작게(2026-09-28, 사용자 요청) */
+  .rev-section{margin-bottom:38px;}
+  .rev-section:last-of-type{margin-bottom:4px;}
+  .rev-section-title{display:flex; align-items:center; gap:7px; font-size:23px; font-weight:800; color:var(--ink); margin-bottom:8px;}
+  .rev-section-desc{font-size:15px; font-weight:500; color:var(--sub2); margin-bottom:8px; line-height:1.5; word-break:keep-all; overflow-wrap:break-word;}
+
+  /* 발음 확인 — 단어별 리스트(기획안 근거): 단어 + 듣기(스피커)/재평가(마이크) 아이콘 버튼 두 개 */
+  .rev-pron-item{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:13px 16px; border-radius:14px; background:var(--bg); /* border:1px solid var(--line-soft); */ margin-bottom:10px;
+  }
+  .rev-pron-list .rev-pron-item:last-child{margin-bottom:0;}
+  /* 800 굵기는 위 섹션 제목(.rev-section-title, 800)과 두께감이 겹쳐 보여 600으로 낮춤(2026-09-30) */
+  .rev-pron-word{font-size:19px; font-weight:600; color:var(--ink);}
+  .rev-pron-actions{display:flex; align-items:center; gap:8px; flex:none;}
+
+  /* 교정 문장(Grammar) — 원문/교정문을 흰 카드 한 덩어리 안에 함께 담고, 원문/교정문 라벨은 칩(알약형)으로 구분.
+     발음 확인(.rev-pron-item)과 같은 카드 톤을 이어받아 두 섹션이 한 세트처럼 보이게 한다 */
+  .rev-gram-item{
+    padding:16px; border-radius:14px; background:var(--bg); /* border:1px solid var(--line-soft); */ margin-bottom:10px;
+  }
+  .rev-gram-list .rev-gram-item:last-child{margin-bottom:0;}
+  .rev-gram-actions{display:flex; justify-content:flex-end; gap:8px; margin-top:12px;}
+
+  .rev-sent{display:flex; align-items:flex-start; gap:8px; font-size:18px; line-height:1.55; word-break:keep-all; overflow-wrap:break-word; margin-bottom:8px;}
+  .rev-sent:last-of-type{margin-bottom:0;}
+  /* 원문 칩=회색(정보), 교정문 칩=보라(강조) — 두 칩을 색으로 구분해 어느 쪽이 "정답"인지 한눈에 보이게 한다 */
+  .rev-sent-tag{flex:none; font-size:13.5px; font-weight:800; color:var(--sub2); background:var(--line); padding:4px 10px; border-radius:999px; line-height:1.3; margin-top:2px;}
+  .rev-sent.orig{color:var(--sub2);}
+  .rev-sent.fix{color:var(--ink); font-weight:600;}
+  .rev-sent.fix .rev-sent-tag{color:var(--purple); background:var(--purple-tint);}
+
+  /* 듣기(스피커)/재평가(마이크) 아이콘 버튼 — 발음 확인·교정 문장 두 섹션이 함께 쓴다 */
+  .rev-mic-btn,.rev-speak-btn{flex:none; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--selection-bg); color:var(--purple); transition:background .15s ease, color .15s ease;}
+  .rev-mic-btn svg,.rev-speak-btn svg{width:17px; height:17px;}
+  .rev-mic-btn.busy,.rev-speak-btn.busy{background:var(--purple); color:#fff; animation:revMicPulse .9s ease-in-out infinite;}
+  @keyframes revMicPulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+
+  /* 마이크 테스트 — 발음 확인 섹션 상단의 별도 버튼으로 여는 보조 팝업(수업리뷰 위에 얹힌 센터 모달).
+     문장별 재평가(.rev-mic-btn)와는 별개로, 마이크 하드웨어/권한이 정상인지 미리 점검하는 용도(기획안 근거) */
+  .rev-section-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:4px;}
+  .rev-mictest-trigger{
+    flex:none; display:flex; align-items:center; gap:6px; padding:8px 13px; border-radius:999px;
+    font-size:13.5px; font-weight:800; color:var(--purple); background:var(--surface-subtle); border:1.5px solid var(--purple-light);
+  }
+  .rev-mictest-trigger svg{width:16px; height:16px;}
+  .rev-mictest-trigger:active{opacity:.7;}
+
+  .mictest-overlay{
+    position:fixed; inset:0; z-index:70; display:flex; align-items:center; justify-content:center; padding:24px;
+    background:rgba(20,16,40,.45); opacity:0; visibility:hidden; pointer-events:none; transition:opacity .2s ease;
+  }
+  .mictest-overlay.on{opacity:1; visibility:visible; pointer-events:auto;}
+  .mictest-card{
+    width:100%; max-width:320px; background:var(--card); border-radius:22px; padding:30px 22px 26px; text-align:center; position:relative;
+    box-shadow:0 30px 60px -20px rgba(25,20,64,.35); opacity:0; transform:translateY(10px) scale(.97);
+    transition:transform .22s cubic-bezier(.22,1,.36,1), opacity .22s ease;
+  }
+  .mictest-overlay.on .mictest-card{opacity:1; transform:translateY(0) scale(1);}
+  .mictest-close{position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--sub2);}
+  .mictest-close:active{background:var(--surface-subtle);}
+  .mictest-close svg{width:17px; height:17px;}
+  .mictest-guide{font-size:17.5px; font-weight:600; color:var(--sub); line-height:1.55; margin:6px 0 20px; word-break:keep-all; overflow-wrap:break-word;}
+  .mictest-sample{font-size:34px; font-weight:800; color:var(--ink); margin-bottom:22px;}
+  .mictest-mic{
+    width:76px; height:76px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 18px;
+    border:2px solid var(--purple-light); color:var(--purple); background:var(--card); transition:background .2s ease,border-color .2s ease,color .2s ease;
+  }
+  .mictest-mic svg{width:30px; height:30px;}
+  .mictest-mic.recording{border-color:var(--danger); color:var(--danger); animation:revMicPulse .9s ease-in-out infinite;}
+  .mictest-note{font-size:15.5px; font-weight:500; color:var(--sub2); line-height:1.55; word-break:keep-all; overflow-wrap:break-word;}
+
+  .mictest-toast{
+    position:absolute; left:50%; bottom:-58px; transform:translate(-50%,8px); display:flex; align-items:center; gap:8px;
+    padding:12px 18px; border-radius:999px; font-size:16.5px; font-weight:700; white-space:nowrap;
+    width:max-content; max-width:calc(100vw - 48px);
+    box-shadow:0 16px 30px -14px rgba(25,20,64,.35); opacity:0; transition:transform .22s ease, opacity .22s ease; pointer-events:none;
+  }
+  .mictest-toast svg{width:16px; height:16px; flex:none;}
+  .mictest-toast span{white-space:normal; text-align:left; line-height:1.4;}
+  .mictest-toast.show{opacity:1; transform:translate(-50%,0);}
+  .mictest-toast.success{background:linear-gradient(150deg,var(--purple),var(--purple-dark)); color:#fff;}
+  .mictest-toast.fail{
+    background:var(--danger-soft); color:var(--danger); white-space:normal; width:304px; max-width:calc(100vw - 48px);
+    border-radius:16px; align-items:flex-start; text-align:left; padding:14px 18px;
+  }
+  .mictest-toast.fail span{line-height:1.5;}
+  .mictest-toast.fail svg{margin-top:2px;}
+
+  /* ---------- Class Report — 클래스룸 홈 카드는 세로 막대 그래프(간략 미리보기)지만, 팝업 안에서는
+     5개 항목(이해력/유창성/발음/어휘/문법)의 균형을 한눈에 보여주는 방사형(레이더) 그래프로 확대.
+     카드 값(#fbReportBars)에서 실시간으로 읽어와 그린다 — 단일 시리즈라 범례 없이 축 라벨 + 값 직접 표기 */
+  .cr-heading{font-size:23px; font-weight:800; color:var(--ink); margin-bottom:10px;}
+  .cr-section{margin-bottom:32px;}
+
+  .cr-radar-wrap{
+    display:flex; justify-content:center; background:var(--bg); border:1px solid var(--line-soft);
+    border-radius:18px; padding:22px 12px; margin-bottom:26px;
+  }
+  .cr-radar-svg{width:100%; max-width:300px; height:auto; overflow:visible;}
+  .cr-radar-ring{fill:none; stroke:var(--line-soft); stroke-width:1;}
+  .cr-radar-ring[data-outer="1"]{stroke:var(--line);}
+  .cr-radar-axis{stroke:var(--line-soft); stroke-width:1;}
+  .cr-radar-fill{fill:url(#crRadarGrad); fill-opacity:.55; stroke:var(--purple); stroke-width:2; stroke-linejoin:round;}
+  .cr-radar-dot{fill:var(--purple-dark); stroke:var(--card); stroke-width:2;}
+  .cr-radar-label{font-size:13.5px; font-weight:600; fill:var(--sub2);}
+  .cr-radar-val{font-size:15.5px; font-weight:800; fill:var(--ink);}
+
+  /* ---------- 월간 보기 (팝업이 아니라 주간 보기와 같은 자리에서 전환되는 인라인 달력) ---------- */
+  /* 별도 카드가 아니라 .sc-topbar-card 흰 배경 안에 이어져 보이도록 배경·라운딩·그림자 없이 레이아웃만 담당 */
+  /* 2026-10-01: 월간 달력이 화면에 한눈에 들어오도록 위쪽 여백(margin-top)과 요일행-그리드 사이 간격(gap)도 같이 줄임 */
+  .sc-month-calendar{display:flex; flex-direction:column; gap:10px; margin-top:12px;}
+  .sc-month-weekday-row{display:grid; grid-template-columns:repeat(7,1fr); text-align:center;}
+  /* 2026-10-01: 요일 텍스트 모노톤 통일 요청으로 sun/sat 색 구분 제거 */
+  .sc-month-weekday-row span{font-size:13.5px; font-weight:600; color:var(--sub2); padding-bottom:6px;}
+  /* 그리드 자체의 행 간격은 1px — 실제로 보이는 여백은 각 셀의 위아래·좌우 마진에서 나온다.
+     좌우 마진도 함께 줘야 옆 칸의 박스와 서로 붙지 않고 참고 이미지처럼 개별 카드로 분리되어 보인다 */
+  .sc-month-grid{display:grid; grid-template-columns:repeat(7,1fr); row-gap:1px;}
+  /* 주간 셀과 크기(패딩·간격·원형 배지 지름)를 통일하고, 셀 사이 여백(margin)은 더 붙여서 촘촘하게.
+     높이는 min-height가 아니라 height로 고정 — 공휴일 라벨이 있는 날과 없는 날이 섞여도 모든 셀의
+     2026-10-01: "일별 높이가 너무 넓다, 월간 달력이 한눈에 보였으면 좋겠다"는 피드백으로 94px→74px로 축소.
+     숫자(30px)+공휴일 라벨+상태 칩이 전부 있는 가장 빽빽한 날(예: 대체공휴일+예정 수업)도 안 잘리는
+     최소값으로 맞춤 — 패딩·칩 간격도 함께 줄여 압축했다 */
+     높이가 항상 같고, 칩(.mc-chip/.mc-dot)은 margin-top:auto로 셀 하단에 고정되어 위쪽 내용(숫자·
+     공휴일 라벨) 줄 수와 무관하게 한 줄로 나란히 정렬된다(2026-09-30, 참고 이미지 기준) */
+  .sc-month-cell{height:74px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:3px; border-radius:6px; padding:5px 0 4px; margin:2px 2px;}
+  .sc-month-cell .mc-chip,.sc-month-cell .mc-dot{margin-top:auto;}
+  .sc-month-cell .mc-num{font-size:16px; font-weight:700; color:var(--ink); width:27px; height:27px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1.5px solid transparent;}
+  .sc-month-cell.outside .mc-num{color:var(--sub2); opacity:.4;}
+  /* 수업이 있는 날 : 참고 이미지처럼 옅은 그레이 배경 박스로 표시 */
+  .sc-month-cell.has-class{background:#F6F7F9;}
+  /* 선택된 날(오늘이 아닌) : 셀 전체가 아니라 숫자에만 옅은 회색 원으로 표시 */
+  .sc-month-cell.selected .mc-num{background:#E7E7EA; color:var(--ink); border-color:transparent;}
+  /* 오늘 : 숫자 원을 브랜드 컬러로 꽉 채워 한눈에 띄게 — 선택된 날과 겹쳐도 오늘 표시가 우선 */
+  .sc-month-cell.today .mc-num{color:var(--purple-tint); background:var(--purple); border-color:transparent;}
+  .sc-month-cell .mc-dot{width:5px; height:5px; border-radius:50%; background:var(--purple);}
+  .sc-month-cell .mc-dot.hidden{visibility:hidden;}
+  .sc-month-cell .mc-chip{font-size:10px; font-weight:800; padding:2px 6px; border-radius:var(--r-pill); line-height:1.2; white-space:nowrap;}
+  .sc-month-cell .mc-chip.attended{background:var(--mint-bg); color:var(--mint-text);}
+  .sc-month-cell .mc-chip.postponed{background:var(--amber-bg); color:var(--amber-text);}
+  .sc-month-cell .mc-chip.absent{background:var(--danger-soft); color:var(--danger);}
+  .sc-month-cell .mc-chip.upcoming{background:var(--selection-bg); color:var(--purple);}
+  /* 공휴일 — 상태 칩과 별도의 표시. 숫자를 옅은 산호색으로 칠하고, 숫자 아래에 공휴일 이름을 아주 작게 덧붙인다.
+     그날 수업이 있으면 상태 칩(mc-chip)이 그 아래 이어서 그대로 보인다 — 두 표시가 서로를 가리지 않는다 */
+  .sc-month-cell.holiday:not(.today) .mc-num{color:var(--holiday);}
+  .sc-month-cell.outside.holiday .mc-num{color:var(--holiday); opacity:.5;}
+  .mc-holiday-name{font-size:9px; font-weight:600; color:var(--holiday); line-height:1.1; white-space:nowrap;}
+  /* 달력 하단 범례 — 캘린더 흰 카드 안, 그리드 아래쪽에 여백을 두고 배치 */
+
+  /* ---------- Tablet / desktop (same as tablet) ---------- */
+  @media (min-width:640px){
+    body{padding-block:28px;}
+    .rc-app{max-width:560px; border-radius:28px; overflow:hidden; box-shadow:0 30px 60px -30px rgba(25,20,64,.25);}
+    .rc-bottom-nav{max-width:560px;} /* position:sticky였을 때 .rc-app의 overflow:hidden/둥근 모서리에 잘려 배경이 끊겨 보이던 문제 — fixed 유지로 수정 */
+    .rc-body{padding-inline:20px;}
+    .sc-topbar-card{margin-inline:-20px; padding-inline:20px;}
+    .rc-course-scroll, .sc-course-scroll{margin-right:-22px;}
+    .rc-hero-media{aspect-ratio:38/9;}
+    .rc-block-title{font-size:25.5px;}
+    .sc-picker-sheet{max-width:560px;}
+    .lesson-sheet-panel{max-width:560px;}
+    /* 풀스크린 팝업은 태블릿/PC에서 앱 프레임(.rc-app)과 똑같은 카드 모양(최대폭·라운딩·그림자)으로 떠서
+       마치 그 프레임 안에서 페이지가 전환되는 것처럼 보이게 한다 */
+    .pop-overlay{align-items:center;}
+    .pop-panel{
+      max-width:560px; height:min(880px, calc(100% - 56px)); border-radius:28px; overflow:hidden;
+      box-shadow:0 30px 60px -30px rgba(25,20,64,.25);
+    }
+    .pop-title{font-size:25.5px;}
+    .sc-picker-title, .lesson-sheet-title{font-size:25.5px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .rc-hero-cta, .rc-icon-tile, .rc-fb-card, .rc-step-marker, .rc-step-popup{transition:none;}
+    .rc-marker-ring .ring-outer, .rc-marker-ring .ring-inner{animation:none; stroke-dashoffset:0;}
+    .rc-vbar-fill{transition:none !important;}
+    .rev-mic-btn.busy,.rev-speak-btn.busy{animation:none;}
+    .rev-eq i{animation:none !important; height:10px !important;}
+    .mictest-mic.recording{animation:none;}
+  }
+</style>
+
+<div class="rc-app">
+  <header class="rc-topbar">
+    <div class="rc-logo">
+      <img class="rc-logo-img" src="data:image/png;base64,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" alt="YBM 전화화상">
+    </div>
+    <span class="rc-topbar-title" id="topbarTitle">클래스룸</span>
+    <button class="rc-icon-btn" aria-label="알림">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </button>
+  </header>
+
+  <!-- 강좌 상태 탭(진행/예정/완료) : 스크롤 시 헤더는 흘러가고 이 바만 상단에 고정된다 -->
+  <div class="rc-status-bar">
+    <div class="rc-tutor-tabs" id="courseStatusTabs" role="tablist" aria-label="강좌 상태">
+      <button type="button" class="on" data-status="ing" role="tab" aria-selected="true">진행</button>
+      <button type="button" data-status="upcoming" role="tab" aria-selected="false">예정</button>
+      <button type="button" data-status="done" role="tab" aria-selected="false">완료</button>
+    </div>
+  </div>
+
+  <main class="rc-body" id="classroomBody">
+    <!-- 강좌명 좌우 스크롤 : 카드 박스 없이 배경에 바로 배치 -->
+    <div class="rc-course-tabs-wrap">
+      <div class="rc-course-scroll" id="courseScroll" role="tablist" aria-label="강좌 선택"></div>
+    </div>
+
+    <!-- 튜터 정보 + 입장 영역을 한 카드로 묶음 : 튜터 정보 → (구분선) → 캐릭터/시간·CTA -->
+    <section class="rc-tutor-hero-card">
+      <div class="rc-tutor-row">
+        <div class="rc-tutor-avatar" id="tutorAvatar"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAC0ZJREFUeAGVV2twVOUZfs5tr2d3z15y2Vw3CQkQRBJkpIGqUCpQFSV2xjq1FbXVamVKtM5YHFuxU3+oUyswWDs6CrYODhVFoaigEAQRgZAQIEESsofcNve9ZO+755y+Z6OMilSbzc6e3XO+7709z/O+H4Pv+ef3+yWrzbqSE0zXiRZz3d53tvnee+ffUq8sw+72hBYtvUkWDHxbLBw+8NuHH9vBMEzo++zLfNcDgUDApwlCEwdmlcNul86dPo5Hfnkz5JEoBJsDJrMDy5Yuw57d25GIJeDLd8DjlPDXbXs3ZyzWJ71ms/y/9mcvd8MfDEqjwfDfeJPZzzHsGqfTKe3c8hxuX7IAZ0ZVpAURisqhdtYc9Peex1AojgR4jMez8Hg82PDoA3d5BINf3yNIe/1fDgSCAZ8VTCtdNgEcbKINH7y+EX957I9Iml2o9VohsCriqSxtoEJLxZHJkGGrAarGIZpSUJznxo5XNsFmE5s0lmsNBIO+b7N1SQlGgsE6FszbYJjcAo7nMN7bhZ/+sB7G/FIU2xnsOzmEW+eWY3ZNGfK9BfDYLHh372G8/Gk3Vi+vR3HVHEDLwkw5ufmRp2G1e+i7JmcUrTHfKbZd1gHdS4Fl9zNgybgGje5ajAbcc00lOkcVzCy142z3MDbeuxzOvHwYRRFmiwie55GJRfCfne/hlRPDeObRB/H+J62YVVUAo9WBW5qeQjwWJ2uMjExqMZVTvqQEes0NrEDGOZ/+M8MyMJvN2L7pSYxFFXidZvT2jeHpVT+GxVUAleWRVUCpV6BoKiyF5bhz9e9RpEQwMXYBFrMBg/0BIBHB0PkOcCzBGJRVwbj/q5i46ICdFZ7IPcBqZFyjBHBQEpPYvfU1JBQWlV47agsllFfX5p7XNBY8x0FVsuCMVhhdpRB8s7HmzpXobm+hspigkEmDgUPHJ3tgoEzmDDKsjxWEJ77mwBcAadI4TY89VxcjLWh+9w3a3JgzfrZrADdcexXiCjnIaARNBazJDE3gwImSXjCosSDm/mgxRkkbakptULIZjEwkgOgAwhMjlAVmKjiGbwoGE76LDggst06/wXwFFgJ5fuLAe2A5IySrgBRlZDwUxqFjJyG53GAFHpqqgmWNsBAGxOIyGEprYSutRnVJIZKUvTyXg5iSgXyuCyM9pyh6CpD2IZGi9VpTzgG9HgzDrtJ/ZAh1dA39lYxGMNzrx4yKAnRT7auLvfjZz38FPjmJh57dgsHhINLhEFLBEWx64WU89eC92P3cnyibHMoqq9HVfgoleRJMXBaTsRR6O1ooejKuKToY6Z9bFQxqEquAW8npQeuQJ8OapkelYXxsGDaLCcNj4wjH0lg5rwrL7liNZz4eIHIZ4CeA2Qu9RDEHKqwaTpOT5/y98IpRFFXV4FRrBwR1EnYjiywJ1EDPWbA8O2Vcf7GMBC62kqdiLtIuslGHjUrgMuF8+zG6ziCbodrGU7hiehX+8XglJicm0BuMITw+CtFTBEGScGTDP+FyeWAqvxLbXt2K66+dTTsJ6O3thdtbjEK3hehqIUwQbliSLj0LepmNwnU8yeycqbpruRrRBwFQQNv+t5EkpWvuGML8qjJEI2miJVEzv5jq2IdA0gBBdMMiWtG09ncI9ZxBgZeHp2ENUj1HsGBGKda81Iyu1x/GZ52DCJFa8iRqyKhT4VKpNUWt03PimzKvF4DXWUhfVJw9cQSROAP/cETnHPKrZ8HEWzA52IOBgQC8Xi9MtFqxFUPiFHgKy+CY1gBGKoIxmwRnMiHL8Fh6/0bMr/OBT0zQtlpOMxiO/dKiT7+S9EteRyZDNylF6UwGvsI8tHT3Ext4SA4TMakLk8MyTnT1I6/yCuK3GZFBPxhiwsG9H2Kosw1aaAgY7iT5FKl0CgrNPPI8ElY+uIG6pIBoeAwa7a87ovcYSoLE5tDP6BhkoGNBfyeTcYiiEaLJqMMSHDmhJUP4uLUV1XPnUdgZQnYUg33nkBr1Y8EvfoPOCwH0tByAOtZH9U9hgICboJIyFLHX7cCbb+2F0yZSMrUcDUFYg05LMh3Sv/B6SvT00C89Lc1kI4FphSIkE49X93dSfZ1YtHwpNm74F9J5eWDFfCSGwhhu/Qx7du1C90QKLceO0boQxon7z+zpwPyaPCQSKdx43TwUeV0UvUBxT2WfzUkXQrr8yKw2hQJyjprGJI59uANlFdMgMGqONqFoAntbzlJmsvjD2l9jaNdBKGMJOGYuhNlWido5C3DPqluw9LZbwYgGrNu4HVQBjI8kSBE9xAQvrrz6h+g7vosEiJwgFmg5TWBlnRQnmRwmplLD0QM60CLRJLKkcg4Lj0LJgrs27EaZ245MMo0Zy64i50YQa98L0RbBjBoP7E6ioWRHMJjEi28fQgN1wrJiOyTJhn0fHcD8pTfh0FuvUZdOTomdqjNBa2MJQ83al72Z0SlohM2k4ljb54QBHrGUCpF6hIE0v+GRv6OCUsnT4oJp01HasBCszQvWmgeRnAyHoti0YTNMBgFzy2042BGAg08jHA6iZd8euElNAz0dOUXMcVFVDrBQrDuoDiHdepYwMHjmMLr9Q/CPxdE7HkcFtWEL9QUTqVjXUAQbN28D9fOcWvIGEhiHhEDHp9i/cyeGLgxAHhyFlRxQMimI+lBiNsHtENHeRtJM3VRAkgjA5hqa1WTawTudTCgajW5RVG1NdHIMW5/7M7rG0ih10SJ5DFWFdnpeRXcwlfPc30dGOj8jJrAY6u0Bc/QjEpQsSktKEJ0I4XQghCylNZVlcf+KK/HuERmrbyN94CwIXBiEyXYYydJZRG/7Zn1yznVDjuOeNxhNOHP0AOqXrICBkBElwBU4DBghBbSS2umg0pGrcjxRMAG7wwyb0wZ3QR4Kiot1UuHE5z34fCRJxhV0jCaQX1pCIHRhcDyTa0KsqwzxNIN4aJwCSD95sR3T5CNnUqn1P1jSSNMMqRwJz2Q8gVBSxZxSB5rPjcMkMCSlLBIqwTarEUCpZGRWUalj0LvPL+OFD06iJN8Gr92C0/3j2Pr+Mdx+RyM+/Pg4nR0KUFBUiPDoCM0RlvXmL8b1ixORKFrX9bQfkPtPHc91rzBFuXBaHl4/2oc8q5lqzsBIDqRTSThddhrJTCSfNpotzIhFQti8+1PwNP/NLnYims6gKt+OU72TkDtOIUbBRCNBnD+6DyV118h5bu+6S0YyvR7+o/sWT6uqlDuoVsvmVqFnaAISteRgLIYKMqrLNTUvGq+MSMfjUBQFsWgIrdR6W4czmFXixlhSw6wyiToqS8pnxIW+YVitRiQjY7j6xjvlotnXL/7qqelr54LGh56XA4O9jcuvrpHbewLw2K1IEqCWXlGKONXVyIOywRHn3VAYQno2jYmBQew51QcXpb1T7kcsPI7pXhvGIhmsuKoUp+UR0hIB0+obZE0wNJq/cVK65GDy0EvNbarCLq4odsuCw47ra4swv7aMgBSmJpXF/BlVSKY1JCkDApG5kwaRIM0LBjYDq6ChmubHvvE0Hr/vZgTTQL5Lwg03LJetrsLFJfU3tn3T3reejNa+cUSeWVlVv+WDM+tXNNSgL0ycJm5bKK2+QhfOtrfBatQwSePYzoOtWLF4LpxmIddRlsybgYXktMPMoqqsHPWza9bPqFtUP/MnD8jfZuuyZ8O7n98RCiVSTSpvqHj/8Jkts8vcKKDhVKD5zecrh4Fmg0Nt5+kc6EaKylHkEYmqGlGyHA2zykJbtry5fmZxQcV9z25vqm+8+7InZR7f8de47g2ZPu6qq6xrmu7ASqNoXpROp+oEni+nM4GUZTJEUYQyKnuhxGlua+k416xOcjt2dUVDu9a++F3b478sMbS++Nq4BwAAAABJRU5ErkJggg==" alt="Sarah Jenkins"></div>
+        <div class="rc-tutor-info">
+          <p class="name" id="tutorName">Sarah Jenkins</p>
+          <p class="schedule" id="tutorSchedule">화 / 목 10:00 – 10:25</p>
+        </div>
+        <button class="rc-cal-btn" aria-label="일정 보기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg>
+        </button>
+      </div>
+
+      <!-- 캐릭터 영상은 '정보'가 아니라 '감성/브랜드' 요소, 핵심은 시간·CTA. 수업 진행 단계에 따라 상태가 바뀐다 -->
+      <div class="rc-hero-inner">
+        <div class="rc-hero-media" id="heroMedia">
+          <video id="heroVideo" autoplay muted loop playsinline poster="assets/hero-poster.jpg">
+            <source src="assets/hero-tutor.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="rc-hero-status" id="heroStatus" data-state="upcoming">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>
+          <span class="num" id="countdown">03:20</span>
+          <span class="suffix">남음</span>
+        </div>
+        <div class="rc-hero-lesson">
+          <p class="rc-hero-lesson-num">Lesson.01</p>
+          <h3 class="rc-hero-title">Small Talk &amp; Ice Breaking</h3>
+        </div>
+        <button class="rc-hero-cta" id="heroCta" type="button">
+          <span class="label">강의실 입장하기</span>
+        </button>
+        <button type="button" class="rc-hero-preview" id="statusPreview">환경 테스트</button>
+      </div>
+    </section>
+
+    <!-- 예습 : 2026-10-01부터 순차 가이드 플로우로 변경 — 처음엔 1단계(오늘의 Lesson) 말풍선만 열려 있고
+         2·3단계는 닫힌 채로 시작한다. 1단계를 완료(팝업의 액션 버튼 클릭)하면 2단계 말풍선이 자동으로 열리고,
+         2단계를 완료하면 3단계가 자동으로 열려 — 유저가 순서대로 따라가기만 하면 되는 플로우.
+         각 단계는 여전히 마커/칩을 직접 눌러 독립적으로 열고 닫을 수 있다(강제 잠금은 아님). -->
+    <section class="rc-block">
+      <h2 class="rc-block-title">학습 전에 미리 예습해 보아요</h2>
+      <div class="rc-diagram">
+        <div class="rc-flow" id="flow">
+          <svg class="link" viewBox="0 0 326 478" preserveAspectRatio="none">
+            <path d=""/>
+          </svg>
+
+          <!-- 오늘의 Lesson (항상 중앙, 첫 화면엔 팝업이 닫혀 있음) -->
+          <div class="rc-step" data-step-id="lesson" data-align="left" data-active="true" data-completed="false">
+            <button class="rc-step-marker" type="button" aria-label="오늘의 Lesson 닫기">
+              <svg class="rc-marker-ring" viewBox="0 0 100 100" aria-hidden="true">
+                <circle class="ring-idle" cx="50" cy="50" r="47"/>
+                <circle class="ring-outer" cx="50" cy="50" r="47"/>
+                <circle class="ring-inner" cx="50" cy="50" r="42"/>
+              </svg>
+              <img src="assets/char-lesson-laptop.png" alt="">
+            </button>
+            <div class="rc-step-popup">
+              <span class="rc-popup-tail" aria-hidden="true"></span>
+              <p class="rc-unit-current">오늘의 교재</p>
+              <button type="button" class="rc-popup-go">교재 보기</button>
+              <button type="button" class="rc-hero-preview">전체 보기</button>
+            </div>
+            <button type="button" class="rc-step-title-chip" aria-label="오늘의 교재 열기">오늘의 교재</button>
+            <button type="button" class="rc-step-done-chip" aria-label="교재보기 완료 — 다시 열기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>교재보기 완료</button>
+          </div>
+
+          <!-- 내용 익히기 (항상 오른쪽) -->
+          <div class="rc-step" data-step-id="review" data-align="right" data-active="false" data-completed="false">
+            <button class="rc-step-marker" type="button" aria-label="내용 익히기 닫기">
+              <svg class="rc-marker-ring" viewBox="0 0 100 100" aria-hidden="true">
+                <circle class="ring-idle" cx="50" cy="50" r="47"/>
+                <circle class="ring-outer" cx="50" cy="50" r="47"/>
+                <circle class="ring-inner" cx="50" cy="50" r="42"/>
+              </svg>
+              <img src="assets/char-review-frog.png" alt="">
+            </button>
+            <div class="rc-step-popup">
+              <span class="rc-popup-tail" aria-hidden="true"></span>
+              <p class="rc-unit-current">오늘의 사전 학습</p>
+              <button type="button" class="rc-popup-go">바로가기</button>
+              <button type="button" class="rc-hero-preview">전체 보기</button>
+            </div>
+            <button type="button" class="rc-step-title-chip" aria-label="오늘의 사전 학습 열기">오늘의 사전 학습</button>
+            <button type="button" class="rc-step-done-chip" aria-label="사전 학습 완료 — 다시 열기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>사전 학습 완료</button>
+          </div>
+
+          <!-- AI로 말해보기 (항상 왼쪽) -->
+          <div class="rc-step" data-step-id="ai" data-align="left" data-active="false" data-completed="false">
+            <button class="rc-step-marker" type="button" aria-label="AI로 말해보기 닫기">
+              <svg class="rc-marker-ring" viewBox="0 0 100 100" aria-hidden="true">
+                <circle class="ring-idle" cx="50" cy="50" r="47"/>
+                <circle class="ring-outer" cx="50" cy="50" r="47"/>
+                <circle class="ring-inner" cx="50" cy="50" r="42"/>
+              </svg>
+              <img src="assets/char-ai-laptop.png" alt="">
+            </button>
+            <div class="rc-step-popup">
+              <span class="rc-popup-tail" aria-hidden="true"></span>
+              <p class="rc-unit-current">오늘의 AI 학습</p>
+              <button type="button" class="rc-popup-go">바로가기</button>
+              <button type="button" class="rc-hero-preview">전체 보기</button>
+            </div>
+            <button type="button" class="rc-step-title-chip" aria-label="오늘의 AI 학습 열기">오늘의 AI 학습</button>
+            <button type="button" class="rc-step-done-chip" aria-label="AI 학습 완료 — 다시 열기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>AI 학습 완료</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 리뷰 / 리포트 : 수업리뷰(피드백 스니펫+교정 개수) · Class Report(항목별 막대, 스크롤 진입 시 애니메이션) -->
+    <section class="rc-block" id="reviewSection">
+      <h2 class="rc-block-title">학습 후 확인해 보아요</h2>
+      <div class="rc-fb-list">
+        <div class="rc-fb-card">
+          <button type="button" class="rc-fb-top" id="fbReviewGotoBtn" aria-label="수업리뷰 바로가기">
+            <span class="rc-fb-top-left">
+              <span class="label">수업리뷰</span>
+            </span>
+            <span class="rc-fb-goto" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </button>
+          <p class="rc-fb-quote">"You did an amazing job today, Chloe — pronunciation improved a lot!"</p>
+          <span class="rc-fb-footer">
+            <button type="button" class="rc-fb-replay" id="fbReviewReplayBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              오늘 수업 다시듣기
+            </button>
+          </span>
+        </div>
+
+        <div class="rc-fb-card">
+          <button type="button" class="rc-fb-top" id="fbReportGotoBtn" aria-label="Class Report 바로가기">
+            <span class="rc-fb-top-left">
+              <span class="label">Class Report</span>
+              <span class="rc-fb-date" id="fbReportDate">07.01–07.31</span>
+            </span>
+            <span class="rc-fb-goto" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </button>
+          <span class="rc-vbar-row" id="fbReportBars">
+            <span class="rc-vbar-item"><span class="rc-vbar-val num">10</span><span class="rc-vbar-track"><span class="rc-vbar-fill" style="--h:100%"></span></span><span class="rc-vbar-label">이해력</span></span>
+            <span class="rc-vbar-item"><span class="rc-vbar-val num">8</span><span class="rc-vbar-track"><span class="rc-vbar-fill" style="--h:80%"></span></span><span class="rc-vbar-label">유창성</span></span>
+            <span class="rc-vbar-item"><span class="rc-vbar-val num">6</span><span class="rc-vbar-track"><span class="rc-vbar-fill" style="--h:60%"></span></span><span class="rc-vbar-label">발음</span></span>
+            <span class="rc-vbar-item"><span class="rc-vbar-val num">4</span><span class="rc-vbar-track"><span class="rc-vbar-fill" style="--h:40%"></span></span><span class="rc-vbar-label">어휘</span></span>
+            <span class="rc-vbar-item"><span class="rc-vbar-val num">4</span><span class="rc-vbar-track"><span class="rc-vbar-fill" style="--h:40%"></span></span><span class="rc-vbar-label">문법</span></span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 아이콘 그리드 -->
+    <section class="rc-block">
+      <div class="rc-icon-grid">
+        <button type="button" class="rc-icon-tile" id="ctaAskQuestion">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 1 1 4.6 2.4c-.9.6-1.7 1-1.7 2.3"/><path d="M12 17h.01"/></svg>
+          <span>질문하기</span>
+        </button>
+        <button type="button" class="rc-icon-tile" id="ctaSatisfaction">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l4.5-4.5a2 2 0 0 1 2.8 0L14 15.3l1.7-1.7a2 2 0 0 1 2.8 0L21 16.5"/></svg>
+          <span>만족도 평가</span>
+        </button>
+        <button class="rc-icon-tile">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.7-6.2"/><path d="M3.5 4.5v4.3h4.3"/><path d="M12 8v4.5l3 2"/></svg>
+          <span>AI 히스토리</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <main class="rc-body" id="scheduleBody" hidden>
+    <!-- 강좌 선택 : 클래스룸과 동일한 스타일의 좌우 스크롤 탭. 목록은 클래스룸 홈과 동일한 courses 배열을 그대로 사용한다 -->
+    <div class="sc-course-tabs-wrap">
+      <div class="sc-course-scroll" id="scCourseScroll" role="tablist" aria-label="강좌 선택"></div>
+    </div>
+
+    <!-- 2026-10-01: 정리 — "연기/보강 현황·수업 루틴 변경" 줄이 카드 밖에 따로 떠 있어 리스트 바로 위에서
+         어색하게 끼어 보인다는 피드백으로 캘린더 카드 안의 푸터 줄로 통합(하단 구분선으로 분리).
+         상단 내비는 주간/월간 공용 — 이전/다음은 현재 보기 모드에 맞춰 주/월을 이동하고,
+         우측 버튼은 보기 모드를 전환한다(주간→월간 버튼은 "월간", 월간→주간 버튼은 "주간"으로 라벨이 바뀐다) -->
+    <div class="sc-topbar-card">
+      <div class="sc-week-topbar">
+        <div class="sc-week-label-group">
+          <button type="button" class="sc-month-trigger" id="scMonthTrigger" aria-haspopup="dialog" aria-label="년월 선택">
+            <span class="m-label" id="scTopLabel">2026년 9월</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <!-- 2026-10-01: locate 아이콘을 붙였다가 "이상하다"는 피드백으로 제거 — 텍스트(TODAY)만으로 유지 -->
+          <button type="button" class="sc-today-btn" id="scTodayBtn">TODAY</button>
+        </div>
+        <div class="sc-view-toggle" id="scViewToggle" role="tablist" aria-label="보기 전환">
+          <button type="button" class="sc-view-seg on" data-mode="week" role="tab" aria-selected="true">주간</button>
+          <button type="button" class="sc-view-seg" data-mode="month" role="tab" aria-selected="false">월간</button>
+        </div>
+      </div>
+
+      <!-- 캘린더 표면(주간 스트립 / 월간 그리드) : 흰 카드 안에서 좌우 꽉 차게 이어진다. 보기 모드에 따라 하나만 보인다 -->
+      <!-- 2026-09-30: 좌우 스와이프로 하루씩 이동(화살표 버튼 제거 — 날짜칸이 얇아진다는 피드백) -->
+      <div class="sc-week-strip" id="scWeekStrip"></div>
+
+      <div class="sc-month-calendar" id="scMonthCalendar" hidden>
+        <div class="sc-month-weekday-row">
+          <span class="sun">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="sat">토</span>
+        </div>
+        <div class="sc-month-grid" id="scMonthGrid"></div>
+      </div>
+
+      <!-- 연기/보강 안내 + 수업 루틴 변경 — 캘린더 카드 푸터로 통합, 구분선으로만 분리(2026-10-01) -->
+      <div class="sc-quicklinks" id="scQuicklinks">
+        <button type="button" class="sq-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          연기/보강 현황 · 특별보강 2회 가능
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <button type="button" class="sq-item sq-action">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          수업 루틴 변경
+        </button>
+      </div>
+    </div>
+
+    <!-- 흰 카드 밖 : 주간 보기의 일별 수업 리스트. 항목을 클릭하면 카드 안 스트립의 선택일만 그 날짜로 이동한다(주는 그대로) -->
+    <section class="sc-agenda-section" id="scAgendaSection">
+      <div class="sc-agenda-list" id="scAgendaList"></div>
+    </section>
+  </main>
+
+  <nav class="rc-bottom-nav">
+    <button class="rc-nav-item on" data-tab="classroom" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h7A2.5 2.5 0 0 1 15 8.5v7A2.5 2.5 0 0 1 12.5 18h-7A2.5 2.5 0 0 1 3 15.5v-7Z"/><path d="M15 10.5l5.1-3a.9.9 0 0 1 1.4.75v7.5a.9.9 0 0 1-1.4.75l-5.1-3"/></svg>
+      클래스룸
+    </button>
+    <button class="rc-nav-item" data-tab="schedule">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg>
+      스케줄
+    </button>
+  </nav>
+
+  <div class="sc-picker-overlay" id="scPickerOverlay" hidden>
+    <div class="sc-picker-sheet" role="dialog" aria-modal="true" aria-label="년월 선택">
+      <div class="sc-picker-header">
+        <button type="button" class="sc-picker-cancel" id="scPickerCancel">취소</button>
+        <span class="sc-picker-title">년월 선택</span>
+        <button type="button" class="sc-picker-confirm" id="scPickerConfirm">확인</button>
+      </div>
+      <div class="sc-picker-wheels">
+        <div class="sc-picker-highlight" aria-hidden="true"></div>
+        <div class="sc-picker-col" id="scPickerYearCol"><div class="sc-picker-col-inner" id="scPickerYearInner"></div></div>
+        <div class="sc-picker-col" id="scPickerMonthCol"><div class="sc-picker-col-inner" id="scPickerMonthInner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 레슨별 전체보기 바텀시트 — 예습 3단계(교재/사전 학습/AI 학습) 팝업의 "전체 보기" 공용 시트 -->
+  <div class="lesson-sheet-overlay" id="lessonSheetOverlay" hidden>
+    <div class="lesson-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="lessonSheetTitle">
+      <div class="lesson-sheet-head">
+        <span></span>
+        <span class="lesson-sheet-title" id="lessonSheetTitle">전체 보기</span>
+        <button type="button" class="lesson-sheet-close" id="lessonSheetClose" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="lesson-sheet-body" id="lessonSheetList"></div>
+    </div>
+  </div>
+
+  <!-- 학습 질문(질문하기) — 풀스크린 팝업 -->
+  <div class="pop-overlay" id="qaOverlay" hidden>
+    <div class="pop-panel" role="dialog" aria-modal="true" aria-labelledby="qaTitle">
+      <div class="pop-head">
+        <button type="button" class="pop-close" id="qaCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="pop-title" id="qaTitle">학습 질문</span>
+        <span class="pop-close pop-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="pop-tabs-wrap" id="qaTabsWrap">
+        <div class="rc-tutor-tabs" id="qaTabs" role="tablist" aria-label="학습 질문 화면 전환">
+          <button type="button" class="on" data-qa-tab="write" role="tab" aria-selected="true">질문하기</button>
+          <button type="button" data-qa-tab="history" role="tab" aria-selected="false">나의 질문 내역</button>
+        </div>
+      </div>
+
+      <div class="pop-body" id="qaBody">
+        <!-- 질문 작성 -->
+        <div id="qaWriteView">
+          <p class="pop-guide">Tutor가 직접 확인 후 답변드려요. 수강 중인 과정 언어(영어·일본어 등)로 작성해 주세요.</p>
+
+          <div class="qa-field" id="qaFieldTitle">
+            <label for="qaInputTitle">제목<span class="req">*</span></label>
+            <input type="text" id="qaInputTitle" placeholder="질문 제목을 입력하세요" maxlength="60">
+            <p class="qa-err">제목을 입력하세요.</p>
+          </div>
+
+          <div class="qa-field" id="qaFieldContent">
+            <label for="qaInputContent">내용<span class="req">*</span></label>
+            <textarea id="qaInputContent" placeholder="학습 질문을 입력하세요." maxlength="500"></textarea>
+            <p class="qa-err">내용을 입력하세요.</p>
+          </div>
+
+          <div class="qa-field" id="qaFieldEmail">
+            <label for="qaInputEmail">답변 받을 이메일<span class="req">*</span></label>
+            <input type="email" id="qaInputEmail" placeholder="abc@abc.co.kr">
+            <p class="qa-err">이메일을 입력하세요.</p>
+          </div>
+
+          <div class="pop-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 11.5h1v4.5h1"/></svg>
+            <span>보낸 질문은 Tutor에게 이메일로 바로 발송되며, 전송 후에는 수정·삭제할 수 없어요.</span>
+          </div>
+        </div>
+
+        <!-- 나의 질문 내역 -->
+        <div id="qaHistoryView" hidden>
+          <div class="pop-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 11.5h1v4.5h1"/></svg>
+            <span>내가 질문한 내역이에요. Tutor의 답변은 질문 시 입력한 이메일로 직접 발송돼요.</span>
+          </div>
+          <div class="qa-history-list" id="qaHistoryList"></div>
+        </div>
+
+        <!-- 제출 완료 -->
+        <div id="qaSuccessView" class="pop-result" hidden>
+          <span class="pop-result-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <h3>학습 질문이 접수되었습니다</h3>
+          <p>Tutor 확인 후 입력하신 이메일로<br>답변드릴게요.</p>
+        </div>
+      </div>
+
+      <div class="pop-foot" id="qaFootWrite">
+        <button type="button" class="pop-btn-ghost" id="qaCancelBtn">취소</button>
+        <button type="button" class="pop-btn-primary" id="qaSubmitBtn">보내기</button>
+      </div>
+      <div class="pop-foot" id="qaFootSuccess" hidden>
+        <button type="button" class="pop-btn-primary" id="qaSuccessConfirmBtn">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 강사 만족도 평가 — 풀스크린 팝업 -->
+  <div class="pop-overlay" id="satOverlay" hidden>
+    <div class="pop-panel" role="dialog" aria-modal="true" aria-labelledby="satTitle">
+      <div class="pop-head">
+        <button type="button" class="pop-close" id="satCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="pop-title" id="satTitle">강사 만족도 평가</span>
+        <span class="pop-close pop-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="pop-body" id="satBody">
+        <!-- 평가 작성 -->
+        <div id="satFormView">
+          <p class="pop-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 11.5h1v4.5h1"/></svg>
+            <span>만족도 평가는 수강 기간 중 1회만 참여할 수 있어요.</span>
+          </p>
+          <p class="sat-error-banner" id="satErrorBanner">평가하지 않은 항목을 확인해 주세요.</p>
+          <div class="sat-list" id="satList"></div>
+        </div>
+
+        <!-- 이미 참여 완료 -->
+        <div id="satLockedView" class="pop-result" hidden>
+          <span class="pop-result-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <h3>만족도 평가를 완료했어요</h3>
+          <p>수강 기간 중 1회만 참여할 수 있어요.<br>소중한 의견 감사해요.</p>
+        </div>
+
+        <!-- 제출 완료 -->
+        <div id="satSuccessView" class="pop-result" hidden>
+          <span class="pop-result-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <h3>강사 만족도 평가가 완료되었습니다</h3>
+          <p>참여해 주셔서 감사합니다.</p>
+        </div>
+      </div>
+
+      <div class="pop-foot" id="satFootForm">
+        <button type="button" class="pop-btn-ghost" id="satCancelBtn">취소</button>
+        <button type="button" class="pop-btn-primary" id="satSubmitBtn">제출</button>
+      </div>
+      <div class="pop-foot" id="satFootDone" hidden>
+        <button type="button" class="pop-btn-primary" id="satDoneConfirmBtn">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 수업 리뷰 — 풀스크린 팝업 -->
+  <div class="pop-overlay" id="revOverlay" hidden>
+    <div class="pop-panel" role="dialog" aria-modal="true" aria-labelledby="revTitle">
+      <div class="pop-head">
+        <button type="button" class="pop-close" id="revCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="pop-title" id="revTitle">수업 리뷰</span>
+        <span class="pop-close pop-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="pop-body" id="revBody">
+        <div class="rev-lesson">
+          <div class="rev-lesson-top">
+            <span class="rev-course-chip">비즈니스 실전 회화</span>
+            <span class="rev-lesson-date">8월 13일 (금) 10:00</span>
+          </div>
+          <p class="rev-lesson-title" id="revLessonTitle">Lesson.01 · Small Talk &amp; Ice Breaking</p>
+        </div>
+
+        <p class="rev-section-title">Tutor Feedback</p>
+        <div class="rev-feedback">
+          <p class="rev-feedback-text">You did an amazing job today, Chloe. You were very conversant and could talk about a variety of topics. Your pronunciation was clear, especially when you took your time to say the words slowly. Your vocabulary was relatively strong, though there were a few grammatical slips. Just keep working on your grammar and pronunciation, and you'll continue to improve. Keep up the great work! :-)</p>
+        </div>
+
+        <div class="rev-section">
+          <div class="rev-section-head">
+            <p class="rev-section-title">Pronunciation</p>
+            <button type="button" class="rev-mictest-trigger" id="revMicTestTrigger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
+              마이크 테스트
+            </button>
+          </div>
+          <p class="rev-section-desc">주의해야 할 발음이에요. 마이크 버튼으로 다시 평가해 보세요.</p>
+          <div class="rev-pron-list" id="revPronList"></div>
+        </div>
+
+        <div class="rev-section">
+          <p class="rev-section-title">Grammar</p>
+          <p class="rev-section-desc">Tutor가 교정해 준 문장이에요.</p>
+          <div class="rev-gram-list" id="revGramList"></div>
+        </div>
+
+        <p class="pop-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 11.5h1v4.5h1"/></svg>
+          <span>수업 다시 듣기와 발음 평가는 수업일로부터 2주간만 제공돼요.</span>
+        </p>
+      </div>
+
+      <div class="pop-foot">
+        <button type="button" class="pop-btn-ghost" id="revCloseFootBtn">닫기</button>
+        <button type="button" class="rev-replay" id="revReplayBtn">
+          <svg class="ic-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span class="rev-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="rev-replay-label">오늘 수업 다시 듣기</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 마이크 테스트 — 수업 리뷰 발음 확인 섹션에서 마이크 상태를 미리 점검하는 보조 팝업(수업리뷰 위에 얹힘) -->
+  <div class="mictest-overlay" id="revMicTestOverlay" hidden>
+    <div class="mictest-card">
+      <button type="button" class="mictest-close" id="revMicTestCloseBtn" aria-label="닫기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <p class="mictest-guide">마이크 버튼을 누른 후<br>문장을 말해주세요.</p>
+      <p class="mictest-sample">Hello</p>
+      <button type="button" class="mictest-mic" id="revMicTestBtn" aria-label="마이크 테스트 시작">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
+      </button>
+      <p class="mictest-note">※ 정확한 평가를 위해 마이크 기능이 있는 이어폰을 착용해 주세요.</p>
+      <div class="mictest-toast" id="revMicTestToast"></div>
+    </div>
+  </div>
+
+  <!-- Class Report(월간 리포트) — 풀스크린 팝업 -->
+  <div class="pop-overlay" id="crOverlay" hidden>
+    <div class="pop-panel" role="dialog" aria-modal="true" aria-labelledby="crTitle">
+      <div class="pop-head">
+        <button type="button" class="pop-close" id="crCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="pop-title" id="crTitle">Class Report</span>
+        <span class="pop-close pop-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="pop-body" id="crBody">
+        <div class="rev-lesson">
+          <div class="rev-lesson-top">
+            <span class="rev-course-chip">비즈니스 실전 회화</span>
+            <span class="rev-lesson-date" id="crPeriod">평가 기간 07.01–07.31</span>
+          </div>
+        </div>
+
+        <p class="cr-heading">Evaluation</p>
+        <div class="cr-radar-wrap" id="crRadarWrap"></div>
+
+        <div class="cr-section">
+          <p class="cr-heading">Areas for Improvement</p>
+          <div class="rev-feedback">
+            <p class="rev-feedback-text">You did an amazing job today, Chloe. You were very conversant and could talk about a variety of topics. You</p>
+          </div>
+        </div>
+
+        <div class="cr-section">
+          <p class="cr-heading">Instruction</p>
+          <div class="rev-feedback">
+            <p class="rev-feedback-text">You did an amazing job today, Chloe. You were very of topics. You</p>
+          </div>
+        </div>
+
+        <div class="cr-section">
+          <p class="cr-heading">Comment</p>
+          <div class="rev-feedback">
+            <p class="rev-feedback-text">You did were very conversant and could talk about a variety of topics. You</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var video = document.getElementById('heroVideo');
+  if (video && reduceMotion) { video.removeAttribute('autoplay'); video.pause(); }
+
+  /* 강좌 상태 탭(진행/예정/완료) + 강좌명 좌우 스크롤: 탭으로 상태를 고르면 해당 상태의 강좌만
+     스크롤 리스트에 노출되고, 강좌를 고르면 아래 튜터 정보가 바뀐다. */
+  var courses = [
+    { initials:'SJ', name:'Sarah Jenkins', role:'비즈니스 실전 회화', status:'ing' },
+    { initials:'GL', name:'Grace Lee',     role:'실무 이메일 영어',   status:'ing' },
+    { initials:'JK', name:'James Kim',     role:'토익 스피킹 대비',   status:'ing' },
+    { initials:'HL', name:'Helen Lee',     role:'해외영업 실무영어',  status:'ing' },
+    { initials:'DP', name:'Daniel Park',   role:'데일리 프리토킹',    status:'upcoming' },
+    { initials:'EC', name:'Emily Cho',     role:'여행 영어 회화',     status:'done' }
+  ];
+  var nameEl = document.getElementById('tutorName');
+  var statusTabs = Array.prototype.slice.call(document.querySelectorAll('#courseStatusTabs button'));
+  var courseScroll = document.getElementById('courseScroll');
+  var activeStatus = 'ing';
+  var courseIndex = 0;
+
+  /* 강좌명 스크롤 힌트 — 더 볼 탭이 남은 방향에만 가장자리 페이드를 표시. 렌더로 탭 구성이 바뀔 때마다 다시 계산한다 */
+  function bindCourseScrollHint(el){
+    function update(){
+      var max = el.scrollWidth - el.clientWidth;
+      el.classList.toggle('has-scroll-l', el.scrollLeft > 4);
+      el.classList.toggle('has-scroll-r', max > 4 && el.scrollLeft < max - 4);
+    }
+    el.addEventListener('scroll', update, { passive:true });
+    window.addEventListener('resize', update);
+    el._updateScrollHint = update;
+    requestAnimationFrame(update);
+  }
+
+  function renderCourseChips(){
+    courseScroll.innerHTML = '';
+    courses.forEach(function(c, i){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role','tab');
+      btn.textContent = c.role;
+      if (c.status !== activeStatus) btn.hidden = true;
+      if (i === courseIndex) { btn.classList.add('on'); btn.setAttribute('aria-selected','true'); }
+      else btn.setAttribute('aria-selected','false');
+      btn.addEventListener('click', function(){ setCourse(i); });
+      courseScroll.appendChild(btn);
+    });
+    if (courseScroll._updateScrollHint) requestAnimationFrame(courseScroll._updateScrollHint);
+    else bindCourseScrollHint(courseScroll);
+  }
+
+  function setCourse(i){
+    courseIndex = i;
+    var c = courses[i];
+    nameEl.textContent = c.name;
+    renderCourseChips();
+  }
+
+  statusTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      activeStatus = tab.getAttribute('data-status');
+      statusTabs.forEach(function(t){
+        t.classList.toggle('on', t === tab);
+        t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+      });
+      var firstIdx = courses.findIndex(function(c){ return c.status === activeStatus; });
+      if (firstIdx > -1) setCourse(firstIdx); else renderCourseChips();
+    });
+  });
+
+  renderCourseChips();
+
+  /* 수업 상태 머신: 예정(upcoming) → 임박(soon, ≤60초). "지금 수업 중"/"수업이 종료되었습니다" 멘트는
+     이 카드에서 더 이상 노출하지 않는다 — 카운트다운이 0이 되면 "잠시 후 시작" 상태를 그대로 유지한다. */
+  var totalSeconds = 3 * 60 + 20; // 수업 시작까지 남은 시간(데모값)
+  var lessonState = 'upcoming';
+
+  var heroStatus = document.getElementById('heroStatus');
+  var heroCta = document.getElementById('heroCta');
+  var heroCtaLabel = heroCta.querySelector('.label');
+
+  function mmss(sec){
+    var m = Math.floor(sec / 60), s = sec % 60;
+    return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  }
+
+  function renderHero(){
+    if (lessonState === 'upcoming'){
+      heroStatus.setAttribute('data-state','upcoming');
+      heroStatus.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>' +
+        '<span class="num" id="countdown">' + mmss(totalSeconds) + '</span><span class="suffix">남음</span>';
+    } else { // soon
+      heroStatus.setAttribute('data-state','soon');
+      heroStatus.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>' +
+        '<span class="txt">잠시 후 시작</span>';
+    }
+    heroCtaLabel.textContent = '강의실 입장하기';
+  }
+
+  function tick(){
+    if (totalSeconds > 60){
+      totalSeconds -= 1;
+      lessonState = 'upcoming';
+    } else if (totalSeconds > 0){
+      totalSeconds -= 1;
+      lessonState = 'soon';
+    } // 0 이후에는 더 이상 상태를 바꾸지 않고 "잠시 후 시작"을 유지한다
+    renderHero();
+  }
+  renderHero();
+  var timerId = setInterval(tick, 1000);
+
+  /* 상태 미리보기(데모/QA 전용): 예정→임박 상태를 순환하며 검토할 수 있게 한다 */
+  var previewStates = [
+    { totalSeconds: 200, lessonState: 'upcoming' },
+    { totalSeconds: 8,   lessonState: 'soon' }
+  ];
+  var previewIndex = 0;
+  document.getElementById('statusPreview').addEventListener('click', function(){
+    previewIndex = (previewIndex + 1) % previewStates.length;
+    var s = previewStates[previewIndex];
+    totalSeconds = s.totalSeconds; lessonState = s.lessonState;
+    renderHero();
+  });
+
+  /* 3단계 예습 플로우: 각 단계는 항상 같은 자리를 지키고, 클릭하면 크기만 커지고(활성) 나머지는 작아진다(톤다운).
+     말풍선(팝업)은 항상 자신의 마커 '아래'에서 카드 폭을 꽉 채우며 나타나고, 꼬리가 마커를 향하며,
+     크기는 1단계(레슨) 팝업 높이에 맞춰 통일된다. 점선 연결선은 캐릭터 '아래쪽'을 지나가도록 마커의 하단을 기준으로 그린다. */
+  var flow = document.getElementById('flow');
+  var steps = Array.prototype.slice.call(flow.querySelectorAll('.rc-step'));
+  var linkPath = flow.querySelector('svg.link path');
+
+  function drawLink(){
+    var flowRect = flow.getBoundingClientRect();
+    if (!flowRect.width || !flowRect.height) return;
+    var svg = flow.querySelector('svg.link');
+    svg.setAttribute('viewBox', '0 0 ' + flowRect.width + ' ' + flowRect.height);
+    var points = steps.map(function(step){
+      var m = step.querySelector('.rc-step-marker');
+      var r = m.getBoundingClientRect();
+      // 마커의 '아래쪽 가장자리'를 기준점으로 잡아, 선이 캐릭터 아래를 지나가도록 한다
+      return { x:(r.left + r.width/2) - flowRect.left, y:(r.bottom - 4) - flowRect.top };
+    });
+    var d = 'M' + points[0].x.toFixed(1) + ' ' + points[0].y.toFixed(1);
+    for (var i=1;i<points.length;i++){
+      var prev = points[i-1], cur = points[i], midY = (prev.y + cur.y)/2;
+      d += ' C ' + prev.x.toFixed(1) + ' ' + midY.toFixed(1) + ', ' + cur.x.toFixed(1) + ' ' + midY.toFixed(1) + ', ' + cur.x.toFixed(1) + ' ' + cur.y.toFixed(1);
+    }
+    linkPath.setAttribute('d', d);
+  }
+
+  function refreshFlow(){
+    drawLink();
+  }
+
+  /* 2026-10-01: 기본값은 1단계만 열려 있는 상태(2·3단계는 닫힘) — 캐릭터를 누르면 그 캐릭터의 팝업만
+     독립적으로 열고/닫는다(다른 캐릭터에는 영향을 주지 않음. 순서대로 안 하고 미리 열어봐도 무방). */
+  function toggleStep(id){
+    var step = steps.find(function(s){ return s.getAttribute('data-step-id') === id; });
+    if (!step) return;
+    var isActive = step.getAttribute('data-active') === 'true';
+    step.setAttribute('data-active', String(!isActive));
+    refreshFlow();
+    setTimeout(refreshFlow, 300); // 크기 전환(.28s)이 끝난 뒤 좌표 다시 계산
+  }
+  steps.forEach(function(step){
+    var marker = step.querySelector('.rc-step-marker');
+    marker.addEventListener('click', function(){ toggleStep(step.getAttribute('data-step-id')); });
+    /* 팝업이 닫혔을 때 캐릭터 옆에 뜨는 칩(제목 칩 · 완료 칩)도 캐릭터와 동일하게 눌러서 팝업을 다시 열 수 있다 */
+    step.querySelectorAll('.rc-step-title-chip, .rc-step-done-chip').forEach(function(chip){
+      chip.addEventListener('click', function(){ toggleStep(step.getAttribute('data-step-id')); });
+    });
+  });
+  window.addEventListener('resize', refreshFlow);
+  window.addEventListener('load', refreshFlow);
+  refreshFlow();
+
+  /* 완료 처리 — 팝업의 액션 버튼(교재 보기/바로가기)을 실제로 눌러야 그 단계가 "완료"로 표시되고,
+     펼쳐져 있던 말풍선은 접히면서 마커 옆 캡슐 칩(예: "교재보기 완료")으로 축소된다.
+     마커를 다시 탭하면(toggleStep) 말풍선을 재오픈해서 확인할 수 있다.
+     2026-10-01: 완료 즉시 다음 단계(steps 배열의 다음 인덱스)의 말풍선을 자동으로 열어
+     사용자가 순서대로 1→2→3단계를 이어서 진행할 수 있게 한다(이미 완료된 다음 단계는 건드리지 않음). */
+  steps.forEach(function(step, idx){
+    step.querySelectorAll('.rc-popup-go').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        step.setAttribute('data-completed', 'true');
+        step.setAttribute('data-active', 'false');
+        var next = steps[idx + 1];
+        if (next && next.getAttribute('data-completed') !== 'true'){
+          next.setAttribute('data-active', 'true');
+        }
+        refreshFlow();
+        setTimeout(refreshFlow, 380);
+      });
+    });
+  });
+
+  /* ---------- 레슨별 전체보기 바텀시트 : 3단계(교재/사전 학습/AI 학습) 팝업의 "전체 보기"를 누르면
+     같은 시트 하나를 재사용해 해당 단계의 레슨별 이동 버튼 목록을 보여준다. 오늘 진행하는 Lesson.01만
+     TODAY 칩 + 레슨 주제로 구분하고, 아직 수업하지 않은 나머지 레슨은 비활성화해 아직 이동할 수 없음을 알린다. */
+  var LESSON_SHEET_DATA = {
+    lesson: { title:'교재 전체 보기', cta:'교재 보기' },
+    review: { title:'사전 학습 전체 보기', cta:'바로가기' },
+    ai:     { title:'AI 학습 전체 보기', cta:'바로가기' }
+  };
+  var LESSON_SHEET_NUMS = [1,2,3,4,5,6,7,8]; // Lesson.01(오늘) ~ Lesson.08
+  /* 오늘 레슨의 주제 — 히어로 카드의 "오늘의 Lesson" 타이틀과 같은 레슨이라 그 텍스트를 그대로 가져다 쓴다 */
+  var todayLessonTitleEl = document.querySelector('.rc-hero-title');
+  var TODAY_LESSON_TOPIC = todayLessonTitleEl ? todayLessonTitleEl.textContent : '';
+
+  var lessonSheetOverlay = document.getElementById('lessonSheetOverlay');
+  var lessonSheetTitle = document.getElementById('lessonSheetTitle');
+  var lessonSheetList = document.getElementById('lessonSheetList');
+
+  function openLessonSheet(stepId){
+    var d = LESSON_SHEET_DATA[stepId];
+    if (!d) return;
+    lessonSheetTitle.textContent = d.title;
+    lessonSheetList.innerHTML = LESSON_SHEET_NUMS.map(function(n, i){
+      var isToday = i === 0;
+      return (
+        '<div class="lesson-sheet-item' + (isToday ? '' : ' disabled') + '">' +
+          '<span class="ls-info">' +
+            '<span class="ls-row">' +
+              '<span class="ls-num">Lesson.' + (n < 10 ? '0' + n : n) + '</span>' +
+              (isToday ? '<span class="ls-today">TODAY</span>' : '') +
+            '</span>' +
+            (isToday ? '<span class="ls-topic">' + TODAY_LESSON_TOPIC + '</span>' : '') +
+          '</span>' +
+          '<button type="button" class="ls-go"' + (isToday ? '' : ' disabled') + '>' + d.cta + '</button>' +
+        '</div>'
+      );
+    }).join('');
+    lessonSheetOverlay.hidden = false;
+    requestAnimationFrame(function(){ lessonSheetOverlay.classList.add('on'); });
+  }
+  function closeLessonSheet(){
+    lessonSheetOverlay.classList.remove('on');
+    setTimeout(function(){ lessonSheetOverlay.hidden = true; }, 220);
+  }
+  document.getElementById('lessonSheetClose').addEventListener('click', closeLessonSheet);
+  lessonSheetOverlay.addEventListener('click', function(e){ if (e.target === lessonSheetOverlay) closeLessonSheet(); });
+
+  steps.forEach(function(step){
+    var seeAllBtn = step.querySelector('.rc-step-popup .rc-hero-preview');
+    if (!seeAllBtn) return;
+    seeAllBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      openLessonSheet(step.getAttribute('data-step-id'));
+    });
+  });
+
+  /* ---------- 스케줄 화면 ---------- */
+  /* 날짜 helper */
+  function stripTime(d){ var x = new Date(d); x.setHours(0,0,0,0); return x; }
+  function addDays(d,n){ var x = new Date(d); x.setDate(x.getDate()+n); return x; }
+  function pad2(n){ return n < 10 ? '0'+n : ''+n; }
+  function ymd(d){ return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()); }
+  function sameDay(a,b){ return ymd(a) === ymd(b); }
+  function startOfWeek(d){ var x = stripTime(d); x.setDate(x.getDate() - x.getDay()); return x; }
+  var WD_LABEL = ['일','월','화','수','목','금','토'];
+  function monthFmt(d){ return d.getFullYear()+'년 '+(d.getMonth()+1)+'월'; }
+
+  var SC_TODAY = stripTime(new Date());
+
+  /* 2026년 대한민국 공휴일 — 상태 칩과는 별도로, 날짜 자체를 옅은 산호색으로 표시하기 위한 데이터.
+     제헌절은 2008년부터 공휴일(휴일)이 아니라서 제외했다 */
+  var SC_HOLIDAYS = {
+    '2026-01-01':'신정',
+    '2026-02-16':'설날연휴','2026-02-17':'설날','2026-02-18':'설날연휴',
+    '2026-03-02':'삼일절 대체',
+    '2026-05-05':'어린이날',
+    '2026-05-25':'부처님오신날 대체',
+    '2026-06-03':'지방선거일',
+    '2026-06-06':'현충일',
+    '2026-08-17':'광복절 대체',
+    '2026-09-24':'추석연휴','2026-09-25':'추석','2026-09-26':'추석연휴',
+    '2026-10-03':'개천절',
+    '2026-10-05':'개천절 대체',
+    '2026-10-09':'한글날',
+    '2026-12-25':'크리스마스'
+  };
+  function scHolidayName(d){ return SC_HOLIDAYS[ymd(d)] || ''; }
+
+  /* 데모용 수업 일정 — 클래스룸 화면의 강좌명을 그대로 재사용.
+     월간 달력에서 기본 선택 강좌(비즈니스 실전 회화)만으로도 출석/연기/결석/예정 4가지 칩이 골고루 보이도록 분산 배치 */
+  var SC_CLASSES = [
+    { d: addDays(SC_TODAY,-13), time:'19:30', subject:'비즈니스 실전 회화', status:'absent' },
+    { d: addDays(SC_TODAY,-10), time:'19:30', subject:'비즈니스 실전 회화', status:'postponed' },
+    { d: addDays(SC_TODAY,-6),  time:'19:30', subject:'비즈니스 실전 회화', status:'attended' },
+    { d: addDays(SC_TODAY,-3),  time:'19:30', subject:'비즈니스 실전 회화', status:'attended' },
+    { d: addDays(SC_TODAY,0),   time:'19:30', subject:'비즈니스 실전 회화', status:'upcoming' },
+    /* 보강 수업으로 대체된 예정 수업 — 원수업(연기/결석된 수업)이 언제였는지, 취소 시 그 수업으로 원복된다는 안내가 카드에 함께 표시된다 */
+    { d: addDays(SC_TODAY,4),   time:'19:30', subject:'비즈니스 실전 회화', status:'upcoming', makeupOf:{ d: addDays(SC_TODAY,-7), time:'10:00' } },
+    { d: addDays(SC_TODAY,9),   time:'19:30', subject:'비즈니스 실전 회화', status:'upcoming' },
+    { d: addDays(SC_TODAY,2),   time:'20:00', subject:'실무 이메일 영어',   status:'upcoming' },
+    { d: addDays(SC_TODAY,-7),  time:'20:30', subject:'실무 이메일 영어',   status:'absent' },
+    { d: addDays(SC_TODAY,4),   time:'19:00', subject:'데일리 프리토킹',    status:'upcoming' },
+    { d: addDays(SC_TODAY,-7),  time:'20:30', subject:'여행 영어 회화',     status:'postponed' }
+  ].map(function(c){ c.key = ymd(c.d); return c; });
+
+  var SC_STATUS_BADGE = {
+    upcoming:  { label:'예정', cls:'badge-upcoming'  },
+    attended:  { label:'출석', cls:'badge-attended'  },
+    postponed: { label:'연기', cls:'badge-postponed' },
+    absent:    { label:'결석', cls:'badge-absent'    }
+  };
+
+  var scCourseIndex = 0; /* 스케줄 화면에서 고른 강좌 — courses 배열(클래스룸 강좌 목록)의 인덱스 */
+
+  function scClassesOn(d){
+    var key = ymd(d);
+    var subject = courses[scCourseIndex].role;
+    return SC_CLASSES.filter(function(c){ return c.key === key && c.subject === subject; }).sort(function(a,b){ return a.time.localeCompare(b.time); });
+  }
+  function scHasClassOn(d){
+    var key = ymd(d);
+    var subject = courses[scCourseIndex].role;
+    return SC_CLASSES.some(function(c){ return c.key === key && c.subject === subject; });
+  }
+  /* 하단 리스트는 선택된 하루가 아니라 그 주(週) 전체를, 강좌 구분 없이 날짜순으로 모두 보여준다 */
+  function scClassesInWeek(weekStart){
+    var weekEnd = addDays(weekStart,6);
+    return SC_CLASSES.filter(function(c){
+      return c.d >= weekStart && c.d <= weekEnd;
+    }).sort(function(a,b){
+      var byDate = ymd(a.d).localeCompare(ymd(b.d));
+      return byDate !== 0 ? byDate : a.time.localeCompare(b.time);
+    });
+  }
+
+  var scSelectedDate = SC_TODAY;
+  var scMonthCursor = new Date(SC_TODAY.getFullYear(), SC_TODAY.getMonth(), 1);
+  var scViewMode = 'week'; /* 'week' | 'month' — 팝업 없이 같은 자리에서 전환 */
+
+  function scBuildCardHTML(c){
+    var badge = SC_STATUS_BADGE[c.status] || SC_STATUS_BADGE.upcoming;
+    /* 보강으로 대체된 예정 수업은 "보강 취소"가 최우선 액션 — 리뷰보기/연기신청/보강신청보다 먼저 확인 */
+    /* 2026-10-01: CTA 위계 구분 — 이미 끝난 수업의 "리뷰보기"(실제 행동이 필요 없는 정보성 버튼)는
+       톤을 낮춘 ghost 스타일로, 아직 해야 할 행동이 남은 연기신청/보강신청/보강취소는 기존 블랙 필 버튼 그대로 둬서
+       리스트를 훑을 때 뭘 먼저 봐야 하는지 한눈에 구분되게 한다 */
+    var ctaText, ctaGhost = false;
+    if (c.makeupOf){ ctaText = '보강 취소'; }
+    else if (c.status === 'attended'){ ctaText = '리뷰보기'; ctaGhost = true; }
+    else if (c.status === 'postponed' || c.status === 'absent'){ ctaText = '보강신청'; }
+    else { ctaText = '연기신청'; }
+    var dateLabel = (c.d.getMonth()+1)+'.'+c.d.getDate()+'('+WD_LABEL[c.d.getDay()]+')';
+    /* 보강 수업 안내 — 박스 콜아웃 없이 리스트와 같은 톤의 캡션 두 줄로 간단히: 원수업 일시+취소 시 동작 / 예외 조건 */
+    var noteHTML = '';
+    if (c.makeupOf){
+      var od = c.makeupOf.d;
+      var origLabel = (od.getMonth()+1)+'.'+od.getDate()+'('+WD_LABEL[od.getDay()]+') '+c.makeupOf.time;
+      noteHTML =
+        '<div class="cc-makeup-note">' +
+          '<span class="cc-note-line">※ 원수업 '+origLabel+' · 취소 시 원복됩니다.</span>' +
+          '<span class="cc-note-sub">원수업 스케줄이 있는 경우 취소가 불가합니다.</span>' +
+        '</div>';
+    }
+    return (
+      '<div class="sc-class-card">' +
+        '<div class="cc-time"><span class="cc-date">'+dateLabel+'</span><span class="cc-time-val">'+c.time+'</span></div>' +
+        '<div class="cc-body">' +
+          '<span class="cc-badge '+badge.cls+'">'+badge.label+'</span>' +
+          '<div class="cc-subject">'+c.subject+'</div>' +
+        '</div>' +
+        '<button type="button" class="cc-cta'+(ctaGhost?' ghost':'')+'">'+ctaText+'</button>' +
+        noteHTML +
+      '</div>'
+    );
+  }
+
+  function scRenderTopLabel(){
+    var label = document.getElementById('scTopLabel');
+    label.textContent = scViewMode === 'week' ? monthFmt(scSelectedDate) : monthFmt(scMonthCursor);
+  }
+
+  function scRenderWeek(){
+    /* 2026-09-30: 일~토 고정 주 단위 대신, 선택일(기본값=오늘)이 항상 가운데(4번째) 칸에 오는 ±3일
+       롤링 윈도우로 변경 — 날짜 클릭이나 좌우 스와이프로 scSelectedDate가 바뀔 때마다 이 함수가 다시
+       그 날짜를 중앙에 놓고 다시 그린다 */
+    var weekStart = addDays(scSelectedDate, -3);
+
+    var strip = document.getElementById('scWeekStrip');
+    strip.innerHTML = '';
+    for (var i=0;i<7;i++){
+      var day = addDays(weekStart,i);
+      var dow = day.getDay();
+      var isToday = sameDay(day,SC_TODAY);
+      var isSel = sameDay(day,scSelectedDate);
+      var has = scHasClassOn(day);
+      var isHoliday = !!scHolidayName(day);
+      var cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'sc-week-day' + (isToday?' today':'') + (isSel?' selected':'') + (dow===0?' sun':'') + (dow===6?' sat':'') + (isHoliday?' holiday':'');
+      cell.innerHTML =
+        '<span class="wd-label">'+WD_LABEL[dow]+'</span>' +
+        '<span class="wd-num">'+day.getDate()+'</span>' +
+        '<span class="wd-dot'+(has?'':' hidden')+'"></span>';
+      cell.addEventListener('click', function(dd){ return function(){ scSelectedDate = dd; scRenderWeek(); scRenderTopLabel(); }; }(day));
+      strip.appendChild(cell);
+    }
+
+    /* 그 주에 있는 수업을 요일과 상관없이 날짜순으로 전부 보여준다 */
+    var list = scClassesInWeek(weekStart);
+    var listEl = document.getElementById('scAgendaList');
+    listEl.innerHTML = list.length === 0
+      ? '<div class="sc-agenda-empty">예정된 수업이 없어요</div>'
+      : list.map(scBuildCardHTML).join('');
+    /* 리스트 항목 클릭 시 선택일만 그 날짜로 이동(주는 그대로) — 위쪽 스트립이 함께 갱신된다 */
+    Array.prototype.forEach.call(listEl.querySelectorAll('.sc-class-card'), function(card, idx){
+      card.addEventListener('click', function(){ scSelectedDate = list[idx].d; scRenderWeek(); scRenderTopLabel(); });
+    });
+  }
+
+  /* 월간 보기 — 팝업이 아니라 주간 보기와 같은 자리에서 전환된다. 날짜를 클릭하면 그 날이 포함된 주간 보기로 이동 */
+  function scRenderMonth(){
+    var firstDow = new Date(scMonthCursor.getFullYear(), scMonthCursor.getMonth(), 1).getDay();
+    var gridStart = addDays(scMonthCursor, -firstDow);
+    var grid = document.getElementById('scMonthGrid');
+    grid.innerHTML = '';
+    for (var i=0;i<35;i++){ /* 6주가 아닌 5주만 표기 */
+      var day = addDays(gridStart,i);
+      var outside = day.getMonth() !== scMonthCursor.getMonth();
+      var isToday = sameDay(day,SC_TODAY);
+      var isSel = sameDay(day,scSelectedDate);
+      var dayClasses = scClassesOn(day);
+      var hasClass = dayClasses.length > 0;
+      var holidayName = scHolidayName(day);
+      var isHoliday = !!holidayName;
+      var markHTML;
+      if (dayClasses.some(function(c){ return c.status === 'attended'; })){
+        markHTML = '<span class="mc-chip attended">출석</span>';
+      } else if (dayClasses.some(function(c){ return c.status === 'postponed'; })){
+        markHTML = '<span class="mc-chip postponed">연기</span>';
+      } else if (dayClasses.some(function(c){ return c.status === 'absent'; })){
+        markHTML = '<span class="mc-chip absent">결석</span>';
+      } else if (hasClass){
+        markHTML = '<span class="mc-chip upcoming">예정</span>';
+      } else {
+        markHTML = '<span class="mc-dot hidden"></span>';
+      }
+      /* 공휴일 이름 라벨 — 숫자 바로 아래, 칩보다 위에 표시(순서: 숫자→공휴일→칩). 칩은 셀 안에서
+         항상 하단에 고정되므로(.mc-chip/.mc-dot의 margin-top:auto), 공휴일 라벨 유무와 무관하게
+         모든 칩이 같은 높이에 정렬된다(2026-09-30) */
+      var holidayHTML = isHoliday ? '<span class="mc-holiday-name">'+holidayName+'</span>' : '';
+      var cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'sc-month-cell' + (outside?' outside':'') + (hasClass?' has-class':'') + (isToday?' today':'') + (isSel?' selected':'') + (isHoliday?' holiday':'');
+      cell.innerHTML = '<span class="mc-num">'+day.getDate()+'</span>' + holidayHTML + markHTML;
+      cell.addEventListener('click', function(dd){ return function(){
+        scSelectedDate = dd;
+        scSetViewMode('week');
+      }; }(day));
+      grid.appendChild(cell);
+    }
+  }
+
+  /* 년월 선택 바텀시트 — 상단 라벨을 탭하면 연/월을 스크롤 휠로 고른다 */
+  var SC_PICKER_ITEM_H = 36;
+  var SC_PICKER_YEARS = (function(){
+    var base = SC_TODAY.getFullYear();
+    var arr = [];
+    for (var y = base - 3; y <= base + 3; y++) arr.push(y);
+    return arr;
+  })();
+  var SC_PICKER_MONTHS = [1,2,3,4,5,6,7,8,9,10,11,12];
+  var scPickerScrollTimers = {};
+
+  function scBuildPickerCol(containerId, list, formatFn){
+    var inner = document.getElementById(containerId);
+    inner.innerHTML = list.map(function(v){
+      return '<div class="sc-picker-item" data-value="'+v+'">'+formatFn(v)+'</div>';
+    }).join('');
+  }
+  function scScrollPickerTo(colEl, index, smooth){
+    colEl.scrollTo({ top: index * SC_PICKER_ITEM_H, behavior: smooth ? 'smooth' : 'auto' });
+  }
+  function scSyncPickerActive(colEl){
+    var items = colEl.querySelectorAll('.sc-picker-item');
+    var idx = Math.round(colEl.scrollTop / SC_PICKER_ITEM_H);
+    idx = Math.max(0, Math.min(items.length-1, idx));
+    Array.prototype.forEach.call(items, function(it,i){ it.classList.toggle('active', i===idx); });
+    return idx;
+  }
+  function scOpenPicker(){
+    var year = scViewMode === 'week' ? scSelectedDate.getFullYear() : scMonthCursor.getFullYear();
+    var month = (scViewMode === 'week' ? scSelectedDate.getMonth() : scMonthCursor.getMonth()) + 1;
+
+    scBuildPickerCol('scPickerYearInner', SC_PICKER_YEARS, function(v){ return v+'년'; });
+    scBuildPickerCol('scPickerMonthInner', SC_PICKER_MONTHS, function(v){ return v+'월'; });
+
+    var yearCol = document.getElementById('scPickerYearCol');
+    var monthCol = document.getElementById('scPickerMonthCol');
+    var yearIdx = SC_PICKER_YEARS.indexOf(year); if (yearIdx < 0) yearIdx = 3;
+    var monthIdx = month - 1;
+
+    var overlay = document.getElementById('scPickerOverlay');
+    overlay.hidden = false;
+    /* 오픈 애니메이션이 끝난 뒤 레이아웃이 확정된 상태에서 스크롤 위치를 맞춘다 */
+    requestAnimationFrame(function(){
+      scScrollPickerTo(yearCol, yearIdx, false);
+      scScrollPickerTo(monthCol, monthIdx, false);
+      scSyncPickerActive(yearCol);
+      scSyncPickerActive(monthCol);
+      requestAnimationFrame(function(){ overlay.classList.add('on'); });
+    });
+  }
+  function scClosePicker(){
+    var overlay = document.getElementById('scPickerOverlay');
+    overlay.classList.remove('on');
+    setTimeout(function(){ overlay.hidden = true; }, 220);
+  }
+  function scPickerColScrollHandler(colEl, key){
+    return function(){
+      clearTimeout(scPickerScrollTimers[key]);
+      scPickerScrollTimers[key] = setTimeout(function(){ scSyncPickerActive(colEl); }, 90);
+    };
+  }
+  (function initScPicker(){
+    var trigger = document.getElementById('scMonthTrigger');
+    var overlay = document.getElementById('scPickerOverlay');
+    var yearCol = document.getElementById('scPickerYearCol');
+    var monthCol = document.getElementById('scPickerMonthCol');
+
+    trigger.addEventListener('click', scOpenPicker);
+    document.getElementById('scPickerCancel').addEventListener('click', scClosePicker);
+    overlay.addEventListener('click', function(e){ if (e.target === overlay) scClosePicker(); });
+
+    yearCol.addEventListener('scroll', scPickerColScrollHandler(yearCol, 'year'));
+    monthCol.addEventListener('scroll', scPickerColScrollHandler(monthCol, 'month'));
+
+    /* 항목을 직접 탭하면 그 항목이 가운데로 스크롤되며 선택된다 */
+    yearCol.addEventListener('click', function(e){
+      var item = e.target.closest('.sc-picker-item'); if (!item) return;
+      scScrollPickerTo(yearCol, Array.prototype.indexOf.call(yearCol.querySelectorAll('.sc-picker-item'), item), true);
+    });
+    monthCol.addEventListener('click', function(e){
+      var item = e.target.closest('.sc-picker-item'); if (!item) return;
+      scScrollPickerTo(monthCol, Array.prototype.indexOf.call(monthCol.querySelectorAll('.sc-picker-item'), item), true);
+    });
+
+    document.getElementById('scPickerConfirm').addEventListener('click', function(){
+      var year = SC_PICKER_YEARS[scSyncPickerActive(yearCol)];
+      var month = SC_PICKER_MONTHS[scSyncPickerActive(monthCol)];
+      if (scViewMode === 'week'){
+        var lastDay = new Date(year, month, 0).getDate();
+        var day = Math.min(scSelectedDate.getDate(), lastDay);
+        scSelectedDate = new Date(year, month-1, day);
+        scRenderWeek();
+      } else {
+        scMonthCursor = new Date(year, month-1, 1);
+        scRenderMonth();
+      }
+      scRenderTopLabel();
+      scClosePicker();
+    });
+  })();
+
+
+  /* 주간 ↔ 월간 보기 전환 — 팝업 없이 같은 영역이 바뀐다. 세그먼트 두 버튼 중 하나를 누르면 그 모드로 바뀐다 */
+  function scSetViewMode(mode){
+    scViewMode = mode;
+    var isWeek = mode === 'week';
+    document.getElementById('scWeekStrip').hidden = !isWeek;
+    document.getElementById('scAgendaSection').hidden = !isWeek;
+    document.getElementById('scMonthCalendar').hidden = isWeek;
+    Array.prototype.forEach.call(document.querySelectorAll('.sc-view-seg'), function(seg){
+      var on = seg.getAttribute('data-mode') === mode;
+      seg.classList.toggle('on', on);
+      seg.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    if (isWeek){ scRenderWeek(); }
+    else { scMonthCursor = new Date(scSelectedDate.getFullYear(), scSelectedDate.getMonth(), 1); scRenderMonth(); }
+    scRenderTopLabel();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.sc-view-seg'), function(seg){
+    seg.addEventListener('click', function(){
+      var mode = seg.getAttribute('data-mode');
+      if (mode !== scViewMode) scSetViewMode(mode);
+    });
+  });
+  /* 오늘로 바로 이동 — 현재 보기 모드를 유지한 채 선택일/월 커서를 오늘로 되돌린다 */
+  document.getElementById('scTodayBtn').addEventListener('click', function(){
+    scSelectedDate = SC_TODAY;
+    if (scViewMode === 'week'){ scRenderWeek(); }
+    else { scMonthCursor = new Date(SC_TODAY.getFullYear(), SC_TODAY.getMonth(), 1); scRenderMonth(); }
+    scRenderTopLabel();
+  });
+  /* 2026-09-30: 주간 스트립 좌우 스와이프 — 화살표 버튼 대신 손가락으로 넘기면 하루씩 이동하고
+     scRenderWeek()가 그 날짜를 다시 가운데로 정렬한다. Pointer Events로 터치/마우스/펜을 하나로 처리.
+     가로 이동이 세로 이동보다 뚜렷할 때만 스와이프로 인정해서 페이지 세로 스크롤과 부딪히지 않게 하고,
+     스와이프 직후 발생하는 click은 캡처 단계에서 막아 날짜칸이 같이 눌리지 않게 한다 */
+  (function(){
+    var stripEl = document.getElementById('scWeekStrip');
+    var startX = 0, startY = 0, dx = 0, dy = 0, tracking = false, swiped = false;
+    var SWIPE_THRESHOLD = 40;
+    stripEl.addEventListener('pointerdown', function(e){
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      tracking = true; swiped = false;
+      startX = e.clientX; startY = e.clientY; dx = 0; dy = 0;
+    });
+    stripEl.addEventListener('pointermove', function(e){
+      if (!tracking) return;
+      dx = e.clientX - startX; dy = e.clientY - startY;
+    });
+    stripEl.addEventListener('pointerup', function(){
+      if (!tracking) return;
+      tracking = false;
+      if (Math.abs(dx) >= SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)){
+        swiped = true;
+        scSelectedDate = addDays(scSelectedDate, dx < 0 ? 1 : -1);
+        scRenderWeek();
+        scRenderTopLabel();
+      }
+    });
+    stripEl.addEventListener('pointercancel', function(){ tracking = false; });
+    stripEl.addEventListener('click', function(e){
+      if (swiped){ e.stopPropagation(); e.preventDefault(); swiped = false; }
+    }, true);
+  })();
+
+  /* 강좌 선택 : 클래스룸 강좌명 스크롤과 동일한 알약 탭. 목록은 클래스룸 홈과 동일한 courses 배열을 그대로 사용한다.
+     탭은 요일 점(dot)·월간 표시의 기준 강좌만 바꾸고, 주간 리스트는 항상 그 주 전체 강좌를 보여준다 */
+  var scCourseScroll = document.getElementById('scCourseScroll');
+
+  function scRenderCourseTabs(){
+    scCourseScroll.innerHTML = '';
+    courses.forEach(function(c, i){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role','tab');
+      btn.textContent = c.role;
+      if (i === scCourseIndex) { btn.classList.add('on'); btn.setAttribute('aria-selected','true'); }
+      else btn.setAttribute('aria-selected','false');
+      btn.addEventListener('click', function(){
+        scCourseIndex = i;
+        scRenderCourseTabs();
+        scRefreshCurrentView();
+      });
+      scCourseScroll.appendChild(btn);
+    });
+  }
+
+  function scRefreshCurrentView(){
+    if (scViewMode === 'week'){ scRenderWeek(); } else { scRenderMonth(); }
+    scRenderTopLabel();
+  }
+
+  scRenderCourseTabs();
+  scRefreshCurrentView();
+
+  /* 하단 내비 탭 : 클래스룸 ↔ 스케줄 화면 전환 + 상단 타이틀 갱신.
+     튜터 카드의 일정 아이콘 버튼도 같은 전환 로직을 타도록 함수로 뽑아 공유한다 */
+  var rcScreens = { classroom: document.getElementById('classroomBody'), schedule: document.getElementById('scheduleBody') };
+  var rcNavTitles = { classroom:'클래스룸', schedule:'스케줄' };
+  var rcTopbarTitle = document.getElementById('topbarTitle');
+  function rcGoToTab(key){
+    document.querySelectorAll('.rc-nav-item').forEach(function(b){
+      var match = b.getAttribute('data-tab') === key;
+      b.classList.toggle('on', match);
+      if (match) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+    });
+    Object.keys(rcScreens).forEach(function(k){ rcScreens[k].hidden = (k !== key); });
+    if (rcTopbarTitle && rcNavTitles[key]) rcTopbarTitle.textContent = rcNavTitles[key];
+    if (key === 'schedule') scRefreshCurrentView();
+    else setTimeout(refreshFlow, 0); /* classroomBody가 hidden→표시로 바뀐 뒤 예습 플로우 좌표를 다시 계산 */
+  }
+  document.querySelectorAll('.rc-nav-item').forEach(function(btn){
+    btn.addEventListener('click', function(){ rcGoToTab(btn.getAttribute('data-tab')); });
+  });
+  var rcCalBtn = document.querySelector('.rc-cal-btn');
+  if (rcCalBtn) rcCalBtn.addEventListener('click', function(){ rcGoToTab('schedule'); });
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var fbBars = document.getElementById('fbReportBars');
+  if (!fbBars) return;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function reveal(){ fbBars.classList.add('in'); }
+  if (reduceMotion || !('IntersectionObserver' in window)){
+    reveal();
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){ reveal(); io.disconnect(); }
+    });
+  }, { threshold: 0.35 });
+  io.observe(fbBars);
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var qaOverlay = document.getElementById('qaOverlay');
+  if (!qaOverlay) return;
+
+  var qaWriteView = document.getElementById('qaWriteView');
+  var qaHistoryView = document.getElementById('qaHistoryView');
+  var qaSuccessView = document.getElementById('qaSuccessView');
+  var qaFootWrite = document.getElementById('qaFootWrite');
+  var qaFootSuccess = document.getElementById('qaFootSuccess');
+  var qaTabs = document.getElementById('qaTabs');
+  var qaTabsWrap = document.getElementById('qaTabsWrap');
+  var qaBody = document.getElementById('qaBody');
+
+  var qaInputTitle = document.getElementById('qaInputTitle');
+  var qaInputContent = document.getElementById('qaInputContent');
+  var qaInputEmail = document.getElementById('qaInputEmail');
+
+  /* 나의 질문 내역 데모 데이터 — 최근 작성일 순. 제출에 성공하면 맨 위에 새 항목이 추가된다 */
+  var qaHistory = [
+    { date:'2026-09-10', title:'리스닝 파트 학습법 문의', content:'회화 수업 중 리스닝 파트를 더 효율적으로 연습하는 방법이 궁금합니다. 관련 자료도 추천해 주시면 감사하겠습니다.' },
+    { date:'2026-08-22', title:'수업 교재 관련 질문', content:'이번 주 교재 3번째 유닛에 나온 표현을 실제 대화에서 어떻게 활용하면 좋을지 여쭤봅니다.' }
+  ];
+
+  function qaFmtDate(d){
+    var p = function(n){ return (n<10?'0':'')+n; };
+    return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+  }
+
+  function qaEsc(s){
+    return s.replace(/[&<>]/g, function(c){ return c==='&' ? '&amp;' : (c==='<' ? '&lt;' : '&gt;'); });
+  }
+
+  function qaRenderHistory(){
+    var list = document.getElementById('qaHistoryList');
+    if (!qaHistory.length){
+      list.innerHTML = '<p class="qa-history-empty">아직 남긴 질문이 없어요.</p>';
+      return;
+    }
+    list.innerHTML = qaHistory.map(function(h){
+      return (
+        '<div class="qa-history-item">' +
+          '<div class="qa-h-date">'+h.date+'</div>' +
+          '<div class="qa-h-title">'+qaEsc(h.title)+'</div>' +
+          '<div class="qa-h-content">'+qaEsc(h.content)+'</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  /* 질문하기(작성) ↔ 나의 질문 내역 — 클래스룸 상단 상태 탭(진행/예정/완료)과 같은 밑줄 탭으로 전환 */
+  function qaSetTab(tab){
+    var isWrite = tab === 'write';
+    qaWriteView.hidden = !isWrite;
+    qaHistoryView.hidden = isWrite;
+    qaFootWrite.hidden = !isWrite;
+    Array.prototype.forEach.call(qaTabs.querySelectorAll('button'), function(seg){
+      var on = seg.getAttribute('data-qa-tab') === tab;
+      seg.classList.toggle('on', on);
+      seg.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    qaBody.scrollTop = 0;
+  }
+  Array.prototype.forEach.call(qaTabs.querySelectorAll('button'), function(seg){
+    seg.addEventListener('click', function(){ qaSetTab(seg.getAttribute('data-qa-tab')); });
+  });
+
+  function qaClearErrors(){
+    ['qaFieldTitle','qaFieldContent','qaFieldEmail'].forEach(function(id){
+      document.getElementById(id).classList.remove('error');
+    });
+  }
+  function qaShowError(fieldId){ document.getElementById(fieldId).classList.add('error'); }
+
+  var QA_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  /* 알럿 대신 필드별 인라인 에러로 안내 — 제목/내용/이메일 미입력 시 각각의 입력창 아래 표시 */
+  function qaValidate(){
+    qaClearErrors();
+    var title = qaInputTitle.value.trim();
+    var content = qaInputContent.value.trim();
+    var email = qaInputEmail.value.trim();
+    var firstInvalid = null;
+
+    if (!email || !QA_EMAIL_RE.test(email)){ qaShowError('qaFieldEmail'); firstInvalid = firstInvalid || qaInputEmail; }
+    if (!content){ qaShowError('qaFieldContent'); firstInvalid = firstInvalid || qaInputContent; }
+    if (!title){ qaShowError('qaFieldTitle'); firstInvalid = firstInvalid || qaInputTitle; }
+
+    if (firstInvalid){ firstInvalid.focus(); return false; }
+    return true;
+  }
+
+  function qaResetForm(){
+    qaInputTitle.value = '';
+    qaInputContent.value = '';
+    qaInputEmail.value = '';
+    qaClearErrors();
+  }
+
+  function qaShowSuccess(){
+    qaTabsWrap.hidden = true;
+    qaWriteView.hidden = true;
+    qaHistoryView.hidden = true;
+    qaFootWrite.hidden = true;
+    qaSuccessView.hidden = false;
+    qaFootSuccess.hidden = false;
+  }
+
+  document.getElementById('qaSubmitBtn').addEventListener('click', function(){
+    if (!qaValidate()) return;
+    qaHistory.unshift({
+      date: qaFmtDate(new Date()),
+      title: qaInputTitle.value.trim(),
+      content: qaInputContent.value.trim()
+    });
+    qaRenderHistory();
+    qaShowSuccess();
+  });
+
+  function qaOpen(){
+    qaRenderHistory();
+    qaTabsWrap.hidden = false;
+    qaSuccessView.hidden = true;
+    qaFootSuccess.hidden = true;
+    qaSetTab('write');
+    qaOverlay.hidden = false;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ qaOverlay.classList.add('on'); });
+    });
+  }
+  function qaClose(){
+    qaOverlay.classList.remove('on');
+    setTimeout(function(){
+      qaOverlay.hidden = true;
+      qaResetForm();
+    }, 220);
+  }
+
+  document.getElementById('qaCloseBtn').addEventListener('click', qaClose);
+  document.getElementById('qaCancelBtn').addEventListener('click', qaClose);
+  document.getElementById('qaSuccessConfirmBtn').addEventListener('click', qaClose);
+  qaOverlay.addEventListener('click', function(e){ if (e.target === qaOverlay) qaClose(); });
+
+  var qaTrigger = document.getElementById('ctaAskQuestion');
+  if (qaTrigger) qaTrigger.addEventListener('click', qaOpen);
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var satOverlay = document.getElementById('satOverlay');
+  if (!satOverlay) return;
+
+  var satFormView = document.getElementById('satFormView');
+  var satLockedView = document.getElementById('satLockedView');
+  var satSuccessView = document.getElementById('satSuccessView');
+  var satFootForm = document.getElementById('satFootForm');
+  var satFootDone = document.getElementById('satFootDone');
+  var satErrorBanner = document.getElementById('satErrorBanner');
+  var satList = document.getElementById('satList');
+
+  /* 기획서(Slide 19) 문항 6개 — ※ 3번과 4번 문구가 원본 기획서에도 동일하게 실려 있음(원본 중복으로 추정,
+     실제 서비스 반영 전 기획팀 확인 필요). 지금은 원문 그대로 둔다 */
+  var SAT_QUESTIONS = [
+    '강사님과의 수업이 재미있으셨나요?',
+    '수업 내용에 대해 이해할 수 있도록, 강사님이 잘 설명해 주셨나요?',
+    '회원님의 발음과 문법 등에 대해, 강사님이 잘 교정해 주셨나요?',
+    '회원님의 발음과 문법 등에 대해, 강사님이 잘 교정해 주셨나요?',
+    '수업 시작시간과 종료시간은 잘 준수되었나요?',
+    '마지막으로, 현재의 강사님과 지속적으로 수업하기를 원하시나요?'
+  ];
+
+  /* 데모 상태 — 한 번 제출하면 "이미 참여" 잠김 화면으로 바뀐다(기획서의 "수강 기간 중 1회 제한").
+     ※ "수업 시작 7일 이후에만 평가 가능" 게이트는 실제 수업 시작일 데이터가 있어야 판단할 수 있어
+     지금은 데모에 넣지 않음 — 실 연동 시 이 조건을 오픈 시점에 추가하면 된다 */
+  var satCompleted = false;
+  var satAnswers = SAT_QUESTIONS.map(function(){ return 0; });
+
+  var SAT_STAR_PATH = 'M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z';
+
+  function satRenderList(){
+    satList.innerHTML = SAT_QUESTIONS.map(function(q, qi){
+      var stars = '';
+      for (var v = 1; v <= 5; v++){
+        stars += '<button type="button" class="sat-star" data-q="'+qi+'" data-v="'+v+'" aria-label="'+v+'점">' +
+          '<svg viewBox="0 0 24 24"><path d="'+SAT_STAR_PATH+'"/></svg>' +
+        '</button>';
+      }
+      return (
+        '<div class="sat-item" id="satItem'+qi+'">' +
+          '<p class="sat-q"><span class="sat-q-num">'+(qi+1)+'.</span><span class="sat-q-text">'+q+'</span></p>' +
+          '<div class="sat-stars">'+stars+'</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function satRenderDots(qi){
+    var item = document.getElementById('satItem'+qi);
+    Array.prototype.forEach.call(item.querySelectorAll('.sat-star'), function(star){
+      star.classList.toggle('filled', +star.getAttribute('data-v') <= satAnswers[qi]);
+    });
+  }
+
+  /* 별 터치 — n번째를 누르면 1~n이 모두 채워진다(기획서 예시: 3번째 클릭 시 1·2·3 모두 채워짐) */
+  satList.addEventListener('click', function(e){
+    var star = e.target.closest('.sat-star');
+    if (!star) return;
+    var qi = +star.getAttribute('data-q');
+    satAnswers[qi] = +star.getAttribute('data-v');
+    satRenderDots(qi);
+    document.getElementById('satItem'+qi).classList.remove('error');
+  });
+
+  /* 알럿 대신 미입력 문항을 빨간 텍스트로 표시 + 상단 배너 — 기획서 알럿 "평가하지 않은 항목을 확인해 주세요" */
+  function satValidate(){
+    var firstInvalid = null;
+    SAT_QUESTIONS.forEach(function(_, qi){
+      var item = document.getElementById('satItem'+qi);
+      var ok = satAnswers[qi] > 0;
+      item.classList.toggle('error', !ok);
+      if (!ok) firstInvalid = firstInvalid || item;
+    });
+    satErrorBanner.classList.toggle('on', !!firstInvalid);
+    if (firstInvalid) firstInvalid.scrollIntoView({ block:'center', behavior:'smooth' });
+    return !firstInvalid;
+  }
+
+  function satShowView(view){
+    satFormView.hidden = view !== 'form';
+    satLockedView.hidden = view !== 'locked';
+    satSuccessView.hidden = view !== 'success';
+    satFootForm.hidden = view !== 'form';
+    satFootDone.hidden = view === 'form';
+  }
+
+  document.getElementById('satSubmitBtn').addEventListener('click', function(){
+    if (!satValidate()) return;
+    satCompleted = true;
+    satShowView('success');
+  });
+
+  function satOpen(){
+    if (satCompleted){
+      satShowView('locked');
+    } else {
+      satAnswers = SAT_QUESTIONS.map(function(){ return 0; });
+      satErrorBanner.classList.remove('on');
+      satRenderList();
+      satShowView('form');
+    }
+    satOverlay.hidden = false;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ satOverlay.classList.add('on'); });
+    });
+  }
+  function satClose(){
+    satOverlay.classList.remove('on');
+    setTimeout(function(){ satOverlay.hidden = true; }, 220);
+  }
+
+  document.getElementById('satCloseBtn').addEventListener('click', satClose);
+  document.getElementById('satCancelBtn').addEventListener('click', satClose);
+  document.getElementById('satDoneConfirmBtn').addEventListener('click', satClose);
+  satOverlay.addEventListener('click', function(e){ if (e.target === satOverlay) satClose(); });
+
+  var satTrigger = document.getElementById('ctaSatisfaction');
+  if (satTrigger) satTrigger.addEventListener('click', satOpen);
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var revOverlay = document.getElementById('revOverlay');
+  if (!revOverlay) return;
+
+  /* 발음 확인 2건(단어) / 교정 문장 1건 — 클래스룸 홈 카드의 칩 숫자("발음 확인 2", "교정 문장 1")와 맞춘다.
+     발음 확인은 기획안 근거로 문장이 아닌 단어 단위 리스트로 구성(각 단어마다 듣기/재평가 아이콘) */
+  var REV_PRON = [
+    { word:'taste' },
+    { word:'noodles' }
+  ];
+  var REV_GRAM = [
+    { orig:"She don't have any hobby these day.", fix:"She doesn't have any hobbies these days." }
+  ];
+
+  var ICON_SPEAK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+  var ICON_MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>';
+
+  function revEsc(s){
+    return s.replace(/[&<>]/g, function(c){ return c==='&' ? '&amp;' : (c==='<' ? '&lt;' : '&gt;'); });
+  }
+
+  /* 듣기(스피커)/재평가(마이크) 아이콘 버튼 공통 동작 — 실제 오디오·음성 인식 없이 아이콘이 잠깐
+     활성 상태로 바뀌는 것으로 "재생 중"/"평가 중" 느낌만 시뮬레이션한다 */
+  function revBindIconBtns(root){
+    Array.prototype.forEach.call(root.querySelectorAll('.rev-speak-btn,.rev-mic-btn'), function(btn){
+      btn.addEventListener('click', function(){
+        if (btn.classList.contains('busy')) return;
+        btn.classList.add('busy');
+        setTimeout(function(){ btn.classList.remove('busy'); }, 900);
+      });
+    });
+  }
+
+  function revRenderPron(){
+    var list = document.getElementById('revPronList');
+    list.innerHTML = REV_PRON.map(function(item){
+      return (
+        '<div class="rev-pron-item">' +
+          '<span class="rev-pron-word">'+revEsc(item.word)+'</span>' +
+          '<div class="rev-pron-actions">' +
+            '<button type="button" class="rev-speak-btn" aria-label="'+revEsc(item.word)+' 발음 듣기">'+ICON_SPEAK+'</button>' +
+            '<button type="button" class="rev-mic-btn" aria-label="'+revEsc(item.word)+' 발음 다시 평가하기">'+ICON_MIC+'</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+    revBindIconBtns(list);
+  }
+
+  function revRenderGram(){
+    var list = document.getElementById('revGramList');
+    list.innerHTML = REV_GRAM.map(function(item){
+      return (
+        '<div class="rev-gram-item">' +
+          '<p class="rev-sent orig"><span class="rev-sent-tag">원문</span>'+revEsc(item.orig)+'</p>' +
+          '<p class="rev-sent fix"><span class="rev-sent-tag">교정문</span>'+revEsc(item.fix)+'</p>' +
+          '<div class="rev-gram-actions">' +
+            '<button type="button" class="rev-speak-btn" aria-label="교정 문장 듣기">'+ICON_SPEAK+'</button>' +
+            '<button type="button" class="rev-mic-btn" aria-label="교정 문장 다시 말해보기">'+ICON_MIC+'</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+    revBindIconBtns(list);
+  }
+
+  /* 오늘 수업 다시듣기 — 아이콘·라벨이 바뀌며 재생/일시정지 토글(실제 오디오 없이 상태만 시뮬레이션) */
+  var revReplayBtn = document.getElementById('revReplayBtn');
+  var revReplayLabel = revReplayBtn.querySelector('.rev-replay-label');
+  revReplayBtn.addEventListener('click', function(){
+    var playing = revReplayBtn.classList.toggle('playing');
+    revReplayLabel.textContent = playing ? '재생 중' : '오늘 수업 다시 듣기';
+  });
+
+  function revOpen(){
+    revRenderPron();
+    revRenderGram();
+    revReplayBtn.classList.remove('playing');
+    revReplayLabel.textContent = '오늘 수업 다시 듣기';
+    revOverlay.hidden = false;
+    revOverlay.querySelector('.pop-body').scrollTop = 0;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ revOverlay.classList.add('on'); });
+    });
+  }
+  function revClose(){
+    revOverlay.classList.remove('on');
+    setTimeout(function(){ revOverlay.hidden = true; }, 220);
+  }
+
+  document.getElementById('revCloseBtn').addEventListener('click', revClose);
+  document.getElementById('revCloseFootBtn').addEventListener('click', revClose);
+  revOverlay.addEventListener('click', function(e){ if (e.target === revOverlay) revClose(); });
+
+  /* 마이크 테스트 — 발음 확인 섹션의 마이크 하드웨어 사전 점검 보조 팝업. 문장별 재평가(.rev-mic-btn)와는 별개.
+     녹음 시뮬레이션 후 인식 성공/실패를 토스트로 안내한다(실제 음성 인식 없이 데모용으로 랜덤 판정). */
+  var mtOverlay = document.getElementById('revMicTestOverlay');
+  if (mtOverlay) {
+    var mtMic = document.getElementById('revMicTestBtn');
+    var mtToast = document.getElementById('revMicTestToast');
+    var mtBusy = false;
+
+    function mtOpen(){
+      mtBusy = false;
+      mtMic.classList.remove('recording');
+      mtToast.className = 'mictest-toast';
+      mtToast.innerHTML = '';
+      mtOverlay.hidden = false;
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ mtOverlay.classList.add('on'); });
+      });
+    }
+    function mtClose(){
+      mtOverlay.classList.remove('on');
+      setTimeout(function(){ mtOverlay.hidden = true; }, 200);
+    }
+    function mtShowToast(ok){
+      mtToast.className = 'mictest-toast ' + (ok ? 'success' : 'fail');
+      mtToast.innerHTML = ok
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>마이크 테스트에 성공했어요</span>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9L2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span>음성 인식이 되지 않았습니다.<br>마이크 상태를 확인해 주세요.</span>';
+      requestAnimationFrame(function(){ mtToast.classList.add('show'); });
+      setTimeout(function(){ mtToast.classList.remove('show'); }, 2600);
+    }
+    mtMic.addEventListener('click', function(){
+      if (mtBusy) return;
+      mtBusy = true;
+      mtToast.classList.remove('show');
+      mtMic.classList.add('recording');
+      setTimeout(function(){
+        mtMic.classList.remove('recording');
+        mtShowToast(Math.random() > 0.25);
+        mtBusy = false;
+      }, 1300);
+    });
+    document.getElementById('revMicTestCloseBtn').addEventListener('click', mtClose);
+    mtOverlay.addEventListener('click', function(e){ if (e.target === mtOverlay) mtClose(); });
+    var mtTrigger = document.getElementById('revMicTestTrigger');
+    if (mtTrigger) mtTrigger.addEventListener('click', mtOpen);
+  }
+
+  var revGotoTrigger = document.getElementById('fbReviewGotoBtn');
+  var revReplayTrigger = document.getElementById('fbReviewReplayBtn');
+  if (revGotoTrigger) revGotoTrigger.addEventListener('click', revOpen);
+  if (revReplayTrigger) revReplayTrigger.addEventListener('click', revOpen);
+})();
+</script>
+<script>
+(function(){
+  "use strict";
+  var crOverlay = document.getElementById('crOverlay');
+  if (!crOverlay) return;
+
+  /* 클래스룸 홈 Class Report 카드는 세로 막대(간략 미리보기)지만, 팝업 안에서는 5개 항목의 균형을
+     한눈에 보여주는 방사형 그래프로 확대해서 보여준다. 카드(#fbReportBars)에 이미 표시 중인 값을
+     그대로 읽어와 그린다 — 데이터를 중복으로 들고 있지 않고 항상 카드와 같은 값을 보여주기 위함 */
+  function crPolarPoint(cx, cy, r, i, n){
+    var angle = (-90 + (360 / n) * i) * Math.PI / 180;
+    return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+  }
+
+  function crBuildRadar(){
+    var cardItems = document.querySelectorAll('#fbReportBars .rc-vbar-item');
+    var items = Array.prototype.map.call(cardItems, function(item){
+      return {
+        val: +item.querySelector('.rc-vbar-val').textContent.trim() || 0,
+        label: item.querySelector('.rc-vbar-label').textContent.trim()
+      };
+    });
+    var n = items.length;
+    if (!n) return;
+
+    var cx = 150, cy = 148, R = 90;
+    var levels = [0.25, 0.5, 0.75, 1];
+
+    var gridSvg = levels.map(function(lv, li){
+      var pts = [];
+      for (var i = 0; i < n; i++){
+        var p = crPolarPoint(cx, cy, R * lv, i, n);
+        pts.push(p[0].toFixed(1) + ',' + p[1].toFixed(1));
+      }
+      return '<polygon points="' + pts.join(' ') + '" class="cr-radar-ring"' + (li === levels.length - 1 ? ' data-outer="1"' : '') + '/>';
+    }).join('');
+
+    var axisSvg = '';
+    var dataPts = [];
+    var labelSvg = '';
+    for (var i = 0; i < n; i++){
+      var outer = crPolarPoint(cx, cy, R, i, n);
+      axisSvg += '<line x1="' + cx + '" y1="' + cy + '" x2="' + outer[0].toFixed(1) + '" y2="' + outer[1].toFixed(1) + '" class="cr-radar-axis"/>';
+
+      var pct = Math.max(0, Math.min(1, items[i].val / 10));
+      var dp = crPolarPoint(cx, cy, R * pct, i, n);
+      dataPts.push(dp[0].toFixed(1) + ',' + dp[1].toFixed(1));
+
+      var lp = crPolarPoint(cx, cy, R + 26, i, n);
+      var anchor = 'middle';
+      if (lp[0] > cx + 4) anchor = 'start';
+      else if (lp[0] < cx - 4) anchor = 'end';
+      labelSvg +=
+        '<text x="' + lp[0].toFixed(1) + '" y="' + (lp[1] - 3).toFixed(1) + '" text-anchor="' + anchor + '" class="cr-radar-label">' + items[i].label + '</text>' +
+        '<text x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + 13).toFixed(1) + '" text-anchor="' + anchor + '" class="cr-radar-val">' + items[i].val + '</text>';
+    }
+
+    var dotsSvg = dataPts.map(function(p){
+      var xy = p.split(',');
+      return '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="4" class="cr-radar-dot"/>';
+    }).join('');
+
+    document.getElementById('crRadarWrap').innerHTML =
+      '<svg viewBox="0 0 300 296" class="cr-radar-svg" role="img" aria-label="이번 달 5개 항목 평가 결과">' +
+        '<defs><linearGradient id="crRadarGrad" x1="0" y1="0" x2="1" y2="1">' +
+          '<stop offset="0%" style="stop-color:var(--purple-light)"/>' +
+          '<stop offset="100%" style="stop-color:var(--purple-dark)"/>' +
+        '</linearGradient></defs>' +
+        gridSvg + axisSvg +
+        '<polygon points="' + dataPts.join(' ') + '" class="cr-radar-fill"/>' +
+        dotsSvg + labelSvg +
+      '</svg>';
+  }
+
+  function crBuildPeriod(){
+    var dateEl = document.getElementById('fbReportDate');
+    var periodEl = document.getElementById('crPeriod');
+    /* 날짜(칩)와 튜터명(별도 텍스트)이 마크업으로 분리돼 있어, 여기서는 날짜 칩 텍스트만 채운다 */
+    if (dateEl && periodEl) periodEl.textContent = '평가 기간 ' + dateEl.textContent.trim();
+  }
+
+  function crOpen(){
+    crBuildPeriod();
+    crBuildRadar();
+    crOverlay.hidden = false;
+    crOverlay.querySelector('.pop-body').scrollTop = 0;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ crOverlay.classList.add('on'); });
+    });
+  }
+  function crClose(){
+    crOverlay.classList.remove('on');
+    setTimeout(function(){ crOverlay.hidden = true; }, 220);
+  }
+
+  document.getElementById('crCloseBtn').addEventListener('click', crClose);
+  crOverlay.addEventListener('click', function(e){ if (e.target === crOverlay) crClose(); });
+
+  var crGotoTrigger = document.getElementById('fbReportGotoBtn');
+  if (crGotoTrigger) crGotoTrigger.addEventListener('click', crOpen);
+})();
+</script>
