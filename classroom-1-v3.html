@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>전화영어 클래스룸 (폰트 확대)</title>
+<title>전화영어 클래스룸 시안1</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
@@ -118,23 +118,30 @@
     padding:20px; display:flex; flex-direction:column; gap:16px;
   }
   .rc-tutor-row{display:flex; align-items:center; gap:12px;}
-  .rc-tutor-avatar{
-    width:32px; height:32px; border-radius:50%; flex:none; overflow:hidden;
-  }
-  .rc-tutor-avatar img{width:100%; height:100%; object-fit:cover; display:block;}
+  /* 2026-10-06: 피드백 "강좌명 > 레슨명 > 선생님·과정시간 순으로 보이고, 이미지가 크다" —
+     카드 상단을 강좌명(강조) → 레슨명(2단) → 강사·시간(작은 메타 줄) 순으로 재구성하고,
+     강사 사진은 메타 줄 안의 22px 원형으로 축소 */
+  .rc-cc-course{font-size:20px; font-weight:800; color:var(--ink); line-height:1.3; letter-spacing:-.3px; word-break:keep-all;}
+  .rc-cc-info{display:flex; align-items:baseline; gap:8px; min-width:0; background:var(--surface-subtle); border-radius:14px; padding:13px 16px;}
+  .rc-cc-lesson-num{font-size:13px; font-weight:700; color:var(--purple); line-height:1.3; flex:none;}
+  .rc-hero-title{font-size:16px; font-weight:600; color:var(--ink); line-height:1.35; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  /* 강좌명 + 화상/전화 칩은 한 줄(좁으면 칩이 다음 줄로), 그 아래에 강사명·수업시간 부제 줄 */
+  .rc-cc-head{display:flex; align-items:center; flex-wrap:wrap; gap:4px 6px;}
+  @media (max-width:380px){ .rc-cc-meta{gap:4px 8px;} .rc-cc-meta .name, .rc-cc-meta .schedule{font-size:13px;} .rc-cc-course{font-size:19px;} .rc-cc-head .rc-type-badge svg{display:none;} }
+  .rc-cc-meta{display:flex; align-items:center; flex-wrap:wrap; gap:4px 10px; margin-top:6px;}
   .rc-tutor-info{flex:1; min-width:0;}
   /* 2026-09-30: 튜터 이름보다 "수업 요일·시간"이 실제로 더 중요한 정보라는 피드백 —
      이름은 톤을 낮추고(회색) 작게, 요일·시간은 보라 굵은 글자로 승격해 먼저 눈에 띄게 한다.
      (칩 배경/패딩은 사용자가 직접 다듬은 뒤 텍스트만 강조하는 쪽으로 최종 결정 — 배경 없이 순수 텍스트) */
-  .rc-tutor-info .name{font-size:14px; font-weight:600; color:var(--sub); line-height:1.2;}
-  .rc-tutor-info .schedule{
+  .rc-cc-meta .name{white-space:nowrap; font-size:13.5px; font-weight:600; color:var(--sub); line-height:1.2;}
+  .rc-cc-meta .schedule{
     display:inline-flex; align-items:center;
-    font-size:14px; font-weight:800; color:var(--purple); line-height:1.4;
+    font-size:13.5px; font-weight:700; color:var(--ink); line-height:1.4; white-space:nowrap;
   }
   /* 2026-10-02: QA #3 — 과정이 화상/전화 수업인지 아이콘으로 구분 (수업 요일·시간 아래, 작은 칩) */
   .rc-type-badge{
     display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700;
-    padding:3px 8px; border-radius:var(--r-pill); margin-top:5px;
+    padding:3px 8px; border-radius:var(--r-pill);
   }
   .rc-type-badge svg{width:12px; height:12px; flex:none;}
   .rc-type-badge.type-video{background:var(--selection-bg); color:var(--purple);}
@@ -223,26 +230,19 @@
   .rc-popup-links{display:flex; flex-direction:row; align-items:center; gap:4px; justify-content:space-between;}
   /* 영상은 카드 안쪽 패딩을 무시하고 카드 폭 전체로 채운다(내용은 full) — 타이틀/버튼 등 텍스트만 카드 패딩(20px)을 유지(내용은 약간) */
   .rc-hero-media{
-    width:calc(100% + 40px); margin:0 -20px; aspect-ratio:3.8/1; border-radius:0; overflow:hidden; background:#fff;
+    width:calc(100% + 40px); margin:0 -20px; aspect-ratio:5.2/1; border-radius:0; overflow:hidden; background:#fff;
     position:relative; transition:opacity .25s ease;
   }
   .rc-hero-media video{width:100%; height:100%; object-fit:contain; background:#fff;}
-  /* 상태별 색상 : 보라=행동(CTA 전용), 회색/잉크=정보 → 예정/임박 두 상태만 사용 */
-  .rc-hero-status{display:flex; align-items:baseline; gap:7px; justify-content:center; color:var(--ink);}
-  .rc-hero-status[data-state="soon"]{color:var(--ink);}
-  .rc-hero-status svg{width:19px; height:19px; align-self:center; margin-right:-2px;}
-  .rc-hero-status .num{font-size:28px; font-weight:800; letter-spacing:.5px;}
-  .rc-hero-status .suffix, .rc-hero-status .txt{font-size:15.5px; font-weight:500; color:var(--sub);}
-
-  .rc-hero-lesson{display:flex; flex-direction:column; align-items:center; gap:4px;}
-  .rc-hero-lesson-num{font-size:13.5px; font-weight:500; color:var(--sub2); text-align:center;}
-  .rc-hero-title{font-size:21px; font-weight:700; color:var(--ink); text-align:center; line-height:1.35;}
   .rc-hero-cta{
-    padding:16px 32px; border-radius:14px; color:#fff; font-size:16.5px; font-weight:700;
+    width:100%; padding:16px 20px; border-radius:14px; color:#fff; font-size:16.5px; font-weight:700;
     background:linear-gradient(120deg,var(--purple) 0%,var(--purple-dark) 100%);
-    display:flex; align-items:center; justify-content:center; gap:7px; box-shadow:var(--shadow-btn);
+    display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:var(--shadow-btn);
   }
-  .rc-hero-cta svg{width:15px; height:15px;}
+  /* 입장 버튼 3상태 — 시작 전(대기, 연한 보라 비활성) / 입장 가능(기본 그라데이션) / 종료(회색 비활성) */
+  .rc-hero-cta[data-state="waiting"]{background:var(--selection-bg); color:var(--purple); box-shadow:none; cursor:default;}
+  .rc-hero-cta[data-state="ended"]{background:var(--line-soft); color:var(--sub2); box-shadow:none; cursor:default;}
+  .rc-hero-cta:disabled:active{transform:none; filter:none;}
   .rc-hero-cta:active{transform:translateY(1px); filter:brightness(.97);}
 
   /* ---------- Section heading : 강/약 위계 ---------- */
@@ -439,11 +439,16 @@
      그리드가 3열로 늘어난다 — JS(setCourse)가 이 클래스를 토글한다 */
   .rc-icon-grid.has-correction{grid-template-columns:repeat(3,1fr);}
   .rc-icon-tile{
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; padding:18px 6px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:16px 6px;
     background:var(--card); border:1px solid var(--line-soft); border-radius:16px;
   }
-  .rc-icon-tile svg{width:22px; height:22px; color:var(--sub2); flex:none;}
-  .rc-icon-tile span{font-size:14.5px; font-weight:500; color:var(--sub); text-align:center;}
+  /* 2026-10-06: 아이콘이 회색 단색이라 밋밋하다는 피드백 — 아이콘을 연한 컬러 바탕의 원형 칩 안에 넣고
+     타일마다 톤을 달리한다(학습 질문=보라, 만족도 평가=앰버, 첨삭=민트). 색은 기존 상태 칩과 같은 토큰을 재사용 */
+  .rc-icon-tile .tile-ic{width:40px; height:40px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center; background:var(--selection-bg); color:var(--purple);}
+  .rc-icon-tile .tile-ic.tone-amber{background:var(--amber-bg); color:var(--amber-text);}
+  .rc-icon-tile .tile-ic.tone-mint{background:var(--mint-bg); color:var(--mint-text);}
+  .rc-icon-tile svg{width:22px; height:22px; flex:none;}
+  .rc-icon-tile span{font-size:14.5px; font-weight:600; color:var(--sub); text-align:center;}
   .rc-icon-tile:active{transform:translateY(1px);}
 
   /* ---------- Bottom nav ---------- */
@@ -508,6 +513,17 @@
   .sc-topbar-card{
     background:var(--card); display:flex; flex-direction:column; gap:16px; margin-inline:-8px; padding:16px 8px 18px;
   }
+  /* 2026-10-06: 주간·월간 공통 — 현재 과정의 수업 요일/시간 · 화상/전화 구분 · 수강기간을 달력 위에 고정 표시 */
+  /* 달력 카드와 붙어 있으면 복잡해 보여서 흰 블록을 따로 분리 — 사이에 배경색 틈(8px)을 둔다.
+     (#scheduleBody는 .rc-body의 gap:18px이 적용되므로 음수 margin으로 틈을 8px로 줄인다) */
+  .sc-course-info{background:var(--card); margin-inline:-8px; padding:14px 12px 14px; margin-bottom:-10px;}
+  .sc-course-info .rc-cc-course{font-size:18px;}
+  .sc-course-info .ci-top{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:4px 12px;}
+  /* 수강기간 | 요일·시간 — 한 줄로 붙여 영역을 최소화 */
+  .sc-course-info .ci-meta{display:flex; align-items:center; gap:8px; margin-top:6px; white-space:nowrap;}
+  .sc-course-info .ci-period{font-size:12.5px; font-weight:500; color:var(--sub);}
+  .sc-course-info .ci-sep{width:1px; height:11px; background:var(--line); flex:none;}
+  .sc-course-info .ci-time{font-size:13px; font-weight:700; color:var(--ink);}
   .sc-week-topbar{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 2px;}
   .sc-week-label-group{display:flex; align-items:center; gap:9px; min-width:0;}
   /* 이전/다음 화살표 대신 라벨을 탭하면 바텀시트로 년월을 고른다 */
@@ -519,9 +535,12 @@
      .ls-today(레슨 시트의 TODAY 배지)와 같은 톤(surface-subtle 배경 + sub2 텍스트)을 재사용해
      "정보성 보조 버튼"이라는 성격을 명확히 하고, 보라색은 남기지 않는다.
      2026-10-01: locate 아이콘을 붙였다가 "이상하다"는 피드백으로 제거, 텍스트만 남김 */
+  /* 2026-10-06: 상단 TODAY 버튼과 리스트의 "오늘" 칩을 같은 모양(보라 채움·흰 글자·같은 크기)으로 통일 —
+     "오늘"을 가리키는 표식이 어디서나 똑같이 보이도록 */
   .sc-today-btn{
-    flex:none; font-size:12px; font-weight:700; letter-spacing:.3px; color:var(--sub2);
-    background:var(--surface-subtle); padding:5px 11px; border-radius:var(--r-pill); line-height:1.3;
+    flex:none; display:inline-flex; align-items:center; justify-content:center; height:26px; padding:0 11px;
+    font-size:12px; font-weight:700; line-height:1; color:var(--purple);
+    background:transparent; box-shadow:inset 0 0 0 1.5px var(--purple); border-radius:var(--r-pill);
   }
   .sc-today-btn:active{opacity:.7;}
   /* 주간/월간 전환 — 세그먼트 컨트롤 형태로 선택된 쪽만 배경이 채워진다 */
@@ -626,12 +645,19 @@
 
   /* 흰 카드 밖에서 요일별 수업을 나열하는 영역 — 주간 스트립은 카드 안으로 옮겨져 여기엔 리스트만 남는다 */
   .sc-agenda-section{flex:1;}
+  .sc-month-note{padding:0 4px; font-size:12px; font-weight:600; color:var(--sub2); line-height:1.4; word-break:keep-all; overflow-wrap:break-word;}
   /* 월간 그리드(.sc-month-grid)와 완전히 같은 컬럼 구조(display:grid, 7칸 1fr, column-gap 없음)를 써서
      요일별 칼럼의 x좌표가 항상 픽셀 단위로 일치하도록 한다. 이전에는 flex+gap이라 칼럼 폭 계산식이
      grid와 달라 요일 위치가 아주 조금씩 어긋나 보였음 — 두 영역 모두 같은 그리드 트랙 위에 놓는 것으로 해결 */
   /* 2026-09-30: 선택일이 항상 가운데(4번째) 칸에 오도록 scRenderWeek()가 ±3일 롤링 윈도우로 다시 그린다.
      화살표 버튼 대신 좌우 스와이프 제스처로 하루씩 이동(날짜칸이 얇아진다는 피드백으로 화살표 제거) */
-  .sc-week-strip{display:grid; grid-template-columns:repeat(7,1fr); touch-action:pan-y;}
+  /* 2026-10-06: 주 단위 이동 화살표 — 날짜칸이 얇아지지 않도록 20px 폭의 작은 보조 버튼만 좌우에 둔다
+     (스와이프는 하루씩, 화살표는 한 주(7일)씩 이동) */
+  .sc-week-wrap{display:flex; align-items:center;}
+  .sc-week-arrow{flex:none; width:30px; height:48px; display:flex; align-items:center; justify-content:center; color:var(--sub2); border-radius:8px;}
+  .sc-week-arrow svg{width:28px; height:28px;}
+  .sc-week-arrow:active{color:var(--purple); background:var(--surface-subtle);}
+  .sc-week-strip{flex:1; min-width:0; display:grid; grid-template-columns:repeat(7,1fr); touch-action:pan-y;}
   /* 월간 셀과 동일한 원형 배지 지름 등 크기는 통일하고, 셀 좌우 마진을 월간(2px)보다 조금 더 줘서
      주간 쪽 칸은 그만큼 살짝 좁게 — 마진이 좌우 대칭이라 칸 중앙(숫자 배지) 위치 자체는 그대로 정렬된다 */
   .sc-week-day{display:flex; flex-direction:column; align-items:center; gap:6px; padding:8px 0 6px; margin:0 3px; border-radius:6px; background:var(--card); position:relative;}
@@ -663,7 +689,7 @@
   /* QA — 오늘 일정 강조 : 오늘 날짜의 카드만 연보라 배경의 둥근 카드로 떼어내 눈에 띄게 하고,
      시간·"오늘" 배지를 보라로 올린다. cc-time(56px)+gap(14px)=70px는 카드 자체 padding과
      무관하게 유지되므로(각 자식의 padding-left 기준) 아래 보강 안내(cc-makeup-note) 정렬은 그대로 맞는다 */
-  .sc-class-card.is-today{background:var(--selection-bg); border-radius:14px; padding:16px 10px; margin:2px 0; border-bottom-color:transparent;}
+  .sc-class-card.is-today{background:var(--selection-bg); border-radius:0; margin-inline:-8px; padding-inline:12px; border-bottom-color:transparent;}
   .sc-class-card.is-today .cc-time-val{color:var(--purple);}
   .sc-class-card .cc-time{flex:none; width:56px; display:flex; flex-direction:column; align-items:flex-start; gap:4px;}
   .sc-class-card .cc-date{font-size:12px; font-weight:600; color:var(--sub2); white-space:nowrap;}
@@ -678,10 +704,11 @@
      좁은 시간 칼럼 안에 넣으면 텍스트가 옆 칼럼과 겹쳐 보였다(2026-10-02) */
   .sc-class-card .cc-badge-row{align-self:flex-start; display:flex; align-items:center; gap:6px;}
   .sc-class-card .cc-today-tag{
-    flex:none; font-size:10px; font-weight:800; padding:3px 7px; line-height:1.2;
+    flex:none; display:inline-flex; align-items:center; justify-content:center; height:24px; padding:0 10px;
+    font-size:12px; font-weight:700; line-height:1;
     color:#fff; background:var(--purple); border-radius:var(--r-pill); white-space:nowrap;
   }
-  .sc-class-card .cc-badge{flex:none; font-size:12px; font-weight:700; padding:4px 9px; border-radius:var(--r-pill); white-space:nowrap; line-height:1.3;}
+  .sc-class-card .cc-badge{flex:none; display:inline-flex; align-items:center; justify-content:center; height:24px; font-size:12px; font-weight:700; padding:0 10px; border-radius:var(--r-pill); white-space:nowrap; line-height:1;}
   .sc-class-card .cc-badge.badge-upcoming{background:var(--selection-bg); color:var(--purple);}
   .sc-class-card .cc-badge.badge-attended{background:var(--mint-bg); color:var(--mint-text);}
   /* 2026-10-02: "연기"는 이제 과거 이력용 보조 상태라 눈에 띄는 앰버 대신 중립 톤으로 낮추고,
@@ -689,9 +716,9 @@
   .sc-class-card .cc-badge.badge-postponed{background:var(--surface-subtle); color:var(--sub);}
   .sc-class-card .cc-badge.badge-absent{background:var(--danger-soft); color:var(--danger);}
   .sc-class-card .cc-badge.badge-skip{background:var(--amber-bg); color:var(--amber-text);}
-  /* "보강예정"은 일반 "예정"(연보라 바탕)과 구분되도록 꽉 채운 보라 배지로 — 이미 보강이 확정된
-     특별한 상태임을 한눈에 강조한다 */
-  .sc-class-card .cc-badge.badge-makeup{background:var(--purple); color:#fff;}
+  /* 2026-10-06: "보강예정"은 "예정"과 같은 연보라 칩으로 통일(별도 스타일 없음) — 보강 여부는 CTA(보강 취소)와 안내 문구로 구분 */
+  /* 오늘 줄은 배경이 이미 연보라라 "예정" 칩(연보라)이 배경에 묻혀 글자만 떠 보인다 — 흰 바탕으로 칩 형태를 살린다 */
+  .sc-class-card.is-today .cc-badge.badge-upcoming{background:var(--card);}
   .sc-class-card .cc-subject{flex:1; min-width:0; font-size:15.5px; font-weight:800; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   /* CTA는 색으로 상태를 나누지 않고(상태 배지가 이미 색으로 구분해 줌) 블랙 하나로 통일 —
      페이지 전체에서 보라색은 오늘 표시·주요 CTA 등 한두 군데로만 남긴다(2026-09-30).
@@ -706,7 +733,7 @@
      구분해 쓸 일이 생길 수 있어 마크업에는 남겨둔다) */
   .sc-class-card .cc-cta{
     flex:none; font-size:14px; font-weight:700; border-radius:11px; padding:10px 13px; white-space:nowrap;
-    background:none; color:var(--ink); border:1.5px solid var(--line);
+    background:none; color:var(--purple); border:1.5px solid var(--purple);
   }
 
   /* 보강 취소 안내 — 박스형 콜아웃 대신 리스트의 다른 항목들과 같은 톤의 평범한 캡션 두 줄로.
@@ -1294,6 +1321,8 @@
     .sc-fab-wrap{max-width:560px;}
     .rc-body{padding-inline:20px;}
     .sc-topbar-card{margin-inline:-20px; padding-inline:20px;}
+    .sc-course-info{margin-inline:-20px; padding-inline:24px;}
+    .sc-class-card.is-today{margin-inline:-20px; padding-inline:24px;}
     .rc-hero-media{aspect-ratio:38/9;}
     .rc-block-title{font-size:25.5px;}
     .sc-picker-sheet{max-width:560px;}
@@ -1358,11 +1387,15 @@
       <!-- 튜터 정보 + 입장 영역 : 튜터 정보 → (구분선) → 캐릭터/시간·CTA -->
       <section class="rc-tutor-hero-card">
       <div class="rc-tutor-row">
-        <div class="rc-tutor-avatar" id="tutorAvatar"><img src="https://hhyoo84-svg.github.io/ybm_phoneapp_books_v1/images/Tutor1.png" alt="Sarah Jenkins"></div>
         <div class="rc-tutor-info">
-          <p class="name" id="tutorName">Sarah Jenkins</p>
-          <p class="schedule" id="tutorSchedule">화 / 목 10:00 – 10:25</p>
-          <span class="rc-type-badge" id="tutorTypeBadge"></span>
+          <div class="rc-cc-head">
+            <h2 class="rc-cc-course" id="courseTitle">비즈니스 실전 회화</h2>
+            <span class="rc-type-badge" id="tutorTypeBadge"></span>
+          </div>
+          <div class="rc-cc-meta">
+            <span class="name" id="tutorName">Sarah Jenkins</span>
+            <span class="schedule" id="tutorSchedule">화/목 10:00–10:25</span>
+          </div>
         </div>
         <!-- 2026-10-01: 출석체크 버튼, 스케줄 버튼 옆에 나란히 배치 — 두 버튼 모두 축소
              (중간 아이콘 변경 이력 생략 — Figma 이전 작업현황 문서 참고)
@@ -1384,6 +1417,11 @@
         </div>
       </div>
 
+      <div class="rc-cc-info">
+        <span class="rc-cc-lesson-num">Lesson.01</span>
+        <h3 class="rc-hero-title">Small Talk &amp; Ice Breaking</h3>
+      </div>
+
       <!-- 캐릭터 영상은 '정보'가 아니라 '감성/브랜드' 요소, 핵심은 시간·CTA. 수업 진행 단계에 따라 상태가 바뀐다 -->
       <div class="rc-hero-inner">
         <div class="rc-hero-media" id="heroMedia">
@@ -1391,17 +1429,8 @@
             <source src="https://hhyoo84-svg.github.io/ybm_phoneapp_books_v1/images/video.mp4" type="video/mp4">
           </video>
         </div>
-        <div class="rc-hero-status" id="heroStatus" data-state="upcoming">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>
-          <span class="num" id="countdown">03:20</span>
-          <span class="suffix">남음</span>
-        </div>
-        <div class="rc-hero-lesson">
-          <p class="rc-hero-lesson-num">Lesson.01</p>
-          <h3 class="rc-hero-title">Small Talk &amp; Ice Breaking</h3>
-        </div>
-        <button class="rc-hero-cta" id="heroCta" type="button">
-          <span class="label">강의실 입장하기</span>
+        <button class="rc-hero-cta" id="heroCta" type="button" data-state="waiting" disabled>
+          <span class="label">강의 시작 전 <span class="num" id="countdown">03:20</span></span>
         </button>
         <button type="button" class="rc-hero-preview" id="statusPreview">환경 테스트</button>
       </div>
@@ -1539,17 +1568,17 @@
     <section class="rc-block" id="iconGridBlock">
       <div class="rc-icon-grid">
         <button type="button" class="rc-icon-tile" id="ctaAskQuestion">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 1 1 4.6 2.4c-.9.6-1.7 1-1.7 2.3"/><path d="M12 17h.01"/></svg>
+          <i class="tile-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 1 1 4.6 2.4c-.9.6-1.7 1-1.7 2.3"/><path d="M12 17h.01"/></svg></i>
           <span>학습 질문</span>
         </button>
         <button type="button" class="rc-icon-tile" id="ctaSatisfaction">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l4.5-4.5a2 2 0 0 1 2.8 0L14 15.3l1.7-1.7a2 2 0 0 1 2.8 0L21 16.5"/></svg>
+          <i class="tile-ic tone-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17l4.5-4.5a2 2 0 0 1 2.8 0L14 15.3l1.7-1.7a2 2 0 0 1 2.8 0L21 16.5"/></svg></i>
           <span>만족도 평가</span>
         </button>
         <!-- QA #8 — 첨삭 기능을 제공하는 주니어 과정에만 노출(JS에서 courses[].audience==='junior'일 때만 보임) -->
         <button type="button" class="rc-icon-tile" id="ctaCorrection" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-          <span>첨삭</span>
+          <i class="tile-ic tone-mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></i>
+          <span>주니어 첨삭</span>
         </button>
       </div>
     </section>
@@ -1580,6 +1609,21 @@
          어색하게 끼어 보인다는 피드백으로 캘린더 카드 안의 푸터 줄로 통합(하단 구분선으로 분리).
          상단 내비는 주간/월간 공용 — 이전/다음은 현재 보기 모드에 맞춰 주/월을 이동하고,
          우측 버튼은 보기 모드를 전환한다(주간→월간 버튼은 "월간", 월간→주간 버튼은 "주간"으로 라벨이 바뀐다) -->
+    <!-- 클래스룸 카드 상단과 같은 구성: 강좌명 + 화상/전화 칩 → 강사명·수업시간 → 수강기간 -->
+    <div class="sc-course-info" id="scCourseInfo">
+      <div class="ci-top">
+        <div class="rc-cc-head">
+          <h2 class="rc-cc-course" id="scCourseTitle">비즈니스 실전 회화</h2>
+          <span class="rc-type-badge" id="scTypeBadge"></span>
+        </div>
+      </div>
+      <div class="ci-meta">
+        <span class="ci-period" id="scCoursePeriod">2026.07.01 ~ 2026.12.31</span>
+        <span class="ci-sep" aria-hidden="true"></span>
+        <span class="ci-time" id="scCourseTime">화/목 10:00–10:25</span>
+      </div>
+    </div>
+
     <div class="sc-topbar-card">
       <div class="sc-week-topbar">
         <div class="sc-week-label-group">
@@ -1598,7 +1642,15 @@
 
       <!-- 캘린더 표면(주간 스트립 / 월간 그리드) : 흰 카드 안에서 좌우 꽉 차게 이어진다. 보기 모드에 따라 하나만 보인다 -->
       <!-- 2026-09-30: 좌우 스와이프로 하루씩 이동(화살표 버튼 제거 — 날짜칸이 얇아진다는 피드백) -->
-      <div class="sc-week-strip" id="scWeekStrip"></div>
+      <div class="sc-week-wrap" id="scWeekWrap">
+        <button type="button" class="sc-week-arrow" id="scWeekPrev" aria-label="이전 주">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="sc-week-strip" id="scWeekStrip"></div>
+        <button type="button" class="sc-week-arrow" id="scWeekNext" aria-label="다음 주">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
 
       <div class="sc-month-calendar" id="scMonthCalendar" hidden>
         <div class="sc-month-weekday-row">
@@ -1625,6 +1677,9 @@
     <section class="sc-agenda-section" id="scAgendaSection">
       <div class="sc-agenda-list" id="scAgendaList"></div>
     </section>
+
+    <!-- 월간 보기 하단 안내 — 연기·보강 신청은 주간 리스트에서만 가능하다는 것을 알린다(주간 보기에서는 숨김) -->
+    <p class="sc-month-note" id="scMonthNote" hidden>※ 연기, 보강신청 등은 주별 스케줄에서 가능합니다.</p>
 
     <!-- QA — 월간 보기에서 수업 2개 이상인 날의 "+N" 칩을 탭/호버하면 뜨는 말풍선 툴팁.
          scheduleBody 안에 둬서 스케줄 탭을 벗어나면(main이 hidden) 자동으로 함께 숨는다 -->
@@ -2163,14 +2218,15 @@
      2026-10-02: Helen Lee를 2번째 강좌로 순서 변경. avatar — 강사 이미지는 같은 호스팅 URL에 파일명만
      다르게(Tutor1.png/Tutor2.png) 두고, 과정마다 다른 강사 사진이 보이도록 함(없으면 기본 Tutor1.png) */
   var courses = [
-    { initials:'SJ', name:'Sarah Jenkins', role:'비즈니스 실전 회화', status:'ing', type:'video' },
-    { initials:'HL', name:'Helen Lee',     role:'해외영업 실무영어',  status:'ing', type:'phone', prepItems:['lesson'], avatar:'Tutor2.png' },
-    { initials:'GL', name:'Grace Lee',     role:'실무 이메일 영어',   status:'ing', type:'phone' },
-    { initials:'JK', name:'James Kim',     role:'토익 스피킹 대비',   status:'ing', type:'video', audience:'junior' },
-    { initials:'DP', name:'Daniel Park',   role:'데일리 프리토킹',    status:'upcoming', type:'phone' },
-    { initials:'EC', name:'Emily Cho',     role:'여행 영어 회화',     status:'done', type:'video' }
+    { initials:'SJ', name:'Sarah Jenkins', role:'비즈니스 실전 회화', schedule:'화/목 10:00–10:25', period:'2026.07.01 ~ 2026.12.31', status:'ing', type:'video', audience:'junior' },
+    { initials:'HL', name:'Helen Lee',     role:'해외영업 실무영어',  schedule:'월/수/금 20:00–20:10', period:'2026.08.03 ~ 2027.02.02', status:'ing', type:'phone', prepItems:['lesson'], avatar:'Tutor2.png' },
+    { initials:'GL', name:'Grace Lee',     role:'실무 이메일 영어',   schedule:'화/목 19:00–19:10', period:'2026.09.01 ~ 2026.12.01', status:'ing', type:'phone' },
+    { initials:'JK', name:'James Kim',     role:'토익 스피킹 대비',   schedule:'월/수/금 18:00–18:25', period:'2026.08.17 ~ 2027.02.16', status:'ing', type:'video', audience:'junior' },
+    { initials:'DP', name:'Daniel Park',   role:'데일리 프리토킹',    schedule:'월/수/금 10:00–10:10', period:'2026.11.02 ~ 2027.05.01', status:'upcoming', type:'phone' },
+    { initials:'EC', name:'Emily Cho',     role:'여행 영어 회화',     schedule:'화/목 20:30–20:55', period:'2026.03.03 ~ 2026.09.02', status:'done', type:'video' }
   ];
   var nameEl = document.getElementById('tutorName');
+  var courseTitleEl = document.getElementById('courseTitle');
   var statusTabs = Array.prototype.slice.call(document.querySelectorAll('#courseStatusTabs button'));
   var courseScroll = document.getElementById('courseScroll');
   var activeStatus = 'ing';
@@ -2326,15 +2382,26 @@
     else bindCourseScrollHint(courseScroll);
   }
 
+  /* 화상/전화 칩은 클래스룸 카드(#tutorTypeBadge)와 스케줄 과정 정보(#scTypeBadge) 두 곳에 같은 모양으로 그린다 */
   function renderTypeBadge(type){
-    var badge = document.getElementById('tutorTypeBadge');
-    if (!badge) return;
     var isVideo = type === 'video';
-    badge.className = 'rc-type-badge ' + (isVideo ? 'type-video' : 'type-phone');
-    badge.innerHTML = (isVideo
+    var svg = isVideo
       ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2.5"/><path d="M16 10.5l5.5-3.2a1 1 0 0 1 1.5.87v7.7a1 1 0 0 1-1.5.87L16 13.5"/></svg>'
-      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 17.5c-5 0-9-4-9-9 0-1 .3-1.6.8-2.2l1.7-1.8a1 1 0 0 1 1.5.1l1.6 2.1a1 1 0 0 1-.1 1.3L10.5 9.5c.6 1.6 1.7 2.7 3.3 3.3l1.5-1.5a1 1 0 0 1 1.3-.1l2.1 1.6a1 1 0 0 1 .1 1.5l-1.8 1.7c-.6.5-1.2.8-2.2.8Z"/></svg>'
-    ) + '<span>' + (isVideo ? '화상' : '전화') + '</span>';
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 17.5c-5 0-9-4-9-9 0-1 .3-1.6.8-2.2l1.7-1.8a1 1 0 0 1 1.5.1l1.6 2.1a1 1 0 0 1-.1 1.3L10.5 9.5c.6 1.6 1.7 2.7 3.3 3.3l1.5-1.5a1 1 0 0 1 1.3-.1l2.1 1.6a1 1 0 0 1 .1 1.5l-1.8 1.7c-.6.5-1.2.8-2.2.8Z"/></svg>';
+    ['tutorTypeBadge','scTypeBadge'].forEach(function(id){
+      var badge = document.getElementById(id);
+      if (!badge) return;
+      badge.className = 'rc-type-badge ' + (isVideo ? 'type-video' : 'type-phone');
+      badge.innerHTML = svg + '<span>' + (isVideo ? '화상' : '전화') + '</span>';
+    });
+  }
+  function renderCourseInfo(c){
+    var t = document.getElementById('scCourseTime'), pr = document.getElementById('scCoursePeriod'), sc = document.getElementById('tutorSchedule');
+    var ti = document.getElementById('scCourseTitle');
+    if (ti) ti.textContent = c.role;
+    if (t) t.textContent = c.schedule || '';
+    if (pr) pr.textContent = c.period || '';
+    if (sc && c.schedule) sc.textContent = c.schedule;
   }
   /* QA #8 — 첨삭 타일은 courses[].audience === 'junior'일 때만 노출, 그리드도 2열↔3열로 함께 전환 */
   var ctaCorrectionTile = document.getElementById('ctaCorrection');
@@ -2344,21 +2411,14 @@
     if (ctaCorrectionTile) ctaCorrectionTile.hidden = !isJunior;
     if (iconGridEl) iconGridEl.classList.toggle('has-correction', isJunior);
   }
-  /* 2026-10-02: 강사 이미지도 과정마다 다르게 — 같은 호스팅 폴더 안에서 파일명만 바꿔 끼운다(avatar 없으면 기본 Tutor1.png) */
-  var tutorAvatarImg = document.querySelector('#tutorAvatar img');
-  var TUTOR_IMG_BASE = 'https://hhyoo84-svg.github.io/ybm_phoneapp_books_v1/images/';
-  function renderTutorAvatar(avatarFile, name){
-    if (!tutorAvatarImg) return;
-    tutorAvatarImg.src = TUTOR_IMG_BASE + (avatarFile || 'Tutor1.png');
-    tutorAvatarImg.alt = name;
-  }
   function setCourse(i){
     courseIndex = i;
     var c = courses[i];
     nameEl.textContent = c.name;
+    if (courseTitleEl) courseTitleEl.textContent = c.role;
     renderTypeBadge(c.type);
+    renderCourseInfo(c);
     renderCorrectionTile(c.audience);
-    renderTutorAvatar(c.avatar, c.name);
     /* QA #10 — 과정을 바꾸면 그 과정의 예습 단계 구성(prepItems)에 맞춰 플로우를 다시 그린다.
        renderPrepSteps/refreshFlow/updatePrepEncourage는 이 함수보다 아래쪽에서 선언되지만 함수 선언이라
        호이스팅되어 여기서도 바로 호출할 수 있다 — 다만 실제 호출 시점(클릭)엔 이미 모두 정의된 뒤이므로 안전하다 */
@@ -2373,8 +2433,8 @@
     renderCourseChips();
   }
   renderTypeBadge(courses[courseIndex].type);
+  renderCourseInfo(courses[courseIndex]);
   renderCorrectionTile(courses[courseIndex].audience);
-  renderTutorAvatar(courses[courseIndex].avatar, courses[courseIndex].name);
 
   statusTabs.forEach(function(tab){
     tab.addEventListener('click', function(){
@@ -2395,9 +2455,10 @@
   /* 수업 상태 머신: 예정(upcoming) → 임박(soon, ≤60초). "지금 수업 중"/"수업이 종료되었습니다" 멘트는
      이 카드에서 더 이상 노출하지 않는다 — 카운트다운이 0이 되면 "잠시 후 시작" 상태를 그대로 유지한다. */
   var totalSeconds = 3 * 60 + 20; // 수업 시작까지 남은 시간(데모값)
-  var lessonState = 'upcoming';
+  var LESSON_LENGTH = 25 * 60;    // 수업 시간(10:00–10:25)
+  var remainSeconds = LESSON_LENGTH;
+  var lessonState = 'waiting';    // waiting(시작 전) → open(입장 가능) → ended(종료)
 
-  var heroStatus = document.getElementById('heroStatus');
   var heroCta = document.getElementById('heroCta');
   var heroCtaLabel = heroCta.querySelector('.label');
 
@@ -2406,42 +2467,44 @@
     return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
   }
 
+  /* 버튼 하나가 상태에 따라 문구·활성 여부를 바꾼다:
+     시작 전 "강의 시작 전 08:00"(비활성) → 시작 시각이 되면 즉시 "강의실 입장하기"(활성) → 종료 후 "강의 종료"(비활성) */
   function renderHero(){
-    if (lessonState === 'upcoming'){
-      heroStatus.setAttribute('data-state','upcoming');
-      heroStatus.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>' +
-        '<span class="num" id="countdown">' + mmss(totalSeconds) + '</span><span class="suffix">남음</span>';
-    } else { // soon
-      heroStatus.setAttribute('data-state','soon');
-      heroStatus.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>' +
-        '<span class="txt">잠시 후 시작</span>';
+    heroCta.setAttribute('data-state', lessonState);
+    heroCta.disabled = lessonState !== 'open';
+    if (lessonState === 'waiting'){
+      heroCtaLabel.innerHTML = '강의 시작 전 <span class="num" id="countdown">' + mmss(totalSeconds) + '</span>';
+    } else if (lessonState === 'open'){
+      heroCtaLabel.textContent = '강의실 입장하기';
+    } else {
+      heroCtaLabel.textContent = '강의 종료';
     }
-    heroCtaLabel.textContent = '강의실 입장하기';
   }
 
   function tick(){
-    if (totalSeconds > 60){
+    if (lessonState === 'waiting'){
       totalSeconds -= 1;
-      lessonState = 'upcoming';
-    } else if (totalSeconds > 0){
-      totalSeconds -= 1;
-      lessonState = 'soon';
-    } // 0 이후에는 더 이상 상태를 바꾸지 않고 "잠시 후 시작"을 유지한다
+      if (totalSeconds <= 0){ totalSeconds = 0; lessonState = 'open'; remainSeconds = LESSON_LENGTH; }
+    } else if (lessonState === 'open'){
+      remainSeconds -= 1;
+      if (remainSeconds <= 0) lessonState = 'ended';
+    }
     renderHero();
   }
   renderHero();
   var timerId = setInterval(tick, 1000);
 
-  /* 상태 미리보기(데모/QA 전용): 예정→임박 상태를 순환하며 검토할 수 있게 한다 */
+  /* 상태 미리보기(데모/QA 전용): 시작 전 → 입장 가능 → 종료를 순환하며 검토할 수 있게 한다 */
   var previewStates = [
-    { totalSeconds: 200, lessonState: 'upcoming' },
-    { totalSeconds: 8,   lessonState: 'soon' }
+    { totalSeconds: 200, lessonState: 'waiting' },
+    { totalSeconds: 0,   lessonState: 'open' },
+    { totalSeconds: 0,   lessonState: 'ended' }
   ];
   var previewIndex = 0;
   document.getElementById('statusPreview').addEventListener('click', function(){
     previewIndex = (previewIndex + 1) % previewStates.length;
     var s = previewStates[previewIndex];
-    totalSeconds = s.totalSeconds; lessonState = s.lessonState;
+    totalSeconds = s.totalSeconds; lessonState = s.lessonState; remainSeconds = LESSON_LENGTH;
     renderHero();
   });
 
@@ -2691,7 +2754,7 @@
     postponed: { label:'연기', cls:'badge-postponed' },
     absent:    { label:'취소/결석', cls:'badge-absent' },
     skip:      { label:'SKIP', cls:'badge-skip' },
-    makeup:    { label:'보강예정', cls:'badge-makeup' }
+    makeup:    { label:'보강예정', cls:'badge-upcoming' }
   };
 
   /* 2026-10-02: "강좌별로 스케줄 뜨게 해줘" 요청으로 다시 강좌 필터 적용 — 상단 탭(#courseScroll,
@@ -3047,7 +3110,9 @@
     scViewMode = mode;
     var isWeek = mode === 'week';
     document.getElementById('scWeekStrip').hidden = !isWeek;
+    document.getElementById('scWeekWrap').hidden = !isWeek;
     document.getElementById('scAgendaSection').hidden = !isWeek;
+    document.getElementById('scMonthNote').hidden = isWeek;
     document.getElementById('scMonthCalendar').hidden = isWeek;
     Array.prototype.forEach.call(document.querySelectorAll('.sc-view-seg'), function(seg){
       var on = seg.getAttribute('data-mode') === mode;
@@ -3108,6 +3173,15 @@
       if (swiped){ e.stopPropagation(); e.preventDefault(); swiped = false; }
     }, true);
   })();
+
+  /* 주 단위 이동 화살표 — 선택일을 7일 앞/뒤로 옮기고 다시 그린다 */
+  [['scWeekPrev',-7],['scWeekNext',7]].forEach(function(pair){
+    document.getElementById(pair[0]).addEventListener('click', function(){
+      scSelectedDate = addDays(scSelectedDate, pair[1]);
+      scRenderWeek();
+      scRenderTopLabel();
+    });
+  });
 
   function scRefreshCurrentView(){
     if (scViewMode === 'week'){ scRenderWeek(); } else { scRenderMonth(); }
