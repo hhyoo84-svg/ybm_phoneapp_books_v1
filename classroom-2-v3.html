@@ -1686,6 +1686,20 @@
   .sc-day-group.is-today .sc-day-head{color:var(--ink); font-weight:800;}
   .sc-day-today{font-size:11.5px; font-weight:800; color:var(--on-brand); background:linear-gradient(150deg,var(--purple),var(--purple-dark)); padding:3px 7px; border-radius:4px; line-height:1.2;}
   .sc-day-group.is-today .cc-time-val{color:var(--purple-light);}
+
+  /* 라이브 카드 : 수업 일시(칩)와 레슨 번호 구분 · 보강 완료 팝업 : 과목명 / 일시 단락 구분 */
+  .live-card .lesson-meta{display:flex; align-items:center; justify-content:center; gap:8px;}
+  .live-card .lesson-when{font-size:12.5px; font-weight:700; color:var(--purple); background:rgba(0,241,110,.12); padding:3px 7px; border-radius:4px; line-height:1.2;}
+  .live-card .lesson-meta .lesson-num{text-align:left;}
+  .live-card .lesson-when{transition:opacity .2s ease;}
+  .live-card.swapping .lesson-when{opacity:0;}
+  #mkConfirmDesc{white-space:pre-line; line-height:1.6;}
+
+  /* 독려 문구 2줄 */
+  .mo-cheer{white-space:pre-line; font-size:14px; line-height:1.55; color:var(--sub);}
+
+  /* AI 히스토리 바텀시트 : 헤더와 안내문 사이 여백 (풀스크린 팝업 본문과 같은 18px) */
+  #aihSheetOverlay .lesson-sheet-body{padding-top:18px;}
 </style>
 </head>
 <body>
@@ -1721,7 +1735,7 @@
     <!-- 수강중 강좌 스와이프 : 좌우로 넘겨 다른 강좌로 전환, 다음 카드가 살짝 보이고 아래 페이지 표시 -->
     <div class="course-swiper-wrap">
       <div class="course-swiper" id="courseSwiper" role="region" aria-label="수강중인 강좌">
-        <div class="ai-banner course-slide" data-lesson-num="오늘 19:30 · Lesson.01" data-lesson="Small Talk &amp; Ice Breaking" aria-label="1 / 3" data-prep="lesson,review,ai">
+        <div class="ai-banner course-slide" data-when="오늘 19:30" data-lesson-num="Lesson.01" data-lesson="Small Talk &amp; Ice Breaking" aria-label="1 / 3" data-prep="lesson,review,ai">
           <span class="tutor-avatar"><img src="data:image/jpeg;base64,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" alt="Sarah Jenkins"></span>
           <span class="ai-txt">
             <span class="course">비즈니스 실전 회화<span class="type-chip video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2.5"/><path d="M16 10.5l5.5-3.2a1 1 0 0 1 1.5.87v7.7a1 1 0 0 1-1.5.87L16 13.5"/></svg>화상</span></span>
@@ -1729,7 +1743,7 @@
           </span>
           <span class="slide-dots" role="img" aria-label="강좌 1 / 3"><i class="on"></i><i></i><i></i></span>
         </div>
-        <div class="ai-banner course-slide" data-lesson-num="오늘 07:00 · Lesson.04" data-lesson="Writing a Clear Request" aria-label="2 / 3" data-prep="lesson">
+        <div class="ai-banner course-slide" data-when="오늘 07:00" data-lesson-num="Lesson.04" data-lesson="Writing a Clear Request" aria-label="2 / 3" data-prep="lesson">
           <span class="tutor-avatar initials">GL</span>
           <span class="ai-txt">
             <span class="course">실무 이메일 영어<span class="type-chip phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 17.5c-5 0-9-4-9-9 0-1 .3-1.6.8-2.2l1.7-1.8a1 1 0 0 1 1.5.1l1.6 2.1a1 1 0 0 1-.1 1.3L10.5 9.5c.6 1.6 1.7 2.7 3.3 3.3l1.5-1.5a1 1 0 0 1 1.3-.1l2.1 1.6a1 1 0 0 1 .1 1.5l-1.8 1.7c-.6.5-1.2.8-2.2.8Z"/></svg>전화</span></span>
@@ -1737,7 +1751,7 @@
           </span>
           <span class="slide-dots" role="img" aria-label="강좌 2 / 3"><i></i><i class="on"></i><i></i></span>
         </div>
-        <div class="ai-banner course-slide" data-lesson-num="오늘 10:00 · Lesson.07" data-lesson="My Favorite Place" aria-label="3 / 3" data-prep="lesson,review,ai" data-junior="1">
+        <div class="ai-banner course-slide" data-when="오늘 10:00" data-lesson-num="Lesson.07" data-lesson="My Favorite Place" aria-label="3 / 3" data-prep="lesson,review,ai" data-junior="1">
           <span class="tutor-avatar initials">JK</span>
           <span class="ai-txt">
             <span class="course">토익 스피킹 대비<span class="type-chip video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2.5"/><path d="M16 10.5l5.5-3.2a1 1 0 0 1 1.5.87v7.7a1 1 0 0 1-1.5.87L16 13.5"/></svg>화상</span></span>
@@ -1753,7 +1767,7 @@
         <button type="button" class="live-act" id="attOpenBtn" aria-label="출석현황"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="overflow:visible;"><circle cx="12" cy="7" r="4.3"/><path d="M21 21v-2a6.5 6.5 0 0 0-6.5-6.5h-5A6.5 6.5 0 0 0 3 19v2"/><path d="M16.5 8.3 18.7 10.8 24.5 3.3"/></svg></button>
         <button type="button" class="live-act" id="liveCalBtn" aria-label="일정 보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg></button>
       </div>
-      <p class="lesson-num" id="liveLessonNum">오늘 19:30 · Lesson.01</p>
+      <p class="lesson-meta"><span class="lesson-when" id="liveWhen">오늘 19:30</span><span class="lesson-num" id="liveLessonNum">Lesson.01</span></p>
       <h2 class="lesson" id="liveLessonTitle">Small Talk &amp; Ice Breaking</h2>
       <!-- 수업 시작 전: 버튼 안에 남은 시간 표시 → 시작 시간(00:00)이 되면 '강의실 입장하기'로 바뀐다 -->
       <button type="button" class="enter-btn is-wait" id="enterClassBtn" aria-live="polite">
@@ -1775,7 +1789,7 @@
         <div class="mo-panel-head" id="accordionHead">
           <span class="prep-progress" id="prepProgress"><b>0/3</b> · 0% 완료</span>
           <h3 class="mo-title">수업 전에<br>미리 <em>예습</em>해 보세요</h3>
-          <p class="mo-cheer" id="prepCheer">5분 예습으로 자신감을 올려 보세요</p>
+          <p class="mo-cheer" id="prepCheer"></p>
         </div>
         <div class="prep-body" id="prepBody">
           <button type="button" class="step mo-row" id="step1" data-step-id="lesson">
@@ -2524,7 +2538,16 @@
     steps = steps.filter(function(x){ return !x.hidden; });
     var allDone = steps.length > 0 && steps.every(function(x){ return x.classList.contains('done'); });
     var cheer = document.getElementById('prepCheer');
-    cheer.textContent = allDone ? '예습 완료! 자신 있게 수업에 들어가 보세요' : '5분 예습으로 자신감을 올려 보세요';
+    /* 독려 문구 — 완료 상태별 2줄 안내 (기획서 클래스룸 독려 문구 기준) */
+    var isDone = function(id){ var el = document.querySelector('.prep-body .step[data-step-id="'+id+'"]'); return el && !el.hidden && el.classList.contains('done'); };
+    var hasLesson = !!document.querySelector('.prep-body .step[data-step-id="lesson"]:not([hidden])');
+    var anyDone = steps.some(function(x){ return x.classList.contains('done'); });
+    var msg;
+    if (allDone) msg = '사전 학습을 모두 마쳤어요.\n꼼꼼하게 준비한 만큼 오늘 수업도 알차게 채워질 거예요.';
+    else if (isDone('review') && hasLesson && !isDone('lesson')) msg = '오늘의 사전 학습을 완료하셨네요.\n수업시작 전에, 오늘의 교재도 미리 확인할 수 있어요.';
+    else if (anyDone) msg = '좋아요, 예습을 시작하셨네요.\n남은 학습도 수업 전에 이어서 해 보세요.';
+    else msg = '수업의 몰입도를 높이는 스마트한 습관!\n교재와 예습, AI 대화로 오늘의 클래스를 가볍게 예열해 보세요.';
+    cheer.textContent = msg;
     cheer.classList.toggle('all-done', allDone);
     var doneN = steps.filter(function(x){ return x.classList.contains('done'); }).length;
     var prog = document.getElementById('prepProgress');
@@ -3700,6 +3723,7 @@
     setTimeout(function(){
       document.getElementById('liveLessonTitle').textContent = slides[idx].getAttribute('data-lesson');
       document.getElementById('liveLessonNum').textContent = slides[idx].getAttribute('data-lesson-num');
+      document.getElementById('liveWhen').textContent = slides[idx].getAttribute('data-when') || '';
       live.classList.remove('swapping');
     }, 180);
   }
@@ -4051,7 +4075,7 @@
 
   function mkOpenConfirm(){
     var dateStr = mkSelectedDate ? mkDateLabel(mkSelectedDate) : '';
-    mkConfirmDesc.textContent = (mkCourseLabel ? mkCourseLabel+' · ' : '') + dateStr + ' ' + mkSelectedSlot;
+    mkConfirmDesc.textContent = (mkCourseLabel ? mkCourseLabel+'\n' : '') + dateStr + ' ' + mkSelectedSlot;
     mkConfirmOverlay.hidden = false;
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){ mkConfirmOverlay.classList.add('on'); });
@@ -4204,5 +4228,6 @@
 })();
 </script>
 
+<script>(function(){ var st = document.getElementById('step2'); if (st && window.__setStepDone) window.__setStepDone(st, true); })();</script>
 </body>
 </html>
