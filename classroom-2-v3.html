@@ -1768,7 +1768,7 @@
   .ic-ribbon{animation-duration:3.2s;}
 
   /* 주니어 첨삭 : 예습 리스트 마지막 행, 배지 대신 화살표 */
-  .corr-row{display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:14px 14px 14px 12px; border-radius:var(--r-card); background:var(--card); box-shadow:var(--shadow-card);}
+  .corr-row{text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:14px 14px 14px 12px; border-radius:var(--r-card); background:var(--card); box-shadow:var(--shadow-card);}
   .corr-row .mo-row-ic svg{width:30px; height:30px;}
   .corr-chev{width:18px; height:18px; color:var(--sub2); flex:none;}
   .corr-row:active{transform:scale(.99);}
@@ -1776,6 +1776,171 @@
   /* 라이브 카드 : 오늘 수업 시간 칩은 좌상단(우상단 아이콘과 같은 줄), 레슨 번호·제목은 가운데 */
   .live-card .lesson-when{position:absolute; top:16px; left:12px; z-index:2; font-size:13px; padding:4px 8px;}
   .live-card .lesson-meta .lesson-num{text-align:center;}
+
+  /* 만족도 평가 미완료 : 문항 전체를 레드로 바꾸지 않고, 문항 옆 '미응답' 칩으로만 표시 · 상단 안내는 작게 */
+  .sat-error-banner{font-size:13.5px; font-weight:500; padding:10px 12px; border-radius:6px; margin-bottom:16px; line-height:1.4;}
+  .sat-item.error .sat-q{color:var(--ink);}
+  .sat-item.error .sat-num:not(.filled){box-shadow:inset 0 0 0 1px var(--line);}
+  .sat-item.error .sat-q-text::after{content:"미응답"; display:inline-block; margin-left:6px; padding:2px 6px; border-radius:4px; font-size:11.5px; font-weight:600; line-height:1.3; vertical-align:2px; color:var(--danger); background:var(--danger-soft);}
+
+  /* 학습질문 입력 오류 : 안내문구 톤(작은 도움말 + 아이콘)으로 */
+  .qa-field .qa-err{font-size:12.5px; font-weight:500; line-height:1.4; margin-top:6px; align-items:center; gap:4px;}
+  .qa-field.error .qa-err{display:flex;}
+  .qa-field .qa-err::before{content:"!"; flex:none; width:13px; height:13px; border-radius:50%; background:var(--danger); color:#fff; font-size:9.5px; font-weight:700; line-height:13px; text-align:center;}
+  .qa-field.error input,.qa-field.error textarea{border-color:var(--danger); box-shadow:none;}
+  /* ===== 스케줄 플로우 다이얼로그 ===== */
+  .scd-overlay{position:fixed; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(17,17,17,.45); opacity:0; transition:opacity .2s ease;}
+  .scd-overlay.on{opacity:1;}
+  .scd-card{width:100%; max-width:340px; background:var(--card); border-radius:12px; padding:14px 18px 18px; box-shadow:0 20px 40px -16px rgba(0,0,0,.35); transform:translateY(8px); transition:transform .2s ease;}
+  .scd-overlay.on .scd-card{transform:none;}
+  .scd-head{display:grid; grid-template-columns:32px 1fr 32px; align-items:center; margin-bottom:10px;}
+  .scd-icon{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--ink); border-radius:6px;}
+  .scd-icon svg{width:20px; height:20px;}
+  .scd-icon[hidden]{display:flex !important; visibility:hidden;}
+  #scDlgBack{grid-column:1;} #scDlgClose{grid-column:3;}
+  .scd-title{grid-column:2; text-align:center; font-size:17px; font-weight:600; color:var(--ink);}
+  .scd-msg{font-size:14px; font-weight:500; color:var(--sub); line-height:1.6; text-align:center; white-space:pre-line; word-break:keep-all; padding:6px 4px 18px;}
+  .scd-msg b{color:var(--ink); font-weight:600;}
+  .scd-msg.info{text-align:left; white-space:normal; padding-top:0;}
+  .scd-msg.info h4{font-size:14.5px; font-weight:600; color:var(--ink); margin:12px 0 4px;}
+  .scd-msg.info h4:first-child{margin-top:0;}
+  .scd-msg.info ul{margin:0; padding-left:16px;}
+  .scd-msg.info li{font-size:13.5px; line-height:1.6;}
+  .scd-msg.info .warn{color:var(--danger); font-size:12.5px;}
+  .scd-btns{display:flex; gap:8px;}
+  .scd-btns button{flex:1; padding:13px 10px;}
+  .scd-btns .pop-btn-ghost{flex:0 0 34%;}
+  .scd-link{display:block; margin:12px auto 0; font-size:13px; font-weight:500; color:var(--sub2); text-decoration:underline; text-underline-offset:3px;}
+  .scd-link[hidden]{display:none;}
+
+  /* ===== 연기/보강 현황 ===== */
+  .pm-guide-row{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:12px;}
+  .pm-guide-row .pop-guide{margin:0;}
+  .pm-info-link{flex:none; font-size:13px; font-weight:500; color:var(--sub); text-decoration:underline; text-underline-offset:3px;}
+  .pm-table{border-radius:8px; overflow:hidden; box-shadow:inset 0 0 0 1px var(--line-soft);}
+  .pm-row{display:grid; grid-template-columns:1.2fr .7fr 1.3fr; align-items:center; min-height:48px; border-top:1px solid var(--line-soft);}
+  .pm-row:first-child{border-top:none;}
+  .pm-row > span{padding:10px 8px; text-align:center; font-size:13.5px; font-weight:500; color:var(--ink); font-variant-numeric:tabular-nums;}
+  .pm-row.head{min-height:38px; background:var(--surface-subtle);}
+  .pm-row.head > span{font-size:12.5px; font-weight:600; color:var(--sub);}
+  .pm-row .pm-st{color:var(--amber-text); font-weight:600;}
+  .pm-row .pm-done{color:var(--purple-light); font-weight:600;}
+  .pm-row .pm-dash{color:var(--sub2);}
+  .pm-row .cc-cta{font-size:12.5px; font-weight:600; padding:7px 10px; margin:0 auto; border-radius:6px; background:linear-gradient(150deg,var(--purple),var(--purple-dark)); color:var(--on-brand); white-space:nowrap;}
+  .pm-row .cc-cta:active{transform:scale(.97);}
+  .pm-empty{padding:18px; text-align:center; font-size:13.5px; color:var(--sub2);}
+  .pm-note{margin:12px 2px 24px; font-size:12.5px; font-weight:500; color:var(--purple-light); line-height:1.5;}
+  .pm-sub-title{font-size:15px; font-weight:600; color:var(--ink); margin:0 2px 10px;}
+  .pm-sub-title b{color:var(--purple-light); font-weight:700;}
+
+  /* 연기 신청 후(보강 미신청) 카드 : 보강신청 + 연기 취소 2버튼 */
+  .sc-class-card .cc-ctas{display:flex; flex-direction:column; gap:6px; flex:none;}
+  .sc-class-card .cc-cta.ghost{background:none; box-shadow:inset 0 0 0 1px var(--line); color:var(--sub);}
+  /* ===== 마이크 테스트 · 다시 평가 팝업 : 시안2 타이포·라운드 ===== */
+  .mictest-card{border-radius:12px; padding:26px 20px 22px;}
+  .mictest-guide{font-size:14px; color:var(--sub); margin:4px 0 14px;}
+  .mictest-sample{font-size:28px; font-weight:600; margin-bottom:18px; letter-spacing:-.3px; word-break:keep-all;}
+  .ve-card .mictest-sample.sentence{font-size:18px; line-height:1.45; font-weight:600;}
+  .mictest-note{font-size:12.5px; color:var(--sub2);}
+  /* 마이크 버튼 : 대기(그린 라인) → 녹음 중(그린 채움 + 퍼지는 링 + 실시간 파형) */
+  .mictest-mic{position:relative; width:68px; height:68px; margin-bottom:14px; border:1.5px solid var(--purple-light); color:var(--purple-light);}
+  .mictest-mic svg{width:26px; height:26px; transition:transform .2s ease, opacity .2s ease;}
+  .mictest-mic::before,.mictest-mic::after{content:""; position:absolute; inset:-2px; border-radius:50%; border:2px solid var(--purple); opacity:0; pointer-events:none;}
+  .mictest-mic .mic-wave{position:absolute; inset:0; display:none; align-items:center; justify-content:center; gap:3px;}
+  .mictest-mic .mic-wave i{display:block; width:3px; height:8px; border-radius:2px; background:var(--on-brand); animation:micWave .7s ease-in-out infinite;}
+  .mictest-mic .mic-wave i:nth-child(2){animation-delay:.12s;} .mictest-mic .mic-wave i:nth-child(3){animation-delay:.24s;}
+  .mictest-mic .mic-wave i:nth-child(4){animation-delay:.36s;} .mictest-mic .mic-wave i:nth-child(5){animation-delay:.48s;}
+  @keyframes micWave{0%,100%{height:6px;}50%{height:22px;}}
+  .mictest-mic.recording{border-color:transparent; background:linear-gradient(150deg,var(--purple),var(--purple-dark)); color:var(--on-brand); animation:none;}
+  .mictest-mic.recording svg{opacity:0; transform:scale(.6);}
+  .mictest-mic.recording .mic-wave{display:flex;}
+  .mictest-mic.recording::before{animation:micRing 1.4s ease-out infinite;}
+  .mictest-mic.recording::after{animation:micRing 1.4s ease-out .7s infinite;}
+  @keyframes micRing{0%{opacity:.55; transform:scale(1);}100%{opacity:0; transform:scale(1.6);}}
+  .mictest-mic:active{transform:scale(.96);}
+  /* 결과 토스트 : 칩 형태(8px), 성공 = 그린 그라데이션, 실패 = 연한 레드 */
+  .mictest-toast{bottom:-52px; padding:10px 14px; border-radius:8px; font-size:13.5px; font-weight:600; gap:6px; box-shadow:0 12px 24px -12px rgba(0,0,0,.3);}
+  .mictest-toast svg{width:15px; height:15px;}
+  .mictest-toast.success{color:var(--on-brand);}
+  .mictest-toast.fail{border-radius:8px; width:auto; padding:10px 14px; font-weight:500; font-size:13px; align-items:flex-start;}
+  /* 다시 평가 결과 막대 */
+  .ve-state{font-size:12.5px; font-weight:500; color:var(--sub2); margin:0 0 14px; min-height:18px; transition:color .2s ease;}
+  .ve-state.rec{color:var(--purple-light); font-weight:600;}
+  .ve-result{display:flex; flex-direction:column; gap:10px; text-align:left; padding:14px; margin:0 0 14px; border-radius:8px; background:var(--surface-subtle);}
+  .ve-row{display:grid; grid-template-columns:72px 1fr 40px; align-items:center; gap:10px;}
+  .ve-label{font-size:12.5px; font-weight:500; color:var(--sub);}
+  .ve-track{height:8px; border-radius:4px; background:var(--np-200); overflow:hidden;}
+  .ve-fill{display:block; height:100%; width:0; border-radius:4px; background:linear-gradient(90deg,var(--purple),var(--purple-dark)); transition:width .9s cubic-bezier(.22,1,.36,1);}
+  .ve-fill.low{background:linear-gradient(90deg,#FFB547,#FF9900);}
+  .ve-val{font-size:13px; font-weight:600; color:var(--ink); text-align:right; font-variant-numeric:tabular-nums;}
+  .ve-val.empty{color:var(--np-400);}
+  /* 듣기 버튼 : 재생 중 이퀄라이저 */
+  .rev-speak-btn .rev-eq{display:none; height:14px;}
+  .rev-speak-btn .rev-eq i{width:2.5px;}
+  .rev-speak-btn.playing{background:linear-gradient(150deg,var(--purple),var(--purple-dark)); color:var(--on-brand); animation:none;}
+  .rev-speak-btn.playing svg{display:none;}
+  .rev-speak-btn.playing .rev-eq{display:inline-flex;}
+  .rev-mic-btn:active,.rev-speak-btn:active{transform:scale(.94);}
+
+  /* ===== 라이브 카드 : 수업환경 테스트 링크 ===== */
+  .live-card .env-link{display:block; margin:12px auto 0; font-size:12.5px; font-weight:500; color:rgba(255,255,255,.6); text-decoration:underline; text-underline-offset:3px;}
+  /* ===== 수업환경 테스트 ===== */
+  .env-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .env-head-title{font-size:16px; font-weight:600; color:var(--ink);}
+  .env-info{font-size:13px; font-weight:500; color:var(--sub); text-decoration:underline; text-underline-offset:3px;}
+  .env-preview{position:relative; aspect-ratio:16/10; border-radius:8px; overflow:hidden; background:radial-gradient(120% 90% at 30% 20%,#2c2f36 0%,#16181d 70%);}
+  .env-cam,.env-aud{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
+  .env-person{width:58%; animation:envBreath 4s ease-in-out infinite;}
+  @keyframes envBreath{0%,100%{transform:translateY(0);}50%{transform:translateY(-2px);}}
+  .env-live{position:absolute; top:10px; left:10px; display:inline-flex; align-items:center; gap:5px; padding:3px 7px; border-radius:4px; background:rgba(0,0,0,.45); color:#fff; font-size:11px; font-weight:600; letter-spacing:.4px;}
+  .env-live i{width:6px; height:6px; border-radius:50%; background:#FF4D4F; animation:envBlink 1.2s ease-in-out infinite;}
+  @keyframes envBlink{0%,100%{opacity:1;}50%{opacity:.25;}}
+  .env-cam-name{position:absolute; bottom:10px; left:10px; font-size:11.5px; font-weight:500; color:rgba(255,255,255,.75);}
+  .env-aud{flex-direction:column; gap:14px;}
+  .env-meter{display:flex; align-items:center; gap:4px; height:64px;}
+  .env-meter i{display:block; width:5px; height:8px; border-radius:3px; background:linear-gradient(180deg,var(--purple),var(--purple-dark)); transition:height .12s ease;}
+  .env-aud-cap{font-size:12.5px; font-weight:500; color:rgba(255,255,255,.7);}
+  .env-tabs{margin:14px 0 16px;}
+  .env-tabs .rc-tutor-tabs{display:grid; grid-template-columns:1fr 1fr;}
+  .env-tabs .rc-tutor-tabs button{text-align:center; font-size:15px;}
+  .env-label{display:block; font-size:13.5px; font-weight:600; color:var(--ink); margin:0 0 6px;}
+  .env-label ~ .env-label{margin-top:14px;}
+  .env-select{position:relative;}
+  .env-select select{width:100%; appearance:none; -webkit-appearance:none; font:inherit; font-size:14px; color:var(--ink); padding:12px 36px 12px 12px; border-radius:8px; border:1px solid var(--line); background:var(--card);}
+  .env-select::after{content:""; position:absolute; right:14px; top:50%; width:7px; height:7px; border-right:2px solid var(--sub); border-bottom:2px solid var(--sub); transform:translateY(-70%) rotate(45deg); pointer-events:none;}
+  .env-ok{display:flex; align-items:center; gap:6px; margin-top:10px; font-size:12.5px; font-weight:500; color:var(--purple-light);}
+  .env-ok i{width:6px; height:6px; border-radius:50%; background:var(--purple-light);}
+  .env-play{display:flex; align-items:center; justify-content:center; gap:7px; width:100%; margin-top:14px; padding:12px; border-radius:8px; background:var(--surface-subtle); color:var(--ink); font-size:14px; font-weight:600;}
+  .env-play svg{width:14px; height:14px; color:var(--purple-light);}
+  .env-play .rev-eq{display:none; height:14px;}
+  .env-play.playing{background:linear-gradient(150deg,var(--purple),var(--purple-dark)); color:var(--on-brand);}
+  .env-play.playing svg{display:none;} .env-play.playing .rev-eq{display:inline-flex;}
+  .env-guide{margin-top:22px; font-size:13px; font-weight:500; color:var(--sub);}
+  .env-guide-link{font-size:13px; font-weight:600; color:var(--purple-light); text-decoration:underline; text-underline-offset:3px;}
+
+  /* 연기/보강 현황 : 연기·스킵 = 레드(탁한 옐로우 대신), 참고 문구 = 그레이 */
+  .pm-row .pm-st{color:var(--danger);}
+  .pm-note{color:var(--sub2);}
+
+  /* 예습 진도 칩 : 원형 진행 그래프(파이)가 진도에 따라 차오름 */
+  @property --p{syntax:'<number>'; inherits:true; initial-value:0;}
+  .prep-progress{display:inline-flex; align-items:center; gap:6px; padding:5px 9px 5px 6px;}
+  .pp-ring{position:relative; width:16px; height:16px; flex:none; border-radius:50%; box-shadow:inset 0 0 0 1.8px var(--purple-light); --p:0; transition:--p .9s cubic-bezier(.22,1,.36,1);}
+  .pp-ring::after{content:""; position:absolute; inset:3.5px; border-radius:50%; background:conic-gradient(var(--purple-light) calc(var(--p) * 1%), transparent 0);}
+  .prep-progress.all-done .pp-ring{box-shadow:inset 0 0 0 1.8px var(--purple-light); animation:ppPop .5s ease .6s;}
+  @keyframes ppPop{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
+  @media (prefers-reduced-motion: reduce){ .pp-ring{transition:none;} .prep-progress.all-done .pp-ring{animation:none;} }
+
+  /* 팝업 타이틀 아래 설명글 통일 : 14px · 500 · 회색(np-700) · 행간 1.55 */
+  .pop-guide,.mk-guide,.rev-section-desc,.mictest-guide{font-size:14px; font-weight:500; line-height:1.55; color:var(--np-700);}
+
+  /* 진도 그래프 : SVG로 중심 정렬, 칩 테두리·배경 없이 그래프 + 텍스트만 */
+  .prep-progress,.prep-progress.all-done{border:none; background:none; padding:0; gap:6px; top:6px;}
+  .prep-progress .pp-ring{width:17px; height:17px; box-shadow:none; color:var(--purple-light); transition:none; overflow:visible;}
+  .prep-progress .pp-ring::after{content:none;}
+  .pp-pie{transition:stroke-dashoffset .9s cubic-bezier(.22,1,.36,1);}
+  .prep-progress.all-done .pp-ring{box-shadow:none;}
+  @media (prefers-reduced-motion: reduce){ .pp-pie{transition:none;} }
 </style>
 </head>
 <body>
@@ -1858,13 +2023,14 @@
           강의실 입장하기
         </span>
       </button>
+      <button type="button" class="env-link" id="envTestLink">수업환경 테스트</button>
     </section>
 
     <section class="timeline">
       <!-- 사전 예습 : 틴트 패널 + 흰 행(아이콘 원 · 제목 · 한 줄 설명) + 진행 스테퍼 -->
       <article class="mo-panel prep-card" id="prepCard">
         <div class="mo-panel-head" id="accordionHead">
-          <span class="prep-progress" id="prepProgress"><b>0/3</b> · 0% 완료</span>
+          <span class="prep-progress" id="prepProgress"><svg class="pp-ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.6" fill="none" stroke="currentColor" stroke-width="1.8"/><circle class="pp-pie" cx="10" cy="10" r="3.25" fill="none" stroke="currentColor" stroke-width="6.5" stroke-dasharray="20.42 20.42" stroke-dashoffset="20.42" transform="rotate(-90 10 10)"/></svg><span class="pp-txt"><b>0/3</b> · 0% 완료</span></span>
           <h3 class="mo-title">수업 전에 미리 <em>예습</em>해 보세요</h3>
           <div class="mo-cheer-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><p class="mo-cheer" id="prepCheer"></p></div>
         </div>
@@ -1924,11 +2090,11 @@
         </span>
       </button>
       <!-- QA#8 주니어 첨삭 : 수업 후(After) 영역, 주니어 과정에서만 노출 -->
-      <button type="button" class="mo-row corr-row" id="ctaCorrection" hidden>
+      <a class="mo-row corr-row" id="ctaCorrection" href="https://m.my.ybmclass.com/classroom/pop_lecture_class_phone_engFix_list.asp" target="_blank" rel="noopener" hidden>
         <span class="mo-row-ic"><svg viewBox="0 0 40 40" fill="none"><rect x="7" y="6" width="22" height="28" rx="4" fill="#DDE6FB"/><path d="M12 14h12M12 19h9M12 24h6" stroke="#8FB0F2" stroke-width="2.2" stroke-linecap="round"/><g class="ic-pen"><path d="M21 31l11-11 3.5 3.5-11 11H21z" fill="#FFD24A"/><path d="M32 20l2-2 3.5 3.5-2 2z" fill="#09AA5C"/></g></svg></span>
         <span class="mo-row-txt"><span class="name">주니어 첨삭</span></span>
         <svg class="corr-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-      </button>
+      </a>
 
       <!-- Class Report -->
       <button type="button" class="mo-card mo-blue" id="tileReport">
@@ -2236,7 +2402,7 @@
         <span class="pop-result-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
         </span>
-        <h3>보강 신청이 완료되었어요</h3>
+        <h3>보강 수업이 신청되었어요</h3>
         <p id="mkConfirmDesc">7월 24일(금) 21:00</p>
       </div>
       <button type="button" class="pop-btn-primary" id="mkConfirmBtn" style="width:100%; margin-top:22px;">확인</button>
@@ -2304,6 +2470,98 @@
 
       <div class="pop-foot">
         <button type="button" class="pop-btn-primary" id="attChangeScheduleBtn" style="width:100%;">스케줄 변경</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 스케줄 플로우 공용 다이얼로그 (연기 신청 · 보강신청 안내 · 연기 취소 · 보강 취소 · 안내사항) ===== -->
+  <div class="scd-overlay" id="scDlg" hidden>
+    <div class="scd-card" role="dialog" aria-modal="true" aria-labelledby="scDlgTitle">
+      <div class="scd-head">
+        <button type="button" class="scd-icon" id="scDlgBack" aria-label="이전"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="scd-title" id="scDlgTitle"></span>
+        <button type="button" class="scd-icon" id="scDlgClose" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="scd-msg" id="scDlgMsg"></div>
+      <div class="scd-btns" id="scDlgBtns"></div>
+      <button type="button" class="scd-link" id="scDlgLink"></button>
+    </div>
+  </div>
+
+  <!-- ===== 연기/보강 현황 (풀스크린 팝업) ===== -->
+  <div class="pop-overlay" id="pmOverlay" hidden>
+    <div class="pop-panel" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+      <div class="pop-head">
+        <span class="pop-close pop-close--spacer" aria-hidden="true"></span>
+        <span class="pop-title" id="pmTitle">연기/보강 현황</span>
+        <button type="button" class="pop-close" id="pmCloseBtn" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="pop-body">
+        <div class="pm-guide-row">
+          <p class="pop-guide">연기 및 보강 현황 확인 후, 보강 신청하세요.</p>
+          <button type="button" class="pm-info-link" id="pmInfoBtn">안내사항</button>
+        </div>
+        <div class="pm-table" id="pmTable"></div>
+        <p class="pm-note">※ 수업 연기 및 연기 취소는 주별 스케줄에서 가능합니다.</p>
+        <p class="pm-sub-title">특별 보강 <b id="pmSpecialLeft">2</b>회</p>
+        <div class="pm-table" id="pmSpecialTable"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 발음/문장 다시 평가 (단어: Intonation·Stress / 문장: Timing·Word·Intonation·Stress) ===== -->
+  <div class="mictest-overlay" id="veOverlay" hidden>
+    <div class="mictest-card ve-card">
+      <button type="button" class="mictest-close" id="veCloseBtn" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <p class="mictest-guide">마이크 버튼을 누른 후<br>문장을 말해주세요.</p>
+      <p class="mictest-sample" id="veSample">taste</p>
+      <button type="button" class="mictest-mic" id="veMicBtn" aria-label="녹음 시작"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg><span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
+      <p class="ve-state" id="veState">마이크를 눌러 녹음을 시작하세요</p>
+      <div class="ve-result" id="veResult"></div>
+      <p class="mictest-note">※ 정확한 평가를 위해 마이크 기능이 있는 이어폰을 착용해 주세요.</p>
+    </div>
+  </div>
+
+  <!-- ===== 수업환경 테스트 (장치 테스트) ===== -->
+  <div class="pop-overlay" id="envOverlay" hidden>
+    <div class="pop-panel" role="dialog" aria-modal="true" aria-labelledby="envTitle">
+      <div class="pop-head">
+        <span class="pop-close pop-close--spacer" aria-hidden="true"></span>
+        <span class="pop-title" id="envTitle">수업환경 테스트</span>
+        <button type="button" class="pop-close" id="envCloseBtn" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="pop-body">
+        <div class="env-head"><span class="env-head-title">장치 테스트</span><button type="button" class="env-info" id="envInfoBtn">정보</button></div>
+        <div class="env-preview" id="envPreview">
+          <div class="env-cam">
+            <svg class="env-person" viewBox="0 0 120 90" fill="none"><circle cx="60" cy="36" r="16" fill="rgba(255,255,255,.22)"/><path d="M28 90c2-20 15-32 32-32s30 12 32 32z" fill="rgba(255,255,255,.18)"/></svg>
+            <span class="env-live"><i></i>LIVE</span>
+            <span class="env-cam-name" id="envCamName">FaceTime HD Camera</span>
+          </div>
+          <div class="env-aud" hidden>
+            <div class="env-meter" id="envMeter"></div>
+            <span class="env-aud-cap" id="envAudCap">말을 해 보세요. 막대가 움직이면 정상이에요.</span>
+          </div>
+        </div>
+        <div class="pop-tabs-wrap env-tabs">
+          <div class="rc-tutor-tabs" role="tablist">
+            <button type="button" class="on" data-env-tab="video" role="tab" aria-selected="true">Video</button>
+            <button type="button" data-env-tab="audio" role="tab" aria-selected="false">Audio</button>
+          </div>
+        </div>
+        <div class="env-pane" data-env-pane="video">
+          <label class="env-label" for="envCamSel">카메라</label>
+          <div class="env-select"><select id="envCamSel"><option>FaceTime HD Camera</option><option>USB Camera (1080p)</option><option>OBS Virtual Camera</option></select></div>
+          <p class="env-ok"><i></i>카메라가 정상적으로 연결되었어요.</p>
+        </div>
+        <div class="env-pane" data-env-pane="audio" hidden>
+          <label class="env-label" for="envMicSel">마이크</label>
+          <div class="env-select"><select id="envMicSel"><option>기본 마이크 (내장)</option><option>AirPods Pro</option><option>USB Headset</option></select></div>
+          <label class="env-label" for="envSpkSel">스피커</label>
+          <div class="env-select"><select id="envSpkSel"><option>기본 스피커 (내장)</option><option>AirPods Pro</option></select></div>
+          <button type="button" class="env-play" id="envPlayBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="rev-eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="env-play-label">테스트 사운드 재생</span></button>
+        </div>
+        <p class="env-guide">장치에 문제가 있나요? <button type="button" class="env-guide-link" id="envGuideBtn">설정 가이드 보기</button></p>
       </div>
     </div>
   </div>
@@ -2519,7 +2777,7 @@
       <p class="mictest-sample">Hello</p>
       <button type="button" class="mictest-mic" id="revMicTestBtn" aria-label="마이크 테스트 시작">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
-      </button>
+      <span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
       <p class="mictest-note">※ 정확한 평가를 위해 마이크 기능이 있는 이어폰을 착용해 주세요.</p>
       <div class="mictest-toast" id="revMicTestToast"></div>
     </div>
@@ -2629,7 +2887,12 @@
     cheer.classList.toggle('all-done', allDone);
     var doneN = steps.filter(function(x){ return x.classList.contains('done'); }).length;
     var prog = document.getElementById('prepProgress');
-    if (prog){ prog.innerHTML = '<b>'+doneN+'/'+steps.length+'</b> · '+Math.round(doneN/Math.max(1,steps.length)*100)+'% 완료'; prog.classList.toggle('all-done', allDone); }
+    if (prog){
+      var pct = Math.round(doneN/Math.max(1,steps.length)*100);
+      prog.querySelector('.pp-txt').innerHTML = '<b>'+doneN+'/'+steps.length+'</b> · '+pct+'% 완료';
+      prog.querySelector('.pp-pie').style.strokeDashoffset = (20.42 * (1 - pct/100)).toFixed(2);
+      prog.classList.toggle('all-done', allDone);
+    }
     if (stepEl.id === 'step2'){
       state.prepDone = done;
 
@@ -2850,9 +3113,9 @@
     /* 보강으로 대체된 예정 수업은 "보강 취소"가 최우선 액션 — 리뷰보기/연기신청/보강신청보다 먼저 확인 */
     /* CTA 색은 더 이상 상태별로 나누지 않는다 — 버튼은 항상 같은 톤(.cc-cta 기본 스타일=블랙), 텍스트만 상태에 따라 달라진다 */
     var ctaText;
-    if (c.makeupOf){ ctaText = '보강 취소'; }
-    else if (c.status === 'attended'){ ctaText = '리뷰보기'; }
-    else if (c.status === 'postponed' || c.status === 'absent' || c.status === 'cancelled' || c.status === 'skip'){ ctaText = '보강신청'; }
+    if (c.makeupOf || c.status === 'makeup'){ ctaText = '보강 취소'; }
+    else if (c.status === 'attended' || c.status === 'absent'){ ctaText = '리뷰보기'; }
+    else if (c.status === 'postponed' || c.status === 'cancelled' || c.status === 'skip'){ ctaText = '보강신청'; }
     else { ctaText = '연기신청'; }
     var dateLabel = (c.d.getMonth()+1)+'.'+c.d.getDate()+'('+WD_LABEL[c.d.getDay()]+')';
     /* 보강 수업 안내 — 박스 콜아웃 없이 리스트와 같은 톤의 캡션 두 줄로 간단히: 원수업 일시+취소 시 동작 / 예외 조건 */
@@ -2873,7 +3136,9 @@
           '<div class="cc-subject">'+c.subject+'</div>' +
           '<span class="cc-badge '+badge.cls+'">'+badge.label+'</span>' +
         '</div>' +
-        '<button type="button" class="cc-cta">'+ctaText+'</button>' +
+        ((c.status === 'postponed' && !c.makeupOf && c.d >= SC_TODAY)
+          ? '<span class="cc-ctas"><button type="button" class="cc-cta" data-act="보강신청">보강신청</button><button type="button" class="cc-cta ghost" data-act="연기 취소">연기 취소</button></span>'
+          : '<button type="button" class="cc-cta" data-act="'+ctaText+'">'+ctaText+'</button>') +
         noteHTML +
       '</div>'
     );
@@ -2950,23 +3215,15 @@
     Array.prototype.forEach.call(listEl.querySelectorAll('.sc-class-card'), function(card, idx){
       card.addEventListener('click', function(){ scSelectedDate = list[idx].d; scRenderWeek(); scRenderTopLabel(); });
     });
-    /* 시안1 v3 스케줄 플로우 : 보강신청 → 보강 신청 팝업 / 연기신청 → 확인 후 보강 신청 /
-       보강 취소 → 확인 후 예정으로 원복 / 리뷰보기 → 수업리뷰 팝업 */
-    Array.prototype.forEach.call(listEl.querySelectorAll('.cc-cta'), function(btn, idx){
-      btn.addEventListener('click', function(e){
-        e.stopPropagation();
-        var txt = btn.textContent, c = list[idx];
-        if (txt === '보강신청' && window.mkOpenForClass){ window.mkOpenForClass(c); }
-        else if (txt === '연기신청' && window.scOpenConfirm){
-          window.scOpenConfirm({ title:'연기 신청하시겠어요?', desc:'연기 후에는 보강 신청이 필요해요.\n(단, 수강 기간 내)',
-            cancelText:'연기 취소', okText:'보강 신청', onOk:function(){ window.mkOpenForClass(c); } });
-        } else if (txt === '보강 취소' && window.scOpenConfirm){
-          window.scOpenConfirm({ title:'보강을 취소하시겠어요?', desc:'취소하면 보강 일정은 사라지고, 다시 보강 신청이 필요한 상태로 돌아가요.',
-            cancelText:'닫기', okText:'보강 취소', onOk:function(){ delete c.makeupOf; c.status = 'upcoming'; scRenderWeek(); scRenderTopLabel(); } });
-        } else if (txt === '리뷰보기' && window.revOpen){ window.revOpen(); }
+    /* 스케줄 플로우(기획서 Schedule_040~050) : 버튼별 동작은 scFlow에서 처리 */
+    Array.prototype.forEach.call(listEl.querySelectorAll('.sc-class-card'), function(card, idx){
+      Array.prototype.forEach.call(card.querySelectorAll('.cc-cta'), function(btn){
+        btn.addEventListener('click', function(e){ e.stopPropagation(); if (window.scFlow) window.scFlow(btn.getAttribute('data-act'), list[idx]); });
       });
     });
   }
+
+  window.__scApi = { list:function(){ return SC_CLASSES; }, refresh:function(){ scRefreshCurrentView(); }, course:function(){ return courses[scCourseIndex].role; }, wd:WD_LABEL, sameDay:sameDay };
 
   /* 월간 보기 — 팝업이 아니라 주간 보기와 같은 자리에서 전환된다. 날짜를 클릭하면 그 날이 포함된 주간 보기로 이동 */
   function scRenderMonth(){
@@ -3555,11 +3812,20 @@
   /* 듣기(스피커)/재평가(마이크) 아이콘 버튼 공통 동작 — 실제 오디오·음성 인식 없이 아이콘이 잠깐
      활성 상태로 바뀌는 것으로 "재생 중"/"평가 중" 느낌만 시뮬레이션한다 */
   function revBindIconBtns(root){
-    Array.prototype.forEach.call(root.querySelectorAll('.rev-speak-btn,.rev-mic-btn'), function(btn){
+    /* 듣기 : 재생 중 이퀄라이저 / 마이크 : 다시 평가 팝업(단어 2지표 · 문장 4지표) */
+    Array.prototype.forEach.call(root.querySelectorAll('.rev-speak-btn'), function(btn){
+      btn.insertAdjacentHTML('beforeend', '<span class="rev-eq" aria-hidden="true"><i></i><i></i><i></i></span>');
       btn.addEventListener('click', function(){
-        if (btn.classList.contains('busy')) return;
-        btn.classList.add('busy');
-        setTimeout(function(){ btn.classList.remove('busy'); }, 900);
+        var on = !btn.classList.contains('playing');
+        Array.prototype.forEach.call(document.querySelectorAll('.rev-speak-btn.playing'), function(b){ b.classList.remove('playing'); clearTimeout(b._t); });
+        if (on){ btn.classList.add('playing'); btn._t = setTimeout(function(){ btn.classList.remove('playing'); }, 2200); }
+      });
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('.rev-mic-btn'), function(btn){
+      btn.addEventListener('click', function(){
+        var pron = btn.closest('.rev-pron-item'), gram = btn.closest('.rev-gram-item');
+        if (pron && window.veOpen) window.veOpen(pron.querySelector('.rev-pron-word').textContent, false);
+        else if (gram && window.veOpen){ var fx = gram.querySelector('.rev-sent.fix').cloneNode(true); var tg = fx.querySelector('.rev-sent-tag'); if (tg) tg.remove(); window.veOpen(fx.textContent.trim(), true); }
       });
     });
   }
@@ -4084,6 +4350,7 @@
 
   function mkOpen(c){
     mkCourseLabel = (c && c.subject) || '';
+    window.__mkClass = c || null;
     mkMinDate = mkAddDays(MK_TODAY, 1);
     mkMaxDate = mkAddDays(MK_TODAY, 14);
     mkSelectedDate = null; mkSelectedBlock = null; mkSelectedSlot = null; mkSelectedTutor = null;
@@ -4153,7 +4420,7 @@
 
   function mkOpenConfirm(){
     var dateStr = mkSelectedDate ? mkDateLabel(mkSelectedDate) : '';
-    mkConfirmDesc.textContent = (mkCourseLabel ? mkCourseLabel+'\n' : '') + dateStr + ' ' + mkSelectedSlot;
+    mkConfirmDesc.textContent = (mkCourseLabel ? mkCourseLabel+'\n' : '') + dateStr + ' ' + mkSelectedSlot + ' / ' + (mkSelectedTutor || 'TUTOR');
     mkConfirmOverlay.hidden = false;
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){ mkConfirmOverlay.classList.add('on'); });
@@ -4176,6 +4443,7 @@
     } else {
       if (!mkSelectedSlot) return;
       mkClose();
+      document.dispatchEvent(new CustomEvent('mkdone', { detail:{ date:mkSelectedDate, time:mkSelectedSlot, tutor:mkSelectedTutor } }));
       mkOpenConfirm();
     }
   });
@@ -4309,5 +4577,237 @@
 </script>
 
 <script>(function(){ var st = document.getElementById('step2'); if (st && window.__setStepDone) window.__setStepDone(st, true); })();</script>
+<script>
+/* ===== 스케줄 플로우 : 연기 신청 → 보강 신청 / 연기 취소 / 보강 취소 / 연기·보강 현황 / 안내사항 ===== */
+(function(){
+  "use strict";
+  var api = window.__scApi; if (!api) return;
+  var dlg = document.getElementById('scDlg'), dTitle = document.getElementById('scDlgTitle'), dMsg = document.getElementById('scDlgMsg'),
+      dBtns = document.getElementById('scDlgBtns'), dLink = document.getElementById('scDlgLink'),
+      dBack = document.getElementById('scDlgBack'), dClose = document.getElementById('scDlgClose');
+  var onBack = null;
+  function md(d){ return (d.getMonth()+1)+'/'+d.getDate(); }
+  function mdw(d){ return (d.getMonth()+1)+'.'+d.getDate()+'('+api.wd[d.getDay()]+')'; }
+  function closeDlg(){ dlg.classList.remove('on'); setTimeout(function(){ dlg.hidden = true; }, 180); }
+  /* o = { title, msg(text), html(bool), back(fn), close(bool), buttons:[{text, ghost, fn}], link:{text, fn} } */
+  function openDlg(o){
+    dTitle.textContent = o.title || '';
+    dMsg.className = 'scd-msg' + (o.info ? ' info' : '');
+    if (o.html) dMsg.innerHTML = o.msg; else dMsg.textContent = o.msg || '';
+    dBtns.innerHTML = '';
+    (o.buttons || []).forEach(function(b){
+      var el = document.createElement('button'); el.type = 'button';
+      el.className = b.ghost ? 'pop-btn-ghost' : 'pop-btn-primary'; el.textContent = b.text;
+      el.addEventListener('click', function(){ closeDlg(); if (b.fn) setTimeout(b.fn, 190); });
+      dBtns.appendChild(el);
+    });
+    dLink.hidden = !o.link;
+    if (o.link){ dLink.textContent = o.link.text; dLink.onclick = function(){ closeDlg(); if (o.link.fn) setTimeout(o.link.fn, 190); }; }
+    onBack = o.back || null; dBack.hidden = !o.back;
+    dClose.hidden = o.close === false;
+    dlg.hidden = false; requestAnimationFrame(function(){ requestAnimationFrame(function(){ dlg.classList.add('on'); }); });
+  }
+  dBack.addEventListener('click', function(){ var f = onBack; closeDlg(); if (f) setTimeout(f, 190); });
+  dClose.addEventListener('click', closeDlg);
+  dlg.addEventListener('click', function(e){ if (e.target === dlg) closeDlg(); });
+  window.scDlgOpen = openDlg;
+
+  function refresh(){ api.refresh(); if (!pm.hidden) pmRender(); }
+  function openMk(c){ if (window.mkOpenForClass) window.mkOpenForClass(c); }
+
+  /* ---------- 연기 신청 (예정 카드) ---------- */
+  function askPostpone(c){
+    openDlg({ title:'연기 신청', msg:md(c.d)+'일 수업 연기를 신청하시겠습니까?',
+      buttons:[{ text:'확인', fn:function(){ c.status = 'postponed'; refresh(); askMakeupAfterPostpone(c); } }],
+      link:{ text:'다음에 하기' } });
+  }
+  function askMakeupAfterPostpone(c){
+    openDlg({ title:'보강 신청', msg:md(c.d)+'일 수업이 연기되었습니다.\n연기한 수업은 보강 신청이 필요해요.',
+      back:function(){ c.status = 'upcoming'; refresh(); askPostpone(c); },
+      buttons:[{ text:'보강 신청', fn:function(){ openMk(c); } }],
+      link:{ text:'다음에 하기' } });
+  }
+  /* ---------- 연기 취소 : 원 스케줄이 비어 있으면 원복, 있으면 보강 신청으로 ---------- */
+  function askCancelPostpone(c){
+    var occupied = api.list().some(function(x){ return x !== c && x.subject === c.subject && api.sameDay(x.d, c.d) && x.time === c.time; });
+    if (occupied){
+      openDlg({ title:'연기 취소', msg:md(c.d)+'일 원 수업 스케줄이 있습니다.\n보강 신청을 해주세요.',
+        buttons:[{ text:'확인', fn:function(){ openMk(c); } }] });
+    } else {
+      openDlg({ title:'연기 취소', msg:md(c.d)+'일 수업 연기를 취소하시겠습니까?',
+        buttons:[{ text:'확인', fn:function(){ c.status = 'upcoming'; refresh(); } }],
+        link:{ text:'다음에 하기' } });
+    }
+  }
+  /* ---------- 보강 취소 : 확인 시 보강 수업 삭제 + 원수업 원복 ---------- */
+  function askCancelMakeup(c){
+    openDlg({ title:'보강 취소', msg:md(c.d)+'일 보강 수업을 취소하시겠습니까?', back:function(){}, close:false,
+      buttons:[{ text:'취소', ghost:true }, { text:'확인', fn:function(){
+        var L = api.list(), i = L.indexOf(c); if (i > -1) L.splice(i, 1);
+        if (c.makeupOf){
+          var o = c.makeupOf.orig || { d:c.makeupOf.d, time:c.makeupOf.time, subject:c.subject, status:'skip' };
+          if (L.indexOf(o) === -1){ o.key = o.key || (o.d.getFullYear()+'-'+('0'+(o.d.getMonth()+1)).slice(-2)+'-'+('0'+o.d.getDate()).slice(-2)); L.push(o); }
+        } else if (c.special){ specialLeft++; updateQuick(); }
+        refresh();
+      } }] });
+  }
+  window.scFlow = function(act, c){
+    if (act === '보강신청') openMk(c);
+    else if (act === '연기신청') askPostpone(c);
+    else if (act === '연기 취소') askCancelPostpone(c);
+    else if (act === '보강 취소') askCancelMakeup(c);
+    else if (act === '리뷰보기' && window.revOpen) window.revOpen();
+  };
+
+  /* ---------- 보강 신청 완료 → 주별 리스트에 보강 수업 등록, 원수업(SKIP/연기)은 리스트에서 빠짐 ---------- */
+  document.addEventListener('mkdone', function(e){
+    var orig = window.__mkClass, det = e.detail, L = api.list();
+    var d = new Date(det.date); d.setHours(0,0,0,0);
+    var nc = { d:d, time:det.time, subject:(orig && orig.subject) || api.course(), status:'makeup', tutor:det.tutor };
+    nc.key = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    if (orig && !orig.special){
+      nc.makeupOf = { d:orig.d, time:orig.time, orig:orig };
+      var i = L.indexOf(orig); if (i > -1) L.splice(i, 1);
+    } else { nc.special = true; specialLeft = Math.max(0, specialLeft - 1); updateQuick(); }
+    L.push(nc);
+    refresh();
+  });
+
+  /* ---------- 연기/보강 현황 ---------- */
+  var pm = document.getElementById('pmOverlay');
+  var specialLeft = 2;
+  var quick = document.querySelector('#scQuicklinks .sq-item');
+  function updateQuick(){
+    if (!quick) return;
+    var nodes = Array.prototype.filter.call(quick.childNodes, function(n){ return n.nodeType === 3 && n.textContent.trim(); });
+    if (nodes[0]) nodes[0].textContent = ' 연기/보강 현황 · 특별보강 '+specialLeft+'회 가능 ';
+    document.getElementById('pmSpecialLeft').textContent = specialLeft;
+  }
+  var ST = { skip:'스킵', postponed:'연기', cancelled:'취소' };
+  function row(a, b, c){ return '<div class="pm-row"><span>'+a+'</span><span>'+b+'</span><span>'+c+'</span></div>'; }
+  var HEAD = '<div class="pm-row head"><span>정규수업일</span><span>연기</span><span>보강</span></div>';
+  function pmRender(){
+    var course = api.course(), L = api.list().filter(function(c){ return c.subject === course; });
+    var rows = [];
+    L.forEach(function(c){
+      if (ST[c.status] && !c.makeupOf) rows.push({ d:c.d, st:ST[c.status], c:c });
+      if (c.makeupOf) rows.push({ d:c.makeupOf.d, st:ST[(c.makeupOf.orig||{}).status] || '스킵', mk:c });
+    });
+    rows.sort(function(a,b){ return a.d - b.d; });
+    var tb = document.getElementById('pmTable');
+    tb.innerHTML = HEAD + (rows.length ? rows.map(function(r, i){
+      var right = r.mk ? '<span class="pm-done">'+mdw(r.mk.d)+' 보강수업</span>' : '<button type="button" class="cc-cta" data-pm="'+i+'">보강 신청</button>';
+      return row(mdw(r.d), '<span class="pm-st">'+r.st+'</span>', right);
+    }).join('') : '<p class="pm-empty">연기 · 스킵된 수업이 없어요.</p>');
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-pm]'), function(b){
+      b.addEventListener('click', function(){ var r = rows[Number(b.getAttribute('data-pm'))]; closePm(); setTimeout(function(){ openMk(r.c); }, 200); });
+    });
+    var used = L.filter(function(c){ return c.special; });
+    var sp = document.getElementById('pmSpecialTable'), html = HEAD;
+    used.forEach(function(c){ html += row('<span class="pm-dash">-</span>', '', '<span class="pm-done">'+mdw(c.d)+' 보강수업</span>'); });
+    for (var k=0;k<specialLeft;k++) html += row('<span class="pm-dash">-</span>', '', '<button type="button" class="cc-cta" data-sp="1">보강 신청</button>');
+    sp.innerHTML = html;
+    Array.prototype.forEach.call(sp.querySelectorAll('[data-sp]'), function(b){
+      b.addEventListener('click', function(){ closePm(); setTimeout(function(){ openMk({ special:true, subject:api.course() }); }, 200); });
+    });
+    document.getElementById('pmSpecialLeft').textContent = specialLeft;
+  }
+  function openPm(){ pmRender(); pm.hidden = false; pm.querySelector('.pop-body').scrollTop = 0; requestAnimationFrame(function(){ requestAnimationFrame(function(){ pm.classList.add('on'); }); }); }
+  function closePm(){ pm.classList.remove('on'); setTimeout(function(){ pm.hidden = true; }, 220); }
+  if (quick) quick.addEventListener('click', openPm);
+  document.getElementById('pmCloseBtn').addEventListener('click', closePm);
+  pm.addEventListener('click', function(e){ if (e.target === pm) closePm(); });
+  document.getElementById('pmInfoBtn').addEventListener('click', function(){
+    openDlg({ title:'안내사항', info:true, html:true,
+      msg:'<h4>연기 가능 시간</h4><ul><li>수업 시작 10분 전까지</li></ul><p class="warn">※ 연기 취소 버튼이 있는 경우 가능</p>' +
+          '<h4>보강수업</h4><ul><li>연기한 수업은 보강 수업으로 다시 신청할 수 있습니다.</li><li>보강 수업은 수강 종료일까지 신청 및 수강해야 합니다.</li><li>보강 수업은 내일부터 2주 이내 일정에서 직접 신청할 수 있습니다. (단, 수강 기간 내)</li></ul>',
+      buttons:[{ text:'확인' }] });
+  });
+  updateQuick();
+})();
+</script>
+<script>
+/* ===== 발음·문장 다시 평가 / 듣기 재생 / 수업환경 테스트 ===== */
+(function(){
+  "use strict";
+  function openOv(o){ o.hidden = false; requestAnimationFrame(function(){ requestAnimationFrame(function(){ o.classList.add('on'); }); }); }
+  function closeOv(o){ o.classList.remove('on'); setTimeout(function(){ o.hidden = true; }, 220); }
+
+  /* ---------- 다시 평가 ---------- */
+  var ve = document.getElementById('veOverlay'), veSample = document.getElementById('veSample'), veMic = document.getElementById('veMicBtn'),
+      veState = document.getElementById('veState'), veResult = document.getElementById('veResult'), veTimer = null, veKeys = [];
+  function veRows(vals){
+    veResult.innerHTML = veKeys.map(function(k, i){
+      var v = vals ? vals[i] : null;
+      return '<div class="ve-row"><span class="ve-label">'+k+'</span><span class="ve-track"><span class="ve-fill'+(v !== null && v < 50 ? ' low' : '')+'"></span></span><span class="ve-val'+(v === null ? ' empty' : '')+'">'+(v === null ? '–' : v+'%')+'</span></div>';
+    }).join('');
+    if (vals) requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      Array.prototype.forEach.call(veResult.querySelectorAll('.ve-fill'), function(f, i){ f.style.width = vals[i] + '%'; });
+    }); });
+  }
+  window.veOpen = function(text, isSentence){
+    clearTimeout(veTimer); veMic.classList.remove('recording');
+    veSample.textContent = isSentence ? '“'+text+'”' : text;
+    veSample.classList.toggle('sentence', !!isSentence);
+    veKeys = isSentence ? ['Timing','Word','Intonation','Stress'] : ['Intonation','Stress'];
+    veState.textContent = '마이크를 눌러 녹음을 시작하세요'; veState.classList.remove('rec');
+    veRows(null); openOv(ve);
+  };
+  veMic.addEventListener('click', function(){
+    if (veMic.classList.contains('recording')) return;
+    veRows(null);
+    veMic.classList.add('recording'); veState.textContent = '듣고 있어요…'; veState.classList.add('rec');
+    veTimer = setTimeout(function(){
+      veMic.classList.remove('recording'); veState.classList.remove('rec');
+      veState.textContent = '평가가 완료되었어요. 다시 녹음할 수 있어요.';
+      veRows(veKeys.map(function(){ return 30 + Math.round(Math.random()*14)*5; }));
+    }, 2200);
+  });
+  document.getElementById('veCloseBtn').addEventListener('click', function(){ clearTimeout(veTimer); veMic.classList.remove('recording'); closeOv(ve); });
+  ve.addEventListener('click', function(e){ if (e.target === ve){ clearTimeout(veTimer); veMic.classList.remove('recording'); closeOv(ve); } });
+
+  /* ---------- 수업환경 테스트 ---------- */
+  var env = document.getElementById('envOverlay'), meter = document.getElementById('envMeter'), meterTimer = null;
+  for (var i=0;i<22;i++){ meter.appendChild(document.createElement('i')); }
+  var bars = Array.prototype.slice.call(meter.children);
+  function meterRun(on){
+    clearInterval(meterTimer);
+    if (!on){ bars.forEach(function(b){ b.style.height = '8px'; }); return; }
+    var t = 0;
+    meterTimer = setInterval(function(){
+      t += .35; var amp = (Math.sin(t) + 1.2) / 2.2;
+      bars.forEach(function(b, k){ b.style.height = Math.max(6, Math.round((Math.sin(t*2 + k*.6) * .5 + .5) * 56 * amp + Math.random()*8)) + 'px'; });
+    }, 110);
+  }
+  function envTab(tab){
+    Array.prototype.forEach.call(env.querySelectorAll('[data-env-tab]'), function(b){ var on = b.getAttribute('data-env-tab') === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+    Array.prototype.forEach.call(env.querySelectorAll('[data-env-pane]'), function(p){ p.hidden = p.getAttribute('data-env-pane') !== tab; });
+    env.querySelector('.env-cam').hidden = tab !== 'video';
+    env.querySelector('.env-aud').hidden = tab !== 'audio';
+    meterRun(tab === 'audio');
+  }
+  Array.prototype.forEach.call(env.querySelectorAll('[data-env-tab]'), function(b){ b.addEventListener('click', function(){ envTab(b.getAttribute('data-env-tab')); }); });
+  document.getElementById('envCamSel').addEventListener('change', function(e){ document.getElementById('envCamName').textContent = e.target.value; });
+  var play = document.getElementById('envPlayBtn'), playT = null;
+  play.addEventListener('click', function(){
+    var on = !play.classList.contains('playing'); play.classList.toggle('playing', on);
+    play.querySelector('.env-play-label').textContent = on ? '재생 중' : '테스트 사운드 재생';
+    clearTimeout(playT); if (on) playT = setTimeout(function(){ play.click(); }, 3000);
+  });
+  function envOpen(){ envTab('video'); openOv(env); }
+  function envClose(){ meterRun(false); closeOv(env); }
+  document.getElementById('envCloseBtn').addEventListener('click', envClose);
+  env.addEventListener('click', function(e){ if (e.target === env) envClose(); });
+  var link = document.getElementById('envTestLink'); if (link) link.addEventListener('click', envOpen);
+  document.getElementById('envInfoBtn').addEventListener('click', function(){
+    if (window.scDlgOpen) window.scDlgOpen({ title:'장치 테스트 정보', info:true, html:true, buttons:[{ text:'확인' }],
+      msg:'<h4>수업 전 확인해 주세요</h4><ul><li>카메라와 마이크 접근을 허용해 주세요.</li><li>이어폰(마이크 포함)을 사용하면 더 깨끗하게 들려요.</li><li>조용하고 밝은 곳에서 수업해 주세요.</li></ul>' });
+  });
+  document.getElementById('envGuideBtn').addEventListener('click', function(){
+    if (window.scDlgOpen) window.scDlgOpen({ title:'설정 가이드', info:true, html:true, buttons:[{ text:'확인' }],
+      msg:'<h4>카메라가 보이지 않을 때</h4><ul><li>설정 &gt; 앱 &gt; 전화화상 &gt; 카메라 권한을 켜 주세요.</li><li>다른 앱에서 카메라를 사용 중이면 종료해 주세요.</li></ul><h4>소리가 들리지 않을 때</h4><ul><li>기기 볼륨과 무음 모드를 확인해 주세요.</li><li>이어폰 연결 상태를 확인해 주세요.</li></ul>' });
+  });
+})();
+</script>
 </body>
 </html>
