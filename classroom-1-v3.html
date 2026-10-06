@@ -948,9 +948,10 @@
   .qa-field input::placeholder,.qa-field textarea::placeholder{color:var(--sub2);}
   .qa-field textarea{resize:none; min-height:108px; line-height:1.55;}
   .qa-field input:focus,.qa-field textarea:focus{outline:none; border-color:var(--purple); background:var(--card);}
-  .qa-field .qa-err{display:none; font-size:16px; font-weight:600; color:var(--danger); margin-top:6px;}
-  .qa-field.error input,.qa-field.error textarea{border-color:var(--danger);}
-  .qa-field.error .qa-err{display:block;}
+  .qa-field .qa-err{display:none; align-items:center; gap:5px; font-size:14px; font-weight:500; line-height:1.4; color:var(--danger); margin-top:6px;}
+  .qa-field .qa-err::before{content:"!"; flex:none; width:15px; height:15px; border-radius:50%; background:var(--danger); color:#fff; font-size:10.5px; font-weight:700; line-height:15px; text-align:center;}
+  .qa-field.error input,.qa-field.error textarea{border-color:var(--danger); box-shadow:none;}
+  .qa-field.error .qa-err{display:flex;}
 
   /* 나의 질문 내역 — 행 간격은 .lesson-sheet-item과 동일(padding:18px 2px + 하단 구분선) */
   .qa-history-list{display:flex; flex-direction:column; gap:0;}
@@ -966,7 +967,7 @@
 
   /* ---------- 만족도 평가 — 문항 6개, 각 문항 1~5단계를 "채워지는" 방식으로 평가
      (예: 3번째 원을 누르면 1·2·3이 모두 채워짐) */
-  .sat-error-banner{display:none; padding:12px 13px; border-radius:12px; background:var(--danger-soft); color:var(--danger); font-size:17.5px; font-weight:700; margin-bottom:18px; word-break:keep-all; overflow-wrap:break-word;}
+  .sat-error-banner{display:none; padding:10px 12px; border-radius:8px; background:var(--danger-soft); color:var(--danger); font-size:15px; font-weight:500; line-height:1.4; margin-bottom:16px; word-break:keep-all; overflow-wrap:break-word;}
   .sat-error-banner.on{display:block;}
   /* 행 간격은 .lesson-sheet-item/.qa-history-item과 동일(padding:18px 2px + 하단 구분선)로 통일 —
      이전엔 이 팝업만 padding-bottom+margin-bottom 조합(26px)을 따로 썼었음 */
@@ -978,7 +979,8 @@
   .sat-q{display:flex; gap:6px; font-size:19px; font-weight:700; color:var(--ink); line-height:1.5; margin-bottom:14px; transition:color .15s ease;}
   .sat-q .sat-q-num{flex:none;}
   .sat-q .sat-q-text{flex:1; min-width:0; word-break:keep-all; overflow-wrap:break-word;}
-  .sat-item.error .sat-q{color:var(--danger);}
+  /* 미완료 표시는 문항 전체를 빨강으로 바꾸지 않고 문항 끝의 '미응답' 칩으로만 알린다(시안2와 동일) */
+  .sat-item.error .sat-q-text::after{content:"미응답"; display:inline-block; margin-left:6px; padding:2px 7px; border-radius:5px; font-size:13px; font-weight:600; line-height:1.3; vertical-align:2px; color:var(--danger); background:var(--danger-soft);}
   /* 각진 별 대신 모서리가 살짝 둥근 별 — fill과 stroke를 같은 색으로 주고 stroke-linejoin:round로
      뾰족한 꼭짓점을 둥글려서 부드러운 인상을 준다(색만 다른 두 상태: 채워짐/비어있음).
      2026-09-28: 별을 눈에 더 잘 띄게 확 키움(26px→36px) */
@@ -991,7 +993,6 @@
   .sat-star path{fill:var(--surface-subtle); stroke:var(--line); stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; transition:fill .15s ease, stroke .15s ease;}
   .sat-star.filled path{fill:var(--purple); stroke:var(--purple);}
   .sat-star.filled svg{transform:scale(1.06);}
-  .sat-item.error .sat-star path{stroke:var(--danger-soft);}
 
   /* ---------- 수업 리뷰 — 오늘 수업 다시듣기(하단 푸터로 이동, 2026-09-29) · Tutor Feedback · 발음 확인(원문/교정문+막대 재평가) · 교정 문장 */
   /* 2026-09-30: 회색 박스(카드) 톤을 다시 걷어내고 — 아래 Tutor Feedback 등 섹션과는 박스가 아니라
@@ -1094,40 +1095,47 @@
   .mictest-overlay.on{opacity:1; visibility:visible; pointer-events:auto;}
   /* 2026-10-02: 알럿성 팝업(연기신청 확인 등)의 패딩이 빡빡하다는 피드백으로 살짝 더 여유있게 */
   .mictest-card{
-    width:100%; max-width:320px; background:var(--card); border-radius:22px; padding:34px 20px 28px; text-align:center; position:relative;
+    width:100%; max-width:340px; background:var(--card); border-radius:22px; padding:34px 20px 28px; text-align:center; position:relative;
     box-shadow:0 30px 60px -20px rgba(25,20,64,.35); opacity:0; transform:translateY(10px) scale(.97);
     transition:transform .22s cubic-bezier(.22,1,.36,1), opacity .22s ease;
   }
   .mictest-overlay.on .mictest-card{opacity:1; transform:translateY(0) scale(1);}
+  /* 예습 안내 팝업(시안2 동일) — 수업 시작 1분 전인데 예습이 남아 있으면 뜨는 센터 모달 */
+  .prep-nudge-card{padding:28px 20px 20px; display:flex; flex-direction:column; align-items:center;}
+  .prep-nudge-chip{display:inline-flex; align-items:center; gap:7px; background:var(--danger-soft); color:var(--danger); font-size:15px; font-weight:700; padding:7px 14px; border-radius:var(--r-pill); margin-bottom:18px;}
+  .prep-nudge-chip svg{width:17px; height:17px; flex:none;}
+  .prep-nudge-chip .num{font-variant-numeric:tabular-nums;}
+  .prep-nudge-icon{width:72px; height:72px; border-radius:50%; background:var(--selection-bg); color:var(--purple); display:flex; align-items:center; justify-content:center; margin-bottom:18px;}
+  .prep-nudge-icon svg{width:32px; height:32px;}
+  .prep-nudge-title{margin:0 0 24px; font-size:22px; font-weight:800; color:var(--ink); line-height:1.4; word-break:keep-all; letter-spacing:-.3px;}
+  .prep-nudge-actions{width:100%; display:flex; flex-direction:column; gap:6px;}
+  .prep-nudge-actions .pop-btn-primary{width:100%; display:flex; align-items:center; justify-content:center; gap:8px;}
+  .prep-nudge-actions .pop-btn-primary svg{width:17px; height:17px;}
+  .prep-nudge-later{padding:12px 0 4px; font-size:16px; font-weight:600; color:var(--sub2);}
   .mictest-close{position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--sub2);}
   .mictest-close:active{background:var(--surface-subtle);}
   .mictest-close svg{width:17px; height:17px;}
   .mictest-guide{font-size:17.5px; font-weight:600; color:var(--sub); line-height:1.55; margin:6px 0 20px; word-break:keep-all; overflow-wrap:break-word;}
-  .mictest-sample{font-size:34px; font-weight:800; color:var(--ink); margin-bottom:22px;}
+  .mictest-sample{font-size:34px; font-weight:800; color:var(--ink); margin-bottom:20px;}
   .mictest-mic{
-    width:76px; height:76px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 18px;
+    width:76px; height:76px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;
     border:2px solid var(--purple-light); color:var(--purple); background:var(--card); transition:background .2s ease,border-color .2s ease,color .2s ease;
   }
   .mictest-mic svg{width:30px; height:30px;}
   .mictest-mic.recording{border-color:var(--danger); color:var(--danger); animation:revMicPulse .9s ease-in-out infinite;}
   .mictest-note{font-size:15.5px; font-weight:500; color:var(--sub2); line-height:1.55; word-break:keep-all; overflow-wrap:break-word;}
 
-  .mictest-toast{
-    position:absolute; left:50%; bottom:-58px; transform:translate(-50%,8px); display:flex; align-items:center; gap:8px;
-    padding:12px 18px; border-radius:999px; font-size:16.5px; font-weight:700; white-space:nowrap;
-    width:max-content; max-width:calc(100vw - 48px);
-    box-shadow:0 16px 30px -14px rgba(25,20,64,.35); opacity:0; transition:transform .22s ease, opacity .22s ease; pointer-events:none;
-  }
-  .mictest-toast svg{width:16px; height:16px; flex:none;}
-  .mictest-toast span{white-space:normal; text-align:left; line-height:1.4;}
-  .mictest-toast.show{opacity:1; transform:translate(-50%,0);}
-  .mictest-toast.success{background:linear-gradient(150deg,var(--purple),var(--purple-dark)); color:#fff;}
-  .mictest-toast.fail{
-    background:var(--danger-soft); color:var(--danger); white-space:normal; width:304px; max-width:calc(100vw - 48px);
-    border-radius:16px; align-items:flex-start; text-align:left; padding:14px 18px;
-  }
-  .mictest-toast.fail span{line-height:1.5;}
-  .mictest-toast.fail svg{margin-top:2px;}
+  /* 마이크 테스트 결과 — 시안2와 동일: 상태 문구 + Intonation/Stress 점수 박스(녹음 전엔 "–", 평가 후 막대·% 표시) */
+  .mictest-status{font-size:15.5px; font-weight:500; color:var(--sub); line-height:1.5; margin:0 0 18px; word-break:keep-all;}
+  .mictest-status.done{color:var(--purple);}
+  .mictest-status.fail{color:var(--danger);}
+  .mictest-score{display:flex; flex-direction:column; gap:12px; text-align:left; background:var(--surface-subtle); border-radius:14px; padding:14px 16px; margin-bottom:18px;}
+  .mictest-score-row{display:grid; grid-template-columns:auto 1fr 44px; align-items:center; gap:12px; font-size:16px; color:var(--ink);}
+  .mictest-score-row .lb{font-weight:500; min-width:84px;}
+  .mictest-score-row .bar{height:8px; border-radius:99px; background:var(--line-soft); overflow:hidden;}
+  .mictest-score-row .bar i{display:block; height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,var(--purple),var(--purple-dark)); transition:width .5s cubic-bezier(.22,1,.36,1);}
+  .mictest-score-row .val{text-align:right; font-weight:800; font-variant-numeric:tabular-nums; color:var(--ink);}
+  .mictest-score-row .val.empty{color:var(--sub2); font-weight:500;}
 
   /* ---------- 출석현황 (2026-10-02) — 튜터 카드의 출석체크 버튼으로 여는 전체 팝업.
      기존 pop-overlay/pop-panel 셸(다른 팝업들과 동일)을 재사용. 2026-10-02(수정): 통계 테이블 대신
@@ -2008,6 +2016,25 @@
     </div>
   </div>
 
+  <!-- 예습 안내 팝업 — 수업 시작 1분 전(waiting, ≤60초)인데 예습이 남아 있으면 한 번 뜬다(시안2 동일) -->
+  <div class="mictest-overlay" id="prepNudgeOverlay" role="dialog" aria-modal="true" aria-label="예습 안내" hidden>
+    <div class="mictest-card prep-nudge-card">
+      <div class="prep-nudge-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <span>수업 시작까지 <span class="num" id="prepNudgeTime">01:00</span></span>
+      </div>
+      <div class="prep-nudge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg></div>
+      <h2 class="prep-nudge-title">수업 전 5분 예습,<br>자신감 UP!</h2>
+      <div class="prep-nudge-actions">
+        <button type="button" class="pop-btn-primary" id="prepNudgeStartBtn">
+          예습 시작하기
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+        <button type="button" class="prep-nudge-later" id="prepNudgeLaterBtn">나중에 할게요</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 마이크 테스트 — 수업 리뷰 발음 확인 섹션에서 마이크 상태를 미리 점검하는 보조 팝업(수업리뷰 위에 얹힘) -->
   <div class="mictest-overlay" id="revMicTestOverlay" hidden>
     <div class="mictest-card">
@@ -2015,12 +2042,16 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <p class="mictest-guide">마이크 버튼을 누른 후<br>문장을 말해주세요.</p>
-      <p class="mictest-sample">Hello</p>
+      <p class="mictest-sample" id="revMicTestWord">taste</p>
       <button type="button" class="mictest-mic" id="revMicTestBtn" aria-label="마이크 테스트 시작">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
       </button>
+      <p class="mictest-status" id="revMicTestStatus" aria-live="polite">마이크를 눌러 녹음을 시작하세요</p>
+      <div class="mictest-score" id="revMicTestScore">
+        <div class="mictest-score-row"><span class="lb">Intonation</span><span class="bar"><i id="mtBarInto"></i></span><b class="val empty" id="mtValInto">–</b></div>
+        <div class="mictest-score-row"><span class="lb">Stress</span><span class="bar"><i id="mtBarStress"></i></span><b class="val empty" id="mtValStress">–</b></div>
+      </div>
       <p class="mictest-note">※ 정확한 평가를 위해 마이크 기능이 있는 이어폰을 착용해 주세요.</p>
-      <div class="mictest-toast" id="revMicTestToast"></div>
     </div>
   </div>
 
@@ -2516,6 +2547,7 @@
       if (remainSeconds <= 0) lessonState = 'ended';
     }
     renderHero();
+    checkPrepNudge();
   }
   renderHero();
   var timerId = setInterval(tick, 1000);
@@ -2531,7 +2563,9 @@
     previewIndex = (previewIndex + 1) % previewStates.length;
     var s = previewStates[previewIndex];
     totalSeconds = s.totalSeconds; lessonState = s.lessonState; remainSeconds = LESSON_LENGTH;
+    prepNudgeShown = false; // 미리보기로 '시작 전'에 돌아오면 팝업도 다시 뜰 수 있게
     renderHero();
+    checkPrepNudge();
   });
 
   /* 3단계 예습 플로우: 각 단계는 항상 같은 자리를 지키고, 클릭하면 크기만 커지고(활성) 나머지는 작아진다(톤다운).
@@ -2626,6 +2660,44 @@
     if (textEl) textEl.textContent = (done === visibleSteps.length) ? PREP_MSG.complete : PREP_MSG.incomplete;
   }
   updatePrepEncourage();
+
+  /* ---------- 예습 안내 팝업 : 수업 시작 60초 전 + 예습 미완료 → 1회 노출(시안2 로직 동일) ---------- */
+  var prepNudgeOverlay = document.getElementById('prepNudgeOverlay');
+  var prepNudgeTime = document.getElementById('prepNudgeTime');
+  var prepNudgeShown = false;
+  var PREP_NUDGE_AT = 60;
+  function hasPrepLeft(){
+    var visibleSteps = steps.filter(function(s){ return !s.hidden; });
+    return visibleSteps.some(function(s){ return s.getAttribute('data-completed') !== 'true'; });
+  }
+  function openPrepNudge(){
+    prepNudgeShown = true;
+    prepNudgeOverlay.hidden = false;
+    requestAnimationFrame(function(){ prepNudgeOverlay.classList.add('on'); });
+  }
+  function closePrepNudge(){
+    prepNudgeOverlay.classList.remove('on');
+    setTimeout(function(){ prepNudgeOverlay.hidden = true; }, 200);
+  }
+  function checkPrepNudge(){
+    var isOpen = !prepNudgeOverlay.hidden;
+    if (lessonState !== 'waiting'){ if (isOpen) closePrepNudge(); return; }
+    if (isOpen) prepNudgeTime.textContent = mmss(totalSeconds);
+    if (!isOpen && !prepNudgeShown && totalSeconds <= PREP_NUDGE_AT && totalSeconds > 0 && hasPrepLeft()){
+      prepNudgeTime.textContent = mmss(totalSeconds);
+      openPrepNudge();
+    }
+  }
+  document.getElementById('prepNudgeStartBtn').addEventListener('click', function(){
+    closePrepNudge();
+    var next = steps.filter(function(s){ return !s.hidden && s.getAttribute('data-completed') !== 'true'; })[0];
+    setTimeout(function(){
+      document.getElementById('prepBlock').scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block:'start'});
+      if (next){ next.setAttribute('data-active', 'true'); refreshFlow(); setTimeout(refreshFlow, 300); }
+    }, 220);
+  });
+  document.getElementById('prepNudgeLaterBtn').addEventListener('click', closePrepNudge);
+  prepNudgeOverlay.addEventListener('click', function(e){ if (e.target === prepNudgeOverlay) closePrepNudge(); });
 
   /* 완료 처리 — 팝업의 액션 버튼(교재 보기/바로가기)을 실제로 눌러야 그 단계가 "완료"로 표시되고,
      펼쳐져 있던 말풍선은 접히면서 마커 옆 캡슐 칩(예: "교재보기 완료")으로 축소된다.
@@ -3813,19 +3885,33 @@
   document.getElementById('revCloseFootBtn').addEventListener('click', revClose);
   revOverlay.addEventListener('click', function(e){ if (e.target === revOverlay) revClose(); });
 
-  /* 마이크 테스트 — 발음 확인 섹션의 마이크 하드웨어 사전 점검 보조 팝업. 문장별 재평가(.rev-mic-btn)와는 별개.
-     녹음 시뮬레이션 후 인식 성공/실패를 토스트로 안내한다(실제 음성 인식 없이 데모용으로 랜덤 판정). */
+  /* 마이크 테스트 — 발음 확인 섹션의 마이크 사전 점검 보조 팝업. 문장별 재평가(.rev-mic-btn)와는 별개.
+     시안2와 동일하게 녹음 → 상태 문구 + Intonation/Stress 점수(막대·%)로 결과를 보여준다.
+     실제 음성 인식 없이 데모용으로 점수·인식 실패(25%)를 랜덤 생성한다. */
   var mtOverlay = document.getElementById('revMicTestOverlay');
   if (mtOverlay) {
     var mtMic = document.getElementById('revMicTestBtn');
-    var mtToast = document.getElementById('revMicTestToast');
+    var mtStatus = document.getElementById('revMicTestStatus');
+    var mtBars = [document.getElementById('mtBarInto'), document.getElementById('mtBarStress')];
+    var mtVals = [document.getElementById('mtValInto'), document.getElementById('mtValStress')];
     var mtBusy = false;
 
+    function mtSetScore(scores){
+      mtBars.forEach(function(bar, i){
+        bar.style.width = scores ? scores[i] + '%' : '0%';
+        mtVals[i].textContent = scores ? scores[i] + '%' : '–';
+        mtVals[i].classList.toggle('empty', !scores);
+      });
+    }
+    function mtSetStatus(text, cls){
+      mtStatus.textContent = text;
+      mtStatus.className = 'mictest-status' + (cls ? ' ' + cls : '');
+    }
     function mtOpen(){
       mtBusy = false;
       mtMic.classList.remove('recording');
-      mtToast.className = 'mictest-toast';
-      mtToast.innerHTML = '';
+      mtSetStatus('마이크를 눌러 녹음을 시작하세요');
+      mtSetScore(null);
       mtOverlay.hidden = false;
       requestAnimationFrame(function(){
         requestAnimationFrame(function(){ mtOverlay.classList.add('on'); });
@@ -3835,22 +3921,21 @@
       mtOverlay.classList.remove('on');
       setTimeout(function(){ mtOverlay.hidden = true; }, 200);
     }
-    function mtShowToast(ok){
-      mtToast.className = 'mictest-toast ' + (ok ? 'success' : 'fail');
-      mtToast.innerHTML = ok
-        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>마이크 테스트에 성공했어요</span>'
-        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9L2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span>음성 인식이 되지 않았습니다.<br>마이크 상태를 확인해 주세요.</span>';
-      requestAnimationFrame(function(){ mtToast.classList.add('show'); });
-      setTimeout(function(){ mtToast.classList.remove('show'); }, 2600);
-    }
+    function mtRand(){ return 40 + 5 * Math.floor(Math.random() * 12); } // 40~95%
     mtMic.addEventListener('click', function(){
       if (mtBusy) return;
       mtBusy = true;
-      mtToast.classList.remove('show');
+      mtSetStatus('녹음 중이에요…');
+      mtSetScore(null);
       mtMic.classList.add('recording');
       setTimeout(function(){
         mtMic.classList.remove('recording');
-        mtShowToast(Math.random() > 0.25);
+        if (Math.random() > 0.25){
+          mtSetScore([mtRand(), mtRand()]);
+          mtSetStatus('평가가 완료되었어요. 다시 녹음할 수 있어요.', 'done');
+        } else {
+          mtSetStatus('음성 인식이 되지 않았어요. 마이크를 확인하고 다시 시도해 주세요.', 'fail');
+        }
         mtBusy = false;
       }, 1300);
     });
