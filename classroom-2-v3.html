@@ -1772,6 +1772,10 @@
   .corr-row .mo-row-ic svg{width:30px; height:30px;}
   .corr-chev{width:18px; height:18px; color:var(--sub2); flex:none;}
   .corr-row:active{transform:scale(.99);}
+
+  /* 라이브 카드 : 오늘 수업 시간 칩은 좌상단(우상단 아이콘과 같은 줄), 레슨 번호·제목은 가운데 */
+  .live-card .lesson-when{position:absolute; top:16px; left:12px; z-index:2; font-size:13px; padding:4px 8px;}
+  .live-card .lesson-meta .lesson-num{text-align:center;}
 </style>
 </head>
 <body>
@@ -1839,7 +1843,8 @@
         <button type="button" class="live-act" id="attOpenBtn" aria-label="출석현황"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="overflow:visible;"><circle cx="12" cy="7" r="4.3"/><path d="M21 21v-2a6.5 6.5 0 0 0-6.5-6.5h-5A6.5 6.5 0 0 0 3 19v2"/><path d="M16.5 8.3 18.7 10.8 24.5 3.3"/></svg></button>
         <button type="button" class="live-act" id="liveCalBtn" aria-label="일정 보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg></button>
       </div>
-      <p class="lesson-meta"><span class="lesson-when" id="liveWhen">오늘 19:30</span><span class="lesson-num" id="liveLessonNum">Lesson.01</span></p>
+      <span class="lesson-when" id="liveWhen">오늘 19:30</span>
+      <p class="lesson-meta"><span class="lesson-num" id="liveLessonNum">Lesson.01</span></p>
       <h2 class="lesson" id="liveLessonTitle">Small Talk &amp; Ice Breaking</h2>
       <!-- 수업 시작 전: 버튼 안에 남은 시간 표시 → 시작 시간(00:00)이 되면 '강의실 입장하기'로 바뀐다 -->
       <button type="button" class="enter-btn is-wait" id="enterClassBtn" aria-live="polite">
