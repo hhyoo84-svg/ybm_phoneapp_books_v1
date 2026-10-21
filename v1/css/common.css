@@ -1,0 +1,258 @@
+/* ==================================================================
+   common.css — 공통 컴포넌트 — 헤더 · 탭 · 버튼 · 칩 · 아이콘 버튼 · 모달/다이얼로그/바텀시트 셸 · 토스트 · 하단 내비
+   ================================================================== */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --surface-default:var(--color-gray-950); --surface-subtle:var(--color-gray-900); --surface-muted:var(--color-gray-800); --surface-scrim:rgba(0,0,0,.6); --text-primary:var(--color-gray-50); --text-secondary:var(--color-gray-400); --text-tertiary:var(--color-gray-500); --text-warning:var(--color-orange-400); --text-danger:var(--color-red-400); --text-info:var(--color-blue-400); --border-default:var(--color-gray-700); --border-subtle:var(--color-gray-800); --border-error:var(--color-red-400); --neutral-bg:var(--color-gray-800); --status-warning-weak:var(--color-orange-950); --status-negative-weak:var(--color-red-950); --status-info-weak:var(--color-blue-950); --accent-green-weak:var(--color-green-950); --accent-blue-weak:var(--color-blue-950); --accent-red-weak:var(--color-red-950); --brand-interactive-subtle:var(--brand-950); color-scheme:dark; }
+}
+[hidden]{display:none !important;}
+.num{font-family:"Plus Jakarta Sans","Pretendard Variable",sans-serif; font-variant-numeric:tabular-nums;}
+.stage{
+    width:100%; max-width:560px; height:100dvh; background:var(--surface-subtle);
+    display:flex; flex-direction:column; position:relative; overflow:hidden;
+  }
+/* ---------- Header : DS 헤더 규격(48px · 좌우 16px · 타이틀 18/800) ---------- */
+.topbar-sticky{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--surface-default);}
+.classroom-topbar{
+    height:48px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px;
+    padding:0 16px; background:var(--surface-default);
+  }
+.classroom-topbar-title{font-size:var(--font-size-18); font-weight:var(--font-weight-bold); color:var(--text-primary); white-space:nowrap; justify-self:center;}
+.classroom-topbar-info{
+    justify-self:end; display:flex; align-items:center; padding:4px 2px; white-space:nowrap;
+  }
+.classroom-topbar-info:active{opacity:.7;}
+.tabs.classroom-tabs button{
+    flex:1; padding:8px 4px; font-size:var(--font-size-18); font-weight:var(--font-weight-medium); color:var(--text-tertiary);
+    display:flex; align-items:baseline; justify-content:center; transition:color .15s;
+  }
+/* ---------- 본문 : DS 베젤(좌우 8px · 섹션 간격 18px) ---------- */
+.scroll-area{flex:1; overflow-y:auto; padding:20px 8px 104px; display:flex; flex-direction:column; gap:18px;}
+.scroll-area > *{flex-shrink:0;}
+/* 튜터·강좌 배너 (인사말은 삭제, 튜터 정보만 남김) */
+.ai-banner{
+    position:relative; background:var(--brand-interactive-subtle); display:flex; align-items:center;
+  }
+.ai-banner .tutor-avatar{ border-radius:50%; flex:none; overflow:hidden;}
+.ai-banner .tutor-avatar img{width:100%; height:100%; object-fit:cover;}
+/* ---------- 하단 내비 : 시안2 3개 메뉴 유지, DS 내비 규격(라벨 13.5/700 · 아이콘 22) ---------- */
+.bottom-nav{
+    position:sticky; bottom:0; z-index:5; display:flex; justify-content:space-around;
+    padding:10px 24px calc(10px + env(safe-area-inset-bottom,0px));
+    background:var(--surface-default); border-top:1px solid var(--border-subtle);
+  }
+.nav-item{display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--text-tertiary); font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); min-width:64px;}
+.nav-item svg{width:22px; height:22px;}
+.nav-item.active{color:var(--brand-text-link);}
+/* ---------- 예습 유도 팝업(시안2 고유) : DS 센터 모달 규격 ---------- */
+.popup-overlay{
+    position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+.popup-overlay.open{opacity:1; pointer-events:auto;}
+.popup-backdrop{position:absolute; inset:0; background:var(--surface-scrim);}
+.popup-card{
+    position:relative; width:100%; max-width:340px; background:var(--surface-default);
+    padding:30px 22px 22px; display:flex; flex-direction:column; align-items:center;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.35);
+    transform:translateY(10px) scale(.97); opacity:0; transition:transform .22s cubic-bezier(.22,1,.36,1), opacity .22s ease;
+  }
+.popup-overlay.open .popup-card{transform:none; opacity:1;}
+.urgency-chip{display:flex; align-items:center; gap:7px; margin-bottom:18px;}
+.urgency-chip svg{width:16px; height:16px;}
+.popup-icon-wrap{width:72px; height:72px; border-radius:50%; background:var(--brand-interactive-subtle); display:flex; align-items:center; justify-content:center; margin-bottom:18px;}
+.popup-icon-wrap svg{width:32px; height:32px;}
+.popup-card h2{margin:0 0 24px; text-align:center; font-weight:var(--font-weight-bold); color:var(--text-primary); line-height:1.4; word-break:keep-all; font-size:var(--font-size-20);}
+.popup-actions{width:100%; display:flex; flex-direction:column; gap:8px;}
+/* 수업 카드 : DS Class Row 타이포(날짜 12 · 시간 15.5/800 · 배지 12 · 과목 15.5/800 · CTA 14/700) *//* ---------- 캘린더 보기 : DS 풀스크린 팝업 셸(.modal-*) 위에 월 그리드 ---------- *//* ====================================================================
+     시안1 v2 (2026-09-30) 구조 이식 — 팝업(풀스크린 셸·학습질문·만족도·수업리뷰·Class Report·레슨 시트)과
+     스케줄 캘린더(년월 피커·TODAY·주간/월간 전환·공휴일·리스트) CSS. 컬러는 시안2 토큰을 그대로 따른다
+     ==================================================================== */
+.tabs{display:flex; align-items:center; gap:20px;}
+.tabs button{position:relative; padding:15px 0; font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+.tabs button.on{color:var(--text-primary); font-weight:var(--font-weight-bold);}
+.tabs:not(.classroom-tabs) button.on::after{content:''; position:absolute; left:0; right:0; bottom:0; height:3px; border-radius:2px;}
+.segment{ border-radius:var(--radius-4); font-weight:var(--font-weight-semibold); color:var(--text-secondary); transition:background .15s ease, color .15s ease;}
+.segment.on{background:var(--surface-default); color:var(--text-primary); box-shadow:0 1px 3px rgba(28,25,23,.12);}
+/* ---------- 풀스크린 팝업 공통 셸 : 질문하기·만족도 평가·AI 히스토리·수업리뷰·Class Report처럼
+     내용이 긴 화면에 쓴다. 앱 프레임(.classroom-app)과 같은 최대폭·라운딩·그림자를 그대로 이어받아
+     페이지 전환처럼 화면 전체를 덮는다. (년월 선택처럼 가벼운 선택 UI는 기존 바텀시트 .schedule-picker-*를 그대로 쓴다) */
+.modal-overlay{
+    position:fixed; inset:0; z-index:60; display:flex; align-items:flex-start; justify-content:center;
+    background:var(--surface-subtle); opacity:0; visibility:hidden; pointer-events:none; transition:opacity .2s ease;
+  }
+.modal-overlay.on{opacity:1; visibility:visible; pointer-events:auto;}
+/* 팝업 배경은 2026-09-29부터 --bg(옅은 회색)가 아닌 --card(흰색, 다크모드에서는 카드 톤)로 —
+     --surface-subtle 박스들(.review-feedback/.review-lesson 등)이 바탕과 또렷이 대비되어 "박스 구성"이 잘 보이도록 */
+.modal{
+    width:100%; max-width:390px; height:100%; display:flex; flex-direction:column;
+    background:var(--surface-default); opacity:0; transform:translateY(14px);
+    transition:transform .22s cubic-bezier(.22,1,.36,1), opacity .22s ease;
+  }
+.modal-overlay.on .modal{opacity:1; transform:translateY(0);}
+.modal-head{
+    flex:none; height:60px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+    padding:0 10px; background:var(--surface-default); border-bottom:1px solid var(--border-subtle);
+  }
+/* 타이틀 크기는 클래스룸 섹션 타이틀(.classroom-block-title, "학습 전에 미리 예습해 보아요")과 동일하게 맞춘다.
+     grid-row를 명시적으로 1로 고정 — 지정하지 않으면(auto) 3개 아이템이 각자 다른 암시적 행으로
+     배치되어 세로 중앙정렬이 깨지는 문제가 있어(2026-09-29 발견) 셋 다 grid-row:1로 고정한다 */
+.modal-title{grid-column:2; grid-row:1; font-weight:var(--font-weight-semibold); letter-spacing:-.3px; color:var(--text-primary); text-align:center; white-space:nowrap;}
+/* 닫기 버튼은 2026-09-29부터 좌상단이 아닌 우상단 — 오른쪽 끝(grid-column:3)으로, 빈 스페이서가
+     왼쪽(grid-column:1)에서 타이틀 중앙 정렬을 맞춰준다. 탭하기 쉽도록 버튼·아이콘도 2026-09-29 여러 차례에
+     걸쳐 조정(32→38→76→48px) *//* 참고 이미지 기준 진한 잉크 톤 X — sub2(연한 회색)는 타이틀 옆에서 너무 흐려 보여 ink로 변경(2026-09-30) */
+.modal-close{grid-column:3; grid-row:1; justify-self:end;}
+.modal-close:active{background:var(--surface-muted);}
+.modal-close--spacer{grid-column:1; grid-row:1; visibility:hidden;}
+/* 클래스룸 상단 상태 탭(진행/예정/완료)과 같은 밑줄 탭 스타일 — 팝업 안에서도 글자 크기(19px)와
+     선택 표시(브랜드 컬러 밑줄)를 그대로 이어받아, 알약 세그먼트보다 크고 또렷하게 보이게 한다 */
+.modal-tabs-wrap{flex:none; padding:0 18px; border-bottom:1px solid var(--border-subtle);}
+.modal-body{flex:1; overflow-y:auto; padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px));}
+.modal-guide{ margin:0 0 18px; word-break:keep-all; overflow-wrap:break-word;}
+/* 참고 이미지 기준 박스 없이 아이콘+회색 텍스트만 — 회색 박스(surface-subtle)를 얹으면
+     3개 팝업(학습질문/만족도평가/수업리뷰) 모두에서 참고 이미지와 달라 보여 제거(2026-09-30) *//* 앱 전체 공통 안내문 스타일 — 박스 없이 아이콘+회색 텍스트만(2026-09-30).
+     이전엔 학습질문 "나의 질문 내역" 탭만 별도로 .qa-info-banner(라벤더 박스+보라 텍스트)를 썼는데,
+     페이지마다 안내문 톤이 제각각이라는 피드백에 따라 .modal-note 하나로 통일하고 .qa-info-banner는 제거함 */
+.modal-note{display:flex; align-items:flex-start; gap:8px; margin-bottom:18px;}
+.modal-note svg{width:14px; height:14px; color:var(--text-tertiary); flex:none; margin-top:1.5px;}
+.modal-note span{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); line-height:1.55; word-break:keep-all; overflow-wrap:break-word;}
+.modal-foot{display:flex; gap:10px; padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--border-subtle); flex:none; background:var(--surface-default);}
+.btn:where([data-variant="secondary"]){flex:none; padding:14px 18px; font-weight:var(--font-weight-semibold); color:var(--text-secondary); background:var(--surface-muted);}
+.btn:where([data-variant="secondary"]):active{opacity:.7;}
+.btn:where([data-variant="primary"]){
+    flex:1; padding:14px 18px; font-weight:var(--font-weight-bold); text-align:center;
+    background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); 
+  }
+.btn:where([data-variant="primary"]):active{transform:translateY(1px);}
+/* 결과 화면(제출 완료 / 잠김 등 공통) — 질문하기·만족도 평가가 함께 쓴다 */
+.modal-result{display:flex; flex-direction:column; align-items:center; text-align:center; padding:26px 8px 4px;}
+.modal-result-icon{
+    width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); margin-bottom:18px; flex:none;
+  }
+.modal-result-icon svg{width:26px; height:26px;}
+.modal-result h3{ font-weight:var(--font-weight-bold); color:var(--text-primary);}
+.modal-result p{ font-weight:var(--font-weight-medium); color:var(--text-secondary); word-break:keep-all; overflow-wrap:break-word;}
+.review-mictest-trigger svg{width:16px; height:16px; color:var(--brand-text-link);}
+/* ---------- Class Report — 클래스룸 홈 카드는 세로 막대 그래프(간략 미리보기)지만, 팝업 안에서는
+     5개 항목(이해력/유창성/발음/어휘/문법)의 균형을 한눈에 보여주는 방사형(레이더) 그래프로 확대.
+     카드 값(#fbReportBars)에서 실시간으로 읽어와 그린다 — 단일 시리즈라 범례 없이 축 라벨 + 값 직접 표기 */
+.report-heading{ font-weight:var(--font-weight-bold); color:var(--text-primary); margin-bottom:10px;}
+.report-section{margin-bottom:32px;}
+@media (min-width:640px){
+  body{padding-block:28px;}
+  .stage{height:min(920px, calc(100dvh - 56px)); box-shadow:0 30px 60px -30px rgba(0,0,0,.25);}
+  .scroll-area{padding-inline:20px;}
+  .modal-overlay{align-items:center;}
+  .modal{max-width:560px; height:min(920px, calc(100% - 56px)); overflow:hidden; box-shadow:0 30px 60px -30px rgba(0,0,0,.25);}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; transition-duration:.15s !important;}
+}
+.tabs:not(.classroom-tabs) button.on::after{background:var(--text-primary);}
+.ai-banner{gap:12px; padding:12px 16px;}
+.ai-banner .tutor-avatar{width:40px; height:40px;}
+.ai-txt{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.ai-txt .course{ font-weight:var(--font-weight-bold); color:var(--text-primary); letter-spacing:-.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.ai-txt .tutor{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
+.tutor-avatar.initials{display:flex; align-items:center; justify-content:center; background:var(--surface-default); color:var(--text-secondary); font-size:var(--font-size-14); font-weight:var(--font-weight-bold);}
+/* 과정 안내 : 보조 링크 — 브랜드 컬러 없이 흐린 회색 */
+.classroom-topbar-info{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); gap:1px;}
+.classroom-topbar-info svg{width:12px; height:12px; opacity:.8;}
+@media (min-width:640px){
+  .stage, .modal{border-radius:12px;}
+}
+.enter-btn, .btn:where([data-variant="secondary"]), .btn:where([data-variant="primary"]), .review-replay{border-radius:8px;}
+.schedule-class-card .btn:where([data-size="sm"]), .lesson-sheet-go, .review-mictest-trigger, .qa-field input, .qa-field textarea, .satisfaction-error-banner, .schedule-picker-highlight, .schedule-course-menu button{border-radius:6px;}
+/* 시안2 : 하단 여백 통일 — 바텀 내비가 sticky(겹치지 않음)라 큰 여백이 필요 없다. 모든 화면 32px */
+.scroll-area{padding-bottom:32px;}
+.icon-pen, .art-pen{transform-box:fill-box; transform-origin:20% 85%; animation:pwWrite 1.8s ease-in-out infinite;}
+.art-line{stroke-dasharray:26; stroke-dashoffset:26; animation:pwDraw 1.8s ease-in-out infinite;}
+.icon-dot{animation:icDot 1.4s ease-in-out infinite;}
+.icon-dot.d2{animation-delay:.2s;}
+.icon-dot.d3{animation-delay:.4s;}
+.art-bar{transform-box:fill-box; transform-origin:bottom center; animation:barGrow 2.4s ease-in-out infinite;}
+.art-bar.b2{animation-delay:.15s;}
+.art-bar.b3{animation-delay:.3s;}
+.art-q{transform-box:fill-box; transform-origin:50% 60%; animation:ddiyongBounce 2.6s ease-in-out infinite;}
+@media (prefers-reduced-motion: reduce){
+  .art-line{stroke-dashoffset:0;}
+  .icon-dot{opacity:1;}
+}
+.modal-foot .btn:where([data-variant="primary"]):disabled{opacity:.4; pointer-events:none;}
+/* ===== 시안2 베리에이션 : 이식한 페이지를 시안2 톤(Npay 그린 · 각진 radius · 형광 위 다크 텍스트)으로 ===== *//* 헤더 : 과정 안내 + 설정 */
+.classroom-topbar-actions{justify-self:end; display:flex; align-items:center; gap:2px;}
+.classroom-topbar-gear{width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--text-tertiary); border-radius:6px;}
+.classroom-topbar-gear svg{width:18px; height:18px;}
+.classroom-topbar-gear:active{background:var(--surface-muted);}
+/* 강좌 슬라이드 : 수업 유형 칩(화상/전화) — 튜터명 옆 */
+.ai-txt .tutor{display:flex; align-items:center; gap:6px;}
+.type-chip{display:inline-flex; align-items:center; gap:3px;}
+.type-chip svg{width:12px; height:12px; flex:none;}
+.btn:where([data-variant="primary"]):disabled{background:var(--color-gray-100); color:var(--color-gray-400); box-shadow:none; cursor:not-allowed;}
+/* ===== 디자인 시안 피드백 반영 (클래스룸 #20~29 · 스케줄 #30~35) ===== *//* #29 강좌명 볼륨 : 다른 타이틀(21px)과 균형 */
+.ai-txt .course{font-size:var(--font-size-20);}
+.ai-txt .course{display:flex; align-items:center; gap:6px; max-width:100%;}
+.ai-txt .course .type-chip{flex:none;}
+.ai-txt .tutor .when{display:inline-flex; align-items:center; gap:6px; color:var(--text-primary); font-weight:var(--font-weight-semibold);}
+.ai-txt .tutor .when::after{content:""; width:2px; height:2px; border-radius:50%; background:var(--text-tertiary);}
+.segment{padding:6px 12px;}
+.modal-result h3{font-size:var(--font-size-20); margin-bottom:6px;}
+.btn:where([data-variant="primary"]), .btn:where([data-variant="secondary"]), #revOverlay .modal-foot .review-replay{font-size:var(--font-size-16);}
+.icon-pen, .art-pen{animation-duration:2.8s;}
+.art-line{animation-duration:2.8s;}
+.art-bar{animation-duration:3.4s;}
+.art-q{animation-duration:3.6s;}
+.icon-dot{animation-duration:1.8s;}
+/* 주니어 첨삭 : 예습 리스트 마지막 행, 배지 대신 화살표 */
+.correction-row{text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:14px 14px 14px 12px; border-radius:var(--radius-8); background:var(--surface-default); box-shadow:0 0 0 1px var(--border-subtle), var(--shadow-xs);}
+.correction-chev{width:18px; height:18px; color:var(--text-tertiary); flex:none;}
+.correction-row:active{transform:scale(.99);}
+/* ===== 스케줄 플로우 다이얼로그 ===== */
+.dialog-overlay{position:fixed; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(17,17,17,.45); opacity:0; transition:opacity .2s ease;}
+.dialog-overlay.on{opacity:1;}
+.dialog-card{width:100%; max-width:340px; background:var(--surface-default); border-radius:12px; padding:14px 18px 18px; box-shadow:0 20px 40px -16px rgba(0,0,0,.35); transform:translateY(8px); transition:transform .2s ease;}
+.dialog-overlay.on .dialog-card{transform:none;}
+.dialog-head{display:grid; grid-template-columns:32px 1fr 32px; align-items:center; margin-bottom:10px;}
+.dialog-icon{margin:-6px;}
+.dialog-icon[hidden]{display:flex !important; visibility:hidden;}
+.dialog-title{grid-column:2; text-align:center; font-size:var(--font-size-16); font-weight:var(--font-weight-semibold); color:var(--text-primary);}
+.dialog-msg{font-size:var(--font-size-14); font-weight:var(--font-weight-medium); color:var(--text-secondary); line-height:1.6; text-align:center; white-space:pre-line; word-break:keep-all; padding:6px 4px 18px;}
+.dialog-msg b{color:var(--text-primary); font-weight:var(--font-weight-semibold);}
+.dialog-msg.info{text-align:left; white-space:normal; padding-top:0;}
+.dialog-msg.info h4{font-size:var(--font-size-14); font-weight:var(--font-weight-semibold); color:var(--text-primary); margin:12px 0 4px;}
+.dialog-msg.info h4:first-child{margin-top:0;}
+.dialog-msg.info ul{margin:0; padding-left:16px;}
+.dialog-msg.info li{font-size:var(--font-size-13); line-height:1.6;}
+.dialog-msg.info .warn{color:var(--text-danger); font-size:var(--font-size-12);}
+.dialog-btns{display:flex; gap:8px;}
+.dialog-btns button{flex:1; padding:13px 10px;}
+.dialog-btns .btn:where([data-variant="secondary"]){flex:0 0 34%;}
+.dialog-link{display:block; margin:12px auto 0;}
+.dialog-link[hidden]{display:none;}
+.btn:where([data-variant="outlined"]){background:none; box-shadow:inset 0 0 0 1px var(--border-default); color:var(--text-secondary);}
+/* 예습 진도 칩 : 원형 진행 그래프(파이)가 진도에 따라 차오름 */
+@property --p{syntax:'<number>'; inherits:true; initial-value:0;}
+.segment{font-size:var(--font-size-13);}
+/* ===== 공통 패턴 (점검 이슈 13 · 14 · 15) ===== *//* 칩 — 작은 칩 11px(높이 20) */
+:where(.chip[data-size="small"]){font-size:var(--font-size-11); font-weight:var(--font-weight-semibold); line-height:14px; padding:3px 6px; border-radius:var(--radius-4);}
+/* 칩 — 기본 칩 13px(높이 24) */
+:where(.chip[data-size="base"]){font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); line-height:16px; padding:4px 8px; border-radius:var(--radius-4);}
+/* 닫기·이전 버튼 — 터치 44px, 아이콘 20px */
+.icon-btn{width:44px; height:44px; flex:none; display:flex; align-items:center; justify-content:center; border-radius:50%; color:var(--text-primary);}
+.icon-btn svg{width:20px; height:20px;}
+/* 텍스트 링크 — 13px · 연한 회색 · 밑줄 (강조 링크만 그린) */
+.btn:where([data-variant="link"]){font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); text-decoration:underline; text-underline-offset:3px;}
+/* 버튼 — 작은 버튼(sm) : 리스트 행 · 시트 헤더 · 보조 액션 (점검 이슈 9 · 10 · 11 · 12) */
+.btn:where([data-size="sm"]){flex:none; display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:8px 12px; font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); border-radius:6px; white-space:nowrap;}
+.btn:where([data-size="sm"]) svg{width:15px; height:15px; flex:none;}
+.btn:where([data-variant="secondary"][data-size="sm"]){color:var(--text-primary);}
+/* 예습 유도 팝업 */
+.popup-actions .btn:where([data-variant="primary"]){flex:none; display:flex; align-items:center; justify-content:center; gap:8px;}
+.popup-actions .btn svg{width:17px; height:17px;}
+.popup-skip-link{align-self:center; padding:10px 0;}
+/* ===== 컴포넌트 이름 = Figma 컴포넌트 (B안) ===== *//* Chip — Tone (Figma Chip · Tone) : 자리 클래스가 색을 따로 정하면 그쪽이 우선 */
+:where(.chip[data-tone="brand"]){background:var(--brand-interactive-subtle); color:var(--brand-text-link);}
+:where(.chip[data-tone="neutral"]){background:var(--surface-muted); color:var(--text-secondary);}
+:where(.chip[data-tone="warning"]){background:var(--status-warning-weak); color:var(--text-warning);}
+:where(.chip[data-tone="danger"]){background:var(--status-negative-weak); color:var(--text-danger);}
+:where(.chip[data-tone="info"]){background:var(--status-info-weak); color:var(--text-info);}

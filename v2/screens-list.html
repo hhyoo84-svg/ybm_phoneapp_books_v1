@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전화영어 클래스룸 · 시안4 화면 목록</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  /* 레이아웃 : 왼쪽 기획안 메뉴 트리 · 가운데 기기 화면 · 오른쪽 기획안 정보 (좁으면 위아래로) */
+  :root{
+    --bg:#f3f4f6; --panel:#ffffff; --ink:#030712; --ink-2:#4b5563; --ink-3:#6b7280; --line:#e5e7eb; --line-2:#f3f4f6;
+    --brand-2:#5d4be8; --brand-ink:#4434c9; --brand-soft:#eeebfd;
+    --muted:#9ca3af; --device:#111827; --stage:#e5e7eb;
+    --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --bg:#0b0f17; --panel:#111827; --ink:#f9fafb; --ink-2:#d1d5db; --ink-3:#9ca3af; --line:#1f2937; --line-2:#172031;
+    --brand-ink:#a99bff; --brand-soft:#2a2350; --muted:#6b7280; --device:#000000; --stage:#0f1521; color-scheme:dark; } }
+  :root[data-theme="dark"]{
+    --bg:#0b0f17; --panel:#111827; --ink:#f9fafb; --ink-2:#d1d5db; --ink-3:#9ca3af; --line:#1f2937; --line-2:#172031;
+    --brand-ink:#a99bff; --brand-soft:#2a2350; --muted:#6b7280; --device:#000000; --stage:#0f1521; color-scheme:dark; }
+  html,body{height:100%;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font); font-size:14px; -webkit-font-smoothing:antialiased;}
+  button{font:inherit; color:inherit; cursor:pointer;}
+  .app{height:100%; display:grid; grid-template-columns:300px minmax(0,1fr) 320px; grid-template-rows:auto minmax(0,1fr);}
+  /* 상단 바 */
+  .bar{grid-column:1 / -1; display:flex; align-items:center; gap:12px; padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line);}
+  .bar h1{margin:0; font-size:16px; font-weight:700; letter-spacing:-.2px; white-space:nowrap;}
+  .bar .ver{font-size:12px; color:var(--ink-3); white-space:nowrap;}
+  .bar .sp{flex:1;}
+  .seg{display:inline-flex; background:var(--line-2); border-radius:6px; padding:3px; gap:2px;}
+  .seg button{border:0; background:none; padding:6px 12px; border-radius:4px; font-size:13px; font-weight:600; color:var(--ink-3);}
+  .seg button[aria-pressed="true"]{background:var(--panel); color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.12);}
+  .nav-btn{border:1px solid var(--line); background:var(--panel); border-radius:6px; padding:6px 10px; font-size:13px; font-weight:600;}
+  .nav-btn:disabled{opacity:.4; cursor:default;}
+  /* 왼쪽 메뉴 */
+  .side{background:var(--panel); border-right:1px solid var(--line); overflow:auto; padding:8px 0 24px;}
+  .grp{padding:14px 16px 6px; font-size:12px; font-weight:700; color:var(--ink-3); letter-spacing:.2px; display:flex; align-items:center; gap:6px;}
+  .grp .tab{font-weight:600; color:var(--muted);}
+  .sub{padding:8px 16px 4px 16px; font-size:12px; font-weight:600; color:var(--ink-2);}
+  .item{display:grid; grid-template-columns:28px minmax(0,1fr); gap:2px 6px; width:100%; text-align:left; border:0; background:none; padding:7px 16px 7px 22px; border-left:3px solid transparent;}
+  .item:hover{background:var(--line-2);}
+  .item[aria-current="true"]{background:var(--brand-soft); border-left-color:var(--brand-2);}
+  .item .no{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--brand-ink); padding-top:1px;}
+  .item .nm{font-size:14px; font-weight:600; color:var(--ink); min-width:0;}
+  .item .id{grid-column:2; font-family:var(--mono); font-size:11px; color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .item.off{cursor:default;}
+  .item.off .no{color:var(--muted);} .item.off .nm{color:var(--muted); font-weight:500;}
+  .item.off:hover{background:none;}
+  details.more{margin-top:10px; border-top:1px solid var(--line);}
+  details.more summary{list-style:none; padding:14px 16px 6px; font-size:12px; font-weight:700; color:var(--ink-3); cursor:pointer;}
+  details.more summary::-webkit-details-marker{display:none;}
+  details.more summary::after{content:" ▾";}
+  /* 가운데 기기 화면 */
+  .stage{position:relative; background:var(--stage); overflow:hidden; display:flex; align-items:center; justify-content:center; min-height:0;}
+  .device{position:relative; background:var(--device); border-radius:36px; padding:12px; box-shadow:0 30px 60px -30px rgba(0,0,0,.45); transform-origin:center center;}
+  .device.tablet{border-radius:28px; padding:16px;}
+  .screen{position:relative; background:#fff; border-radius:24px; overflow:hidden;}
+  .device.tablet .screen{border-radius:12px;}
+  .screen iframe{display:block; border:0; width:100%; height:100%;}
+  .loading{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.85); color:#4b5563; font-size:13px; font-weight:600; transition:opacity .2s;}
+  .loading[hidden]{display:none!important;}
+  /* 오른쪽 정보 */
+  .info{background:var(--panel); border-left:1px solid var(--line); overflow:auto; padding:20px 20px 32px; display:flex; flex-direction:column; gap:18px;}
+  .info .eyebrow{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--brand-ink);}
+  .info h2{margin:2px 0 0; font-size:20px; line-height:1.3; text-wrap:balance;}
+  .kv{display:grid; grid-template-columns:76px minmax(0,1fr); gap:8px 10px; margin:0; font-size:13px;}
+  .kv dt{color:var(--ink-3);} .kv dd{margin:0; color:var(--ink); min-width:0; overflow-wrap:anywhere;}
+  .kv code{font-family:var(--mono); font-size:12px;}
+  .pill{display:inline-block; padding:2px 7px; border-radius:4px; font-size:11px; font-weight:700; background:var(--line-2); color:var(--ink-2); margin-right:4px;}
+  .pill.w1{background:var(--brand-soft); color:var(--brand-ink);}
+  .desc h3{margin:0 0 6px; font-size:13px; color:var(--ink-3); font-weight:700;}
+  .desc ul{margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; line-height:1.55; color:var(--ink-2);}
+  .note{font-size:12px; line-height:1.55; color:var(--ink-3); border-top:1px solid var(--line); padding-top:12px;}
+  .flink{display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:13px; color:var(--brand-ink); text-decoration:none;}
+  .flink:hover{text-decoration:underline;}
+  .copy{margin-left:4px; padding:2px 8px; border:1px solid var(--line); border-radius:4px; background:var(--panel); color:var(--ink-2); font:inherit; font-size:11px; cursor:pointer;}
+  .copy:hover{border-color:var(--brand-2); color:var(--brand-ink);}
+  .mob-select{display:none;}
+  :focus-visible{outline:2px solid var(--brand-2); outline-offset:2px;}
+  @media (max-width:1100px){ .app{grid-template-columns:260px minmax(0,1fr);} .info{grid-column:1 / -1; border-left:0; border-top:1px solid var(--line);} .app{grid-template-rows:auto minmax(560px,1fr) auto; height:auto; min-height:100%;} }
+  @media (max-width:720px){
+    .app{grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto minmax(520px,78vh) auto;}
+    .side{display:none;} .mob-select{display:block; padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line);}
+    .mob-select select{width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:6px; background:var(--panel); color:var(--ink); font:inherit;}
+    .bar{flex-wrap:wrap;} .bar .ver{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="bar">
+    <h1>전화영어 클래스룸 · 시안4(와옹이) 화면</h1>
+    <span class="ver">기획안 v2.1 · 화면 번호 = Figma 프레임 번호 · 개발 전달본 v2(app.html · inc 분리)</span>
+    <span class="sp"></span>
+    <div class="seg" role="group" aria-label="기기 크기">
+      <button type="button" id="devMobile" aria-pressed="true">모바일 390</button>
+      <button type="button" id="devTablet" aria-pressed="false">태블릿 768</button>
+    </div>
+    <button type="button" class="nav-btn" id="prevBtn" aria-label="이전 화면">← 이전</button>
+    <button type="button" class="nav-btn" id="nextBtn" aria-label="다음 화면">다음 →</button>
+  </header>
+  <div class="mob-select"><label for="mobSel" style="position:absolute;left:-9999px">화면 선택</label><select id="mobSel"></select></div>
+  <nav class="side" id="side" aria-label="기획안 화면 목록"></nav>
+  <main class="stage" id="stage">
+    <div class="device" id="device">
+      <div class="screen" id="screen"><div class="loading" id="loading">화면을 여는 중…</div></div>
+    </div>
+  </main>
+  <aside class="info" id="info" aria-live="polite"></aside>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var FIG = 'https://www.figma.com/design/20GzBZGgraOkwqRb5iLsDM/?node-id=';
+  /* 기획안 메뉴 구조도(4p) 순서 : 클래스룸(하단 탭1) → 스케줄(하단 탭2). 번호·이름 = Figma 「시안2 · 화면」 프레임 */
+  var TREE = [
+    { grp:'앱 실행', tab:'네이티브', subs:[
+      { sub:'스플래시', items:['39'] },
+      { sub:'업데이트 · 시스템 공지', items:['40','41','42','43'] },
+      { sub:'접근 권한', items:['44','45'] }
+    ]},
+    { grp:'클래스룸', tab:'하단 탭1', subs:[
+      { sub:'상단 탭', items:['01','02','03'] },
+      { sub:'강의실 입장 버튼', items:['47','48','49'] },
+      { sub:'수강 중 · 레이어 팝업', items:['46','17','14','07','08','24','25','09','26','27','10','11','28','29','30','12','31','32','13','06','15','16','18'] }
+    ]},
+    { grp:'스케줄', tab:'하단 탭2', subs:[
+      { sub:'주별 · 월별', items:['04','05','19'] },
+      { sub:'레이어 팝업', items:['20','22','23','68','69'] },
+      { sub:'연기 · 연기 취소', items:['21','64','65','66','67'] },
+      { sub:'수업 루틴 변경', items:['50','51','52','53','54','55','56','57','58','59','60','61','62','63'] }
+    ]}
+    ,{ grp:'푸시 진입', tab:'네이티브', subs:[
+      { sub:'수업 콜(VoIP)', items:['33','34'] },
+      { sub:'수업 전 알림 푸시', items:['35','36','37','38'] }
+    ]}
+  ];
+  var P = {
+    '01':{n:'클래스룸 · 수강중', id:'Classroom_010_W1_FULL', pg:'11, 16, 24p', way:'W1', node:'2020-24', d:['상단 헤더(로고·타이틀·과정 안내·설정)와 수강 중/예정/종료 탭, 하단 클래스룸/스케줄 탭 고정','강의 카드: 과정명·수업 방식(화상/전화)·수업일·시간·레슨 타이틀, 강의가 여럿이면 좌우 스와이프','TO-DO(교재 미리보기·수업 예습·AI 대화)와 상황별 독려 문구','수업 리뷰 · Class Report · 학습 질문 · 만족도 · 첨삭 바로가기']},
+    '02':{n:'클래스룸 · 예정', id:'Classroom_050_WEB_FULL', pg:'27p', way:'WEB', node:'2020-234', d:['[예정] 탭 활성','예정 강좌 카드 나열: 강좌명, 수업 방식·요일·주 N회·기간, 수업 시간, 썸네일','"수업 시작일을 설정하세요 (~기한)" 안내 → 시작일 설정 페이지(외부 브라우저)']},
+    '03':{n:'클래스룸 · 종료', id:'Classroom_060_WEB_FULL', pg:'28p', way:'WEB', node:'2020-307', d:['종료 강의: 강좌명·수강기간·수업 방식·요일·시간','진행률과 출석/연기/취소·결석 통계','수업 리뷰 · 월말 평가서(Class Report) · AI 히스토리 바로가기']},
+    '17':{n:'수업환경테스트', id:'Classroom_020 → 테스트 페이지(W2)', pg:'16p ③', way:'W2', node:'2024-320', d:['WebRTC 기반 카메라·오디오(Video/Audio) 사전 점검','장치 선택, 연결 상태 안내, 설정 가이드 링크']},
+    '14':{n:'출석현황', id:'Classroom_021_WEB_LP', pg:'17p ②', way:'WEB', node:'2079-488', d:['연속 출석 N회 + 0·3·7·14·30회 단계 진행 바, 최고 기록, 다음 배지까지 남은 횟수','출석 배지 5종(시작이 반이에요! · 작심삼일 극복! · 루틴 자리잡기 · 대단한 열정! · 습관의 완성), 못 받은 배지는 잠금','달력 도장: 출석 / 연기·SKIP(점선) / 결석(빨간 링) / 수업 예정, 날짜 누르면 그날 수업 요약','진행률(수업 진행 수/전체)과 출석·연기·취소/결석 건수','[스케줄 변경] → 스케줄 주별 탭','클래스룸 강의 정보 줄의 "연속 출석 N회" 칩으로도 진입'], note:'연속 기준 제안: 일 대신 "회"(수업한 날 기준), 연기·SKIP은 연속 유지 · 결석만 0으로 — 기획 확인 필요'},
+    '07':{n:'학습질문 · 작성', id:'Classroom_022_WEB_LP', pg:'18p ①', way:'WEB', node:'2029-234', d:['안내 문구, 제목·내용·답변 받을 이메일 입력','[보내기] → 전화LMS 학습 질문 게시판에 등록, 강사가 이메일로 답변']},
+    '08':{n:'학습질문 · 내역', id:'Classroom_022_WEB_LP', pg:'18p ③', way:'WEB', node:'2023-182', d:['나의 질문 내역: 작성일(YYYY-MM-DD) · 제목 · 내용','답변은 질문 시 입력한 이메일로 발송된다는 안내']},
+    '24':{n:'학습질문 · 미입력', id:'Classroom_022_WEB_LP', pg:'18p ②', way:'WEB', node:'2029-273', d:['미입력 항목 안내: 제목을 입력하세요 / 내용을 입력하세요 / 이메일을 입력하세요'], note:'기획안은 알럿, 시안은 입력칸 아래 빨간 안내문으로 표현'},
+    '25':{n:'학습질문 · 접수완료', id:'Classroom_022_WEB_LP', pg:'18p ②', way:'WEB', node:'2029-321', d:['[보내기] 완료 후 접수 안내와 [확인]']},
+    '09':{n:'만족도', id:'Classroom_023_WEB_LP', pg:'19p ①②', way:'WEB', node:'2023-209', d:['강사 만족도 6문항, 1~5 점수(누른 번호까지 채워짐)','수강 기간 중 1회 참여 안내, [취소] [제출]']},
+    '26':{n:'만족도 · 미응답', id:'Classroom_023_WEB_LP', pg:'19p ④', way:'WEB', node:'2029-338', d:['미참여 항목이 있을 때 "평가하지 않은 항목을 확인해 주세요."'], note:'시안은 상단 안내 + 문항별 \'미응답\' 칩으로 표현'},
+    '27':{n:'만족도 · 제출완료', id:'Classroom_023_WEB_LP', pg:'19p ③', way:'WEB', node:'2029-469', d:['"강사 만족도 평가가 완료되었습니다. 참여해 주셔서 감사합니다."'], note:'기획안의 "수업 시작 7일 이후 가능" · "이미 참여" 알럿은 아직 시안 없음'},
+    '10':{n:'수업리뷰', id:'Classroom_030_WEB_FULL', pg:'21p ①②③', way:'WEB', node:'2023-316', d:['최신 수업 리뷰: 강의 정보, Feedback, Pronunciation, Grammar(LMS 연동)','[지난 수업 다시 듣기] → 기존 듣기 페이지']},
+    '11':{n:'마이크테스트', id:'Classroom_031_WEB_LP', pg:'21p ④⑤', way:'WEB', node:'2023-405', d:['[마이크 테스트] → 테스트 팝업, 마이크 아이콘을 누르면 테스트 시작']},
+    '28':{n:'마이크테스트 · 녹음중', id:'Classroom_031_WEB_LP', pg:'21p ⑤', way:'WEB', node:'2029-485', d:['마이크 아이콘이 바뀌며 녹음 중 표시(파형)']},
+    '29':{n:'마이크테스트 · 성공', id:'Classroom_031_WEB_LP', pg:'21p ⑥', way:'WEB', node:'2029-501', d:['인식 성공 시 토스트 알럿'], note:'기획안 문구 "SUCCESS" → 시안 "마이크 테스트에 성공했어요"'},
+    '30':{n:'마이크테스트 · 실패', id:'Classroom_031_WEB_LP', pg:'21p ⑦', way:'WEB', node:'2029-520', d:['인식 실패 시 "음성 인식이 되지 않았습니다. 마이크 상태를 확인해 주세요."']},
+    '12':{n:'발음평가', id:'Classroom_031_WEB_LP', pg:'22p ②', way:'WEB', node:'2023-420', d:['발음 항목의 마이크 → 음성 평가 팝업(단어: 평가 요소 2개)']},
+    '31':{n:'발음평가 · 결과', id:'Classroom_031_WEB_LP', pg:'22p ③④', way:'WEB', node:'2029-542', d:['녹음 후 평가 결과를 막대 그래프로 반영(Intonation · Stress)']},
+    '32':{n:'발음평가 · 문장결과', id:'Classroom_031_WEB_LP', pg:'22p ⑤', way:'WEB', node:'2029-567', d:['교정문 문장 평가: 평가 요소 4개(Timing · Word · Intonation · Stress)','50% 미만 항목은 주황 막대']},
+    '13':{n:'ClassReport', id:'Classroom_032_WEB_LP', pg:'23p', way:'WEB', node:'2023-443', d:['월말 평가서(Class Report): 평가 기간, Evaluation 레이더 차트','Areas for Improvement · Instruction · Comment(LMS 연동)']},
+    '06':{n:'레슨시트', id:'Classroom_040_WEB_LP', pg:'25p ②', way:'WEB', node:'2023-98', d:['학습 콘텐츠 전체 보기 → 교재 목록(바텀시트)','오늘 레슨 TODAY 표시, 레슨별 [교재 보기]']},
+    '15':{n:'AI히스토리', id:'Classroom_040_W2_LP', pg:'25p ③, 28p ④', way:'W2', node:'2024-244', d:['AI Y버디 대화 이력: 전체 학습시간 · 팝콘','일자 · 레슨번호 · 소요팝콘 · 대화결과 목록'], note:'B2C/B2B 분기 → 인강개발팀 커스텀 API'},
+    '16':{n:'AI히스토리 · 시트', id:'Classroom_040_W2_LP', pg:'25p ③', way:'W2', node:'2024-281', d:['AI 히스토리를 바텀시트로 연 형태']},
+    '18':{n:'예습유도팝업', id:'— (시안 추가)', pg:'26p 참고', way:'WEB', node:'2024-361', d:['수업 직전(남은 시간 표시) + 예습 미완료일 때 노출','[예습 시작하기] / 바로 수업 입장하기'], note:'기획안에 별도 화면 ID 없음 — 강의실 입장 시간 안내(26p)를 보완하는 시안 추가 화면'},
+    '04':{n:'스케줄 · 주간', id:'Schedule_010_W1_FULL', pg:'13, 29p', way:'W1', node:'2022-52', d:['스케줄 탭 진입 시 주별 디폴트','과정 선택(유형·수강기간·요일·시간), 연도/월 선택, 주별/월별 탭','주간 날짜 바(오늘 강조), 수업 카드별 상태와 버튼(리뷰 보기·보강 신청·연기 신청)','연기/보강 현황 · 수업 루틴 변경 바로가기']},
+    '05':{n:'스케줄 · 월간', id:'Schedule_010_W1_FULL', pg:'13, 29p ⑥⑦', way:'W1', node:'2022-188', d:['월별 캘린더: 날짜별 수업 시간·상태, 복수 수업은 +N','"※ 연기, 보강신청 등은 주별 스케줄에서 가능합니다."','Class Report(데이터 있을 때)']},
+    '19':{n:'년월선택', id:'Schedule_010_WEB_FULL', pg:'29p ②', way:'WEB', node:'2024-384', d:['연도/월 선택 바텀시트(롤링 선택), [취소] [확인]']},
+    '20':{n:'연기보강현황', id:'Schedule_030_WEB_LP', pg:'37p', way:'WEB', node:'2024-411', d:['정규수업일별 연기 상태와 보강 신청 현황','특별 보강 N회, [안내사항]']},
+    '22':{n:'보강신청 · 1단계', id:'Schedule_040_WEB_LP', pg:'38p ①②', way:'WEB', node:'2024-480', d:['오늘부터 2주 안의 날짜만 선택 가능(수강 기간 내)','날짜 선택 후 [신청] → 상세 시간 선택']},
+    '23':{n:'보강신청 · 2단계', id:'Schedule_040_WEB_LP', pg:'38p ③④⑤', way:'WEB', node:'2024-537', d:['[내 강사 검색] 토글(수강 이력 강사 우선)','수업 시간대 → 분 단위 시간·강사 선택, [신청]']},
+    '21':{n:'연기신청 · 확인', id:'Schedule_50_WEB_LP', pg:'40p ①', way:'WEB', node:'2082-483', d:['예정 카드 [연기신청] → "M/D일 수업 연기를 신청하시겠습니까?"','[확인] → 카드 \'연기\' + 보강 신청 안내(64) / [다음에 하기] → 닫힘'], note:'시안1·2 같은 흐름·문구로 통일(시안1은 2버튼 확인 팝업, 시안2는 다이얼로그 + 텍스트 링크)'}
+  };
+  P['33'] = {n:'수업 콜 · 수신', id:'CALL_010_N_PUSH', pg:'43p ①③', way:'N', node:'2057-284', d:['수업 시작 시 VoIP 푸시로 일반 전화 수신과 같은 풀스크린 화면(AOS/iOS 디자인 통일)','앱 아이콘 · 강사명 · 과정/레슨 텍스트(수정 가능), [거절하기] / [통화하기]','[거절하기] → 통화 종료. 강사가 총 3회 시도(전화영어는 070 전화로 재시도)','강의실에 이미 들어가 있으면 띄우지 않음'], note:'거절 시 클래스룸으로 돌아오며 "강사님이 잠시 후 다시 걸 수 있어요" 토스트'};
+  P['34'] = {n:'수업 콜 · 강의실 연결', id:'CALL_010_N_PUSH → WebRTC_010_W2_FULL', pg:'43p ②', way:'N', node:'2057-316', d:['[통화하기] → 앱 구동, 화상/전화 강의실로 전환하며 WebRTC 연결','연결 중 진행 표시와 [취소]'], note:'연결 후 강의실(구르미)은 외부 화면 — 웹뷰 구현 가능 여부 검토 중'};
+  P['35'] = {n:'푸시 · 사전학습 40분 전', id:'NOTI_010_N_PUSH', pg:'44p', way:'N', node:'2060-614', d:['수업 40분 전 사전 학습 알림 푸시','알림 터치 → 오늘의 사전 학습(Vocab) 웹뷰로 바로 이동'], note:'설정 > 사전 학습 알림(기본 꺼짐)을 켠 경우만 발송. 시안에서는 터치 시 클래스룸의 오늘 사전 학습 단계를 연다'};
+  P['36'] = {n:'푸시 · 교재 20분 전', id:'NOTI_020_N_PUSH', pg:'45p', way:'N', node:'2060-631', d:['수업 20분 전 교재 미리보기 알림 푸시','알림 터치 → 오늘의 교재 웹뷰로 바로 이동'], note:'설정 > 교재 미리보기 알림(기본 꺼짐)을 켠 경우만 발송. 시안에서는 터치 시 오늘 교재 단계를 연다'};
+  P['37'] = {n:'푸시 · 수업 10분 전', id:'NOTI_030_N_PUSH', pg:'46p', way:'N', node:'2060-648', d:['수업 10분 전 알림 푸시(설정 > 수업 시간 알림, 기본 10분 전)','알림 터치 → 클래스룸','이때 강의실 입장 바를 누르면 "수업 시작 5분 전부터 입장 가능" 알럿'], note:'기획안 본문이 45p(교재)와 같아 시안은 "오늘 배울 내용(TO-DO)을 미리 확인해 보세요. 강의실은 5분 전부터 입장할 수 있어요."로 제안'};
+  P['38'] = {n:'푸시 · 수업 5·3·1분 전', id:'NOTI_040_N_PUSH', pg:'47p', way:'N', node:'2060-665', d:['수업 5/3/1분 전 알림 푸시 — "지금 바로 강의실에 입장해 주세요!"','알림 터치 → 클래스룸, 강의실 입장 바 터치 시 강의실 진입'], note:'시안은 5분 전 기준. B2B 스마트연수원 푸시(48~49p)는 B2C 앱 범위 밖이라 제외'};
+  P['39'] = {n:'스플래시', id:'Splash_010_N_FULL', pg:'6p ②', way:'N', node:'2062-555', d:['앱 실행 시 고정 스플래시 1.5~2초 노출','그동안 세션·자동 로그인 확인, 버전 체크(강제/선택 업데이트 팝업 분기)','해당 없으면 클래스룸으로 자동 진입'], note:'수업 콜·잠금화면과 같은 어두운 그라데이션 + 화이트 로고로 네이티브 화면 톤 통일. 시안에서는 1.8초 후 클래스룸으로 전환'};
+  P['40'] = {n:'업데이트 · 선택', id:'Onboarding_010_N_POP', pg:'7p ①', way:'N', node:'2064-1271', d:['일반 업데이트 알림: [나중에 하기] / [업데이트 하기]','[나중에 하기] → 닫히고 홈(클래스룸)','[업데이트 하기] → 스토어. 업데이트 없이 돌아오면 다시 노출'], note:'기획안의 개편 내용 목록은 "이번 업데이트" 박스로 정리(항목은 예시)'};
+  P['41'] = {n:'업데이트 · 강제', id:'Onboarding_010_N_POP', pg:'7p ①', way:'N', node:'2064-1472', d:['강제 업데이트: [나중에 하기] 없이 [업데이트 하기]만','터치 시 스토어 업데이트 화면으로 이동']};
+  P['42'] = {n:'공지 · 통상', id:'Onboarding_010_N_POP', pg:'7p ②', way:'N', node:'2064-1669', d:['통상 공지 팝업: [확인] 누르면 팝업만 닫힘','오늘 하루 보지 않기 / 일주일간 보지 않기','본문이 길면 팝업 안에서 스크롤'], note:'공지 내용은 예시'};
+  P['43'] = {n:'시스템 점검', id:'Onboarding_010_N_POP', pg:'7p ③④', way:'N', node:'2064-1865', d:['서버 정기점검 기간에 앱 실행 시 노출(회사 공통 점검 일정 후킹)','점검 일시 표시, [확인] → 앱 종료','긴급 · 서비스 종료 공지도 같은 형태([확인] → 앱 종료)']};
+  P['44'] = {n:'권한 안내 · AOS', id:'Permission_010_N_FULL', pg:'8p', way:'N', node:'2068-809', d:['정보통신망법에 따른 접근 권한 고지: 필수(마이크) / 선택(카메라 · 알림)','권한 변경 경로: 휴대폰 설정 > 애플리케이션 > 앱','[확인] → OS 오디오 권한 팝업 → 알림 권한 팝업','알림 거부 시 설정 화면에서 다시 유도'], note:'OS 권한 팝업은 시스템 UI라 시안 제외. 기획안 "시험 녹음"은 "수업 음성 연결"로 정리'};
+  P['45'] = {n:'권한 안내 · iOS', id:'Permission_020_N_FULL', pg:'9p', way:'N', node:'2068-854', d:['선택 접근 권한 고지: 알림 · 마이크 · 카메라(전화/화상 수업)','권한 변경 경로: 설정 > 앱','[확인] → OS 알림 → 마이크 → 카메라 권한 팝업 순서'], note:'OS 권한 팝업은 시스템 UI라 시안 제외'};
+  P['46'] = {n:'내 강의 정보', id:'Classroom_020_WEB_LP', pg:'16p ②', way:'WEB', node:'2070-1159', d:['강의 카드 과정명 옆 ⓘ 터치 시 레이어 팝업','과정명 · 수업 방식(전화/화상) · 요일·시간 · 주 N회, 수강기간, 강사(전화LMS 연동)','[확인] 또는 바깥 영역 터치 시 닫힘'], note:'예정 · 종료 카드와 같은 구성으로 통일 — 시안1은 좌측 썸네일 + 우측 정보(기획안 구성), 시안2는 큰 이미지 위 과정명'};
+  P['47'] = {n:'입장 버튼 · 1시간 이상 전', id:'WebRTC_010_W2_FULL', pg:'26p ①', way:'W2', node:'2071-3391', d:['수업 시작 1시간 이상 남았을 때: 수업 시각 + "5분 전부터 입장" 안내','버튼은 비활성 톤, 터치하면 입장 가능 시간 토스트'], note:'기획안의 강의실 상태 바를 별도 바 대신 기존 입장 버튼 하나의 상태로 정리'};
+  P['48'] = {n:'입장 버튼 · 1시간 이내', id:'WebRTC_010_W2_FULL', pg:'26p ②③', way:'W2', node:'2071-3584', d:['수업 시작 1시간 이내: 시작까지 남은 시간 카운트다운','5분 전이 되기 전에 터치하면 "수업 시작 5분 전부터 강의실에 입장할 수 있어요" 토스트(하단 탭 위)'], note:'화면은 토스트 노출 상태'};
+  P['49'] = {n:'입장 버튼 · 5분 전 입장', id:'WebRTC_010_W2_FULL', pg:'26p ④', way:'W2', node:'2071-3786', d:['수업 시작 5분 전부터 버튼 활성: "강의실 입장하기" + 남은 시간','터치 → 강의실(WebRTC) 입장','시작 시각 이후에는 남은 시간 없이 "강의실 입장하기"만 표시']};
+  P['50'] = {n:"루틴 변경 · 항목", id:'Schedule_020_WEB_LP', pg:'30p ①②', way:'WEB', node:'2075-488', d:["스케줄 > [수업 루틴 변경] 터치 시 풀스크린 팝업", "현재 과정 · 요일 · 시간 · 강사 요약", "변경 항목: 전체 스케줄(요일·시간·강사) / 강사 / 교재 / 전화번호", "하단 변경 이력(변경일 · 항목 · 이전 → 이후 · 적용일)"], note:"전화번호 변경은 전화 수업 과정에만 노출, B2B는 미노출"};
+  P['51'] = {n:"루틴 변경 · 시작일", id:'Schedule_020_WEB_LP', pg:'30p ③ · 32p ① · 33p ①', way:'WEB', node:'2075-557', d:["내일부터 2주 안의 날짜만 선택(보강 신청 달력과 같은 형태)", "전체 스케줄 · 강사 · 교재 변경이 같은 화면을 쓰고 타이틀 · 안내 문구만 다름", "[다음] → 항목별 다음 단계"]};
+  P['52'] = {n:"루틴 변경 · 요일·시간", id:'Schedule_020_WEB_LP', pg:'30p ④⑤', way:'WEB', node:'2075-618', d:["요일 선택: 주 N회만큼 선택, 제목 옆에 선택 개수 표시(2/2)", "수업 시간대 → 상세 시간(변경 가능한 시간만, 시간별 가능 강사 수)", "[다음] → 강사 선택"]};
+  P['53'] = {n:"루틴 변경 · 요일 알럿", id:'Schedule_020_WEB_LP', pg:'30p ⑤', way:'WEB', node:'2075-685', d:["선택한 요일 수가 수업 횟수와 다를 때 [다음] 터치 시 노출", "\"주 N회 수업이에요 / 요일을 N개 선택해 주세요.\" [확인]"]};
+  P['54'] = {n:"루틴 변경 · 강사", id:'Schedule_021_WEB_LP', pg:'31p · 32p ②③', way:'WEB', node:'2076-1146', d:["상단 요약: 시작일 · 요일 · 시간", "수업 스타일 설정 바로가기", "수업 가능 강사 N명 / 나와 수업한 적이 있는 강사(그 시간 불가는 비활성)", "[선택] → 완료, [강사 변경 안 함](전체 스케줄 변경만) · [자동 매칭]"], note:"B2C 피드백 반영: \"AI 추천 매칭\" → \"자동 매칭\""};
+  P['55'] = {n:"루틴 변경 · 강사 정보", id:'Schedule_021_WEB_LP', pg:'31p ③', way:'WEB', node:'2076-1230', d:["[강사 정보] 터치 시 팝업: 국가 · 전문 분야, 학력 · 전공, 경력, 소개", "[확인]으로 닫힘"]};
+  P['56'] = {n:"루틴 변경 · 수업 스타일", id:'Schedule_022_WEB_LP', pg:'32p ④⑤', way:'WEB', node:'2076-1330', d:["설정한 스타일을 강사에게 전달", "수업 방식 · 대화 속도 · 수업 방향 · 피드백 각 2택", "[저장] → 강사 선택으로 복귀"], note:"기획안: B2C 현재 미사용이나 사용으로 통일"};
+  P['57'] = {n:"루틴 변경 · 완료", id:'Schedule_021_WEB_LP', pg:'31p ④ · 32p ③', way:'WEB', node:'2076-1365', d:["\"수업 루틴이 변경되었어요\": 시작일 · 요일 · 시간 · 강사", "강사만 변경한 경우 \"강사가 변경되었어요\": 시작일 · 강사", "[확인] → 스케줄 화면 복귀"]};
+  P['58'] = {n:"교재 변경 · 레벨", id:'Schedule_023_WEB_LP', pg:'33p ②④', way:'WEB', node:'2077-488', d:["시작일 선택 후 레벨 선택(여러 개 선택, 기본 전체)", "B2C: 첫걸음 Level 1 ~ / B2B는 단체별 레벨 목록 커스텀"], note:"인강 개발팀 커스텀 처리"};
+  P['59'] = {n:"교재 변경 · 교재", id:'Schedule_024_WEB_LP', pg:'34p ①②③', way:'WEB', node:'2077-553', d:["선택한 레벨의 교재를 구분(생활회화 · 비즈니스 · 토픽회화)별로 나열", "[미리보기] → 교재 보기(Classroom_040_WEB_LP), [선택] → 시작 유닛"]};
+  P['60'] = {n:"교재 변경 · 시작 유닛", id:'Schedule_024_WEB_LP', pg:'34p ④', way:'WEB', node:'2077-608', d:["선택한 교재의 유닛 목록 중 시작할 유닛 하나 선택(라디오)", "[변경] → 완료"]};
+  P['61'] = {n:"교재 변경 · 완료", id:'Schedule_024_WEB_LP', pg:'34p ⑤⑥', way:'WEB', node:'2077-653', d:["\"교재가 변경되었어요\": 시작일 · 레벨 · 교재 · 시작 유닛", "[확인] → 스케줄 화면 복귀"]};
+  P['62'] = {n:"전화번호 변경", id:'Schedule_025_WEB_LP', pg:'35p ①', way:'WEB', node:'2077-715', d:["현재 번호 표시, 수업 받을 번호 입력(숫자만)", "\"- 없이 숫자만 입력, 변경한 번호는 바로 반영\" 안내", "형식이 틀리면 \"올바른 전화번호를 입력해 주세요.\" 알럿"], note:"B2C 전화 수업 과정만 노출(B2B 미사용)"};
+  P['63'] = {n:"전화번호 변경 · 완료", id:'Schedule_025_WEB_LP', pg:'35p ②③', way:'WEB', node:'2077-736', d:["\"전화번호가 변경되었어요\": 변경 번호", "[확인] → 스케줄 화면 복귀"]};
+  P['64'] = {n:"연기 · 보강 신청 안내", id:'Schedule_50_WEB_LP', pg:'40p ②③', way:'WEB', node:'2082-603', d:["연기 신청 [확인] 후 \"M/D일 수업이 연기되었습니다. 연기한 수업은 보강 신청이 필요해요.\"", "[보강 신청] → 보강 신청(22) / [다음에 하기] → 카드는 '연기' 상태로 남음"]};
+  P['65'] = {n:"연기 카드 · 보강신청/연기 취소", id:'Schedule_50_WEB_LP', pg:'40p ④⑤', way:'WEB', node:'2082-728', d:["연기한 수업(수업일 전) 카드에 [보강신청] [연기 취소] 두 버튼", "배지 '연기'"]};
+  P['66'] = {n:"연기 취소 · 확인", id:'Schedule_50_WEB_LP', pg:'40p ⑤⑥', way:'WEB', node:'2082-838', d:["원 스케줄이 비어 있을 때: \"M/D일 수업 연기를 취소하시겠습니까?\"", "[확인] → 예정으로 원복 / [다음에 하기] → 닫힘"]};
+  P['67'] = {n:"연기 취소 · 원 수업 있음", id:'Schedule_50_WEB_LP', pg:'40p ⑦', way:'WEB', node:'2083-475', d:["원 시간에 다른 수업이 잡혀 있을 때: \"M/D일 원 수업 스케줄이 있습니다. 보강 신청을 해주세요.\"", "[확인] → 보강 신청으로 이동(중복 스케줄 방지)"]};
+  P['68'] = {n:"보강 신청 완료", id:'Schedule_041_WEB_LP', pg:'39p ①②', way:'WEB', node:'2083-586', d:["\"보강 수업이 신청되었어요\" + 과정 · 날짜 · 시간 / 강사", "[확인] → 주별 리스트에 '보강예정' 카드 등록, 원수업 안내 캡션(취소 시 원복)"]};
+  P['69'] = {n:"보강 취소 · 확인", id:'Schedule_041_WEB_LP', pg:'39p ③④', way:'WEB', node:'2083-707', d:["보강예정 카드 [보강 취소] → \"M/D일 보강 수업을 취소하시겠습니까?\"", "[확인] → 보강 수업 삭제 + 원수업 상태(SKIP/연기)로 복귀 / [취소] → 닫힘", "원수업 스케줄이 이미 있으면 보강 취소 불가"]};
+  /* 기획안에만 있고 아직 시안이 없는 화면 */
+  /* 기존 웹페이지를 그대로 불러오는 화면(W2) — 신규 디자인 없음 */
+  var EXIST = [
+    ['Login_010_W2_FULL','로그인','10p'],
+    ['Classroom_024_W2_LP','첨삭(주니어)','20p']
+  ];
+  var TODO = [
+    
+    ['Classroom_011_W1_FULL','클래스룸 가로 UI','12p'],
+['Schedule_011/012_W1_FULL','스케줄 가로 UI','14–15p'],
+
+    ['Setting_010_N_FULL','설정 · 알림','41p'],['Setting_020_W2_FULL','약관 · 개인정보 · 탈퇴','42p']
+  ];
+  var ORDER = []; TREE.forEach(function(g){ g.subs.forEach(function(s){ ORDER = ORDER.concat(s.items); }); });
+
+  /* ---- 화면 : app.html?screen=NO 를 iframe으로 띄움 (상태 재현은 js/demo/screen-states.js) ---- */
+  var ver = '4', SRC = 'app.html';
+  /* 화면별 구현 파일 (v2 폴더 구조 기준) */
+  var AREA = {}; ['01','02','03','47','48','49'].forEach(function(n){ AREA[n] = 'classroom'; }); ['04','05','65'].forEach(function(n){ AREA[n] = 'schedule'; });
+  for (var q = 33; q <= 45; q++) AREA[String(q)] = 'native';
+  function files(no){ var a = AREA[no] || 'popup';
+    if (a === 'classroom') return ['inc/classroom.html', 'css/classroom.css', 'js/classroom.js'];
+    if (a === 'schedule') return ['inc/schedule.html', 'css/schedule.css', 'js/schedule.js'];
+    if (a === 'native') return ['inc/native.html', 'css/shell.css', 'js/shell.js'];
+    return ['inc/popups.html', 'css/popup.css', 'js/popup.js']; }
+  /* Figma 「시안4 · 화면(와옹)」 프레임 node-id — 번호별 */
+  var N4 = {"01": "2187:601", "02": "2192:723", "03": "2192:807", "04": "2191:723", "05": "2193:1181", "06": "2192:1156", "07": "2192:1415", "08": "2192:1664", "09": "2194:1181", "10": "2194:1494", "11": "2194:1791", "12": "2194:2007", "13": "2194:2231", "14": "2195:1705", "15": "2195:2071", "16": "2195:2310", "17": "2195:3184", "18": "2195:3420", "19": "2195:3009", "20": "2197:2362", "21": "2197:2565", "22": "2197:2724", "23": "2197:2930", "24": "2197:3135", "25": "2197:3385", "26": "2198:3013", "27": "2197:3602", "28": "2196:2275", "29": "2199:3148", "30": "2199:3369", "31": "2199:3595", "32": "2199:3821", "33": "2199:4055", "34": "2199:4076", "35": "2199:4093", "36": "2200:3523", "37": "2200:3535", "38": "2200:3547", "39": "2200:3559", "40": "2200:3567", "41": "2200:3790", "42": "2200:4007", "43": "2200:4222", "44": "2200:4436", "45": "2200:4470", "46": "2201:3893", "47": "2201:4121", "48": "2201:4330", "49": "2201:4477", "50": "2203:4820", "51": "2202:4483", "52": "2202:4687", "53": "2202:4899", "54": "2202:5051", "55": "2204:5051", "56": "2204:5212", "57": "2204:5389", "58": "2203:5051", "59": "2204:5549", "60": "2203:5250", "61": "2205:5387", "62": "2205:5548", "63": "2205:5710", "64": "2205:5864", "65": "2205:6646", "66": "2205:6023", "67": "2205:6181", "68": "2205:6337", "69": "2205:6489"};
+  /* ---- 화면 표시 ---- */
+  var cur = null, dev = 'mobile', frame = null;
+  var screenEl = document.getElementById('screen'), device = document.getElementById('device'), loading = document.getElementById('loading');
+  function size(){ return dev === 'mobile' ? { w:390, h:844 } : { w:768, h:1024 }; }
+  function fit(){
+    var s = size(), pad = dev === 'mobile' ? 24 : 32;
+    screenEl.style.width = s.w + 'px'; screenEl.style.height = s.h + 'px';
+    var st = document.getElementById('stage').getBoundingClientRect();
+    var k = Math.min(1, (st.width - 32) / (s.w + pad), (st.height - 32) / (s.h + pad));
+    device.style.transform = 'scale(' + Math.max(.3, k) + ')';
+  }
+  function show(no){
+    if (!P[no]) return;
+    cur = no;
+    document.querySelectorAll('.item[data-no]').forEach(function(b){ b.setAttribute('aria-current', b.dataset.no === no ? 'true' : 'false'); });
+    var cb = document.querySelector('.item[data-no="' + no + '"]'); if (cb) cb.scrollIntoView({ block:'nearest' });
+    document.getElementById('mobSel').value = no;
+    var i = ORDER.indexOf(no);
+    document.getElementById('prevBtn').disabled = i <= 0; document.getElementById('nextBtn').disabled = i >= ORDER.length - 1;
+    info(no);
+    loading.hidden = false;
+    if (frame) frame.remove();
+    frame = document.createElement('iframe');
+    frame.title = '시안' + ver + ' ' + no + ' ' + P[no].n;
+    frame.src = SRC + '?screen=' + no;
+    screenEl.appendChild(frame);
+    try { history.replaceState(null, '', '#s' + no); } catch (e) {}
+  }
+  window.addEventListener('message', function(e){ if (e.data && e.data.protoReady === cur) loading.hidden = true; });
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]; }); }
+  /* 페이지·Figma·화면 공통 표기 : 번호 화면명 | 기획안 ID */
+  function key(no){ return no + ' ' + P[no].n + ' | ' + P[no].id; }
+  document.getElementById('info').addEventListener('click', function(e){
+    var b = e.target.closest('.copy'); if (!b) return;
+    var t = b.dataset.copy === 'key' ? key(cur) : location.href.split('#')[0] + '#s' + cur;
+    var done = function(){ var o = b.textContent; b.textContent = '복사됨'; setTimeout(function(){ b.textContent = o; }, 1200); };
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, done); else done();
+  });
+  function info(no){
+    var p = P[no];
+    var way = { W1:'W1 웹뷰(신규)', W2:'W2 웹뷰(기존)', WEB:'WEB 공통 웹페이지', N:'N 네이티브' }[p.way] || p.way;
+    document.getElementById('info').innerHTML =
+      '<div><div class="eyebrow">시안' + ver + ' · ' + no + '</div><h2>' + esc(p.n) + '</h2></div>' +
+      '<dl class="kv"><dt>공통 표기</dt><dd><code id="keyTxt">' + esc(key(no)) + '</code> <button type="button" class="copy" data-copy="key">복사</button></dd>' +
+      '<dt>기획안 ID</dt><dd><code>' + esc(p.id) + '</code></dd>' +
+      '<dt>기획안</dt><dd>' + esc(p.pg) + '</dd>' +
+      '<dt>구현 방식</dt><dd><span class="pill ' + (p.way === 'W1' ? 'w1' : '') + '">' + esc(way) + '</span></dd>' +
+      '<dt>Figma</dt><dd>' + (N4[no] ? '<a class="flink" href="' + FIG + N4[no] + '" target="_blank" rel="noopener">시안4 프레임 열기 ↗</a>' : '<span class="pill">없음</span>') + '</dd>' +
+      '<dt>구현 파일</dt><dd>' + files(no).map(function(f){ return '<code>' + f + '</code>'; }).join(' ') + '<br><span style="color:var(--muted,#6b7280);font-size:12px">+ 공통 tokens · base · components.css / core.js</span></dd>' +
+      '<dt>화면 링크</dt><dd><button type="button" class="copy" data-copy="link">#s' + no + ' 링크 복사</button> <a class="flink" href="' + SRC + '?screen=' + no + '" target="_blank" rel="noopener">새 창 ↗</a></dd></dl>' +
+      '<div class="desc"><h3>기획안 기능</h3><ul>' + p.d.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>' +
+      (p.note ? '<p class="note">' + esc(p.note) + '</p>' : '') +
+      '<p class="note">' + '시안4(와옹이) — 회의(10/14) 반영. 화면 상태는 app.html?screen=번호 로 재현돼요(js/demo/screen-states.js, 실서비스 제외).</p>';
+  }
+
+  /* ---- 메뉴 그리기 ---- */
+  var side = document.getElementById('side'), sel = document.getElementById('mobSel'), h = '', o = '';
+  TREE.forEach(function(g){
+    h += '<div class="grp">' + g.grp + ' <span class="tab">· ' + g.tab + '</span></div>';
+    o += '<optgroup label="' + g.grp + '">';
+    g.subs.forEach(function(s){
+      h += '<div class="sub">' + s.sub + '</div>';
+      s.items.forEach(function(no){
+        var p = P[no];
+        h += '<button type="button" class="item" data-no="' + no + '" aria-current="false"><span class="no">' + no + '</span><span class="nm">' + esc(p.n) + '</span><span class="id">' + esc(p.id) + '</span></button>';
+        o += '<option value="' + no + '">' + no + ' ' + esc(p.n) + '</option>';
+      });
+    });
+    o += '</optgroup>';
+  });
+  h += '<details class="more"><summary>기존 웹페이지 연동(W2) · 신규 디자인 없음 ' + EXIST.length + '</summary>';
+  EXIST.forEach(function(t){ h += '<div class="item off" aria-disabled="true"><span class="no">W2</span><span class="nm">' + esc(t[1]) + ' · ' + t[2] + '</span><span class="id">' + esc(t[0]) + '</span></div>'; });
+  h += '</details>';
+  h += '<details class="more"><summary>기획안에만 있는 화면 ' + TODO.length + '</summary>';
+  TODO.forEach(function(t){ h += '<div class="item off" aria-disabled="true"><span class="no">—</span><span class="nm">' + esc(t[1]) + ' · ' + t[2] + '</span><span class="id">' + esc(t[0]) + '</span></div>'; });
+  h += '</details>';
+  side.innerHTML = h; sel.innerHTML = o;
+  side.addEventListener('click', function(e){ var b = e.target.closest('.item[data-no]'); if (b) show(b.dataset.no); });
+  sel.addEventListener('change', function(){ show(sel.value); });
+  function step(d){ var i = ORDER.indexOf(cur) + d; if (i >= 0 && i < ORDER.length) show(ORDER[i]); }
+  document.getElementById('prevBtn').addEventListener('click', function(){ step(-1); });
+  document.getElementById('nextBtn').addEventListener('click', function(){ step(1); });
+  document.addEventListener('keydown', function(e){ if (e.target.closest && e.target.closest('select,input,textarea')) return; if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); step(1); } if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); step(-1); } });
+  function setDev(d){ dev = d; device.classList.toggle('tablet', d === 'tablet'); document.getElementById('devMobile').setAttribute('aria-pressed', d === 'mobile'); document.getElementById('devTablet').setAttribute('aria-pressed', d === 'tablet'); fit(); if (cur) show(cur); }
+  document.getElementById('devMobile').addEventListener('click', function(){ setDev('mobile'); });
+  document.getElementById('devTablet').addEventListener('click', function(){ setDev('tablet'); });
+  window.addEventListener('resize', fit);
+  fit();
+  var m = (location.hash || '').match(/^#(?:v[34])?s(\d\d)$/); if (m) m = [m[0], null, m[1]];
+  show(m && P[m[2]] ? m[2] : '01');
+})();
+</script>
+
+</body>
+</html>

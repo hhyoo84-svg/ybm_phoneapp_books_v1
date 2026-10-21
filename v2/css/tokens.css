@@ -1,0 +1,55 @@
+/* ==================================================================
+   tokens.css — 토큰 · 폰트 — 색 · 간격 · 반경 · 그림자 · 타이포 변수. 브랜드(B2B/B2C) 테마는 이 파일만 바꿔 끼운다
+   ================================================================== */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap');
+
+/* ---------- (from v1 variables.css) ---------- */
+/* ===== 공통 DS 토큰 (리소스 디자인 시스템 네이밍) ===== */
+:root{
+    /* Primitive / Color */
+    --color-white:#ffffff; --color-black:#000000;
+    --color-gray-50:#f9fafb; --color-gray-100:#f3f4f6; --color-gray-200:#e5e7eb; --color-gray-300:#d1d5db; --color-gray-400:#9ca3af; --color-gray-500:#6b7280; --color-gray-600:#4b5563; --color-gray-700:#374151; --color-gray-800:#1f2937; --color-gray-900:#111827; --color-gray-950:#030712;
+    --color-red-50:#fef2f2; --color-red-400:#f87171; --color-red-500:#ef4444; --color-red-950:#450a0a;
+    --color-orange-50:#fff7ed; --color-orange-400:#fb923c; --color-orange-500:#f97316; --color-orange-700:#c2410c; --color-orange-950:#431407;
+    --color-blue-50:#eff6ff; --color-blue-400:#60a5fa; --color-blue-500:#3b82f6; --color-blue-600:#2563eb; --color-blue-950:#172554;
+    --color-green-50:#f2f0fd; --color-green-950:#0a062d;
+    /* Primitive / Color · 전화영어 브랜드 (neon) */
+    --color-neon-50:#efeef9; --color-neon-100:#e5e3f6; --color-neon-200:#c4bdf5; --color-neon-300:#8e82ef; --color-neon-400:#301bd6; --color-neon-500:#2b17be; --color-neon-600:#3724cb; --color-neon-700:#24149e; --color-neon-800:#1b0f78; --color-neon-900:#140b59; --color-neon-950:#0c0634;
+    /* Brand / Color · Phone 모드 */
+    --brand-50:var(--color-neon-50); --brand-100:var(--color-neon-100); --brand-200:var(--color-neon-200); --brand-300:var(--color-neon-300); --brand-400:var(--color-neon-400); --brand-500:var(--color-neon-500); --brand-600:var(--color-neon-600); --brand-700:var(--color-neon-700); --brand-800:var(--color-neon-800); --brand-900:var(--color-neon-900); --brand-950:var(--color-neon-950);
+    --brand-interactive:var(--brand-400); --brand-interactive-hover:var(--brand-500); --brand-interactive-active:var(--brand-600);
+    --brand-interactive-subtle:var(--brand-100); --brand-text-link:var(--brand-600); --brand-text-link-hover:var(--brand-700);
+    --brand-on-interactive:var(--color-gray-900); /* 신규 : 네온 위 글자색 (공통 기본값은 white) */
+    /* Semantic / Color · Light */
+    --surface-default:var(--color-white); --surface-subtle:var(--color-gray-50); --surface-muted:var(--color-gray-100); --surface-emphasis:var(--color-gray-900); --surface-scrim:rgba(0,0,0,.5);
+    --text-primary:var(--color-gray-950); --text-secondary:var(--color-gray-600); --text-tertiary:var(--color-gray-500); /* 공통 기본 gray-400 → 대비 위해 500 제안 */
+    --text-warning:var(--color-orange-700); --text-danger:var(--color-red-500); --text-info:var(--color-blue-600);
+    --border-default:var(--color-gray-200); --border-subtle:var(--color-gray-100); --border-error:var(--color-red-500);
+    --neutral-bg:var(--color-gray-100); --status-warning-weak:var(--color-orange-50); --status-negative-weak:var(--color-red-50); --status-negative-solid:var(--color-red-500);
+    --status-info-weak:var(--color-blue-50); --status-info-solid:var(--color-blue-500);
+    --accent-green-weak:var(--color-green-50); --accent-blue-weak:var(--color-blue-50); --accent-red-weak:var(--color-red-50);
+    /* Primitive / Typography */
+    --font-size-11:11px; --font-size-12:12px; --font-size-13:13px; --font-size-14:14px; --font-size-15:15px; --font-size-16:16px; --font-size-18:18px; --font-size-20:20px; --font-size-22:22px; --font-size-24:24px; --font-size-26:26px; --font-size-28:28px;
+    --font-weight-regular:400; --font-weight-medium:500; --font-weight-semibold:600; --font-weight-bold:700;
+    /* Radius · Shadow */
+    --radius-4:4px; --radius-8:8px; --radius-12:12px; --radius-14:14px; --radius-16:16px; --radius-full:999px;
+    --shadow-xs:0 1px 2px 0 rgba(0,0,0,.05); --shadow-md:0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+    color-scheme:light;
+  }
+
+/* ---------- (from v1 common.css) ---------- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --surface-default:var(--color-gray-950); --surface-subtle:var(--color-gray-900); --surface-muted:var(--color-gray-800); --surface-scrim:rgba(0,0,0,.6); --text-primary:var(--color-gray-50); --text-secondary:var(--color-gray-400); --text-tertiary:var(--color-gray-500); --text-warning:var(--color-orange-400); --text-danger:var(--color-red-400); --text-info:var(--color-blue-400); --border-default:var(--color-gray-700); --border-subtle:var(--color-gray-800); --border-error:var(--color-red-400); --neutral-bg:var(--color-gray-800); --status-warning-weak:var(--color-orange-950); --status-negative-weak:var(--color-red-950); --status-info-weak:var(--color-blue-950); --accent-green-weak:var(--color-green-950); --accent-blue-weak:var(--color-blue-950); --accent-red-weak:var(--color-red-950); --brand-interactive-subtle:var(--brand-950); color-scheme:dark; }
+}
+/* 예습 진도 칩 : 원형 진행 그래프(파이)가 진도에 따라 차오름 */
+@property --p{syntax:'<number>'; inherits:true; initial-value:0;}
+
+/* ---------- (from v1 sian4.css) ---------- */
+/* ===================== 시안3 (add_s3) ===================== */
+:root, :root[data-theme]{
+    --brand-interactive:#5D4BE2; --brand-interactive-hover:#4F46E5; --brand-interactive-active:#4338CA;
+    --brand-interactive-subtle:#EEEBFD; --brand-text-link:#5D4BE2; --brand-text-link-hover:#4338CA; --brand-on-interactive:#fff;
+    --brand-selection-bg:#EEEBFD; --brand-300:#8B7BF5;
+    --s3-bg:#F6F5FA; --s3-line:#ECEAF3; --s3-ink:#1C1A2B; --s3-grad:linear-gradient(135deg,#7B6BF0 0%,#5D4BE2 55%,#4F46E5 100%);
+  }

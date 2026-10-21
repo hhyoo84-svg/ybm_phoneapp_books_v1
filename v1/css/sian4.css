@@ -1,0 +1,437 @@
+/* ==================================================================
+   sian4.css — 시안4 레이아웃 · 와옹이 캐릭터 (회의 10/14 반영분 — 위 파일들을 덮어씀, 마지막에 로드)
+   ================================================================== */
+/* ===================== 시안3 (add_s3) ===================== */
+:root, :root[data-theme]{
+    --brand-interactive:#5D4BE2; --brand-interactive-hover:#4F46E5; --brand-interactive-active:#4338CA;
+    --brand-interactive-subtle:#EEEBFD; --brand-text-link:#5D4BE2; --brand-text-link-hover:#4338CA; --brand-on-interactive:#fff;
+    --brand-selection-bg:#EEEBFD; --brand-300:#8B7BF5;
+    --s3-bg:#F6F5FA; --s3-line:#ECEAF3; --s3-ink:#1C1A2B; --s3-grad:linear-gradient(135deg,#7B6BF0 0%,#5D4BE2 55%,#4F46E5 100%);
+  }
+body, .stage{background:var(--s3-bg);}
+.scroll-area, #scheduleArea{background:var(--s3-bg);}
+/* 부드러운 모서리(1안) */
+.btn, .enter-btn, .btn:where([data-variant="secondary"]), .btn:where([data-variant="primary"]), .review-replay{border-radius:12px !important;}
+.schedule-class-card .btn:where([data-size="sm"]), .lesson-sheet-go, .qa-field input, .qa-field textarea{border-radius:10px !important;}
+.home-card{border-radius:18px !important;}
+.makeup-block-btn, .makeup-slot-btn, .rt-pick, .rt-book-cover{border-radius:12px !important;}
+.makeup-cal-cell .makeup-num{border-radius:50% !important;}
+.chip{border-radius:999px !important;}
+.att-medal, .att-badge.on .att-medal::after{border-radius:50% !important;}
+/* 상단 탭(2안) 가운데 정렬 */
+.tabs.classroom-tabs{justify-content:center;}
+.tabs.classroom-tabs .ind{background:var(--brand-interactive) !important;}
+.tabs.classroom-tabs button.on{color:var(--s3-ink);}
+/* 출석현황 · 스케줄 : 아이콘만 → 글자 붙은 버튼 */
+.live-card .live-actions{top:14px !important; right:14px !important; gap:6px;}
+.live-act{width:auto !important; height:30px !important; padding:0 10px 0 8px; gap:4px; border-radius:999px !important; background:rgba(255,255,255,.18) !important; font-size:12px; font-weight:600; color:#fff; white-space:nowrap;}
+.live-act svg{width:15px !important; height:15px !important;}
+/* ---- 입장 카드 상단 : 칩 줄과 제목 사이 여백 · 시간 칩 반전(흰 바탕 + 진한 보라) ---- */
+.live-card{padding-top:68px !important;}
+.live-card .lesson-when{top:18px !important; left:18px !important; height:28px; padding:0 11px !important; display:inline-flex !important; align-items:center; gap:5px; border-radius:999px !important; background:#fff !important; color:#3B2FC9 !important; font-size:13px !important; font-weight:700 !important; letter-spacing:-.1px; box-shadow:0 4px 12px -6px rgba(0,0,0,.5);}
+.live-card .lesson-when::before{content:""; width:6px; height:6px; border-radius:50%; background:#5D4BE2; flex:none;}
+.live-card .live-actions{top:18px !important; right:18px !important; gap:6px !important;}
+.live-act{height:28px !important;}
+.live-card .lesson-meta{margin-bottom:4px;}
+.live-card .lesson-num{font-size:13px !important; color:rgba(255,255,255,.6) !important; letter-spacing:.2px;}
+.live-card .lesson{margin-top:2px !important; margin-bottom:22px !important; line-height:1.3;}
+/* 레슨 번호 + 레슨명 한 줄 · 길면 … */
+.live-card .s3-lrow{display:flex; align-items:baseline; justify-content:center; gap:8px; min-width:0; margin:0 0 20px;}
+.live-card .s3-lrow .lesson-meta{flex:none; margin:0 !important;}
+.live-card .s3-lrow .lesson{flex:0 1 auto; min-width:0; margin:0 !important; font-size:19px !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.live-act .s3-lb{line-height:1;}
+/* 스케줄 : 상단 과정 밴드 보라 / 메뉴는 달력 카드 안 / 주간 화살표는 날짜 줄 양옆 */
+.schedule-hero{background:var(--s3-grad) !important; color:#fff;}
+.schedule-topbar-card{border:0 !important; border-bottom:1px solid var(--s3-line) !important; border-radius:0 !important; box-shadow:none !important;}
+/* 메뉴 : 달력 바로 아래 · DS 아웃라인 버튼(outlined) 2개 세로 배치 */
+#scQuicklinks.s3-ql{display:flex !important; flex-direction:column; gap:8px; margin:14px 0 4px !important; padding:0 !important; border:0 !important; border-radius:0 !important; background:none !important; box-shadow:none !important;}
+#scQuicklinks.s3-ql .schedule-quicklink-item{display:flex !important; align-items:center; justify-content:center; gap:6px; width:100%; min-height:44px; margin:0 !important; padding:0 14px !important; border:0 !important; border-radius:12px !important; background:none !important; box-shadow:inset 0 0 0 1px var(--border-default) !important; color:var(--text-secondary) !important; font-size:var(--font-size-13) !important; font-weight:var(--font-weight-semibold) !important; white-space:nowrap;}
+#scQuicklinks.s3-ql .schedule-quicklink-item:active{opacity:.7;}
+#scQuicklinks.s3-ql .schedule-quicklink-item > svg:first-child{width:15px; height:15px; flex:none; opacity:1; color:var(--brand-interactive);}
+#scQuicklinks.s3-ql .schedule-quicklink-chev{display:none !important;}
+.schedule-month-calendar #scQuicklinks.s3-ql{margin:0 0 4px !important;}
+/* 월간 하단 : 안내는 박스 없이 글씨만 · Class Report 도 outlined */
+.schedule-topbar-card .schedule-month-foot{padding:12px 2px 0 !important; gap:12px !important;}
+.schedule-topbar-card .schedule-month-note{padding:0 !important; background:none !important; border-radius:0 !important; font-size:var(--font-size-12,12px) !important;}
+.schedule-topbar-card .schedule-month-note svg{width:14px; height:14px;}
+#tileReport .home-art{display:none !important;}
+#tileReport .s3-go{flex:none; width:20px; height:20px; margin-top:2px; color:var(--text-tertiary);}
+#tileReport .s3-bars{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:18px; padding:0 4px;}
+#tileReport .s3-bar{display:flex; flex-direction:column; align-items:center; gap:6px;}
+#tileReport .s3-bar b{font-size:16px; font-weight:700; line-height:1; color:var(--s3-ink); font-variant-numeric:tabular-nums;}
+#tileReport .s3-bar i{position:relative; display:block; width:22px; height:56px; border-radius:7px; background:var(--s3-bg); overflow:hidden;}
+#tileReport .s3-bar i::after{content:""; position:absolute; left:0; right:0; bottom:0; height:var(--h); border-radius:7px; background:linear-gradient(180deg,#8B7BF5,#5D4BE2); transform-origin:50% 100%; transform:scaleY(0); transition:transform 1.1s cubic-bezier(.22,1,.36,1) .25s;}
+#tileReport .s3-bar b{opacity:0; translate:0 4px; transition:opacity .4s ease-out, translate .4s ease-out;}
+#tileReport.s3-on .s3-bar i::after{transform:scaleY(1);}
+#tileReport.s3-on .s3-bar b{opacity:1; translate:0 0; transition-delay:.75s;}
+#tileReport .s3-bar:nth-child(2) i::after{transition-delay:.33s;}
+#tileReport .s3-bar:nth-child(3) i::after{transition-delay:.41s;}
+#tileReport .s3-bar:nth-child(4) i::after{transition-delay:.49s;}
+#tileReport .s3-bar:nth-child(5) i::after{transition-delay:.57s;}
+@media (prefers-reduced-motion: reduce){
+  #tileReport .s3-bar i::after{transform:none; transition:none;}
+  #tileReport .s3-bar b{opacity:1; translate:none; transition:none;}
+}
+#tileReport .s3-bar.top i::after{background:var(--s3-grad);}
+#tileReport .s3-bar span{font-size:12px; color:var(--text-tertiary); line-height:1;}
+#tileReport .s3-bar.top span{color:var(--brand-interactive); font-weight:600;}
+.s3-strip-row{display:flex; align-items:center; gap:2px;}
+.s3-strip-row .schedule-week-strip{flex:1; min-width:0;}
+.s3-strip-row .schedule-step{flex:none;}
+.schedule-today-btn{display:inline-flex !important;}
+.schedule-agenda-section .schedule-class-card{box-shadow:none !important;}
+/* ---- 회의 반영(10/14) : 1안 예습 로드맵 ---- */
+#prepBlock{--card-radius:18px; --card-shadow:none; --radius-12:12px; --radius-14:14px; --radius-16:16px; --radius-full:999px; --font-size-24:22px; --font-size-26:24px; --button-shadow:0 14px 26px -10px rgba(93,75,226,.4); margin-top:0;}
+#prepBlock .classroom-diagram{border:1px solid var(--s3-line); padding:22px 18px 36px !important;}
+#prepBlock .classroom-diagram .classroom-prep-head{margin-bottom:12px;}
+#prepBlock .classroom-diagram .classroom-block-title{font-size:var(--font-size-20); font-weight:var(--font-weight-bold); letter-spacing:-.3px; line-height:1.4;}
+@media (min-width:640px){
+  #prepBlock .classroom-diagram .classroom-block-title{font-size:var(--font-size-22);}
+}
+#prepBlock .classroom-diagram .classroom-prep-encourage{padding:12px 14px;}
+#prepBlock .classroom-diagram .classroom-flow{margin:30px 12px 0;}
+.classroom-hero-preview{
+    font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); color:var(--text-tertiary); text-decoration:underline; text-underline-offset:2px;
+    letter-spacing:-.2px;
+  }
+.classroom-popup-links{display:flex; flex-direction:row; align-items:center; gap:4px; justify-content:space-between;}
+.classroom-block{display:flex; flex-direction:column; gap:12px; margin-top:20px;}
+.classroom-block-title{font-size:var(--font-size-24); font-weight:var(--font-weight-bold); color:var(--text-primary); line-height:1.4; letter-spacing:-.3px;}
+.classroom-prep-head{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.classroom-prep-progress{
+    flex:none; font-size:var(--font-size-13); font-weight:var(--font-weight-bold); color:var(--brand-interactive); background:var(--brand-selection-bg);
+    padding:4px 11px; border-radius:var(--radius-full);
+  }
+.classroom-prep-encourage{
+    display:flex; align-items:flex-start; gap:9px; background:var(--status-warning-weak); border-radius:var(--radius-14); padding:14px 16px;
+  }
+.classroom-prep-encourage svg{width:16px; height:16px; color:var(--text-warning); flex:none; margin-top:2px;}
+.classroom-prep-encourage p{font-size:var(--font-size-14); font-weight:var(--font-weight-semibold); color:var(--text-warning); line-height:1.5; word-break:keep-all;}
+.classroom-diagram{
+    background:var(--surface-default); border-radius:var(--card-radius); box-shadow:var(--card-shadow);
+    position:relative; overflow:hidden; padding:36px 30px 38px;
+  }
+.classroom-flow{position:relative; display:flex; flex-direction:column;}
+.classroom-flow svg.link{position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none;}
+.classroom-flow svg.link path{fill:none; stroke:var(--brand-interactive); stroke-width:2; stroke-dasharray:5 7; opacity:.28;}
+.classroom-step{position:relative; display:flex; align-items:center; justify-content:center; gap:32px;}
+.classroom-step + .classroom-step{margin-top:52px;}
+.classroom-step[data-align="left"]{flex-direction:row;}
+.classroom-step[data-align="right"]{flex-direction:row-reverse;}
+.classroom-step-marker{
+    position:relative; width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--surface-subtle); 
+    flex:none; transform:scale(1);
+    
+    transition:transform .36s cubic-bezier(.22,1,.36,1), background .3s cubic-bezier(.22,1,.36,1);
+  }
+.classroom-marker-ring{
+    position:absolute; inset:-9px; width:calc(100% + 18px); height:calc(100% + 18px);
+    transform:rotate(-90deg); 
+    pointer-events:none;
+  }
+.classroom-marker-ring circle{fill:none;}
+.classroom-marker-ring .ring-idle{display:none;}
+.classroom-marker-ring .ring-outer, .classroom-marker-ring .ring-inner{stroke-linecap:round; opacity:0;}
+.classroom-marker-ring .ring-outer{stroke:var(--brand-interactive); stroke-width:5; stroke-dasharray:295.3; stroke-dashoffset:295.3;}
+.classroom-marker-ring .ring-inner{stroke:var(--brand-selection-bg); stroke-width:5; stroke-dasharray:263.9; stroke-dashoffset:263.9;}
+.classroom-step[data-completed="true"] .classroom-marker-ring .ring-outer{
+    opacity:1; animation:rcRingDraw .7s cubic-bezier(.22,1,.36,1) forwards;
+  }
+.classroom-step[data-completed="true"] .classroom-marker-ring .ring-inner{
+    opacity:1; animation:rcRingDraw .7s cubic-bezier(.22,1,.36,1) .1s forwards;
+  }
+.classroom-step-marker img{position:relative; width:82%; height:auto;}
+.classroom-step[data-active="true"] .classroom-step-marker{transform:scale(1.14); background:#fff;}
+.classroom-step-marker:hover{filter:brightness(.97); background:#fff;}
+.classroom-step-done-chip{
+    display:none; align-items:center; gap:6px; padding:10px 16px; border-radius:var(--radius-full);
+    background:var(--brand-interactive); color:#fff; font-size:var(--font-size-14); font-weight:var(--font-weight-bold); white-space:nowrap;
+    box-shadow:var(--button-shadow); transition:transform .12s ease, filter .12s ease;
+  }
+.classroom-step-done-chip svg{width:14px; height:14px; flex:none;}
+.classroom-step-done-chip:active{transform:translateY(1px); filter:brightness(.97);}
+.classroom-step:not([data-active="true"])[data-completed="true"] .classroom-step-done-chip{display:flex;}
+.classroom-step-title-chip{
+    display:none; align-items:center; padding:10px 16px; border-radius:var(--radius-full);
+    background:var(--surface-muted); color:var(--text-secondary); font-size:var(--font-size-14); font-weight:var(--font-weight-bold); white-space:nowrap;
+    transition:transform .12s ease, filter .12s ease;
+  }
+.classroom-step-title-chip:active{transform:translateY(1px); filter:brightness(.97);}
+.classroom-step:not([data-active="true"])[data-completed="false"] .classroom-step-title-chip{display:flex;}
+.classroom-step-popup{
+    display:none; position:relative; width:205px; flex:none;
+    background:var(--brand-selection-bg);
+    border-radius:var(--radius-16); padding:20px 16px; box-shadow:0 14px 26px -16px rgba(79,70,229,.35);
+    text-align:center; flex-direction:column; justify-content:center; gap:8px; box-sizing:border-box;
+  }
+.classroom-step[data-active="true"] .classroom-step-popup{display:flex;}
+.classroom-popup-tail{
+    position:absolute; top:50%; width:14px; height:14px;
+    background:var(--brand-selection-bg);
+    transform:translateY(-50%) rotate(45deg);
+  }
+.classroom-step[data-align="left"] .classroom-popup-tail{left:-6px;}
+.classroom-step[data-align="right"] .classroom-popup-tail{right:-6px;}
+.classroom-unit-current{font-size:var(--font-size-15); font-weight:var(--font-weight-semibold); color:var(--text-primary); text-align:center; line-height:1.5; word-break:keep-all; overflow-wrap:break-word;}
+.classroom-popup-go{
+    display:block; width:100%; margin-top:8px; padding:14px 10px; border-radius:var(--radius-12);
+    font-size:var(--font-size-16); font-weight:var(--font-weight-bold); text-align:center; background:var(--brand-interactive); color:#fff;
+  }
+.classroom-popup-go:active{transform:scale(.98);}
+@media (min-width:640px){
+  .classroom-block-title{font-size:var(--font-size-26);}
+}
+@media (prefers-reduced-motion: reduce){
+  .classroom-step-marker, .classroom-step-popup{transition:none;}
+  .classroom-marker-ring .ring-outer, .classroom-marker-ring .ring-inner{animation:none; stroke-dashoffset:0;}
+}
+@keyframes rcRingDraw{ to{stroke-dashoffset:0;} }
+/* ---- 입장 카드 : 2안 포맷 + 캐릭터(오른쪽 아래, 카드 밖으로 살짝 걸침) ---- */
+.live-card{overflow:visible !important; margin-bottom:22px;}
+.live-card .enter-btn{position:relative; z-index:1;}
+.s3-char{position:absolute; z-index:2; right:14px; bottom:-20px; width:74px; height:auto; pointer-events:none; transform-origin:50% 100%;
+    animation:s3CharIn .7s cubic-bezier(.22,1.4,.36,1) .45s both, s3CharIdle 3.4s ease-in-out 1.4s infinite;}
+@keyframes s3CharIn{from{opacity:0; scale:.6; translate:0 14px;} to{opacity:1; scale:1; translate:0 0;}}
+@keyframes s3CharIdle{0%,100%{rotate:0deg; translate:0 0;} 50%{rotate:-4deg; translate:0 -2px;}}
+@media (prefers-reduced-motion: reduce){
+  .s3-char{animation:none;}
+}
+.live-act .s3-lb{line-height:1;}
+/* ---- 예정 · 종료 : 큰 이미지 → 작은 썸네일(좌) + 과정명·수업정보(우) ---- */
+.class-upcoming-card, .class-done-card{display:grid !important; grid-template-columns:64px 1fr; column-gap:14px; row-gap:0; align-items:start; padding:18px 18px 18px !important;}
+.class-upcoming-card .class-course-img, .class-done-card .class-course-img, .class-upcoming-card .class-upcoming-body, .class-done-card .class-done-body{display:contents !important;}
+.class-upcoming-card .class-course-img img, .class-done-card .class-course-img img{grid-column:1; grid-row:1 / span 2; width:64px !important; height:64px !important; border-radius:12px; object-fit:cover; position:static !important;}
+.class-course-img-scrim{display:none !important;}
+.class-upcoming-title, .class-done-title, .class-done-card .class-course-img h3{grid-column:2; grid-row:1; position:static !important; color:var(--s3-ink) !important; font-size:17px !important; line-height:1.35 !important; margin:2px 0 4px !important; padding:0 !important; text-shadow:none !important;}
+.class-upcoming-card .class-meta, .class-done-card .class-meta{grid-column:2; grid-row:2; margin:0 !important; padding:0 !important;}
+.class-upcoming-card .class-upcoming-body > :not(.class-meta), .class-done-card .class-done-body > :not(.class-meta){grid-column:1 / -1; margin-top:14px;}
+/* ---- 하단 : 2안 카드(리뷰 · 리포트 · 첨삭 · 질문/만족도) ---- */
+.home-card{box-shadow:none !important;}
+.home-pink, .home-blue, .home-white{border:1px solid var(--s3-line);}
+#ctaCorrection.s3-cor:not([hidden]){display:flex !important;}
+/* ---- 회의 반영(10/14) : 스케줄 ---- */
+.schedule-hero .schedule-course-select{gap:8px !important; padding:6px 6px 6px 14px !important; border-radius:999px; background:none !important; box-shadow:none !important; border:0 !important; transition:opacity .2s;}
+.schedule-hero .schedule-course-select:active{opacity:.75;}
+.schedule-hero .schedule-course-name{font-size:17px !important; font-weight:700 !important; letter-spacing:-.2px;}
+.schedule-hero .schedule-chevron{width:26px !important; height:26px !important; padding:5px; border-radius:50%; background:#fff; color:var(--brand-interactive) !important; box-sizing:border-box;}
+.schedule-hero.s3-hint .schedule-chevron{animation:s3Chev 1.1s ease-in-out 2;}
+@keyframes s3Chev{0%,100%{translate:0 0;} 35%{translate:0 3px;} 60%{translate:0 -1px;}}
+@media (prefers-reduced-motion: reduce){
+  .schedule-hero.s3-hint .schedule-chevron{animation:none;}
+}
+/* 리스트 : 1안 알약 칩 → 레슨명 위 */
+.schedule-class-card .class-card-body{gap:6px !important;}
+.s3-card-top{display:flex; align-items:center; gap:6px;}
+.s3-lno{font-size:12px; color:var(--text-tertiary); font-weight:500;}
+/* 상태 칩 = 시간 아래 / 보강 안내 = 레슨 줄 시작에 맞춤 */
+.schedule-class-card .class-card-time{gap:6px !important; align-items:flex-start;}
+.schedule-class-card .class-card-body{gap:3px !important;}
+.schedule-class-card .class-card-makeup-note{padding-left:62px !important; margin-top:-4px;}
+.schedule-class-card .badge{display:inline-flex !important; align-items:center; height:22px; padding:0 9px !important; border-radius:999px !important; font-size:12px !important; font-weight:700 !important; line-height:1;}
+.schedule-class-card .badge::before{display:none !important;}
+.schedule-class-card .badge[data-status="upcoming"], .schedule-class-card .badge[data-status="makeup"]{background:var(--brand-interactive-subtle) !important; color:var(--brand-interactive) !important;}
+.schedule-class-card .badge[data-status="attended"]{background:#E6F6EE !important; color:#18864B !important;}
+.schedule-class-card .badge[data-status="postponed"], .schedule-class-card .badge[data-status="cancelled"]{background:var(--surface-muted) !important; color:var(--text-secondary) !important;}
+.schedule-class-card .badge[data-status="absent"]{background:var(--status-negative-weak) !important; color:var(--text-danger) !important;}
+.schedule-class-card .badge[data-status="skip"]{background:var(--status-warning-weak) !important; color:var(--text-warning) !important;}
+.schedule-class-card .class-card-subject{font-size:16px; font-weight:600; white-space:normal !important; overflow:visible !important; text-overflow:clip !important; word-break:keep-all; line-height:1.35;}
+/* 긴 클래스명(Speaking Practice with YBM 초급) 대응 */
+.course-swiper .course-slide{min-width:0 !important; max-width:100%;}
+.course-slide .ai-txt{flex:1; min-width:0;}
+.course-slide .ai-txt .course{display:flex !important; align-items:center; flex-wrap:nowrap !important; max-width:100%; min-width:0;}
+.course-slide .ai-txt .course .s3-cname{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.course-slide .ai-txt .course > .chip, .course-slide .ai-txt .course > .course-info-btn{flex:none;}
+.att-streak-chip{display:none !important;}
+/* 강좌 선택 드롭다운 : 화면 폭 그대로 넓게, 한 줄 표기 + 현재 강좌 체크 */
+.schedule-hero .schedule-course-menu{left:12px !important; right:12px !important; width:auto !important; min-width:0 !important; max-width:none !important; transform:translate(0,-6px) !important; padding:6px !important; border-radius:16px !important; box-shadow:0 18px 40px -16px rgba(28,26,43,.35) !important;}
+.schedule-hero .schedule-course-menu.open{transform:translate(0,0) !important;}
+.schedule-hero .schedule-course-menu button{display:flex !important; align-items:center; justify-content:space-between; gap:10px; width:100%; padding:14px 14px !important; border-radius:10px !important; font-size:15px !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.schedule-hero .schedule-course-menu button.s3-on{color:var(--brand-interactive) !important; font-weight:700 !important; background:var(--brand-interactive-subtle);}
+.schedule-hero .schedule-course-menu button.s3-on::after{content:""; flex:none; width:18px; height:18px; background:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/contain no-repeat;}
+#scheduleArea .schedule-hero{padding-top:22px !important; padding-bottom:24px !important;}
+.s3-mnote{display:none; position:sticky; bottom:-32px; z-index:7; margin:12px -12px -32px; padding:12px 16px 14px; text-align:center; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); background:rgba(255,255,255,.6); border-top:1px solid var(--border-default, #ECEDF1);}
+.s3-mnote > span{display:inline-block; max-width:100%; padding:11px 16px; border-radius:14px; background:rgba(20,20,28,.92); color:#fff; font-size:13px; font-weight:500; line-height:1.45; word-break:keep-all;}
+.s3-is-month .s3-mnote{display:block;}
+/* 상단 강좌명 띠 : 주간·월간 모두 상단 고정 */
+#scheduleArea .schedule-hero{position:sticky; top:-20px; z-index:8;}
+/* '오늘' 칩은 요일 뒤 */
+.schedule-day-head .schedule-day-today{order:2;}
+/* 월간 : 세로 스크롤 *//* 달 이름은 상단 연·월 표시가 대신 → 표 안에서는 달 사이 구분선만 */
+.s3-mhead{grid-column:1 / -1; height:25px; margin:6px 6px 0; border-top:1px solid var(--s3-line); font-size:0; color:transparent; overflow:hidden;}
+.s3-mhead:first-child{height:4px; margin:0; border-top:0;}
+/* 스크롤 시 달 단위로 딱 멈춤 : 한 달이 한 화면에 들어오도록 칸 높이 축소 */
+#scMonthGrid .schedule-month-cell.today.s3-pulse .month-cell-num{animation:s3TodayPulse 1s ease .35s 2;}
+@keyframes s3TodayPulse{0%,100%{box-shadow:0 0 0 0 rgba(93,75,232,.45);}50%{box-shadow:0 0 0 8px rgba(93,75,232,0);}}
+#scheduleArea.s3-snap{scroll-snap-type:y mandatory; scroll-padding-top:var(--s3-snap-top,220px);}
+.s3-mhead{scroll-snap-align:start; scroll-snap-stop:always;}
+.s3-month .schedule-month-cell{height:78px !important; padding:8px 0 6px !important; gap:4px !important; margin:2px !important;}
+.schedule-month-cell.s3-blank{visibility:hidden; pointer-events:none;}
+.schedule-month-grid{grid-template-columns:repeat(7, minmax(0,1fr)) !important;}
+.schedule-month-cell{min-width:0;}
+.month-cell-chip.time-chip{position:relative; overflow:visible; font-size:11px !important; padding:2px 5px !important; letter-spacing:-.2px;}
+.month-cell-chip.time-chip.has-more b{position:absolute; top:-9px; right:-10px; min-width:15px; height:15px; padding:0 3px; margin:0 !important; border-radius:999px; background:var(--brand-interactive); color:#fff; font-size:9px; line-height:15px; text-align:center;}
+.s3-month .schedule-week-topbar{position:sticky; top:calc(var(--s3-hero-h,0px) - 20px); z-index:6; background:var(--surface-default); margin:-18px -8px 0; padding:14px 10px 10px;}
+.s3-month .schedule-month-weekday-row{position:sticky; top:calc(var(--s3-hero-h,0px) + 37px); z-index:5; background:var(--surface-default); margin:0 -8px; padding:4px 8px 8px; border-bottom:1px solid var(--s3-line);}
+#scMonthCalendar:not([hidden]) ~ * #scQuicklinks, .s3-month #scQuicklinks, .s3-month .schedule-month-foot{display:none !important;}
+/* ---- 캐릭터 시스템 ---- */
+.s3-c{display:block; height:auto; pointer-events:none; user-select:none;}
+.s3-c.pop{animation:s3CharIn .6s cubic-bezier(.22,1.4,.36,1) both;}
+@media (prefers-reduced-motion: reduce){
+  .s3-c.pop{animation:none;}
+}
+/* 입장 카드 : 상태별 크기 보정 */
+.s3-char{width:100px !important; right:6px !important; bottom:-18px !important;}
+/* 결과 팝업 아이콘 → 캐릭터 */
+.modal-result-icon.s3-ci{width:auto !important; height:auto !important; background:none !important; border-radius:0 !important; margin-bottom:10px !important;}
+.modal-result-icon.s3-ci .s3-c{width:92px;}
+.popup-icon-wrap.s3-ci{width:auto !important; height:auto !important; background:none !important; box-shadow:none !important;}
+.popup-icon-wrap.s3-ci .s3-c{width:96px; margin:4px auto 6px;}
+/* 예습 완료 */
+#prepBlock .classroom-prep-encourage{position:relative;}
+#prepBlock .classroom-step[hidden], #ctaCorrection[hidden]{display:none !important;}
+#prepBlock .s3-prep-done{display:none; width:48px; flex:none; margin:-14px 0 -12px -4px;}
+#prepBlock.s3-all-done .s3-prep-done{display:block;}
+#prepBlock.s3-all-done .classroom-prep-encourage > svg{display:none;}
+#prepBlock.s3-all-done .classroom-prep-encourage{align-items:center; background:var(--brand-interactive-subtle);}
+#prepBlock.s3-all-done .classroom-prep-encourage p{color:#3B2FC9;}
+/* 출석현황 : 연속 출석 영역 */
+.att-streak{position:relative;}
+/* 기능 카드 */
+#ctaAskQuestion .home-sm-art.s3-ci{background:none !important;}
+#ctaAskQuestion .home-sm-art.s3-ci .s3-c{width:74px; margin-left:auto;}
+#ctaCorrection .home-row-ic.s3-ci{background:var(--brand-interactive-subtle) !important; overflow:hidden;}
+#ctaCorrection .home-row-ic.s3-ci .s3-c{width:34px; margin-top:6px;}
+#prepBlock .classroom-step-marker img.s3-wy{width:84% !important; height:auto !important; object-fit:contain; transition:width .3s cubic-bezier(.22,1.4,.36,1);}
+#prepBlock .classroom-step[data-active="true"] .classroom-step-marker img.s3-wy{width:132% !important; max-width:none !important;}
+/* 로딩(스플래시) : 와옹이가 바뀌며 로딩 */
+.s3-loader{position:relative; width:110px; height:110px; margin:22px auto 0;}
+.s3-loader img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; opacity:0; scale:.85; transition:opacity .25s, scale .35s cubic-bezier(.22,1.4,.36,1);}
+.s3-loader img.on{opacity:1; scale:1;}
+.s3-loader-dots{display:flex; justify-content:center; gap:6px; margin-top:10px;}
+.s3-loader-dots i{width:6px; height:6px; border-radius:50%; background:var(--brand-interactive); opacity:.25; animation:s3Dot 1.2s ease-in-out infinite;}
+.s3-loader-dots i:nth-child(2){animation-delay:.2s;}
+.s3-loader-dots i:nth-child(3){animation-delay:.4s;}
+@keyframes s3Dot{0%,100%{opacity:.25;} 50%{opacity:1;}}
+/* ---- 캐릭터 애니메이션 v2 : 캐릭터마다 다른 '살아있는' 동작 + 탭하면 점프 & 반짝 ---- */
+.s3-char{pointer-events:auto !important; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+.s3-char[data-k="relax"]{animation:s3Swap .7s cubic-bezier(.22,1.4,.36,1) both, s3Breath 2.8s ease-in-out .7s infinite !important;}
+.s3-char[data-k="seeyou"]{animation:s3Swap .7s cubic-bezier(.22,1.4,.36,1) both, s3Wave 1.6s ease-in-out .7s infinite !important;}
+.s3-char[data-k="cheer"]{animation:s3Swap .7s cubic-bezier(.22,1.4,.36,1) both, s3Bounce 1.1s cubic-bezier(.3,0,.3,1) .7s infinite !important;}
+.s3-char[data-k="video"]{animation:s3Swap .7s cubic-bezier(.22,1.4,.36,1) both, s3Nod 2.2s ease-in-out .7s infinite !important;}
+.s3-char.s3-hop, .s3-hop{animation:s3Hop .6s cubic-bezier(.3,1.5,.5,1) both !important;}
+@keyframes s3Swap{0%{opacity:0; scale:.3; translate:0 30px;} 55%{opacity:1; scale:1.12 .9; translate:0 0;} 75%{scale:.95 1.06;} 100%{scale:1;}}
+@keyframes s3Breath{0%,100%{scale:1 1;} 50%{scale:1.03 .97;}}
+@keyframes s3Wave{0%,100%{rotate:0deg;} 25%{rotate:-6deg;} 75%{rotate:5deg;}}
+@keyframes s3Bounce{0%,100%{translate:0 0; scale:1 1;} 15%{scale:1.08 .92;} 45%{translate:0 -10px; scale:.95 1.06;} 75%{translate:0 0; scale:1.05 .95;}}
+@keyframes s3Nod{0%,100%{rotate:0deg; translate:0 0;} 30%{rotate:3deg; translate:0 2px;} 60%{rotate:-2deg; translate:0 0;}}
+@keyframes s3Hop{0%{translate:0 0; scale:1;} 25%{scale:1.1 .88;} 55%{translate:0 -22px; rotate:-8deg; scale:.94 1.08;} 80%{translate:0 0; rotate:3deg; scale:1.06 .95;} 100%{rotate:0deg; scale:1;}}
+/* 반짝 파티클 */
+.s3-spark{position:fixed; z-index:9999; width:10px; height:10px; pointer-events:none; color:#FFC83D; animation:s3Spark .7s cubic-bezier(.2,.8,.3,1) forwards;}
+.s3-spark::before{content:"✦"; position:absolute; inset:0; font-size:12px; line-height:10px;}
+.s3-spark.p{color:#8B7BF5;}
+.s3-spark.r{color:#FF7A9A;}
+@keyframes s3Spark{0%{opacity:1; translate:0 0; scale:.4;} 100%{opacity:0; translate:var(--dx) var(--dy); scale:1.2; rotate:120deg;}}
+/* 예습 완료 Great! : 등장 시 통통 + 반짝 */
+#prepBlock.s3-all-done .s3-prep-done{animation:s3Swap .7s cubic-bezier(.22,1.4,.36,1) both, s3Bounce 1.3s cubic-bezier(.3,0,.3,1) .8s 3; pointer-events:auto; cursor:pointer;}
+/* 빈 스케줄 빈백 : 숨쉬기 */
+.s3-empty > .s3-c{animation:s3Swap .7s cubic-bezier(.22,1.4,.36,1) both, s3Breath 2.8s ease-in-out .7s infinite; pointer-events:auto; cursor:pointer;}
+/* 리포트 카드 : 막대는 왼쪽으로 모으고 오른쪽에 UP 와옹이 */
+#tileReport .s3-rep-row{display:flex; align-items:flex-end; gap:8px; margin-top:16px;}
+#tileReport .s3-rep-row .s3-bars{flex:0 1 210px; margin-top:0 !important; margin-left:auto; gap:4px !important; padding:0 !important;}
+#tileReport .s3-rep-row .s3-bar i{width:14px !important; height:58px !important; border-radius:7px !important;}
+#tileReport .s3-rep-row .s3-bar i::after{border-radius:7px !important;}
+#tileReport .s3-up-wrap{flex:none; order:-1; width:92px; margin-bottom:-4px; margin-left:0; opacity:0; translate:0 40px; transition:opacity .4s ease-out, translate .7s cubic-bezier(.22,1.5,.36,1); transition-delay:.9s;}
+#tileReport.s3-on .s3-up-wrap{opacity:1; translate:0 0;}
+#tileReport .s3-up-wrap{pointer-events:none;}
+/* 월간 리포트 와옹이 : 클릭 반응 없음 */
+#tileReport .s3-up-wrap img{display:block; width:100%; height:auto; transform-origin:50% 100%; animation:s3Bounce 1.4s cubic-bezier(.3,0,.3,1) 1.7s 2, s3Breath 3s ease-in-out 4.6s infinite;}
+@media (prefers-reduced-motion: reduce){
+  .s3-char, .s3-char[data-k], #prepBlock .s3-prep-done, .s3-empty > .s3-c, #tileReport .s3-up-wrap img{animation:none !important;}
+  #tileReport .s3-up-wrap{opacity:1; translate:none; transition:none;}
+  .s3-spark{display:none;}
+}
+/* ---- 센터 팝업 뒤 : 더 어둡게 + 블러 (캐릭터가 걸쳐 나와도 뒤 내용과 겹쳐 보이지 않게) ---- */
+.mic-test-overlay, .dialog-overlay, #popupOverlay .popup-backdrop{background:rgba(22,20,38,.62) !important; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+/* ---- 팝업 캐릭터 : 센터 팝업 위로 머리가 살짝 걸쳐 나옴 ---- */
+.mic-test-card, .dialog-card, .popup-card{overflow:visible !important;}
+.mic-test-card .modal-result-icon.s3-ci .s3-c{width:104px; margin:-66px auto 0;}
+.modal .modal-result-icon.s3-ci .s3-c{width:100px;}
+.dialog-card .s3-dlg-c{display:block; width:104px; margin:-66px auto 0; animation:s3Swap .7s cubic-bezier(.22,1.4,.36,1) both;}
+/* 팝업 : 이전(<) 버튼 없음 */
+.dialog-card .dialog-icon[data-type="back"]{visibility:hidden !important; pointer-events:none !important;}
+/* 캐릭터 있는 팝업 = '보강 수업이 신청되었어요'와 같은 구성 : 캐릭터 → 제목(20px 굵게) → 내용 → 버튼 */
+.dialog-card{position:relative;}
+.dialog-card.s3-has-c{padding:26px 20px 22px !important;}
+.dialog-card.s3-has-c .dialog-head{display:block; margin:10px 0 8px; text-align:center;}
+.dialog-card.s3-has-c .dialog-icon[data-type="back"]{display:none !important;}
+.dialog-card.s3-has-c .dialog-icon[data-type="close"]{position:absolute; top:10px; right:10px;}
+.dialog-card.s3-has-c .dialog-title{display:block; font-size:var(--font-size-20); font-weight:var(--font-weight-bold); line-height:1.35;}
+.dialog-card.s3-has-c .dialog-msg{padding:0 4px 22px; font-size:15px;}
+.dialog-card .s3-dlg-c[hidden]{display:none;}
+.popup-card .popup-icon-wrap.s3-ci .s3-c{width:100px; margin:0 auto 4px;}
+.modal-result-icon.s3-ci .s3-c, .popup-icon-wrap.s3-ci .s3-c{animation:s3Swap .7s cubic-bezier(.22,1.4,.36,1) .05s both;}
+/* ---- 출석현황 : 진행 막대 위를 달리는 캐릭터 · 출석 도장 · 배지 탭 ---- */
+.att-steps.s3-has-run{margin-top:14px !important;}
+.s3-runner{position:absolute; z-index:3; top:16px; left:0; width:50px; height:auto; translate:-50% -50%; transition:left 1.1s cubic-bezier(.2,.8,.2,1) .15s; pointer-events:auto; cursor:pointer;}
+.s3-runner img{display:block; width:100%; height:auto; transform-origin:50% 100%;}
+.s3-runner[data-k="run"] img{animation:s3Run .42s ease-in-out infinite;}
+.s3-runner.arrived[data-k="run"] img{animation:s3Run .9s ease-in-out infinite;}
+.s3-runner[data-k="yay"] img, .s3-runner[data-k="fire"] img{animation:s3Bounce 1.1s cubic-bezier(.3,0,.3,1) infinite;}
+.s3-runner[data-k="sad"] img{animation:s3Breath 2.6s ease-in-out infinite;}
+@keyframes s3Run{0%,100%{translate:0 0; rotate:-3deg;} 50%{translate:0 -4px; rotate:3deg;}}
+/* 출석 도장 : 팝업 열릴 때 출석한 날이 차례로 '쾅' */
+#attCalGrid .st-attend .makeup-num{animation:s3Stamp .45s cubic-bezier(.3,1.6,.5,1) both; animation-delay:calc(var(--i,0) * 70ms + .35s);}
+@keyframes s3Stamp{0%{scale:1.9; opacity:0; rotate:-14deg;} 60%{scale:.9; opacity:1; rotate:4deg;} 100%{scale:1; rotate:0deg;}}
+#attCalGrid .makeup-num{position:relative; overflow:visible !important;}
+#attCalGrid .s3-paw{position:absolute; right:-9px; bottom:-7px; width:20px; height:auto; pointer-events:none; animation:s3Stamp .45s cubic-bezier(.3,1.6,.5,1) both; animation-delay:calc(var(--i,0) * 70ms + .55s);}
+#attCalGrid .attendance-cal-cell{position:relative;}
+#attCalGrid .s3-paw.s3-m-sad, #attCalGrid .s3-paw.s3-m-nervous{width:24px; right:-11px; bottom:-9px;}
+/* 배지 탭 : 획득한 배지는 점프, 잠긴 배지는 흔들 */
+.att-badge{cursor:pointer;}
+.att-badge .att-medal.s3-shake{animation:s3Shake .45s ease-in-out;}
+@keyframes s3Shake{0%,100%{translate:0 0;} 20%{translate:-4px 0;} 40%{translate:4px 0;} 60%{translate:-3px 0;} 80%{translate:2px 0;}}
+@media (prefers-reduced-motion: reduce){
+  .s3-runner, .s3-runner img, #attCalGrid .st-attend .makeup-num, #attCalGrid .s3-paw{animation:none !important; transition:none !important;}
+}
+/* 빈 화면 *//* ---- 예습 로드맵 : 점선 위를 발바닥이 걸어가고 지나간 자국은 서서히 사라짐 (시안4) ---- */
+.s3-steps-layer{position:absolute; inset:0; pointer-events:none; z-index:0; overflow:visible;}
+.s3-pawstep{position:absolute; width:14px; height:14px; margin:-7px 0 0 -7px; background-size:contain; background-repeat:no-repeat; opacity:0; animation:s3PawStep 2.2s ease-out forwards;}
+@keyframes s3PawStep{0%{opacity:0; scale:.4;} 12%{opacity:1; scale:1.08;} 22%{scale:1;} 55%{opacity:.85;} 100%{opacity:0; scale:.9;}}
+/* 예습 유도 : 펄스 링 · 말풍선 */
+#flow .classroom-step-marker.s3-nudge{z-index:6 !important;}
+#flow .classroom-step-marker.s3-nudge::after{content:""; position:absolute; inset:-4px; border-radius:50%; border:2px solid var(--brand-interactive); opacity:0; animation:s3Ring 2.4s ease-out infinite; pointer-events:none;}
+#flow .classroom-step-marker.s3-nudge-2::after{animation-duration:1.8s;}
+#flow .classroom-step-marker.s3-nudge-3::after{animation-duration:1.1s; border-width:3px;}
+@keyframes s3Ring{0%{opacity:.55; scale:1;} 100%{opacity:0; scale:1.45;}}
+.s3-nudge-bub{transform-origin:36px 100%; position:absolute; left:-4px; bottom:calc(100% + 8px); translate:0 0; z-index:5; padding:7px 11px; border-radius:12px; background:var(--s3-ink); color:#fff; font-size:12px; font-weight:600; line-height:1.3; white-space:nowrap; box-shadow:0 8px 18px -8px rgba(0,0,0,.35); animation:s3BubIn .45s cubic-bezier(.22,1.4,.36,1) both, s3BubFloat 2.6s ease-in-out .5s infinite; pointer-events:none;}
+.s3-nudge-bub::after{content:""; position:absolute; left:36px; top:100%; margin-left:-5px; border:5px solid transparent; border-top-color:var(--s3-ink);}
+.s3-nudge-3 .s3-nudge-bub{background:#E5484D;}
+.s3-nudge-3 .s3-nudge-bub::after{border-top-color:#E5484D;}
+.s3-nudge-bub[hidden]{display:none;}
+@keyframes s3BubIn{from{opacity:0; scale:.6; translate:0 8px;} to{opacity:1; scale:1; translate:0 0;}}
+@keyframes s3BubFloat{0%,100%{translate:0 0;} 50%{translate:0 -3px;}}
+@media (prefers-reduced-motion: reduce){
+  #flow .classroom-step-marker.s3-nudge::after{animation:none; opacity:.4;}
+  .s3-nudge-bub{animation:none;}
+}
+#flow .classroom-step{position:relative; z-index:1;}
+@media (prefers-reduced-motion: reduce){
+  .s3-steps-layer{display:none;}
+}
+.s3-empty{display:flex !important; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:36px 16px !important; text-align:center; color:var(--text-tertiary);}
+.s3-empty > .s3-c{width:120px; opacity:.97;}
+#rtBookList > .s3-empty{min-height:320px;}
+.lesson-sheet-today.schedule-day-today{letter-spacing:0; color:var(--brand-on-interactive); background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); pointer-events:none;}
+.s3-c, .s3-char, .s3-runner img, .s3-paw, #prepBlock .classroom-step-marker img, .s3-up-wrap img, .s3-loader img{image-rendering:auto; -webkit-backface-visibility:hidden; backface-visibility:hidden;}
+/* 강좌 이미지 비율 = 운영 썸네일 288×207 */
+.class-upcoming-card, .class-done-card{grid-template-columns:80px 1fr !important;}
+.class-upcoming-card .class-course-img img, .class-done-card .class-course-img img{width:80px !important; height:auto !important; aspect-ratio:288/207; border-radius:10px;}
+.info-pop .class-course-img{height:auto !important; background:none !important; overflow:visible !important; border-radius:0 !important;}
+.info-pop .class-course-img img{position:static !important; width:100%; height:auto !important; aspect-ratio:288/207; border-radius:12px;}
+.info-pop .class-course-img h3{position:static !important; margin:14px 0 2px !important; color:var(--text-primary) !important; font-size:18px !important; font-weight:700 !important; line-height:1.35 !important; text-shadow:none !important;}
+.s3-mk-guide{display:flex; align-items:center; gap:6px; margin:0 0 16px!important; padding:9px 12px; border-radius:10px;
+  background:var(--color-gray-50,#F6F7F9); color:var(--color-gray-500); font-size:13px!important; line-height:1.4!important;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left!important}
+.s3-mk-guide svg{flex:none; width:15px; height:15px; color:var(--color-gray-400,#9AA0AA)}
+#mkStep2 .makeup-step2-head{justify-content:flex-start}

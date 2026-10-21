@@ -1,0 +1,515 @@
+/* ==================================================================
+   popup.css — 기능 팝업 — 학습 질문 · 만족도 · 수업 리뷰 · Class Report · 출석현황 · AI 히스토리 · 수업환경 테스트 · 마이크/발음 평가 · 레슨 시트 · 공지
+   ================================================================== */
+/* ---------- 레슨별 전체보기 바텀시트 : 예습 3단계(교재/사전 학습/AI 학습) 팝업의 "전체 보기"를 누르면
+     뜨는 공용 시트. 년월 선택 바텀시트(.schedule-picker-*)와 같은 셸(라운드·그림자·슬라이드업)을 그대로 쓰고,
+     본문만 휠 대신 레슨별 이동 버튼 목록으로 바꾼다 */
+.lesson-sheet-overlay{
+    position:fixed; inset:0; z-index:55; display:flex; align-items:flex-end; justify-content:center;
+    background:rgba(28,25,23,.45); opacity:0; transition:opacity .2s ease;
+  }
+.lesson-sheet-overlay.on{opacity:1;}
+.lesson-sheet-panel{
+    width:100%; max-width:390px; max-height:min(74vh,600px); display:flex; flex-direction:column;
+    background:var(--surface-default); box-shadow:0 -20px 40px -20px rgba(0,0,0,.3);
+    transform:translateY(100%); transition:transform .25s cubic-bezier(.32,.72,0,1);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+.lesson-sheet-overlay.on .lesson-sheet-panel{transform:translateY(0);}
+.lesson-sheet-head{
+    flex:none; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+    padding:16px 8px; border-bottom:1px solid var(--border-subtle);
+  }
+.lesson-sheet-title{grid-column:2; font-weight:var(--font-weight-semibold); letter-spacing:-.3px; color:var(--text-primary); text-align:center; white-space:nowrap;}
+.lesson-sheet-close{grid-column:3; justify-self:end; margin:-6px 0;}
+.lesson-sheet-close:active{background:var(--surface-muted);}
+.lesson-sheet-body{flex:1; overflow-y:auto; padding:4px 18px calc(20px + env(safe-area-inset-bottom,0px));}
+.lesson-sheet-item{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 0; border-bottom:1px solid var(--border-subtle);}
+.lesson-sheet-item:last-child{border-bottom:none;}
+.lesson-sheet-info{display:flex; flex-direction:column; gap:4px; min-width:0;}
+.lesson-sheet-row{display:flex; align-items:center; gap:7px;}
+.lesson-sheet-num{ font-weight:var(--font-weight-bold); color:var(--text-primary);}
+/* 오늘 레슨의 주제 — 번호 아래 두 번째 줄에 회색 톤 보조 텍스트로 노출 */
+.lesson-sheet-topic{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-secondary); line-height:1.4;}
+.lesson-sheet-go{
+    flex:none; font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); white-space:nowrap;
+    background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover));
+    padding:9px 16px; 
+  }
+.lesson-sheet-go:active{transform:translateY(1px); filter:brightness(.97);}
+/* 아직 수업하지 않은 미래 레슨은 번호·버튼 모두 회색 톤으로 낮추고 버튼은 실제로 비활성화한다 */
+.lesson-sheet-item.disabled .lesson-sheet-num{color:var(--text-tertiary);}
+.lesson-sheet-go:disabled{background:var(--surface-muted); color:var(--text-tertiary); box-shadow:none; cursor:not-allowed;}
+.lesson-sheet-go:disabled:active{transform:none; filter:none;}
+/* ---------- 학습 질문(질문하기) — 위 풀스크린 셸 위에서 "질문하기"(작성)·"나의 질문 내역"
+     두 화면을 상단 탭(주간/월간과 같은 세그먼트 컨트롤 재사용)으로 오간다 */
+.qa-field{margin-bottom:16px;}
+.qa-field label{display:block; font-weight:var(--font-weight-semibold); color:var(--text-primary); margin-bottom:8px;}
+.qa-field label .req{color:var(--brand-text-link); margin-left:2px;}
+.qa-field input, .qa-field textarea{
+    width:100%; border:1.5px solid var(--border-default); padding:12px 13px;
+    font-size:var(--font-size-18); font-family:inherit; color:var(--text-primary); background:var(--surface-muted);
+    transition:border-color .15s ease, background .15s ease;
+  }
+.qa-field input::placeholder, .qa-field textarea::placeholder{color:var(--text-tertiary);}
+.qa-field textarea{resize:none; min-height:108px; line-height:1.55;}
+.qa-field input:focus, .qa-field textarea:focus{outline:none; border-color:var(--brand-interactive); background:var(--surface-default);}
+.qa-field .qa-err{display:none; color:var(--text-danger);}
+/* 나의 질문 내역 */
+.qa-history-list{display:flex; flex-direction:column; gap:0;}
+.qa-history-item{padding:16px 2px; border-bottom:1px solid var(--border-subtle);}
+.qa-history-item:last-child{border-bottom:none;}
+.qa-h-title{ color:var(--text-primary);}
+.qa-h-content{ font-weight:var(--font-weight-medium); color:var(--text-secondary); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; word-break:keep-all; overflow-wrap:break-word;}
+.qa-history-empty{padding:40px 20px; text-align:center; color:var(--text-tertiary); font-weight:var(--font-weight-medium);}
+/* ---------- 만족도 평가 — 문항 6개, 각 문항 1~5단계를 "채워지는" 방식으로 평가
+     (예: 3번째 원을 누르면 1·2·3이 모두 채워짐) */
+.satisfaction-error-banner{display:none; background:var(--status-negative-weak); color:var(--text-danger);}
+.satisfaction-error-banner.on{display:block;}
+.satisfaction-list{display:flex; flex-direction:column;}
+.satisfaction-item{padding-bottom:26px; margin-bottom:26px; border-bottom:1px solid var(--border-subtle);}
+.satisfaction-item:last-child{border-bottom:none; margin-bottom:0; padding-bottom:0;}
+/* 문항 번호("2.")를 별도 칸으로 분리한 행잉 인덴트 — 줄바꿈되는 문항도 번호 아래가 아니라
+     텍스트 시작 위치에 맞춰 둘째 줄이 정렬되어 훨씬 정돈되어 보인다 */
+.satisfaction-q{display:flex; gap:6px; font-weight:var(--font-weight-semibold); color:var(--text-primary); line-height:1.5; margin-bottom:14px; transition:color .15s ease;}
+.satisfaction-q .satisfaction-q-num{flex:none;}
+.satisfaction-q .satisfaction-q-text{flex:1; min-width:0; word-break:keep-all; overflow-wrap:break-word;}
+/* 각진 별 대신 모서리가 살짝 둥근 별 — fill과 stroke를 같은 색으로 주고 stroke-linejoin:round로
+     뾰족한 꼭짓점을 둥글려서 부드러운 인상을 준다(색만 다른 두 상태: 채워짐/비어있음).
+     2026-09-28: 별을 눈에 더 잘 띄게 확 키움(26px→36px) *//* 2026-09-30: flex:1로 카드 전체 너비에 균등 분배하던 방식을 폐기 — 문항 텍스트 길이와 무관하게
+     칩 너비가 넓어 별과 별 사이 여백이 아이콘 크기보다 훨씬 커 보이는 문제가 있었음.
+     고정 크기(44px, 접근성 최소 탭 영역)로 촘촘하게 묶어 하나의 평가 그룹처럼 보이게 함 */
+.satisfaction-stars{display:flex; gap:6px;}
+.satisfaction-star{flex:none; width:44px; height:44px; display:flex; align-items:center; justify-content:center;}
+.satisfaction-star svg{width:32px; height:32px; transition:transform .15s ease;}
+.satisfaction-star path{fill:var(--surface-muted); stroke:var(--border-default); stroke-width:1.5; stroke-linejoin:round; stroke-linecap:round; transition:fill .15s ease, stroke .15s ease;}
+.satisfaction-star.filled path{fill:var(--brand-interactive); stroke:var(--brand-interactive);}
+.satisfaction-star.filled svg{transform:scale(1.06);}
+.satisfaction-item.error .satisfaction-star path{stroke:var(--status-negative-weak);}
+/* ---------- 수업 리뷰 — 오늘 수업 다시듣기(하단 푸터로 이동, 2026-09-29) · Tutor Feedback · 발음 확인(원문/교정문+막대 재평가) · 교정 문장 *//* 회색 박스로 감싸 아래 Tutor Feedback 섹션과 확실히 분리 — 보라(라벤더) 대신 중립 회색을 써서
+     페이지 전체의 보라 포인트를 늘리지 않는다(2026-09-30, 라벤더 박스 대안 검토 후 결정) *//* 상단 줄 = "어떤 강좌의 무엇인지"(강좌 칩 + 날짜/기간), 그 아래 줄 = 레슨명(타이틀) — 둘을 줄로 분리해
+     한눈에 나눠 인식하게 한다. 강좌 칩은 스케줄 리스트의 상태 배지(.badge[data-status="upcoming"])와 같은
+     톤(퍼플 텍스트+연보라 배경 selection-bg)을 재사용해 새 보라 포인트를 늘리지 않는다.
+     ※ (구) purple-tint는 라이트 모드에서 흰색이라(카드 배경과 구분 안 됨) 칩 배경으로 쓰면 안 됨 — selection-bg 사용(2026-09-30 수정) */
+.review-lesson-top{display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%;}
+.review-course-chip{flex:none; white-space:nowrap;}
+.review-lesson-date{flex:none; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); white-space:nowrap;}
+.review-lesson-title{font-size:var(--font-size-18); font-weight:var(--font-weight-medium); color:var(--text-primary); line-height:1.4;}
+/* 예전엔 .review-lesson 카드 안 하단 CTA였으나, 2026-09-29부터 팝업 하단 푸터(.modal-foot)의 .btn:where([data-variant="secondary"]) 자리로 이동 —
+     평소엔 다른 ghost 버튼과 같은 톤, 재생 중일 때만 브랜드 그라데이션으로 강조.
+     참고 이미지 기준 옆에 "닫기"(.btn:where([data-variant="primary"])) 버튼이 나란히 있어야 해서 2026-09-30에 다시 추가 —
+     다른 팝업(학습질문/만족도평가)과 같은 ghost+primary 2버튼 푸터 패턴으로 통일 */
+.review-replay{
+    flex:none; display:flex; align-items:center; justify-content:center; gap:7px;
+    padding:14px 16px; background:var(--surface-muted); color:var(--text-secondary);
+    font-size:var(--font-size-18); font-weight:var(--font-weight-semibold); white-space:nowrap; transition:background .15s ease, color .15s ease;
+  }
+.review-replay svg{width:16px; height:16px; flex:none;}
+.review-replay.playing{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover));}
+.review-replay:active{transform:translateY(1px);}
+/* Tutor Feedback / Class Report 텍스트 섹션 공용 "옅은 회색 박스" — 타이틀은 박스 밖(.review-section-title/.report-heading),
+     박스 안에는 본문만. 2026-09-29: 참고 이미지 반영해 보라 틴트 카드에서 톤 낮춘 회색 박스로 변경 */
+.review-feedback{padding:16px; background:var(--surface-muted); margin-bottom:36px;}
+/* 클래스룸 메인 카드의 인용문(.classroom-fb-quote)과 크기·컬러를 동일하게 맞춰, 같은 내용이 카드에서 팝업으로
+     이어질 때 톤이 바뀌지 않게 한다(2026-09-30) */
+.review-feedback-text{font-size:var(--font-size-16); font-weight:var(--font-weight-medium); color:var(--text-secondary); line-height:1.65; word-break:keep-all; overflow-wrap:break-word;}
+/* Class Report의 .report-section 안에 쓰일 때는 부모가 이미 섹션 간격(32px)을 맡고 있어 중복 여백 방지 */
+.report-section .review-feedback{margin-bottom:0;}
+/* 섹션(Pronunciation/Grammar) 사이 간격을 넉넉히 벌려 서로 다른 덩어리임이 분명하게 보이게 한다.
+     타이틀도 개수 칩을 떼어내고(2026-09-28, 사용자 요청) 더 크고 굵게.
+     타이틀(강)과 설명 문장(약) 사이 위계를 분명히 하기 위해 설명 문장은 더 작게(2026-09-28, 사용자 요청) */
+.review-section{margin-bottom:38px;}
+.review-section:last-of-type{margin-bottom:4px;}
+.review-section-title{display:flex; align-items:center; gap:7px; font-weight:var(--font-weight-bold); color:var(--text-primary); margin-bottom:8px;}
+.review-section-desc{ margin-bottom:8px;}
+/* 발음 확인 — 단어별 리스트(기획안 근거): 단어 + 듣기(스피커)/재평가(마이크) 아이콘 버튼 두 개 */
+.review-pron-item{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:13px 16px; background:var(--surface-subtle); /* border:1px solid var(--border-subtle); */ margin-bottom:10px;
+  }
+.review-pron-list .review-pron-item:last-child{margin-bottom:0;}
+/* 800 굵기는 위 섹션 제목(.review-section-title, 800)과 두께감이 겹쳐 보여 600으로 낮춤(2026-09-30) */
+.review-pron-word{ font-weight:var(--font-weight-medium); color:var(--text-primary);}
+.review-pron-actions{display:flex; align-items:center; gap:8px; flex:none;}
+/* 교정 문장(Grammar) — 원문/교정문을 흰 카드 한 덩어리 안에 함께 담고, 원문/교정문 라벨은 칩(알약형)으로 구분.
+     발음 확인(.review-pron-item)과 같은 카드 톤을 이어받아 두 섹션이 한 세트처럼 보이게 한다 */
+.review-gram-item{
+    padding:16px; background:var(--surface-subtle); /* border:1px solid var(--border-subtle); */ margin-bottom:10px;
+  }
+.review-gram-list .review-gram-item:last-child{margin-bottom:0;}
+.review-gram-actions{display:flex; justify-content:flex-end; gap:8px; margin-top:12px;}
+.review-sent{display:flex; align-items:flex-start; gap:8px; font-size:var(--font-size-18); line-height:1.55; word-break:keep-all; overflow-wrap:break-word; margin-bottom:8px;}
+.review-sent:last-of-type{margin-bottom:0;}
+/* 원문 칩=회색(정보), 교정문 칩=보라(강조) — 두 칩을 색으로 구분해 어느 쪽이 "정답"인지 한눈에 보이게 한다 */
+.review-sent-tag{flex:none; color:var(--text-tertiary); background:var(--border-default); margin-top:2px;}
+.review-sent.orig{color:var(--text-tertiary); font-weight:var(--font-weight-medium);}
+.review-sent.fix{color:var(--text-primary); font-weight:var(--font-weight-medium);}
+.review-sent.fix .review-sent-tag{color:var(--brand-text-link); background:var(--surface-default);}
+/* 듣기(스피커)/재평가(마이크) 아이콘 버튼 — 발음 확인·교정 문장 두 섹션이 함께 쓴다 */
+.review-mic-btn, .review-speak-btn{flex:none; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--brand-interactive-subtle); color:var(--brand-text-link); transition:background .15s ease, color .15s ease;}
+.review-mic-btn svg, .review-speak-btn svg{width:17px; height:17px;}
+/* 마이크 테스트 — 발음 확인 섹션 상단의 별도 버튼으로 여는 보조 팝업(수업리뷰 위에 얹힌 센터 모달).
+     문장별 재평가(.review-mic-btn)와는 별개로, 마이크 하드웨어/권한이 정상인지 미리 점검하는 용도(기획안 근거) */
+.review-section-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:4px;}
+.mic-test-overlay{
+    position:fixed; inset:0; z-index:70; display:flex; align-items:center; justify-content:center; padding:24px;
+    background:rgba(20,16,40,.45); opacity:0; visibility:hidden; pointer-events:none; transition:opacity .2s ease;
+  }
+.mic-test-overlay.on{opacity:1; visibility:visible; pointer-events:auto;}
+.mic-test-card{
+    width:100%; max-width:320px; background:var(--surface-default); text-align:center; position:relative;
+    box-shadow:0 30px 60px -20px rgba(25,20,64,.35); opacity:0; transform:translateY(10px) scale(.97);
+    transition:transform .22s cubic-bezier(.22,1,.36,1), opacity .22s ease;
+  }
+.mic-test-overlay.on .mic-test-card{opacity:1; transform:translateY(0) scale(1);}
+.mic-test-close{position:absolute; top:7px; right:7px;}
+.mic-test-close:active{background:var(--surface-muted);}
+.mic-test-guide{ word-break:keep-all;}
+.mic-test-sample{ color:var(--text-primary);}
+.mic-test-mic{ border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 18px; background:var(--surface-default); transition:background .2s ease,border-color .2s ease,color .2s ease;
+  }
+.mic-test-note{ font-weight:var(--font-weight-medium); line-height:1.55; word-break:keep-all;}
+.mic-test-toast{
+    position:absolute; left:50%; transform:translate(-50%,8px); display:flex; align-items:center; white-space:nowrap;
+    width:max-content; max-width:calc(100vw - 48px); opacity:0; transition:transform .22s ease, opacity .22s ease; pointer-events:none;
+  }
+.mic-test-toast svg{ flex:none;}
+.mic-test-toast span{white-space:normal; text-align:left; line-height:1.4;}
+.mic-test-toast.show{opacity:1; transform:translate(-50%,0);}
+.mic-test-toast.success{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover));}
+.mic-test-toast.fail{
+    background:var(--status-negative-weak); color:var(--text-danger); white-space:normal; max-width:calc(100vw - 48px); text-align:left;
+  }
+.mic-test-toast.fail span{line-height:1.5;}
+.mic-test-toast.fail svg{margin-top:2px;}
+.report-radar-wrap{
+    display:flex; justify-content:center; background:var(--surface-subtle); border:1px solid var(--border-subtle); padding:22px 12px; margin-bottom:26px;
+  }
+.report-radar-svg{width:100%; max-width:300px; height:auto; overflow:visible;}
+.report-radar-ring{fill:none; stroke:var(--border-subtle); stroke-width:1;}
+.report-radar-ring[data-outer="1"]{stroke:var(--border-default);}
+.report-radar-axis{stroke:var(--border-subtle); stroke-width:1;}
+.report-radar-fill{fill:url(#crRadarGrad); fill-opacity:.55; stroke:var(--brand-interactive); stroke-width:2; stroke-linejoin:round;}
+.report-radar-dot{fill:var(--brand-interactive-hover); stroke:var(--surface-default); stroke-width:2;}
+.report-radar-label{font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); fill:var(--text-tertiary);}
+.report-radar-val{font-size:var(--font-size-16); font-weight:var(--font-weight-bold); fill:var(--text-primary);}
+@media (min-width:640px){
+  .lesson-sheet-panel{max-width:560px;}
+}
+@media (max-width:639px){
+  .modal, .lesson-sheet-panel{max-width:none;}
+}
+/* =====================================================================
+     2026-09-30 : 네온 그린(#331ce3) 루트 컬러 + 참고 이미지 레이아웃
+     - 네온 그린 면 위 글자는 흰색 대신 --brand-on-interactive
+     - 흰 배경 위 초록 글자(강조 단어·링크·내비)는 --brand-text-link
+     ===================================================================== */
+.btn:where([data-variant="primary"]), .lesson-sheet-go, .modal-result-icon, .review-replay.playing, .mic-test-toast.success, .home-chip{color:var(--brand-on-interactive);}
+/* 만족도 평가 : 1~5 숫자 버튼(시안1의 별점과 다르게) — 고른 숫자 하나만 채워짐 */
+.satisfaction-nums{display:grid; grid-template-columns:repeat(5,1fr);}
+.satisfaction-num{width:auto; transition:background .15s ease, box-shadow .15s ease, color .15s ease, transform .1s ease;}
+.satisfaction-num:active{transform:scale(.96);}
+.satisfaction-item.error .satisfaction-num{box-shadow:inset 0 0 0 1.5px var(--status-negative-weak);}
+.satisfaction-scale{display:flex; justify-content:space-between; padding:0 2px; font-weight:var(--font-weight-medium);}
+/* 2026-10-01 : 만족도 숫자 박스 — 작고 낮게, 고른 단계까지 채움 */
+.satisfaction-nums{gap:8px;}
+.satisfaction-num{height:32px; font-size:var(--font-size-14); font-weight:var(--font-weight-bold); color:var(--color-gray-300); background:var(--surface-default); box-shadow:inset 0 0 0 1px var(--border-default);}
+.satisfaction-num.filled{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); box-shadow:none; color:var(--brand-on-interactive);}
+.satisfaction-scale{margin-top:7px; font-size:var(--font-size-12); color:var(--text-tertiary);}
+.popup-card, .mic-test-card{border-radius:12px;}
+.report-radar-wrap{border-radius:8px;}
+.satisfaction-num{border-radius:4px;}
+/* 공휴일은 숫자만 산호색 *//* 수업리뷰 레슨 정보 : 박스 없이 텍스트만 */
+.review-lesson{padding:0; border-radius:0; background:none; margin-bottom:32px; display:flex; flex-direction:column; align-items:flex-start; gap:10px;}
+/* 수업리뷰 푸터 : 왼쪽 닫기(보조) · 오른쪽 다시 듣기(주요, 활성 버튼) */
+#revOverlay .modal-foot .review-replay{
+    flex:1; padding:14px 16px; font-weight:var(--font-weight-bold);
+    background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); color:var(--brand-on-interactive);
+  }
+#revOverlay .modal-foot .review-replay.playing{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); color:var(--brand-on-interactive);}
+/* 재생 중 : 전화영어 교재와 같은 리듬감 있는 3막대 이퀄라이저 */
+.review-eq{display:none; align-items:flex-end; gap:3px; height:15px; flex:none;}
+.review-eq i{display:block; width:3px; height:5px; border-radius:2px; background:currentColor; animation:revEq .9s ease-in-out infinite;}
+.review-eq i:nth-child(2){animation-delay:.15s;}
+.review-eq i:nth-child(3){animation-delay:.3s;}
+.review-replay.playing .review-eq{display:inline-flex;}
+.review-replay.playing svg.icon-play{display:none;}
+@media (prefers-reduced-motion: reduce){
+  .review-eq i{animation:none !important; height:10px !important;}
+}
+/* ---------- AI 히스토리 팝업 : 전체 학습시간·팝콘(포인트) 요약 스탯 + 대화 내역 리스트 ---------- */
+.ai-history-stats{display:flex; gap:10px; margin-bottom:20px;}
+.ai-history-stat{
+    flex:1; background:var(--surface-muted); padding:14px 16px;
+    display:flex; flex-direction:column; align-items:center; gap:5px; text-align:center;
+  }
+.ai-history-stat-label{font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+.ai-history-stat-val{font-size:var(--font-size-18); font-weight:var(--font-weight-bold); color:var(--text-primary); letter-spacing:-.2px;}
+/* 2026-10-01: 팝콘 스탯 컬러를 앰버 → 앱 포인트컬러(보라)로 통일, 아이콘은 제거 — 사용자 요청 */
+.ai-history-list-head, .ai-history-list-item{
+    display:grid; grid-template-columns:1.3fr 1fr 1fr 1.1fr; gap:6px; align-items:center;
+    text-align:center;
+  }
+.ai-history-list-head{
+    padding:0 2px 10px; border-bottom:1px solid var(--border-subtle);
+    font-size:var(--font-size-12); font-weight:var(--font-weight-semibold); color:var(--text-tertiary);
+  }
+/* QA — 리스트형 행 간격은 .lesson-sheet-item/.qa-history-item/.satisfaction-item과 동일(18px 2px)로 통일 —
+     "AI 학습 전체보기" 리스트 리듬이 좋다는 피드백을 기준점으로 다른 리스트형에도 그대로 맞춘다 */
+.ai-history-list-item{padding:18px 2px; border-bottom:1px solid var(--border-subtle);}
+.ai-history-list-item:last-child{border-bottom:none;}
+.ai-history-list-item span{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); line-height:1.3; color:var(--text-tertiary);}
+.ai-history-list-item .ai-history-lesson{color:var(--text-primary); font-weight:var(--font-weight-semibold);}
+.ai-history-list-item .ai-history-popcorn{ font-weight:var(--font-weight-semibold);}
+.ai-history-list-empty{padding:30px 0; text-align:center; font-size:var(--font-size-14); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+/* ---------- 출석현황 (2026-10-02) — 튜터 카드의 출석체크 버튼으로 여는 전체 팝업.
+     기존 modal-overlay/modal 셸(다른 팝업들과 동일)을 재사용. 2026-10-02(수정): 통계 테이블 대신
+     진행률은 독립된 그래프(바)로, 출석/연기/취소·결석은 여백 넉넉한 3분할 행으로 분리 — "촘촘하다"는
+     피드백 반영해 섹션 간 여백을 키우고 이번달 수업일 요약 문구는 제거. 노란색은 출석체크 버튼(.classroom-att-btn)과
+     동일한 색(#FFA700)으로 통일(출석완료 배지/범례). 달력 셀은 보강신청 팝업의
+     .makeup-cal-month/.makeup-weekday-row/.makeup-cal-grid/.makeup-cal-cell/.makeup-num 틀을 그대로 재사용(읽기 전용) */
+.attendance-progress-card{margin-bottom:28px;}
+.attendance-progress-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;}
+.attendance-progress-label{font-size:var(--font-size-16); font-weight:var(--font-weight-bold); color:var(--text-primary);}
+.attendance-progress-value{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+.attendance-progress-value b{font-size:var(--font-size-20); font-weight:var(--font-weight-bold); margin-right:1px;}
+.attendance-progress-track{ overflow:hidden;}
+.attendance-progress-fill{height:100%;}
+.attendance-stats-row{display:flex; gap:10px; margin-bottom:4px;}
+.attendance-stat-item{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    background:var(--surface-default); border:1px solid var(--border-default); padding:18px 6px;
+  }
+.attendance-stat-num{font-size:var(--font-size-20); font-weight:var(--font-weight-bold); color:var(--text-primary);}
+.attendance-stat-label{font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+/* 2026-10-02: "달력 부분부터는 단락 구분해서 배경을 화이트로 전체 풀로" — 스케줄 탭의
+     .schedule-topbar-card와 같은 기법(음수 margin으로 modal-body 좌우 패딩을 상쇄해 꽉 차게 흰 배경을 깐다).
+     진행률/통계 구역은 팝업 배경(연회색) 위에, 달력 구역부터는 별도 흰 패널로 분리 */
+#attBody{background:var(--surface-subtle); display:flex; flex-direction:column;}
+/* 흰 패널을 modal-body 하단까지 끝까지 채운다(flex:1) + 하단 패딩은 modal-body 자체의 하단 패딩을
+     음수 margin으로 상쇄하고 패널 안에서 다시 넉넉하게 준다 — 남는 회색 여백이 생기지 않도록 */
+.attendance-cal-panel{
+    background:var(--surface-default); flex:1; display:flex; flex-direction:column;
+    margin:18px -18px calc(-20px - env(safe-area-inset-bottom,0px));
+    padding:26px 18px calc(30px + env(safe-area-inset-bottom,0px));
+  }
+.attendance-cal-wrap{margin-bottom:30px;}
+.attendance-cal-grid .makeup-cal-cell{position:relative;}
+.attendance-cal-grid .makeup-cal-cell.class-day .makeup-num{ font-weight:var(--font-weight-bold);}
+.attendance-check-badge{
+    position:absolute; top:1px; right:8px; width:17px; height:17px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  }
+.attendance-check-badge svg{width:10px; height:10px;}
+.attendance-legend{display:flex; align-items:center; justify-content:center; gap:16px;}
+.attendance-legend-item{display:flex; align-items:center; gap:6px; font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+.attendance-legend-dot{width:13px; height:13px; flex:none;}
+/* 첨삭 : 주니어 과정에서만, 그리드 한 줄 전체 *//* 레슨 시트 하단 : AI 히스토리 보기 */
+.lesson-sheet-history{display:flex; align-items:center; justify-content:center; gap:2px; width:100%; margin-top:6px; padding:14px; font-size:var(--font-size-14); font-weight:var(--font-weight-semibold); color:var(--text-secondary); background:var(--surface-muted); border-radius:8px;}
+.lesson-sheet-history svg{width:15px; height:15px;}
+/* 진행률 · 통계 (출석현황 팝업 · 종료 카드 공용) */
+.attendance-progress-value b{color:var(--text-primary);}
+.attendance-progress-track{height:8px; border-radius:4px; background:var(--color-gray-100);}
+.attendance-progress-fill{border-radius:4px; background:linear-gradient(90deg,var(--brand-interactive),var(--brand-interactive-hover)); transition:width .8s cubic-bezier(.22,1,.36,1);}
+.attendance-stat-item{border-radius:8px; border-color:var(--border-subtle);}
+.attendance-cal-panel{border-radius:12px 12px 0 0;}
+.attendance-cal-grid .makeup-cal-cell.class-day .makeup-num{background:var(--brand-interactive-subtle); color:var(--brand-text-link);}
+.attendance-check-badge{background:var(--text-primary); box-shadow:none;}
+.attendance-check-badge svg{color:var(--brand-interactive);}
+.attendance-legend-dot{border-radius:3px; background:var(--brand-interactive-subtle);}
+.attendance-legend-dot.is-done{background:var(--text-primary); border-radius:50%;}
+/* AI 히스토리 */
+.ai-history-stat{border-radius:8px;}
+.ai-history-stat-val--popcorn, .ai-history-list-item .ai-history-popcorn{color:var(--brand-text-link);}
+/* AI 히스토리 바텀시트 : 헤더와 안내문 사이 여백 (풀스크린 팝업 본문과 같은 18px) */
+#aihSheetOverlay .lesson-sheet-body{padding-top:18px;}
+.modal-result p, .modal-guide, .review-section-desc, .makeup-guide, .mic-test-guide{font-size:var(--font-size-14); line-height:1.55;}
+/* 학습질문 · 나의 질문 내역 리스트 (클래스룸 타이포 기준) */
+.qa-h-date{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); margin-bottom:4px;}
+.qa-h-title{font-size:var(--font-size-16); font-weight:var(--font-weight-semibold); margin-bottom:4px;}
+.qa-h-content{font-size:var(--font-size-14); line-height:1.55;}
+.qa-history-empty{font-size:var(--font-size-14);}
+/* 만족도 평가 미완료 : 문항 전체를 레드로 바꾸지 않고, 문항 옆 '미응답' 칩으로만 표시 · 상단 안내는 작게 */
+.satisfaction-error-banner{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); padding:10px 12px; border-radius:6px; margin-bottom:16px; line-height:1.4;}
+.satisfaction-item.error .satisfaction-q{color:var(--text-primary);}
+.satisfaction-item.error .satisfaction-num:not(.filled){box-shadow:inset 0 0 0 1px var(--border-default);}
+.satisfaction-item.error .satisfaction-q-text::after{content:"미응답"; display:inline-block; margin-left:6px; padding:2px 6px; border-radius:4px; font-size:var(--font-size-11); font-weight:var(--font-weight-semibold); line-height:1.3; vertical-align:2px; color:var(--text-danger); background:var(--status-negative-weak);}
+/* 학습질문 입력 오류 : 안내문구 톤(작은 도움말 + 아이콘)으로 */
+.qa-field .qa-err{font-size:var(--font-size-12); font-weight:var(--font-weight-medium); line-height:1.4; margin-top:6px; align-items:center; gap:4px;}
+.qa-field.error .qa-err{display:flex;}
+.qa-field .qa-err::before{content:"!"; flex:none; width:13px; height:13px; border-radius:50%; background:var(--status-negative-solid); color:#fff; font-size:var(--font-size-11); font-weight:var(--font-weight-bold); line-height:13px; text-align:center;}
+.qa-field.error input, .qa-field.error textarea{border-color:var(--border-error); box-shadow:none;}
+/* ===== 마이크 테스트 · 다시 평가 팝업 : 시안2 타이포·라운드 ===== */
+.mic-test-card{border-radius:12px; padding:26px 20px 22px;}
+.mic-test-guide{ margin:4px 0 14px;}
+.mic-test-sample{font-size:var(--font-size-28); font-weight:var(--font-weight-semibold); margin-bottom:18px; letter-spacing:-.3px; word-break:keep-all;}
+.voice-eval-card .mic-test-sample.sentence{font-size:var(--font-size-18); line-height:1.45; font-weight:var(--font-weight-semibold);}
+.mic-test-note{font-size:var(--font-size-12); color:var(--text-tertiary);}
+/* 마이크 버튼 : 대기(그린 라인) → 녹음 중(그린 채움 + 퍼지는 링 + 실시간 파형) */
+.mic-test-mic{position:relative; width:68px; height:68px; margin-bottom:14px; border:1.5px solid var(--brand-text-link); color:var(--brand-text-link);}
+.mic-test-mic svg{width:26px; height:26px; transition:transform .2s ease, opacity .2s ease;}
+.mic-test-mic::before, .mic-test-mic::after{content:""; position:absolute; inset:-2px; border-radius:50%; border:2px solid var(--brand-interactive); opacity:0; pointer-events:none;}
+.mic-test-mic .mic-wave{position:absolute; inset:0; display:none; align-items:center; justify-content:center; gap:3px;}
+.mic-test-mic .mic-wave i{display:block; width:3px; height:8px; border-radius:2px; background:var(--brand-on-interactive); animation:micWave .7s ease-in-out infinite;}
+.mic-test-mic .mic-wave i:nth-child(2){animation-delay:.12s;}
+.mic-test-mic .mic-wave i:nth-child(3){animation-delay:.24s;}
+.mic-test-mic .mic-wave i:nth-child(4){animation-delay:.36s;}
+.mic-test-mic .mic-wave i:nth-child(5){animation-delay:.48s;}
+.mic-test-mic.recording{border-color:transparent; background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); color:var(--brand-on-interactive); animation:none;}
+.mic-test-mic.recording svg{opacity:0; transform:scale(.6);}
+.mic-test-mic.recording .mic-wave{display:flex;}
+.mic-test-mic.recording::before{animation:micRing 1.4s ease-out infinite;}
+.mic-test-mic.recording::after{animation:micRing 1.4s ease-out .7s infinite;}
+.mic-test-mic:active{transform:scale(.96);}
+/* 결과 토스트 : 칩 형태(8px), 성공 = 그린 그라데이션, 실패 = 연한 레드 */
+.mic-test-toast{bottom:-52px; padding:10px 14px; border-radius:8px; font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); gap:6px; box-shadow:0 12px 24px -12px rgba(0,0,0,.3);}
+.mic-test-toast svg{width:15px; height:15px;}
+.mic-test-toast.success{color:var(--brand-on-interactive);}
+.mic-test-toast.fail{border-radius:8px; width:max-content; padding:10px 14px; font-weight:var(--font-weight-medium); font-size:var(--font-size-13); align-items:flex-start;}
+/* 다시 평가 결과 막대 */
+.voice-eval-state{font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-tertiary); margin:0 0 14px; min-height:18px; transition:color .2s ease;}
+.voice-eval-state.rec{color:var(--brand-text-link); font-weight:var(--font-weight-semibold);}
+.voice-eval-result{display:flex; flex-direction:column; gap:10px; text-align:left; padding:14px; margin:0 0 14px; border-radius:8px; background:var(--surface-muted);}
+.voice-eval-row{display:grid; grid-template-columns:72px 1fr 40px; align-items:center; gap:10px;}
+.voice-eval-label{font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
+.voice-eval-track{height:8px; border-radius:4px; background:var(--color-gray-100); overflow:hidden;}
+.voice-eval-fill{display:block; height:100%; width:0; border-radius:4px; background:linear-gradient(90deg,var(--brand-interactive),var(--brand-interactive-hover)); transition:width .9s cubic-bezier(.22,1,.36,1);}
+.voice-eval-fill.low{background:linear-gradient(90deg,#FFB547,#FF9900);}
+.voice-eval-val{font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); color:var(--text-primary); text-align:right; font-variant-numeric:tabular-nums;}
+.voice-eval-val.empty{color:var(--color-gray-400);}
+/* 듣기 버튼 : 재생 중 이퀄라이저 */
+.review-speak-btn .review-eq{display:none; height:14px;}
+.review-speak-btn .review-eq i{width:2.5px;}
+.review-speak-btn.playing{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); color:var(--brand-on-interactive); animation:none;}
+.review-speak-btn.playing svg{display:none;}
+.review-speak-btn.playing .review-eq{display:inline-flex;}
+.review-mic-btn:active, .review-speak-btn:active{transform:scale(.94);}
+/* ===== 수업환경 테스트 ===== */
+.env-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.env-head-title{font-size:var(--font-size-16); font-weight:var(--font-weight-semibold); color:var(--text-primary);}
+.env-preview{position:relative; aspect-ratio:16/10; border-radius:8px; overflow:hidden; background:radial-gradient(120% 90% at 30% 20%,#2c2f36 0%,#16181d 70%);}
+.env-cam, .env-aud{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
+.env-person{width:58%; animation:envBreath 4s ease-in-out infinite;}
+.env-live{position:absolute; top:10px; left:10px; display:inline-flex; align-items:center; gap:5px; background:rgba(0,0,0,.45); color:#fff; letter-spacing:.4px;}
+.env-live i{width:6px; height:6px; border-radius:50%; background:var(--color-red-500); animation:envBlink 1.2s ease-in-out infinite;}
+.env-cam-name{position:absolute; bottom:10px; left:10px; font-size:var(--font-size-11); font-weight:var(--font-weight-medium); color:rgba(255,255,255,.75);}
+.env-aud{flex-direction:column; gap:14px;}
+.env-meter{display:flex; align-items:center; gap:4px; height:64px;}
+.env-meter i{display:block; width:5px; height:8px; border-radius:3px; background:linear-gradient(180deg,var(--brand-interactive),var(--brand-interactive-hover)); transition:height .12s ease;}
+.env-aud-cap{font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:rgba(255,255,255,.7);}
+.env-tabs{margin:14px 0 16px;}
+.env-tabs .tabs{display:grid; grid-template-columns:1fr 1fr;}
+.env-tabs .tabs button{text-align:center;}
+.env-label{display:block; font-weight:var(--font-weight-semibold); color:var(--text-primary); margin:0 0 6px;}
+.env-label ~ .env-label{margin-top:14px;}
+.env-select{position:relative;}
+.env-select select{width:100%; appearance:none; -webkit-appearance:none; font:inherit; font-size:var(--font-size-14); color:var(--text-primary); padding:12px 36px 12px 12px; border-radius:8px; border:1px solid var(--border-default); background:var(--surface-default);}
+.env-select::after{content:""; position:absolute; right:14px; top:50%; width:7px; height:7px; border-right:2px solid var(--text-secondary); border-bottom:2px solid var(--text-secondary); transform:translateY(-70%) rotate(45deg); pointer-events:none;}
+.env-ok{display:flex; align-items:center; gap:6px; margin-top:10px; font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--brand-text-link);}
+.env-ok i{width:6px; height:6px; border-radius:50%; background:var(--brand-text-link);}
+.env-play{display:flex; align-items:center; justify-content:center; gap:7px; width:100%; margin-top:14px; padding:12px; border-radius:8px; background:var(--surface-muted); color:var(--text-primary); font-size:var(--font-size-14); font-weight:var(--font-weight-semibold);}
+.env-play svg{width:14px; height:14px; color:var(--brand-text-link);}
+.env-play .review-eq{display:none; height:14px;}
+.env-play.playing{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); color:var(--brand-on-interactive);}
+.env-play.playing svg{display:none;}
+.env-play.playing .review-eq{display:inline-flex;}
+.env-guide{margin-top:22px; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
+/* 팝업 타이틀 아래 설명글 통일 : 14px · 500 · 회색(np-700) · 행간 1.55 */
+.modal-guide, .makeup-guide, .review-section-desc, .mic-test-guide{font-size:var(--font-size-14); font-weight:var(--font-weight-medium); line-height:1.55; color:var(--color-gray-500);}
+/* ===== 타이포 통일 (점검 이슈 1~6) — 공통 DS size 스케일 11/12/13/14/16/18/20/22/28 ===== *//* #1 팝업 헤더 : 휴대폰 18 · 태블릿/PC 20 (앱 헤더 18) */
+.modal-title, .lesson-sheet-title, .schedule-picker-title{font-size:var(--font-size-18);}
+/* 팝업 안 섹션 제목 18 (휴대폰에선 헤더와 같은 크기, 굵기 700으로 구분) */
+.review-section-title, .report-heading, .makeup-section-title, .makeup-switch-text strong{font-size:var(--font-size-18);}
+/* #2 탭 : 상위 탭 18 · 세그먼트 13 */
+.tabs button, .env-tabs .tabs button{font-size:var(--font-size-18);}
+/* #4 폼 라벨 14 */
+.qa-field label, .env-label{font-size:var(--font-size-14);}
+/* #6 리스트 제목 16 · 질문 18 */
+.satisfaction-q{font-size:var(--font-size-18);}
+.lesson-sheet-num, .review-pron-word{font-size:var(--font-size-16);}
+@media (min-width:640px){
+  .modal-title, .lesson-sheet-title, .schedule-picker-title{font-size:var(--font-size-20);}
+}
+.env-guide-link{color:var(--brand-text-link); font-weight:var(--font-weight-semibold);}
+/* ===== 40~43 업데이트 · 시스템 공지 — Onboarding_010_N_POP ===== */
+#noticeOverlay{z-index:9050;}
+#noticeOverlay .modal-result h3{margin-bottom:8px;}
+#noticeOverlay .modal-result p{max-width:none; text-wrap:wrap;}
+#noticeOverlay .modal-result > div{width:100%;}
+.notice-box{margin:16px 0 0; padding:14px 16px; border-radius:12px; background:var(--surface-muted); text-align:center;}
+.notice-box-title{display:block; margin-bottom:6px; font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-tertiary);}
+.notice-box ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:4px; font-size:14px; font-weight:var(--font-weight-medium); color:var(--text-primary);}
+.notice-box.when strong{display:block; font-size:16px; font-weight:var(--font-weight-bold); color:var(--text-primary); line-height:1.5; font-variant-numeric:tabular-nums;}
+.notice-box.list{text-align:left;}
+.notice-box.list li{position:relative; padding-left:12px;}
+.notice-box.list li::before{content:""; position:absolute; left:2px; top:calc(.72em - 2px); width:4px; height:4px; border-radius:50%; background:var(--text-tertiary);}
+.notice-text{max-height:180px; overflow:auto; margin:4px 0 0; font-size:14px; line-height:1.6; color:var(--text-secondary); text-align:center; word-break:keep-all;}
+.notice-text p{margin:0; font-size:inherit; line-height:inherit; color:inherit; text-align:center;}
+.notice-text p + p{margin-top:8px;}
+.notice-skip{display:flex; justify-content:center; gap:14px; margin-top:14px;}
+.notice-skip button{font-size:13px; font-weight:var(--font-weight-medium); color:var(--text-tertiary); text-decoration:underline; text-decoration-thickness:1px; text-decoration-color:color-mix(in srgb, currentColor 40%, transparent); text-underline-offset:3px;}
+#noticeOverlay .modal-foot .btn{flex:1;}
+#infoOverlay{z-index:9050;}
+.info-pop{display:flex; flex-direction:column; gap:12px; text-align:left;}
+.info-pop #infoType{display:contents;}
+.info-pop .class-course-img{border-radius:12px; overflow:hidden;}
+#infoOverlay .modal-foot .btn{flex:1;}
+.rt-tutor-pop{text-align:left;}
+/* ===== 17p 출석현황 고도화 — 연속 출석 · 배지 · 출석 도장 (add_attend) ===== */
+.att-streak{padding:20px 18px 18px; border-radius:10px; background:var(--surface-default); box-shadow:0 1px 0 var(--border-subtle); margin-bottom:12px;}
+.att-streak-top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
+.att-streak-title{display:flex; align-items:center; gap:8px; margin:0; font-size:22px; font-weight:var(--font-weight-bold); color:var(--text-primary); letter-spacing:-.3px;}
+.att-streak-title svg{width:24px; height:24px; color:var(--brand-text-link); flex:none;}
+.att-streak-title b{color:var(--brand-text-link);}
+.att-best{flex:none; padding:5px 10px; border-radius:999px; background:var(--surface-muted); font-size:12px; font-weight:var(--font-weight-semibold); color:var(--text-tertiary);}
+.att-best b{color:var(--text-primary);}
+.att-streak-sub{margin:6px 0 20px; font-size:14px; color:var(--text-secondary);}
+.att-streak-sub b{color:var(--text-primary); font-weight:var(--font-weight-semibold);}
+.att-steps{position:relative; height:52px; margin:0 14px;}
+.att-steps-track{position:absolute; left:0; right:0; top:13px; height:6px; border-radius:3px; background:var(--surface-muted); overflow:hidden;}
+.att-steps-fill{position:absolute; left:0; top:0; bottom:0; width:100%; border-radius:3px; background:linear-gradient(90deg,var(--brand-interactive-hover),var(--brand-interactive)); transform-origin:0 50%; transform:scaleX(0); transition:transform .8s cubic-bezier(.2,.8,.2,1) .15s;}
+.att-step{position:absolute; top:0; width:32px; margin-left:-16px; display:flex; flex-direction:column; align-items:center; gap:6px;}
+.att-step i{display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; background:var(--surface-default); box-shadow:inset 0 0 0 2px var(--border-default); color:var(--text-tertiary);}
+.att-step i svg{width:15px; height:15px;}
+.att-step.on i{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); box-shadow:none; color:var(--brand-on-interactive);}
+.att-step.next i{box-shadow:inset 0 0 0 2px var(--brand-interactive); color:var(--brand-text-link);}
+.att-step span{font-size:12px; font-weight:var(--font-weight-semibold); color:var(--text-tertiary); white-space:nowrap;}
+.att-step.on span, .att-step.next span{color:var(--text-primary);}
+.att-badges{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; padding:18px 10px 16px; border-radius:10px; background:var(--surface-default); box-shadow:0 1px 0 var(--border-subtle);}
+.att-badges-title{grid-column:1/-1; margin:0 0 8px 6px; font-size:14px; font-weight:var(--font-weight-semibold); color:var(--text-tertiary);}
+.att-badge{display:flex; flex-direction:column; align-items:center; gap:7px; text-align:center;}
+.att-medal{position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; width:52px; height:52px; border-radius:50%; background:var(--surface-muted); color:var(--text-tertiary); line-height:1;}
+.att-medal b{font-size:18px; font-weight:var(--font-weight-bold);}
+.att-medal small{margin-top:2px; font-size:10px; font-weight:var(--font-weight-semibold);}
+.att-medal .lk{position:absolute; right:-2px; bottom:-2px; display:flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:var(--surface-default); box-shadow:0 0 0 1px var(--border-subtle);}
+.att-medal .lk svg{width:11px; height:11px;}
+.att-badge.on .att-medal{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); color:var(--brand-on-interactive); box-shadow:0 6px 14px -8px var(--brand-interactive);}
+.att-badge.on .att-medal::after{content:""; position:absolute; inset:3px; border-radius:50%; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45);}
+.att-badge span{font-size:11px; font-weight:var(--font-weight-semibold); line-height:1.3; color:var(--text-tertiary); word-break:keep-all;}
+.att-badge.on span{color:var(--text-primary);}
+#attBody .attendance-cal-panel .attendance-progress-card{margin:26px 0 14px;}
+/* 출석 도장 */
+#attCalGrid .makeup-cal-cell{cursor:pointer;}
+#attCalGrid .attendance-check-badge{display:none;}
+#attCalGrid .makeup-cal-cell.st-attend .makeup-num{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)) !important; color:var(--brand-on-interactive) !important; font-weight:var(--font-weight-bold);}
+#attCalGrid .makeup-cal-cell.st-postpone .makeup-num{background:transparent !important; box-shadow:inset 0 0 0 1.5px var(--border-default); outline:1.5px dashed var(--text-tertiary); outline-offset:-1.5px; color:var(--text-secondary) !important;}
+#attCalGrid .makeup-cal-cell.st-absent .makeup-num{background:var(--status-negative-weak) !important; color:var(--text-danger) !important; box-shadow:inset 0 0 0 1.5px var(--text-danger);}
+#attCalGrid .makeup-cal-cell.sel::after{content:""; position:absolute; left:50%; bottom:2px; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:var(--text-primary);}
+.att-legend2{display:flex; flex-wrap:wrap; justify-content:center; gap:8px 14px; margin-top:4px;}
+.att-legend2 span{display:flex; align-items:center; gap:6px; font-size:12px; font-weight:var(--font-weight-semibold); color:var(--text-tertiary);}
+.att-legend2 i{width:12px; height:12px; border-radius:50%; flex:none;}
+.att-legend2 .l-attend{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover));}
+.att-legend2 .l-postpone{outline:1.5px dashed var(--text-tertiary); outline-offset:-1.5px;}
+.att-legend2 .l-absent{background:var(--status-negative-weak); box-shadow:inset 0 0 0 1.5px var(--text-danger);}
+.att-legend2 .l-plan{background:var(--brand-interactive-subtle);}
+.att-day{display:flex; align-items:center; gap:10px; margin-top:16px; padding:13px 14px; border-radius:12px; background:var(--surface-muted); font-size:14px; color:var(--text-secondary);}
+.att-day[hidden]{display:none;}
+.att-day b{font-weight:var(--font-weight-semibold); color:var(--text-primary);}
+.att-day .tag{flex:none; padding:3px 8px; border-radius:999px; font-size:12px; font-weight:var(--font-weight-bold); background:var(--brand-interactive-subtle); color:var(--brand-text-link);}
+.att-day .tag.absent{background:var(--status-negative-weak); color:var(--text-danger);}
+.att-day .tag.postpone{background:var(--surface-default); color:var(--text-secondary);}
+.att-day em{margin-left:auto; font-style:normal; font-size:13px; color:var(--text-tertiary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+/* 클래스룸 칩 */
+.att-streak-chip{display:inline-flex; align-items:center; gap:4px; padding:3px 9px 3px 7px; border-radius:999px; background:var(--brand-interactive-subtle); color:var(--brand-text-link); font-size:12px; font-weight:var(--font-weight-bold); white-space:nowrap; line-height:1.4;}
+.att-streak-chip svg{width:13px; height:13px;}
+.ai-txt .tutor .att-streak-chip{margin-left:2px;}
+.att-medal, .att-badge.on .att-medal::after{border-radius:12px;}

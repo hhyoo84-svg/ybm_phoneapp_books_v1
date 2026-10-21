@@ -1,0 +1,18 @@
+/* ==================================================================
+   reset.css — 리셋 · 기본 요소 스타일 (태그 선택자만)
+   ================================================================== */
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{height:100%; overflow:hidden;}
+body{
+    margin:0; background:var(--surface-subtle); color:var(--text-primary);
+    font-family:'Pretendard Variable','Pretendard',-apple-system,'Noto Sans KR',sans-serif;
+    display:flex; justify-content:center; height:100dvh; overflow:hidden;
+  }
+button{font-family:inherit; font-size:inherit; color:inherit; border:none; background:none; padding:0; cursor:pointer; -webkit-appearance:none; appearance:none;}
+button:focus{outline:none;}
+button:focus-visible{outline:2px solid var(--brand-interactive); outline-offset:2px;}
+h1, h2, h3, h4, p{margin:0;}
+img{display:block; max-width:100%;}
+/* 2026-10-01 : 세로 스크롤바 숨김 (스크롤은 그대로 동작) */
+html, body, *{scrollbar-width:none; -ms-overflow-style:none;}
+*::-webkit-scrollbar{display:none; width:0; height:0;}

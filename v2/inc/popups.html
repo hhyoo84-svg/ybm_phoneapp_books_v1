@@ -1,0 +1,737 @@
+<!-- ======================================================================
+     inc/popups.html
+     공통 팝업 : 예습 유도 · 년월 선택 · AI 히스토리 · 보강 신청 · 출석현황 · 스케줄 다이얼로그 · 연기/보강 현황 · 다시 평가 · 수업환경 테스트 · 레슨 시트 · 학습 질문 · 만족도 · 수업 리뷰 · 마이크 테스트 · Class Report · 내 강의 정보 · 수업 루틴 변경
+     사용 : 클래스룸·스케줄 내용과 함께 넣음 (기본 hidden, JS로 열림)
+     CSS : popup.css
+     JS  : core.js, popup.js
+     ====================================================================== -->
+  <!-- 예습 유도 팝업(임박 + 예습 미완료 시) -->
+  <div class="popup-overlay" id="popupOverlay" role="dialog" aria-modal="true" aria-label="예습 안내">
+    <div class="popup-backdrop"></div>
+    <div class="popup-card" id="popupCard">
+      <div class="chip urgency-chip" data-size="base" data-tone="danger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <span>수업 시작까지 <span class="num" id="popupTime">00:45</span></span>
+      </div>
+      <div class="popup-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-interactive)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4.5 4.5L19 8"/></svg></div>
+      <h2>수업 전 5분 예습,<br>자신감 UP!</h2>
+      <div class="popup-actions">
+        <button type="button" class="btn" data-variant="primary" id="startPrepBtn">
+          예습 시작하기
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+        <button type="button" class="btn popup-skip-link" data-variant="link" id="skipPrepBtn">바로 수업 입장하기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="schedule-picker-overlay" id="scPickerOverlay" hidden>
+    <div class="schedule-picker-sheet" role="dialog" aria-modal="true" aria-label="년월 선택">
+      <div class="schedule-picker-header">
+        <button type="button" class="btn schedule-picker-cancel" data-variant="secondary" data-size="sm" id="scPickerCancel">취소</button>
+        <span class="schedule-picker-title">년월 선택</span>
+        <button type="button" class="btn schedule-picker-confirm" data-variant="primary" data-size="sm" id="scPickerConfirm">확인</button>
+      </div>
+      <div class="schedule-picker-wheels">
+        <div class="schedule-picker-highlight" aria-hidden="true"></div>
+        <div class="schedule-picker-col" id="scPickerYearCol"><div class="schedule-picker-col-inner" id="scPickerYearInner"></div></div>
+        <div class="schedule-picker-col" id="scPickerMonthCol"><div class="schedule-picker-col-inner" id="scPickerMonthInner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-sheet-overlay" id="aihSheetOverlay" hidden>
+    <div class="lesson-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="aihSheetTitle">
+      <div class="lesson-sheet-head">
+        <span></span>
+        <span class="lesson-sheet-title" id="aihSheetTitle">AI 히스토리</span>
+        <button type="button" class="icon-btn lesson-sheet-close" data-type="close" id="aihSheetClose" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="lesson-sheet-body">
+        <p class="modal-guide">AI Y버디와 대화한 내용이에요</p>
+        <div class="ai-history-stats">
+          <div class="ai-history-stat">
+            <span class="ai-history-stat-label">전체 학습시간</span>
+            <span class="ai-history-stat-val">40분 12초</span>
+          </div>
+          <div class="ai-history-stat">
+            <span class="ai-history-stat-label">팝콘</span>
+            <span class="ai-history-stat-val ai-history-stat-val--popcorn">3,000개</span>
+          </div>
+        </div>
+        <div class="ai-history-list-head">
+          <span>일자</span><span>레슨번호</span><span>소요팝콘</span><span>대화결과</span>
+        </div>
+        <div class="ai-history-list-body" id="aihSheetListBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="aihOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="aihTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn modal-close" data-type="close" id="aihCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="modal-title" id="aihTitle">AI 히스토리</span>
+        <span class="icon-btn modal-close modal-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="modal-body" id="aihBody">
+        <p class="modal-guide">AI Y버디와 대화한 내용이에요</p>
+
+        <div class="ai-history-stats">
+          <div class="ai-history-stat">
+            <span class="ai-history-stat-label">전체 학습시간</span>
+            <span class="ai-history-stat-val" id="aihTotalTime">40분 12초</span>
+          </div>
+          <div class="ai-history-stat">
+            <span class="ai-history-stat-label">팝콘</span>
+            <span class="ai-history-stat-val ai-history-stat-val--popcorn" id="aihPopcorn">3,000개</span>
+          </div>
+        </div>
+
+        <div class="ai-history-list-head">
+          <span>일자</span><span>레슨번호</span><span>소요팝콘</span><span>대화결과</span>
+        </div>
+        <div class="ai-history-list-body" id="aihListBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="mkOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mkTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn modal-close" data-type="back" id="mkBackBtn" aria-label="이전" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span class="icon-btn modal-close modal-close--spacer" id="mkHeadSpacer" aria-hidden="true"></span>
+        <span class="modal-title" id="mkTitle">보강 신청</span>
+        <button type="button" class="icon-btn modal-close" data-type="close" id="mkCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body" id="mkBody">
+        <!-- 1단계 : 날짜 선택 -->
+        <div id="mkStep1">
+          <p class="makeup-guide s3-mk-guide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.1"/></svg>오늘로부터 2주 안에 가능합니다. (단, 수강 기간 내)</p>
+          <div class="makeup-cal-card">
+            <span class="makeup-cal-month" id="mkCalMonth"></span>
+            <div class="makeup-weekday-row">
+              <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+            </div>
+            <div class="makeup-cal-grid" id="mkCalGrid"></div>
+          </div>
+        </div>
+
+        <!-- 2단계 : 수업 시간 · 강사 선택 -->
+        <div id="mkStep2" hidden>
+          <p class="makeup-guide s3-mk-guide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.1"/></svg>오늘로부터 2주 안에 가능합니다. (단, 수강 기간 내)</p>
+          <div class="makeup-step2-head">
+            <span class="chip makeup-date-chip" data-size="base" data-tone="brand" id="mkSelDateChip"></span>
+            
+          </div>
+
+          <div class="makeup-switch-row">
+            <div class="makeup-switch-text">
+              <strong>내 강사 검색</strong>
+              <span>기존 수강 이력이 있는 강사를 우선 보여드려요</span>
+            </div>
+            <button type="button" class="makeup-switch on" id="mkTutorSwitch" role="switch" aria-checked="true" aria-label="내 강사 검색">
+              <span class="makeup-switch-knob"></span>
+            </button>
+          </div>
+
+          <div class="makeup-section">
+            <p class="makeup-section-title">수업 시간 선택</p>
+            <div class="makeup-block-grid" id="mkBlockGrid"></div>
+          </div>
+
+          <div class="makeup-section" id="mkSlotSection" hidden>
+            <p class="makeup-section-title">상세 시간 선택</p>
+            <div class="makeup-slot-grid" id="mkSlotGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn" data-variant="primary" id="mkSubmitBtn" disabled>신청</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 보강 신청 완료 알림 — 센터 모달(마이크 테스트와 같은 셸 재사용) -->
+  <div class="mic-test-overlay" id="mkConfirmOverlay" hidden>
+    <div class="mic-test-card">
+      <div class="modal-result" style="padding:4px 2px 0;">
+        <span class="modal-result-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+        </span>
+        <h3>보강 수업이 신청되었어요</h3>
+        <p id="mkConfirmDesc">7월 24일(금) 21:00</p>
+      </div>
+      <button type="button" class="btn" data-variant="primary" id="mkConfirmBtn" style="width:100%; margin-top:22px;">확인</button>
+    </div>
+  </div>
+
+
+  <!-- 출석현황 — 튜터 카드의 출석체크 버튼으로 여는 전체 팝업(2026-10-02, 다른 팝업과 동일한 modal-overlay/modal 셸).
+       진행/출석/연기/취소·결석 통계 테이블 + 이번달 캘린더(수업일/출석완료 표시) + 스케줄 변경 버튼으로 구성.
+       데모 수치는 ATT_DEMO에서 관리(실데이터 연동 시 이 객체만 교체하면 됨) -->
+  <div class="modal-overlay" id="attOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="attTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn modal-close" data-type="close" id="attCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="modal-title" id="attTitle">출석현황</span>
+        <span class="icon-btn modal-close modal-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="modal-body" id="attBody">
+        <!-- 17p 연속 출석 · 배지 (add_attend) -->
+        <section class="att-streak" aria-label="연속 출석">
+          <div class="att-streak-top">
+            <h3 class="att-streak-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M12 3c.5 3.2 4.5 5 4.5 9.6A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.4c0-1.9 1-3.2 2-4 .2 1.5 1 2.4 2 2.7C11 9 11.2 6 12 3z"/><path d="M8 20h8"/></svg><span>연속 출석 <b id="attStreakN">5</b>회</span></h3>
+            <span class="att-best">최고 기록 <b id="attBest">7</b>회</span>
+          </div>
+          <p class="att-streak-sub" id="attStreakSub"></p>
+          <div class="att-steps" id="attSteps"><div class="att-steps-track"><div class="att-steps-fill" id="attStepsFill"></div></div></div>
+        </section>
+        <section class="att-badges" aria-label="출석 배지"><p class="att-badges-title">출석 배지</p><div id="attBadges" style="display:contents"></div></section>
+
+        <div class="attendance-progress-card">
+          <div class="attendance-progress-head">
+            <span class="attendance-progress-label">진행률</span>
+            <span class="attendance-progress-value"><b id="attProgressPct">42</b>% · <span id="attProgressDone">50</span>/<span id="attProgressTotal">120</span>회</span>
+          </div>
+          <div class="attendance-progress-track"><div class="attendance-progress-fill" id="attProgressFill"></div></div>
+        </div>
+
+        <div class="attendance-stats-row">
+          <div class="attendance-stat-item"><span class="attendance-stat-num" id="attStatAttend">46</span><span class="attendance-stat-label">출석</span></div>
+          <div class="attendance-stat-item"><span class="attendance-stat-num" id="attStatPostpone">2</span><span class="attendance-stat-label">연기</span></div>
+          <div class="attendance-stat-item"><span class="attendance-stat-num" id="attStatAbsent">2</span><span class="attendance-stat-label">취소/결석</span></div>
+        </div>
+
+        <div class="attendance-cal-panel">
+          <div class="attendance-cal-wrap">
+            <p class="makeup-cal-month" id="attCalMonth">2026년 10월</p>
+            <div class="makeup-weekday-row"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+            <div class="makeup-cal-grid attendance-cal-grid" id="attCalGrid"></div>
+          </div>
+          <div class="attendance-legend">
+            <span class="attendance-legend-item"><span class="attendance-legend-dot"></span>수업일</span>
+            <span class="attendance-legend-item"><span class="attendance-legend-dot is-done"></span>출석완료</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn" data-variant="primary" id="attChangeScheduleBtn" style="width:100%;">스케줄 변경</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 스케줄 플로우 공용 다이얼로그 (연기 신청 · 보강신청 안내 · 연기 취소 · 보강 취소 · 안내사항) ===== -->
+  <div class="dialog-overlay" id="scDlg" hidden>
+    <div class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="scDlgTitle">
+      <div class="dialog-head">
+        <button type="button" class="icon-btn dialog-icon" data-type="back" id="scDlgBack" aria-label="이전"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="dialog-title" id="scDlgTitle"></span>
+        <button type="button" class="icon-btn dialog-icon" data-type="close" id="scDlgClose" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="dialog-msg" id="scDlgMsg"></div>
+      <div class="dialog-btns" id="scDlgBtns"></div>
+      <button type="button" class="btn dialog-link" data-variant="link" id="scDlgLink"></button>
+    </div>
+  </div>
+
+  <!-- ===== 연기/보강 현황 (풀스크린 팝업) ===== -->
+  <div class="modal-overlay" id="pmOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+      <div class="modal-head">
+        <span class="icon-btn modal-close modal-close--spacer" aria-hidden="true"></span>
+        <span class="modal-title" id="pmTitle">연기/보강 현황</span>
+        <button type="button" class="icon-btn modal-close" data-type="close" id="pmCloseBtn" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="makeup-status-guide-row">
+          <p class="modal-guide">연기 및 보강 현황 확인 후, 보강 신청하세요.</p>
+          <button type="button" class="btn makeup-status-info-link" data-variant="link" id="pmInfoBtn">안내사항</button>
+        </div>
+        <div class="makeup-status-table" id="pmTable"></div>
+        <p class="makeup-status-note">※ 수업 연기 및 연기 취소는 주별 스케줄에서 가능합니다.</p>
+        <p class="makeup-status-sub-title">특별 보강 <b id="pmSpecialLeft">2</b>회</p>
+        <div class="makeup-status-table" id="pmSpecialTable"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 발음/문장 다시 평가 (단어: Intonation·Stress / 문장: Timing·Word·Intonation·Stress) ===== -->
+  <div class="mic-test-overlay" id="veOverlay" hidden>
+    <div class="mic-test-card voice-eval-card">
+      <button type="button" class="icon-btn mic-test-close" data-type="close" id="veCloseBtn" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <p class="mic-test-guide">마이크 버튼을 누른 후<br>문장을 말해주세요.</p>
+      <p class="mic-test-sample" id="veSample">taste</p>
+      <button type="button" class="mic-test-mic" id="veMicBtn" aria-label="녹음 시작"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg><span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
+      <p class="voice-eval-state" id="veState">마이크를 눌러 녹음을 시작하세요</p>
+      <div class="voice-eval-result" id="veResult"></div>
+      <p class="mic-test-note">※ 정확한 평가를 위해<br>마이크 기능이 있는 이어폰을 착용해 주세요.</p>
+    </div>
+  </div>
+
+  <!-- ===== 수업환경 테스트 (장치 테스트) ===== -->
+  <div class="modal-overlay" id="envOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="envTitle">
+      <div class="modal-head">
+        <span class="icon-btn modal-close modal-close--spacer" aria-hidden="true"></span>
+        <span class="modal-title" id="envTitle">수업환경 테스트</span>
+        <button type="button" class="icon-btn modal-close" data-type="close" id="envCloseBtn" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="env-head"><span class="env-head-title">장치 테스트</span><button type="button" class="btn env-info" data-variant="link" id="envInfoBtn">정보</button></div>
+        <div class="env-preview" id="envPreview">
+          <div class="env-cam">
+            <svg class="env-person" viewBox="0 0 120 90" fill="none"><circle cx="60" cy="36" r="16" fill="rgba(255,255,255,.22)"/><path d="M28 90c2-20 15-32 32-32s30 12 32 32z" fill="rgba(255,255,255,.18)"/></svg>
+            <span class="chip env-live" data-size="small" data-tone="neutral"><i></i>LIVE</span>
+            <span class="env-cam-name" id="envCamName">FaceTime HD Camera</span>
+          </div>
+          <div class="env-aud" hidden>
+            <div class="env-meter" id="envMeter"></div>
+            <span class="env-aud-cap" id="envAudCap">말을 해 보세요. 막대가 움직이면 정상이에요.</span>
+          </div>
+        </div>
+        <div class="modal-tabs-wrap env-tabs">
+          <div class="tabs" data-variant="line" role="tablist">
+            <button type="button" class="on" data-env-tab="video" role="tab" aria-selected="true">Video</button>
+            <button type="button" data-env-tab="audio" role="tab" aria-selected="false">Audio</button>
+          </div>
+        </div>
+        <div class="env-pane" data-env-pane="video">
+          <label class="env-label" for="envCamSel">카메라</label>
+          <div class="env-select"><select id="envCamSel"><option>FaceTime HD Camera</option><option>USB Camera (1080p)</option><option>OBS Virtual Camera</option></select></div>
+          <p class="env-ok"><i></i>카메라가 정상적으로 연결되었어요.</p>
+        </div>
+        <div class="env-pane" data-env-pane="audio" hidden>
+          <label class="env-label" for="envMicSel">마이크</label>
+          <div class="env-select"><select id="envMicSel"><option>기본 마이크 (내장)</option><option>AirPods Pro</option><option>USB Headset</option></select></div>
+          <label class="env-label" for="envSpkSel">스피커</label>
+          <div class="env-select"><select id="envSpkSel"><option>기본 스피커 (내장)</option><option>AirPods Pro</option></select></div>
+          <button type="button" class="env-play" id="envPlayBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="review-eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="env-play-label">테스트 사운드 재생</span></button>
+        </div>
+        <p class="env-guide">장치에 문제가 있나요? <button type="button" class="btn env-guide-link" data-variant="link" id="envGuideBtn">설정 가이드 보기</button></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 레슨별 전체보기 바텀시트 — 예습 3단계(교재/사전 학습/AI 학습) 팝업의 "전체 보기" 공용 시트 -->
+  <div class="lesson-sheet-overlay" id="lessonSheetOverlay" hidden>
+    <div class="lesson-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="lessonSheetTitle">
+      <div class="lesson-sheet-head">
+        <span></span>
+        <span class="lesson-sheet-title" id="lessonSheetTitle">전체 보기</span>
+        <button type="button" class="icon-btn lesson-sheet-close" data-type="close" id="lessonSheetClose" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="lesson-sheet-body" id="lessonSheetList"></div>
+    </div>
+  </div>
+
+  <!-- 학습 질문(질문하기) — 풀스크린 팝업 -->
+  <div class="modal-overlay" id="qaOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="qaTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn modal-close" data-type="close" id="qaCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="modal-title" id="qaTitle">학습 질문</span>
+        <span class="icon-btn modal-close modal-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="modal-tabs-wrap" id="qaTabsWrap">
+        <div class="tabs" data-variant="line" id="qaTabs" role="tablist" aria-label="학습 질문 화면 전환">
+          <button type="button" class="on" data-qa-tab="write" role="tab" aria-selected="true">질문하기</button>
+          <button type="button" data-qa-tab="history" role="tab" aria-selected="false">나의 질문 내역</button>
+        </div>
+      </div>
+
+      <div class="modal-body" id="qaBody">
+        <!-- 질문 작성 -->
+        <div id="qaWriteView">
+          <p class="modal-guide">Tutor가 직접 확인 후 답변드려요. 수강 중인 과정 언어(영어·일본어 등)로 작성해 주세요.</p>
+
+          <div class="qa-field" id="qaFieldTitle">
+            <label for="qaInputTitle">제목<span class="req">*</span></label>
+            <input type="text" id="qaInputTitle" placeholder="질문 제목을 입력하세요" maxlength="60">
+            <p class="qa-err">제목을 입력하세요.</p>
+          </div>
+
+          <div class="qa-field" id="qaFieldContent">
+            <label for="qaInputContent">내용<span class="req">*</span></label>
+            <textarea id="qaInputContent" placeholder="학습 질문을 입력하세요." maxlength="500"></textarea>
+            <p class="qa-err">내용을 입력하세요.</p>
+          </div>
+
+          <div class="qa-field" id="qaFieldEmail">
+            <label for="qaInputEmail">답변 받을 이메일<span class="req">*</span></label>
+            <input type="email" id="qaInputEmail" placeholder="abc@abc.co.kr">
+            <p class="qa-err">이메일을 입력하세요.</p>
+          </div>
+
+          <div class="modal-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 11.5h1v4.5h1"/></svg>
+            <span>보낸 질문은 Tutor에게 이메일로 바로 발송되며, 전송 후에는 수정·삭제할 수 없어요.</span>
+          </div>
+        </div>
+
+        <!-- 나의 질문 내역 -->
+        <div id="qaHistoryView" hidden>
+          <div class="modal-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 11.5h1v4.5h1"/></svg>
+            <span>내가 질문한 내역이에요. Tutor의 답변은 질문 시 입력한 이메일로 직접 발송돼요.</span>
+          </div>
+          <div class="qa-history-list" id="qaHistoryList"></div>
+        </div>
+
+        <!-- 제출 완료 -->
+        <div id="qaSuccessView" class="modal-result" hidden>
+          <span class="modal-result-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <h3>학습 질문이 접수되었습니다</h3>
+          <p>Tutor 확인 후 입력하신 이메일로<br>답변드릴게요.</p>
+        </div>
+      </div>
+
+      <div class="modal-foot" id="qaFootWrite">
+        <button type="button" class="btn" data-variant="secondary" id="qaCancelBtn">취소</button>
+        <button type="button" class="btn" data-variant="primary" id="qaSubmitBtn">보내기</button>
+      </div>
+      <div class="modal-foot" id="qaFootSuccess" hidden>
+        <button type="button" class="btn" data-variant="primary" id="qaSuccessConfirmBtn">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 강사 만족도 평가 — 풀스크린 팝업 -->
+  <div class="modal-overlay" id="satOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="satTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn modal-close" data-type="close" id="satCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="modal-title" id="satTitle">강사 만족도 평가</span>
+        <span class="icon-btn modal-close modal-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="modal-body" id="satBody">
+        <!-- 평가 작성 -->
+        <div id="satFormView">
+          <p class="modal-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 11.5h1v4.5h1"/></svg>
+            <span>만족도 평가는 수강 기간 중 1회만 참여할 수 있어요.</span>
+          </p>
+          <p class="satisfaction-error-banner" id="satErrorBanner">평가하지 않은 항목을 확인해 주세요.</p>
+          <div class="satisfaction-list" id="satList"></div>
+        </div>
+
+        <!-- 이미 참여 완료 -->
+        <div id="satLockedView" class="modal-result" hidden>
+          <span class="modal-result-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <h3>만족도 평가를 완료했어요</h3>
+          <p>수강 기간 중 1회만 참여할 수 있어요.<br>소중한 의견 감사해요.</p>
+        </div>
+
+        <!-- 제출 완료 -->
+        <div id="satSuccessView" class="modal-result" hidden>
+          <span class="modal-result-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <h3>강사 만족도 평가가 완료되었습니다</h3>
+          <p>참여해 주셔서 감사합니다.</p>
+        </div>
+      </div>
+
+      <div class="modal-foot" id="satFootForm">
+        <button type="button" class="btn" data-variant="secondary" id="satCancelBtn">취소</button>
+        <button type="button" class="btn" data-variant="primary" id="satSubmitBtn">제출</button>
+      </div>
+      <div class="modal-foot" id="satFootDone" hidden>
+        <button type="button" class="btn" data-variant="primary" id="satDoneConfirmBtn">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 수업 리뷰 — 풀스크린 팝업 -->
+  <div class="modal-overlay" id="revOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="revTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn modal-close" data-type="close" id="revCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="modal-title" id="revTitle">수업 리뷰</span>
+        <span class="icon-btn modal-close modal-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="modal-body" id="revBody">
+        <div class="review-lesson">
+          <div class="review-lesson-top">
+            <span class="chip review-course-chip" data-size="base" data-tone="brand">Speaking Practice with YBM 초급</span>
+            <span class="review-lesson-date">8월 13일 (금) 10:00</span>
+          </div>
+          <p class="review-lesson-title" id="revLessonTitle">Lesson.01 · Small Talk &amp; Ice Breaking</p>
+        </div>
+
+        <p class="review-section-title">Tutor Feedback</p>
+        <div class="review-feedback">
+          <p class="review-feedback-text">You did an amazing job today, Chloe. You were very conversant and could talk about a variety of topics. Your pronunciation was clear, especially when you took your time to say the words slowly. Your vocabulary was relatively strong, though there were a few grammatical slips. Just keep working on your grammar and pronunciation, and you'll continue to improve. Keep up the great work! :-)</p>
+        </div>
+
+        <div class="review-section">
+          <div class="review-section-head">
+            <p class="review-section-title">Pronunciation</p>
+            <button type="button" class="btn review-mictest-trigger" data-variant="secondary" data-size="sm" id="revMicTestTrigger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
+              마이크 테스트
+            </button>
+          </div>
+          <p class="review-section-desc">주의해야 할 발음이에요. 마이크 버튼으로 다시 평가해 보세요.</p>
+          <div class="review-pron-list" id="revPronList"></div>
+        </div>
+
+        <div class="review-section">
+          <p class="review-section-title">Grammar</p>
+          <p class="review-section-desc">Tutor가 교정해 준 문장이에요.</p>
+          <div class="review-gram-list" id="revGramList"></div>
+        </div>
+
+        <p class="modal-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 11.5h1v4.5h1"/></svg>
+          <span>수업 다시 듣기와 발음 평가는 수업일로부터 2주간만 제공돼요.</span>
+        </p>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn" data-variant="secondary" id="revCloseFootBtn">닫기</button>
+        <button type="button" class="review-replay" id="revReplayBtn" aria-pressed="false">
+          <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span class="review-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="review-replay-label">지난 수업 다시 듣기</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 마이크 테스트 — 수업 리뷰 발음 확인 섹션에서 마이크 상태를 미리 점검하는 보조 팝업(수업리뷰 위에 얹힘) -->
+  <div class="mic-test-overlay" id="revMicTestOverlay" hidden>
+    <div class="mic-test-card">
+      <button type="button" class="icon-btn mic-test-close" data-type="close" id="revMicTestCloseBtn" aria-label="닫기">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <p class="mic-test-guide">마이크 버튼을 누른 후<br>문장을 말해주세요.</p>
+      <p class="mic-test-sample">Hello</p>
+      <button type="button" class="mic-test-mic" id="revMicTestBtn" aria-label="마이크 테스트 시작">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg>
+      <span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
+      <p class="mic-test-note">※ 정확한 평가를 위해<br>마이크 기능이 있는 이어폰을 착용해 주세요.</p>
+      <div class="mic-test-toast" id="revMicTestToast"></div>
+    </div>
+  </div>
+
+  <!-- Class Report(월간 리포트) — 풀스크린 팝업 -->
+  <div class="modal-overlay" id="crOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="crTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn modal-close" data-type="close" id="crCloseBtn" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <span class="modal-title" id="crTitle">Class Report</span>
+        <span class="icon-btn modal-close modal-close--spacer" aria-hidden="true"></span>
+      </div>
+
+      <div class="modal-body" id="crBody">
+        <div class="review-lesson">
+          <div class="review-lesson-top">
+            <span class="chip review-course-chip" data-size="base" data-tone="brand">Speaking Practice with YBM 초급</span>
+            <span class="review-lesson-date" id="crPeriod">평가 기간 07.01–07.31</span>
+          </div>
+        </div>
+
+        <p class="report-heading">Evaluation</p>
+        <div class="report-radar-wrap" id="crRadarWrap"></div>
+
+        <div class="report-section">
+          <p class="report-heading">Areas for Improvement</p>
+          <div class="review-feedback">
+            <p class="review-feedback-text">You did an amazing job today, Chloe. You were very conversant and could talk about a variety of topics. You</p>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <p class="report-heading">Instruction</p>
+          <div class="review-feedback">
+            <p class="review-feedback-text">You did an amazing job today, Chloe. You were very of topics. You</p>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <p class="report-heading">Comment</p>
+          <div class="review-feedback">
+            <p class="review-feedback-text">You did were very conversant and could talk about a variety of topics. You</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 46 내 강의 정보 — Classroom_020_WEB_LP · 강의 카드 과정명 옆 ⓘ (예정 · 완료 카드와 같은 구성) -->
+  <div class="mic-test-overlay" id="infoOverlay" hidden>
+    <div class="mic-test-card" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+      <div class="info-pop">
+        <div class="class-course-img"><img src="https://upsisa.ybmsisa.com/e4u/YBMIngang/ADMIN/files/product/info/D805A4EE-36C7-4F3A-A85C-9430EB0EBBAC.jpg" id="infoImg" alt=""><div class="class-course-img-scrim" aria-hidden="true"></div><h3 class="class-done-title" id="infoTitle"></h3></div>
+        <div class="class-meta"><span id="infoType"></span><span class="class-when" id="infoWhen"></span><span class="class-plan" id="infoPlan"></span></div>
+        <div class="class-kv"><span class="class-kv-label">수강기간</span><span class="class-kv-value" id="infoPeriod"></span></div>
+        <div class="class-kv"><span class="class-kv-label">강사</span><span class="class-kv-value" id="infoTutor"></span></div>
+      </div>
+      <div class="modal-foot" style="padding:20px 0 0; border-top:none; background:none;">
+        <button type="button" class="btn" data-variant="primary" id="infoOk">확인</button>
+      </div>
+    </div>
+  </div>
+
+<!-- 50~63 수업 루틴 변경 — Schedule_020~025_WEB_LP (스케줄 > 수업 루틴 변경) -->
+  <div class="modal-overlay" id="rtOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rtTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn modal-close" data-type="back" id="rtBack" aria-label="이전" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="icon-btn modal-close modal-close--spacer" id="rtSpacer" aria-hidden="true"></span>
+        <span class="modal-title" id="rtTitle">수업 루틴 변경</span>
+        <button type="button" class="icon-btn modal-close" data-type="close" id="rtClose" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="modal-body" id="rtBody">
+        <!-- 메뉴 -->
+        <div class="rt-view" data-view="menu">
+          <div class="rt-current"><span class="rt-ico" style="background:var(--surface-default)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 6h16v14H4z"/><path d="M4 10h16"/><path d="M8 3v4"/><path d="M16 3v4"/></svg></span><span class="rt-current-txt"><span class="rt-current-title">Speaking Practice with YBM 초급</span><span class="rt-current-sub" id="rtNow">화 · 목 19:30 · Sarah Jenkins</span></span></div>
+          <span class="rt-label">변경할 항목을 선택하세요</span>
+          <div class="rt-menu">
+            <button type="button" class="rt-menu-item" data-rt-flow="all"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 6h16v14H4z"/><path d="M4 10h16"/><path d="M8 3v4"/><path d="M16 3v4"/></svg></span><span class="rt-menu-txt"><strong>전체 스케줄 변경</strong><span>요일 · 시간 · 강사</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" class="rt-chev"><path d="M9 6l6 6-6 6"/></svg></button>
+            <button type="button" class="rt-menu-item" data-rt-flow="tutor"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c1.2-4 4.3-6 8-6s6.8 2 8 6"/></svg></span><span class="rt-menu-txt"><strong>강사 변경</strong><span>요일 · 시간은 그대로</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" class="rt-chev"><path d="M9 6l6 6-6 6"/></svg></button>
+            <button type="button" class="rt-menu-item" data-rt-flow="book"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 5h7v14H4z"/><path d="M13 5h7v14h-7z"/></svg></span><span class="rt-menu-txt"><strong>교재 변경</strong><span>레벨 · 교재 · 시작 유닛</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" class="rt-chev"><path d="M9 6l6 6-6 6"/></svg></button>
+            <button type="button" class="rt-menu-item" data-rt-flow="phone"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M7 3h10v18H7z"/><path d="M11 18h2"/></svg></span><span class="rt-menu-txt"><strong>전화번호 변경</strong><span>전화 수업을 받을 번호</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" class="rt-chev"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
+          <span class="rt-label">변경 이력</span>
+          <ul class="rt-history">
+            <li><time>26.09.15</time><span><b>시간 변경</b> 09:00 → 19:30<small>09.17부터 적용</small></span></li>
+            <li><time>26.08.03</time><span><b>강사 변경</b> Grace Lee → Sarah Jenkins<small>08.05부터 적용</small></span></li>
+          </ul>
+        </div>
+        <!-- 시작일 -->
+        <div class="rt-view" data-view="date" hidden>
+          <p class="makeup-guide" id="rtDateGuide"></p>
+          <div class="makeup-cal-card">
+            <span class="makeup-cal-month" id="rtCalMonth"></span>
+            <div class="makeup-weekday-row"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+            <div class="makeup-cal-grid" id="rtCalGrid"></div>
+          </div>
+        </div>
+        <!-- 요일 · 시간 -->
+        <div class="rt-view" data-view="detail" hidden>
+          <div class="rt-head"><span class="chip makeup-date-chip" data-size="base" data-tone="brand" id="rtDateChip"></span><p class="makeup-guide">변경 가능한 시간만 보여요</p></div>
+          <div class="makeup-section">
+            <div class="rt-sec-head"><p class="makeup-section-title">요일 선택</p><span class="rt-count">주 2회 · <b id="rtDayCount">0</b>/2</span></div>
+            <div class="rt-day-grid" id="rtDayGrid"></div>
+          </div>
+          <div class="makeup-section">
+            <p class="makeup-section-title">수업 시간 선택</p>
+            <div class="makeup-block-grid" id="rtBlockGrid"></div>
+          </div>
+          <div class="makeup-section" id="rtSlotSec" hidden>
+            <p class="makeup-section-title">상세 시간 선택</p>
+            <div class="makeup-slot-grid" id="rtSlotGrid"></div>
+          </div>
+        </div>
+        <!-- 강사 -->
+        <div class="rt-view" data-view="tutor" hidden>
+          <span class="rt-sel-chip" id="rtTutorSum"></span>
+          <button type="button" class="rt-style-link" data-rt-go="style"><span class="rt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M4 7h10"/><path d="M18 7h2"/><path d="M4 17h4"/><path d="M12 17h8"/><path d="M16 5v4"/><path d="M10 15v4"/></svg></span><span class="rt-menu-txt"><strong>수업 스타일 설정</strong><span>원하는 수업 방식을 강사에게 알려요</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" class="rt-chev"><path d="M9 6l6 6-6 6"/></svg></button>
+          <div class="rt-sec-head"><span class="rt-label">수업 가능 강사 <b id="rtTutorN" style="color:var(--brand-text-link)"></b></span></div>
+          <div class="rt-tutor-list" id="rtTutorList"></div>
+          <span class="rt-label">나와 수업한 적이 있는 강사</span>
+          <div class="rt-tutor-list" id="rtTutorPast"></div>
+        </div>
+        <!-- 수업 스타일 -->
+        <div class="rt-view" data-view="style" hidden>
+          <p class="makeup-guide">설정한 스타일은 강사에게 전달돼요.</p>
+          <div id="rtStyleRows"></div>
+        </div>
+        <!-- 교재 레벨 -->
+        <div class="rt-view" data-view="level" hidden>
+          <span class="rt-sel-chip" id="rtBookDate"></span>
+          <span class="rt-label">레벨을 선택하세요 (여러 개 선택 가능)</span>
+          <div class="rt-check-list" id="rtLevelList"></div>
+        </div>
+        <!-- 교재 목록 -->
+        <div class="rt-view" data-view="books" hidden>
+          <p class="makeup-guide">수업할 교재를 선택하세요.</p>
+          <div id="rtBookList"></div>
+        </div>
+        <!-- 시작 유닛 -->
+        <div class="rt-view" data-view="unit" hidden>
+          <span class="rt-sel-chip" id="rtBookName"></span>
+          <span class="rt-label">시작할 유닛을 선택하세요</span>
+          <div class="rt-check-list" id="rtUnitList"></div>
+        </div>
+        <!-- 전화번호 -->
+        <div class="rt-view" data-view="phone" hidden>
+          <p class="rt-now">현재 번호<b>010-1234-5678</b></p>
+          <div class="rt-field">
+            <label for="rtPhone">수업 받으실 번호를 입력하세요</label>
+            <input type="tel" id="rtPhone" inputmode="numeric" maxlength="11" placeholder="예) 01012341234" autocomplete="tel">
+            <p>- 없이 숫자만 입력해 주세요.<br>변경한 번호는 바로 반영돼요.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot" id="rtFoot" hidden>
+        <button type="button" class="btn" data-variant="secondary" id="rtSub" hidden></button>
+        <button type="button" class="btn" data-variant="primary" id="rtMain">다음</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 알럿 -->
+  <div class="mic-test-overlay" id="rtAlertOverlay" hidden>
+    <div class="mic-test-card" role="alertdialog" aria-modal="true" aria-labelledby="rtAlertTitle">
+      <div class="modal-result" style="padding-top:2px;">
+        <span class="modal-result-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.6h.01"/></svg></span>
+        <h3 id="rtAlertTitle"></h3><p id="rtAlertDesc"></p>
+      </div>
+      <button type="button" class="btn" data-variant="primary" id="rtAlertOk" style="width:100%; margin-top:22px;">확인</button>
+    </div>
+  </div>
+  <!-- 완료 -->
+  <div class="mic-test-overlay" id="rtDoneOverlay" hidden>
+    <div class="mic-test-card" role="alertdialog" aria-modal="true" aria-labelledby="rtDoneTitle">
+      <div class="modal-result" style="padding-top:2px;">
+        <span class="modal-result-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>
+        <h3 id="rtDoneTitle"></h3>
+        <dl class="rt-kv" id="rtDoneKv"></dl>
+      </div>
+      <button type="button" class="btn" data-variant="primary" id="rtDoneOk" style="width:100%; margin-top:22px;">확인</button>
+    </div>
+  </div>
+  <!-- 강사 정보 -->
+  <div class="mic-test-overlay" id="rtTutorOverlay" hidden>
+    <div class="mic-test-card rt-tutor-pop" role="dialog" aria-modal="true" aria-labelledby="rtTpName">
+      <div class="rt-tutor-pop-head"><div class="rt-av" id="rtTpAv"></div><span><strong id="rtTpName"></strong><span id="rtTpMeta"></span></span></div>
+      <dl class="rt-kv" id="rtTpKv" style="margin-top:0"></dl>
+      <p id="rtTpIntro"></p>
+      <button type="button" class="btn" data-variant="primary" id="rtTpOk" style="width:100%; margin-top:22px;">확인</button>
+    </div>
+  </div>

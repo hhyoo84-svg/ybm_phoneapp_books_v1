@@ -1,0 +1,275 @@
+/* ==================================================================
+   classroom.css — 클래스룸 — 강좌 스와이프 · 입장 카드 · 예습 로드맵 · 리뷰/리포트/질문·만족도 카드 · 예정/종료
+   ================================================================== */
+.classroom-logo{display:flex; align-items:center; gap:7px; min-width:0; justify-self:start;}
+.classroom-logo-img{height:22px; width:auto; flex:none;}
+.classroom-logo-fallback{display:none; align-items:flex-end; gap:2px; height:20px; flex:none;}
+.classroom-logo-fallback .y{width:8px; height:20px; background:#ed1b2f; border-radius:3px 3px 0 0; transform:skewX(-6deg);}
+.classroom-logo-fallback .b1{width:4px; height:16px; background:#005bac;}
+.classroom-logo-fallback .b2{width:4px; height:20px; background:#005bac;}
+.classroom-logo-fallback .b3{width:4px; height:12px; background:#005bac;}
+/* 상태 탭 : 시안2의 3등분 탭 구조는 유지하고, 글자 크기·굵기·밑줄 두께는 DS 상태 탭(19px · 600/800 · 3px) 적용 */
+.tabs.classroom-tabs{position:relative; display:flex; background:var(--surface-default); border-bottom:1px solid var(--border-subtle); padding:0 16px;}
+.tabs.classroom-tabs button .c{font-size:var(--font-size-14); font-weight:var(--font-weight-semibold); color:var(--text-tertiary);}
+.tabs.classroom-tabs button.on{color:var(--text-primary); font-weight:var(--font-weight-bold);}
+.tabs.classroom-tabs .ind{
+    position:absolute; left:16px; bottom:-1px; height:3px; width:calc((100% - 32px)/3); border-radius:2px; transition:transform .22s cubic-bezier(.4,0,.2,1);
+  }
+/* ---------- 라이브 카드 : 시안2 그라데이션 카드 유지, 타이포·CTA는 DS 히어로 규격 ---------- */
+.live-card{
+    position:relative; border-radius:var(--radius-8); overflow:hidden; color:#fff; 
+    transition:padding .35s ease;
+  }
+.live-card::before, .live-card::after{content:""; position:absolute; border-radius:50%; pointer-events:none;}
+.live-card::before{width:176px; height:176px; top:-64px; right:-64px; background:rgba(255,255,255,.1); filter:blur(20px);}
+.live-card::after{width:144px; height:144px; bottom:-64px; left:-48px; background:rgba(255,255,255,.08); filter:blur(12px);}
+.live-card > *{position:relative; z-index:1;}
+.live-card .lesson-num{text-align:center; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:rgba(255,255,255,.72);}
+.live-card .lesson{text-align:center; font-weight:var(--font-weight-semibold); line-height:1.35; margin-top:4px;}
+.live-card.urgent .clock-ic{animation:clockShake 1.1s ease-in-out infinite; transform-origin:50% 65%;}
+.enter-btn{ width:100%; font-size:var(--font-size-16); font-weight:var(--font-weight-semibold);
+    display:flex; align-items:center; justify-content:center; gap:8px; transition:transform .15s ease;
+  }
+.enter-btn svg{width:18px; height:18px; flex:none;}
+.enter-btn:active{transform:translateY(1px);}
+/* ---------- 사전 예습 카드 ---------- */
+.timeline{display:flex; flex-direction:column;}
+.step{
+    width:100%; text-align:left; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:14px 16px 14px 12px; background:var(--surface-muted);
+    transition:background .4s ease;
+  }
+.step:active{filter:brightness(.98);}
+.step .name{font-size:var(--font-size-16); font-weight:var(--font-weight-bold); letter-spacing:-.2px; color:var(--text-primary);}
+.step.done{background:var(--neutral-bg);}
+/* =====================================================================
+     모니모 카드 스타일 참고 (2026-09-29) — 사전 예습 · 수업리뷰 · Class Report · 질문하기 · 만족도
+     - 틴트 파스텔 카드 + 흰 안쪽 행, 두 줄 제목에 핵심 한 단어만 브랜드 컬러로 강조
+     - 부드럽고 넓게 퍼지는 그림자, 오른쪽 일러스트, 해요체 UX 라이팅
+     ===================================================================== */
+.home-title{display:block; font-weight:var(--font-weight-bold); line-height:1.4; letter-spacing:-.3px; color:var(--text-primary); word-break:keep-all;}
+.home-title em{font-style:normal;}
+.step.home-row{
+    background:var(--surface-default); border-radius:var(--radius-8); padding:14px 14px 14px 12px; gap:12px;
+  }
+.home-row-ic{width:46px; height:46px; border-radius:50%; background:var(--surface-muted); flex:none; display:flex; align-items:center; justify-content:center;}
+.home-row-ic svg{width:32px; height:32px;}
+.home-row-txt{flex:1; min-width:0; display:flex; flex-direction:column;}
+.home-row-txt .name{font-size:var(--font-size-16); font-weight:var(--font-weight-bold); color:var(--text-primary); letter-spacing:-.2px;}
+.step.home-row.done{background:var(--surface-default);}
+.step.home-row.done .home-row-ic{background:var(--brand-interactive-subtle);}
+/* 공용 틴트 카드 */
+.home-card{
+    display:block; width:100%; text-align:left; border-radius:var(--radius-8); padding:22px 20px 18px;
+    box-shadow:var(--shadow-md); transition:transform .12s ease;
+  }
+.home-card:active{transform:translateY(1px);}
+.home-white{background:var(--surface-default);}
+.home-card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+.home-chip{display:inline-block; background:var(--brand-interactive); margin-bottom:10px;}
+.home-meta{display:block; margin-top:8px; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+.home-art{flex:none;}
+.home-art svg{width:100%; height:100%;}
+.home-inner{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:18px;
+    background:var(--surface-default); padding:14px 14px 14px 16px;
+  }
+.home-inner-txt{font-size:var(--font-size-14); font-weight:var(--font-weight-medium); color:var(--text-secondary); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; word-break:keep-all;}
+.home-inner svg{width:18px; height:18px; color:var(--text-tertiary); flex:none;}
+/* 반폭 카드 2개 : 질문하기 · 만족도 */
+.home-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.home-sm{position:relative; padding:20px 16px 16px; min-height:176px; display:flex; flex-direction:column;}
+.home-sm-title{display:block; font-weight:var(--font-weight-bold); line-height:1.4; color:var(--text-primary); letter-spacing:-.2px; word-break:keep-all;}
+.home-sm-art{position:absolute; right:12px; bottom:12px; width:60px; height:60px;}
+.home-sm-art svg{width:100%; height:100%;}
+.home-faces{margin-top:auto; display:flex; justify-content:space-around; gap:6px; padding-top:12px;}
+.home-face{display:flex; flex-direction:column; align-items:center; gap:6px; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); padding:4px;}
+.home-face svg{width:44px; height:44px; transition:transform .15s ease;}
+.home-face:active svg{transform:scale(.9);}
+/* ---- 2026-09-29 수정 : 탭은 그린 없이(잉크 컬러), 배너는 강좌명 우선 ---- */
+.tabs.classroom-tabs .ind{background:var(--text-primary);}
+.tabs.classroom-tabs button.on .c{color:var(--text-primary);}
+/* ---- 수강중 강좌 스와이프 (2026-09-29) ---- */
+.tabs.classroom-tabs button{gap:0;}
+.course-swiper-wrap{display:block;}
+.course-swiper{
+    display:flex; gap:8px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none;
+    margin:0 -8px; padding:0 8px; scroll-padding:0 8px; -webkit-overflow-scrolling:touch;
+  }
+.course-swiper::-webkit-scrollbar{display:none;}
+.course-slide{flex:0 0 100%; scroll-snap-align:start; position:relative;}
+.course-slide:last-child{scroll-snap-align:end;}
+.live-card .lesson, .live-card .lesson-num{transition:opacity .2s ease;}
+.live-card.swapping .lesson, .live-card.swapping .lesson-num{opacity:0;}
+@media (min-width:640px){
+  .course-swiper{margin:0 -20px; padding:0 20px; scroll-padding:0 20px;}
+}
+.home-row-txt{gap:0;}
+/* 수강 강좌 : 카드 박스 없이 한 줄 — 강좌명(굵게) + 선생님 이름(초록 작은 글씨) + 1/2 */
+.course-slide{background:transparent; padding:6px 2px; gap:8px; align-items:baseline;}
+.course-slide .tutor-avatar{display:none;}
+.course-slide .ai-txt .tutor{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); white-space:nowrap;}
+/* 라이브 카드 : 블랙 바탕 + 네온 CTA */
+.live-card{background:radial-gradient(120% 90% at 100% 0%, #2a2a2a 0%, rgba(42,42,42,0) 55%), var(--color-gray-900); box-shadow:0 18px 32px -18px rgba(0,0,0,.45);}
+.live-card::before, .live-card::after{display:none;}
+.enter-btn{background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover)); color:var(--brand-on-interactive); box-shadow:none;}
+.step.home-row{box-shadow:0 0 0 1px var(--border-subtle), var(--shadow-xs);}
+/* 리뷰·리포트 : 흰 카드 + 얇은 라인, 안쪽 행은 옅은 회색 */
+.home-pink, .home-blue{background:var(--surface-default); box-shadow:0 0 0 1px var(--border-subtle), var(--shadow-xs);}
+.home-pink .home-inner, .home-blue .home-inner{background:var(--surface-muted);}
+.home-title em{color:var(--brand-text-link);}
+/* 질문하기 : 네온 그린 면 / 만족도 : 흰 카드 */
+.home-white{box-shadow:0 0 0 1px var(--border-subtle), var(--shadow-xs);}
+/* ---- 라이브 카드 : 타이머가 버튼 안으로 — 시작 시간이 되면 '강의실 입장하기'로 전환 ---- */
+.enter-btn{margin-top:18px; min-height:64px; padding:12px 20px;}
+.enter-btn .enter-btn-wait{display:flex; align-items:center; justify-content:center; gap:8px;}
+.enter-btn .enter-btn-wait svg{width:19px; height:19px;}
+.enter-btn .enter-btn-label{font-size:var(--font-size-16); font-weight:var(--font-weight-medium);}
+.enter-btn .enter-btn-time{font-size:var(--font-size-28); font-weight:var(--font-weight-bold); letter-spacing:.5px; line-height:1;}
+.enter-btn .enter-btn-go{display:flex; align-items:center; justify-content:center; gap:8px; font-size:var(--font-size-18); font-weight:var(--font-weight-bold);}
+.enter-btn .enter-btn-go svg{width:20px; height:20px;}
+.enter-btn.is-wait{cursor:default;}
+.live-card{padding:24px 20px 20px;}
+.live-card.urgent{padding:24px 20px 20px;}
+/* ---- 2026-10-01 : 섹션 간격 · 만족도 숫자 버튼 · 강좌 스와이프 빼꼼 ---- */
+#tileReview{margin-top:12px;}
+.home-grid{margin-top:12px;}
+.course-swiper.peek .course-slide{animation:coursePeek 1.8s cubic-bezier(.4,0,.2,1) 1;}
+@media (prefers-reduced-motion: reduce){
+  .course-swiper.peek .course-slide{animation:none;}
+}
+/* 2026-10-01 : 액션 후 카드·버튼 주변에 깜박이던 링/펄스 애니메이션 제거 */
+.enter-btn.attn, .enter-btn.is-ready{animation:none !important;}
+.timeline{gap:8px;}
+.ai-banner, .step, .schedule-agenda-empty, .schedule-course-menu, .review-lesson, .review-feedback, .review-pron-item, .review-gram-item, .home-inner, .mic-test-toast.fail{border-radius:8px;}
+/* 강좌 페이징 : 1/2 칩 대신 도트 (현재 강좌 = 그린 바, 나머지 = 회색 점) */
+.course-slide .slide-dots{margin-left:auto; flex:none; align-self:center; display:flex; align-items:center; gap:4px;}
+.course-slide .slide-dots i{display:block; width:6px; height:6px; border-radius:50%; background:rgba(30,30,35,.18);}
+.course-slide .slide-dots i.on{width:16px; border-radius:3px; background:linear-gradient(150deg,var(--brand-interactive),var(--brand-interactive-hover));}
+.home-face svg{animation:icFace 2.8s ease-in-out infinite;}
+@media (prefers-reduced-motion: reduce){
+  .icon-pen, .art-pen, .art-line, .icon-dot, .art-bar, .art-q, .home-face svg{animation:none !important;}
+}
+/* ===== 시안1 v3 이식 (원본 그대로) ===== *//* ---------- 2026-10-01: 클래스룸 상태 탭 "예정"/"종료" 리스트 페이지 ----------
+     "진행" 탭의 튜터 히어로 카드와 달리, 예정·종료는 여러 강좌를 세로로 나열하는 리스트형 페이지라
+     classroomBody와는 별도의 .classroom-body(classroomUpcomingBody/classroomDoneBody)로 분리했다. */
+.class-list{display:flex; flex-direction:column;}
+/* 예정 — 상단 "시작일 설정" 안내 배너 : 보라 그라데이션으로 눈에 띄게, 바로가기는 외부 브라우저(실제 서비스는
+     회원 로그인 후 시작일 설정 페이지로 연동되므로 새 탭으로 열리는 링크로 표현) *//* 2026-10-01: "예정"/"완료" 카드 공통 — 상단에 풀폭 강좌 이미지를 깔고 타이틀을 이미지 위에 겹쳐 올려(공백 없이)
+     이미지 높이값 안에서 함께 표시. 기존 56px 그라데이션 썸네일 + 별도 타이틀 줄 레이아웃을 대체(예정에서 먼저 적용,
+     이후 완료 카드도 동일 UI로 통일 — 2026-10-01 추가 요청) */
+.class-upcoming-card, .class-done-card{
+    background:var(--surface-default);
+    overflow:hidden; display:flex; flex-direction:column;
+  }
+.class-course-img{position:relative; width:100%; background:var(--surface-muted);}
+.class-course-img img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;}
+.class-course-img-scrim{position:absolute; inset:0;}
+.class-upcoming-title, .class-done-title{
+    position:absolute; bottom:14px; font-weight:var(--font-weight-bold); letter-spacing:-.2px; line-height:1.3;
+    color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.3);
+  }
+.class-upcoming-body, .class-done-body{ display:flex; flex-direction:column;}
+/* 날짜만 칩으로 강조 — "수업 시작일을 설정하세요" 자체는 일반 텍스트로 톤다운 *//* 2026-10-01: 기존엔 "수강기간: 2026.07.07~2026.12.31" + 방식·시간을 <br>로 이어붙인 한 단락
+     (.class-done-meta)이었는데, 줄 사이가 붙어있어 구분이 안 된다는 피드백 + 완성도를 더 다듬어 달라는
+     요청으로 "예정" 카드와 동일한 .class-info-rows/.class-info-row 스택(줄마다 gap:7px, line-height:1.4)으로
+     교체 — 기간은 이미 있는 .class-date-chip으로 강조해 한눈에 띄도록(두 카드가 같은 칩 언어를 공유) *//* 종료 — 수업 리뷰/월말 평가서/AI 히스토리 3버튼. 상태 배지가 아닌 "실행 가능한 행동"이므로
+     리스트의 다른 정보 텍스트와 분명히 구분되도록 보라 그라데이션 필 버튼으로 통일한다.
+     2026-10-01: 메인 홈의 아이콘 그리드(.classroom-icon-grid/.classroom-icon-tile, gap:10px·svg 22px)에 맞춰
+     버튼도 한 단계 키워 또렷하게(간격 8→10px, 아이콘 19→21px, 라벨 12.5→13px) */
+.class-done-actions{display:grid; grid-template-columns:repeat(3,1fr);}
+.class-done-action-btn{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; 
+  }
+.class-done-action-btn span{ letter-spacing:-.1px; white-space:nowrap;}
+.class-done-action-btn:active{transform:translateY(1px); filter:brightness(.97);}
+/* 종료 — 진행률 요약. 카드를 하나 더 쌓기보다 같은 class-done-card 안에 구분선으로만 나눠
+     "한 강좌의 정보"라는 맥락을 유지한다.
+     2026-10-02: "진행률을 동일하게 표현해달라"는 요청으로, 여기서만 쓰던 도넛+4분할 그리드를 걷어내고
+     출석현황 팝업(#attOverlay)과 완전히 같은 막대+3분할 통계 마크업(.attendance-progress-card/.attendance-stats-row)을
+     그대로 재사용한다 — 앱 안에서 "진행률"이 하나의 모양으로만 보이도록 */
+.class-attend-summary{display:flex; flex-direction:column; padding-top:16px; border-top:1px solid var(--border-subtle);}
+.class-attend-summary .attendance-progress-card{margin-bottom:16px;}
+.class-attend-summary .attendance-stats-row{margin-bottom:0;}
+/* 12px 격자 전용 아이콘 — 선 1.2 = 1px대, 작은 크기에서도 덜 뭉개짐 *//* 라이브 카드 우상단 : 출석현황 · 일정 */
+.live-card .live-actions{position:absolute; top:12px; right:12px; display:flex; gap:6px; z-index:2;}
+.live-act{width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.1); color:#fff;}
+.live-act svg{width:16px; height:16px;}
+.live-act:active{background:rgba(255,255,255,.2);}
+/* 예정 / 종료 탭 페이지 */
+.class-list{gap:12px;}
+.class-upcoming-card, .class-done-card{border-radius:8px; box-shadow:0 0 0 1px var(--border-subtle), var(--shadow-xs);}
+.class-course-img{height:136px;}
+.class-course-img-scrim{background:linear-gradient(180deg,rgba(17,17,17,0) 35%,rgba(17,17,17,.72) 100%);}
+.class-upcoming-title, .class-done-title{left:16px; right:16px; font-size:var(--font-size-18);}
+.class-upcoming-body, .class-done-body{padding:16px;}
+.class-done-actions{gap:8px;}
+.class-done-action-btn{border-radius:8px; background:var(--surface-muted); color:var(--text-primary); box-shadow:none; padding:14px 4px; gap:6px;}
+.class-done-action-btn svg{color:var(--brand-text-link); width:20px; height:20px;}
+.class-done-action-btn span{font-size:var(--font-size-13); font-weight:var(--font-weight-semibold);}
+.class-done-action-btn:active{background:var(--color-gray-100);}
+/* #20 강사 · 요일/시간 · 유형 */
+.course-slide .ai-txt{flex-direction:column; align-items:flex-start; gap:4px;}
+.live-card .lesson-num{letter-spacing:0;}
+/* 라이브 카드 : 수업 일시(칩)와 레슨 번호 구분 · 보강 완료 팝업 : 과목명 / 일시 단락 구분 */
+.live-card .lesson-meta{display:flex; align-items:center; justify-content:center; gap:8px;}
+.live-card .lesson-when{color:var(--brand-interactive); background:rgba(48,27,214,.12);}
+.live-card .lesson-when{transition:opacity .2s ease;}
+.live-card.swapping .lesson-when{opacity:0;}
+/* ===== 타이포 정리 : 두께 한 단계 낮춤(위 CSS 일괄) · 팝업 타이틀/설명 = 클래스룸 타이틀(21)/설명(14) · 팝업 버튼 16 ===== */
+.home-title{white-space:nowrap;}
+.home-art{width:72px; height:72px; margin-top:0;}
+.course-slide .ai-txt .course{font-size:var(--font-size-20);}
+/* 예정·종료 카드 정보 정렬 (수강중 슬라이드 기준) */
+.class-meta{display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:var(--font-size-13);}
+.class-meta .type-chip{flex:none;}
+.class-when{display:inline-flex; align-items:center; gap:6px; color:var(--text-primary); font-weight:var(--font-weight-semibold);}
+.class-when::after{content:""; width:2px; height:2px; border-radius:50%; background:var(--text-tertiary);}
+.class-plan{color:var(--text-tertiary); font-weight:var(--font-weight-medium);}
+.class-kv{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border-radius:8px; background:var(--surface-muted);}
+.class-kv-label{display:inline-flex; align-items:center; gap:6px; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+.class-kv-label svg{width:15px; height:15px; color:var(--text-tertiary);}
+.class-kv-value{font-size:var(--font-size-14); font-weight:var(--font-weight-semibold); color:var(--text-primary); white-space:nowrap; font-variant-numeric:tabular-nums;}
+.class-kv-notice{background:var(--brand-interactive-subtle);}
+.class-kv-notice .class-kv-label{color:var(--text-primary);}
+.class-kv-notice .class-kv-label svg, .class-kv-notice .class-kv-value{color:var(--brand-text-link);}
+.class-upcoming-body, .class-done-body{gap:14px;}
+/* 질문하기 · 만족도 : 카드 전체가 버튼 */
+.home-sm{text-align:left; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+.home-sm:active{transform:scale(.98);}
+.home-sat .home-face{pointer-events:none;}
+.home-sat:active .home-face svg{transform:none;}
+.home-face svg{animation-duration:4s;}
+.home-face-alt svg{animation-delay:2s;}
+.correction-row .home-row-ic svg{width:30px; height:30px;}
+/* 라이브 카드 : 오늘 수업 시간 칩은 좌상단(우상단 아이콘과 같은 줄), 레슨 번호·제목은 가운데 */
+.live-card .lesson-when{position:absolute; top:16px; left:12px; z-index:2;}
+.live-card .lesson-meta .lesson-num{text-align:center;}
+/* ===== 라이브 카드 : 수업환경 테스트 링크 ===== */
+.live-card .env-link{display:block; margin:12px auto 0;}
+/* #3 클래스룸 섹션 제목 · 라이브 카드 레슨 제목 : 휴대폰 20 · 태블릿/PC 22 (카드 제목 18 유지) */
+.home-title, .home-sm-title, .live-card .lesson{font-size:var(--font-size-20);}
+@media (min-width:640px){
+  .home-title, .home-sm-title, .live-card .lesson{font-size:var(--font-size-22);}
+}
+.live-card .env-link{color:rgba(255,255,255,.6);}
+@media (hover:hover) and (pointer:fine){
+  .course-swiper{cursor:grab;}
+}
+.course-swiper.dragging{cursor:grabbing; scroll-snap-type:none; user-select:none;}
+/* Tab — 클래스룸 탭은 3등분 + 움직이는 밑줄(.ind)이라 기본 탭의 간격·버튼별 밑줄을 끔 */
+.tabs.classroom-tabs{align-items:normal; gap:normal;}
+.tabs.classroom-tabs button{position:static;}
+/* ===== 46 내 강의 정보 — Classroom_020_WEB_LP (예정 · 완료 카드와 같은 구성) ===== */
+.course-info-btn{display:inline-flex; align-items:center; justify-content:center; flex:none; width:28px; height:28px; margin:-4px -2px -4px 0; padding:0; border-radius:50%; color:var(--text-tertiary); vertical-align:middle;}
+.course-info-btn svg{width:18px; height:18px;}
+.course-info-btn:active{background:var(--surface-muted);}
+/* ===== 47~49 입장 버튼 상태 — 5분 전 이전 탭 안내 토스트 ===== */
+.enter-toast{position:fixed; left:50%; bottom:calc(env(safe-area-inset-bottom, 0px) + 96px); z-index:9100; transform:translate(-50%,8px);
+    width:max-content; max-width:calc(100vw - 48px); padding:12px 18px; border-radius:999px; background:rgba(17,20,30,.9); color:#fff;
+    font-size:14px; font-weight:var(--font-weight-medium); line-height:1.4; text-align:center; word-break:keep-all;
+    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;}
+.enter-toast.show{opacity:1; transform:translate(-50%,0);}
+.enter-btn.is-far .enter-btn-time{font-size:var(--font-size-16); font-weight:var(--font-weight-semibold); letter-spacing:0;}
+.enter-btn .enter-btn-go{white-space:nowrap;}
+.enter-btn .enter-go-time{margin-left:4px; opacity:.72; font-variant-numeric:tabular-nums;}

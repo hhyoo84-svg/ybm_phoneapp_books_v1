@@ -1,0 +1,35 @@
+/* ==================================================================
+   variables.css — 디자인 토큰 — 색 · 타이포 · 간격 · 라운드 · 그림자 (:root 변수만)
+   ================================================================== */
+/* ===== 공통 DS 토큰 (리소스 디자인 시스템 네이밍) ===== */
+:root{
+    /* Primitive / Color */
+    --color-white:#ffffff; --color-black:#000000;
+    --color-gray-50:#f9fafb; --color-gray-100:#f3f4f6; --color-gray-200:#e5e7eb; --color-gray-300:#d1d5db; --color-gray-400:#9ca3af; --color-gray-500:#6b7280; --color-gray-600:#4b5563; --color-gray-700:#374151; --color-gray-800:#1f2937; --color-gray-900:#111827; --color-gray-950:#030712;
+    --color-red-50:#fef2f2; --color-red-400:#f87171; --color-red-500:#ef4444; --color-red-950:#450a0a;
+    --color-orange-50:#fff7ed; --color-orange-400:#fb923c; --color-orange-500:#f97316; --color-orange-700:#c2410c; --color-orange-950:#431407;
+    --color-blue-50:#eff6ff; --color-blue-400:#60a5fa; --color-blue-500:#3b82f6; --color-blue-600:#2563eb; --color-blue-950:#172554;
+    --color-green-50:#f2f0fd; --color-green-950:#0a062d;
+    /* Primitive / Color · 전화영어 브랜드 (neon) */
+    --color-neon-50:#efeef9; --color-neon-100:#e5e3f6; --color-neon-200:#c4bdf5; --color-neon-300:#8e82ef; --color-neon-400:#301bd6; --color-neon-500:#2b17be; --color-neon-600:#3724cb; --color-neon-700:#24149e; --color-neon-800:#1b0f78; --color-neon-900:#140b59; --color-neon-950:#0c0634;
+    /* Brand / Color · Phone 모드 */
+    --brand-50:var(--color-neon-50); --brand-100:var(--color-neon-100); --brand-200:var(--color-neon-200); --brand-300:var(--color-neon-300); --brand-400:var(--color-neon-400); --brand-500:var(--color-neon-500); --brand-600:var(--color-neon-600); --brand-700:var(--color-neon-700); --brand-800:var(--color-neon-800); --brand-900:var(--color-neon-900); --brand-950:var(--color-neon-950);
+    --brand-interactive:var(--brand-400); --brand-interactive-hover:var(--brand-500); --brand-interactive-active:var(--brand-600);
+    --brand-interactive-subtle:var(--brand-100); --brand-text-link:var(--brand-600); --brand-text-link-hover:var(--brand-700);
+    --brand-on-interactive:var(--color-gray-900); /* 신규 : 네온 위 글자색 (공통 기본값은 white) */
+    /* Semantic / Color · Light */
+    --surface-default:var(--color-white); --surface-subtle:var(--color-gray-50); --surface-muted:var(--color-gray-100); --surface-emphasis:var(--color-gray-900); --surface-scrim:rgba(0,0,0,.5);
+    --text-primary:var(--color-gray-950); --text-secondary:var(--color-gray-600); --text-tertiary:var(--color-gray-500); /* 공통 기본 gray-400 → 대비 위해 500 제안 */
+    --text-warning:var(--color-orange-700); --text-danger:var(--color-red-500); --text-info:var(--color-blue-600);
+    --border-default:var(--color-gray-200); --border-subtle:var(--color-gray-100); --border-error:var(--color-red-500);
+    --neutral-bg:var(--color-gray-100); --status-warning-weak:var(--color-orange-50); --status-negative-weak:var(--color-red-50); --status-negative-solid:var(--color-red-500);
+    --status-info-weak:var(--color-blue-50); --status-info-solid:var(--color-blue-500);
+    --accent-green-weak:var(--color-green-50); --accent-blue-weak:var(--color-blue-50); --accent-red-weak:var(--color-red-50);
+    /* Primitive / Typography */
+    --font-size-11:11px; --font-size-12:12px; --font-size-13:13px; --font-size-14:14px; --font-size-16:16px; --font-size-18:18px; --font-size-20:20px; --font-size-22:22px; --font-size-28:28px;
+    --font-weight-regular:400; --font-weight-medium:500; --font-weight-semibold:600; --font-weight-bold:700;
+    /* Radius · Shadow */
+    --radius-4:4px; --radius-8:8px;
+    --shadow-xs:0 1px 2px 0 rgba(0,0,0,.05); --shadow-md:0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+    color-scheme:light;
+  }

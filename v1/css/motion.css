@@ -1,0 +1,89 @@
+/* ==================================================================
+   motion.css — 인터랙션 · 애니메이션 (등장 · 눌림 · 반짝임)
+   ================================================================== */
+@keyframes clockShake{0%,100%{transform:rotate(0);}25%{transform:rotate(-10deg);}75%{transform:rotate(10deg);}}
+/* ---------- 2x2 타일 : 각 타일이 해당 풀스크린 팝업을 연다 ---------- */
+@keyframes pwWrite{0%,100%{transform:translate(0,0) rotate(0);}25%{transform:translate(-2px,1px) rotate(-5deg);}50%{transform:translate(1px,-1px) rotate(4deg);}75%{transform:translate(-1px,1px) rotate(-3deg);}}
+@keyframes pwDraw{0%,55%{stroke-dashoffset:26;}85%,100%{stroke-dashoffset:0;}}
+@keyframes barGrow{0%,100%{transform:scaleY(.5);}50%{transform:scaleY(1);}}
+@keyframes ddiyongBounce{0%,100%{transform:scale(1,1);}8%{transform:scale(1.16,.82);}20%{transform:scale(.9,1.18);}32%{transform:scale(1.06,.94);}44%{transform:scale(.97,1.03);}56%{transform:scale(1.16,.82);}68%{transform:scale(.9,1.18);}80%{transform:scale(1.06,.94);}92%{transform:scale(.97,1.03);}}
+/* 강좌 1/2 칩 : 컬러 칩 *//* 첫 진입에만 다음 강좌가 살짝 두 번 보였다 들어가는 힌트 */
+@keyframes coursePeek{0%,100%{transform:translateX(0);}18%,30%{transform:translateX(-36px);}48%{transform:translateX(0);}64%,74%{transform:translateX(-36px);}90%{transform:translateX(0);}}
+@keyframes revEq{0%,100%{height:5px;} 50%{height:15px;}}
+@keyframes icRibbon{0%,100%{transform:translateY(0) scaleY(1);}50%{transform:translateY(1px) scaleY(1.12);}}
+@keyframes icDot{0%,60%,100%{opacity:.35;}30%{opacity:1;}}
+@keyframes icFace{0%,100%{transform:translateY(0) rotate(0);}25%{transform:translateY(-2px) rotate(-4deg);}50%{transform:translateY(0) rotate(0);}}
+/* 아이콘 모션 톤다운 : 더 느리게, 움직임 폭은 절반 정도로 */
+@keyframes pwWrite{0%,100%{transform:translate(0,0) rotate(0);}30%{transform:translate(-1px,.5px) rotate(-2.5deg);}60%{transform:translate(.5px,-.5px) rotate(2deg);}}
+@keyframes barGrow{0%,100%{transform:scaleY(.82);}50%{transform:scaleY(1);}}
+@keyframes ddiyongBounce{0%,100%{transform:scale(1,1);}12%{transform:scale(1.05,.95);}24%{transform:scale(.97,1.04);}36%{transform:scale(1.01,.99);}48%,100%{transform:scale(1,1);}}
+@keyframes icFace{0%,100%{transform:translateY(0) rotate(0);}30%{transform:translateY(-1px) rotate(-2deg);}60%{transform:translateY(0) rotate(0);}}
+@keyframes icDot{0%,60%,100%{opacity:.55;}30%{opacity:1;}}
+@keyframes icRibbon{0%,100%{transform:translateY(0) scaleY(1);}50%{transform:translateY(.5px) scaleY(1.06);}}
+@keyframes micWave{0%,100%{height:6px;}50%{height:22px;}}
+@keyframes micRing{0%{opacity:.55; transform:scale(1);}100%{opacity:0; transform:scale(1.6);}}
+@keyframes envBreath{0%,100%{transform:translateY(0);}50%{transform:translateY(-2px);}}
+@keyframes envBlink{0%,100%{opacity:1;}50%{opacity:.25;}}
+@keyframes ppPop{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
+@keyframes callRing{0%{transform:scale(1); opacity:.9;}100%{transform:scale(1.7); opacity:0;}}
+@keyframes callSpin{from{transform:translateZ(0) rotate(0deg);}to{transform:translateZ(0) rotate(360deg);}}
+@keyframes callNudge{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+@keyframes pushIn{from{opacity:0; transform:translateY(-16px);}to{opacity:1; transform:none;}}
+@keyframes splashIn{from{opacity:0; transform:translateY(6px);}to{opacity:1; transform:none;}}
+@keyframes splashDot{0%,80%,100%{opacity:.3;}40%{opacity:1;}}
+/* ===== 인터랙션 레이어 (add_motion) ===== */
+button, a, [role="button"], [role="tab"]{-webkit-tap-highlight-color:transparent; touch-action:manipulation;}
+.mo-tap{transition:scale .32s cubic-bezier(.34,1.56,.64,1); backface-visibility:hidden;}
+.mo-tap.mo-press{scale:.97; transition-duration:.1s; transition-timing-function:ease-out;}
+.mo-tap.mo-press.mo-big{scale:.985;}
+@keyframes moPop{0%{scale:1;}40%{scale:1.08;}100%{scale:1;}}
+.mo-pop{animation:moPop .3s cubic-bezier(.34,1.56,.64,1);}
+.mo-rv{opacity:0; translate:0 14px; will-change:opacity, translate;}
+.mo-rv.mo-done{will-change:auto;}
+.mo-rv.mo-in{opacity:1; translate:0 0; transition:opacity .45s ease, translate .5s cubic-bezier(.2,.8,.2,1);}
+@keyframes moSlide{from{opacity:0; translate:16px 0;}to{opacity:1; translate:0 0;}}
+@keyframes moSlideBack{from{opacity:0; translate:-16px 0;}to{opacity:1; translate:0 0;}}
+.rt-view:not([hidden]), #mkStep1:not([hidden]), #mkStep2:not([hidden]){animation:moSlide .3s cubic-bezier(.2,.8,.2,1) both;}
+.mo-back .rt-view:not([hidden]), .mo-back > #mkStep1:not([hidden]){animation-name:moSlideBack;}
+.tabs.mo-has-ind{position:relative;}
+.tabs.mo-has-ind > button.on::after{opacity:0;}
+.mo-ind{position:absolute; bottom:0; left:0; width:100px; height:3px; border-radius:2px; pointer-events:none; transform-origin:0 50%; will-change:translate, scale; transition:translate .32s cubic-bezier(.2,.8,.2,1), scale .32s cubic-bezier(.2,.8,.2,1);}
+.mo-scrolled{box-shadow:0 8px 16px -14px rgba(20,16,40,.35) !important; transition:box-shadow .2s ease;}
+.mo-fade{position:fixed; left:0; right:0; height:44px; pointer-events:none; z-index:40; opacity:0; transition:opacity .25s ease;}
+.mo-fade.on{opacity:1;}
+.mo-more{position:fixed; left:50%; z-index:41; width:36px; height:36px; margin-left:-18px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--surface-default); color:var(--brand-interactive); box-shadow:0 6px 18px -6px rgba(20,16,40,.28), 0 0 0 1px var(--border-subtle);
+    opacity:0; translate:0 8px; pointer-events:none; transition:opacity .25s ease, translate .3s ease;}
+.mo-more.on{opacity:1; translate:0 0; pointer-events:auto;}
+.mo-more svg{width:18px; height:18px;}
+@keyframes moHop{0%,100%{translate:0 0;}30%{translate:0 5px;}60%{translate:0 0;}80%{translate:0 3px;}}
+.mo-more.on.hop svg{animation:moHop 1s ease 2;}
+.mo-shine-host{position:relative; overflow:hidden; isolation:isolate;}
+.mo-shine{position:absolute; top:0; bottom:0; left:0; width:45%; pointer-events:none; z-index:1;
+    background:linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.45) 50%, rgba(255,255,255,0) 100%);
+    translate:-120% 0; animation:moShine .9s cubic-bezier(.4,0,.2,1) .15s forwards;}
+@keyframes moShine{to{translate:320% 0;}}
+@keyframes moNudge{0%{background-color:transparent;}25%{background-color:var(--brand-interactive-subtle);}100%{background-color:transparent;}}
+@keyframes moMark{0%,100%{scale:1;}30%{scale:1.14;}55%{scale:.96;}75%{scale:1.04;}}
+.mo-mark{animation:moMark .7s cubic-bezier(.34,1.56,.64,1) .2s 1;}
+@keyframes moIcon{0%{translate:0 0;}35%{translate:0 -3px;}70%{translate:0 1px;}100%{translate:0 0;}}
+.nav-item.active svg{animation:moIcon .4s ease;}
+@keyframes moEq{0%,100%{transform:scaleY(.34);}50%{transform:scaleY(1);}}
+@keyframes moWave{0%,100%{transform:scaleY(.25);}50%{transform:scaleY(1);}}
+.review-eq i{height:15px !important; max-height:100%; transform-origin:50% 100%; will-change:transform; animation-name:moEq !important;}
+.mic-wave i{height:24px !important; transform-origin:50% 50%; will-change:transform; animation-name:moWave !important;}
+.modal-body.mo-more-below{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(to bottom,#000 calc(100% - 36px),transparent);}
+/* Class Report 방사형 그래프 : 팝업 열릴 때 중심(150,148)에서 펼쳐짐 — 열 때마다 SVG를 새로 그리므로 매번 재생 */
+@keyframes moRadar{from{scale:0; opacity:0;}to{scale:1; opacity:1;}}
+@keyframes moRadarIn{from{opacity:0;}to{opacity:1;}}
+.report-radar-fill, .report-radar-dot{transform-box:view-box; transform-origin:150px 148px; animation:moRadar .9s cubic-bezier(.22,1,.36,1) .18s both;}
+.report-radar-dot{animation-delay:.24s;}
+.report-radar-ring, .report-radar-axis{animation:moRadarIn .4s ease-out both;}
+.report-radar-label, .report-radar-val{animation:moRadarIn .4s ease-out .7s both;}
+@media (prefers-reduced-motion: reduce){
+  .mo-tap, .mo-tap.mo-press{scale:1 !important; transition:none !important;}
+  .report-radar-fill, .report-radar-dot, .report-radar-ring, .report-radar-axis, .report-radar-label, .report-radar-val{animation:none !important;}
+  .mo-rv{opacity:1 !important; translate:none !important;}
+  .mo-pop, .mo-shine, .mo-mark, .mo-more.on.hop svg, .rt-view, #mkStep1, #mkStep2, .nav-item.active svg{animation:none !important;}
+  .mo-ind{transition:none;}
+}

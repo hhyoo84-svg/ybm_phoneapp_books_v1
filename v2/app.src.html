@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>전화영어 클래스룸 · 시안4(와옹이)</title>
+<!-- 스타일 : 토큰 → 기본 → 공통 컴포넌트 → 앱 셸 → 화면별(클래스룸 · 스케줄 · 팝업) -->
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/shell.css">
+<link rel="stylesheet" href="css/classroom.css">
+<link rel="stylesheet" href="css/schedule.css">
+<link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+
+<div class="stage">
+  <!-- @include inc/shell-head.html -->
+
+  <!-- @include inc/classroom.html -->
+
+  <!-- @include inc/schedule.html -->
+
+  <!-- @include inc/shell-nav.html -->
+
+  <!-- @include inc/popups.html -->
+</div>
+
+<!-- @include inc/native.html -->
+
+<!-- 데모 데이터 (data/demo.json) — 개발 시 서버 응답으로 교체 -->
+<!-- @data data/demo.json -->
+<!-- 스크립트 : 순서 무관(각 파일은 블록 등록만), 마지막에 YBMP.boot() 한 번 -->
+<script src="js/core.js"></script>
+<script src="js/classroom.js"></script>
+<script src="js/schedule.js"></script>
+<script src="js/popup.js"></script>
+<script src="js/shell.js"></script>
+<script>YBMP.boot();</script>
+<!-- 화면 목록(screens-list.html)에서 특정 화면 상태를 재현할 때만 필요 — 실서비스에는 넣지 않음 -->
+<script src="js/demo/screen-states.js"></script>
+</body>
+</html>

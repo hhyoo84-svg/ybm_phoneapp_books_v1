@@ -1,0 +1,526 @@
+{
+ "lessons": [
+  "Meeting new faces",
+  "Describing your best friend",
+  "Every morning",
+  "Housing",
+  "The weekend",
+  "Using the telephone",
+  "My favorite sports",
+  "Leisure time",
+  "Going on vacation",
+  "Keeping a pet",
+  "Health problems",
+  "Shopping at the grocery store",
+  "Buying a present",
+  "Online shopping",
+  "Eating out",
+  "Ordering food over the phone",
+  "Talking about an email",
+  "Asking for directions",
+  "Learning a foreign language",
+  "Plans and dreams"
+ ],
+ "lessonSheet": {
+  "lesson": {
+   "title": "교재 전체 보기",
+   "cta": "교재 보기"
+  },
+  "review": {
+   "title": "수업 예습 전체 보기",
+   "cta": "바로가기"
+  },
+  "ai": {
+   "title": "AI 대화 연습 전체 보기",
+   "cta": "바로가기"
+  }
+ },
+ "scheduleCourses": [
+  {
+   "role": "Speaking Practice with YBM 초급",
+   "period": "2026.07.07 ~ 2026.12.31",
+   "when": "화·목 19:30",
+   "type": "video",
+   "report": true
+  },
+  {
+   "role": "Speaking Practice with YBM 초중급",
+   "period": "2026.09.01 ~ 2027.02.28",
+   "when": "월·수·금 07:00",
+   "type": "phone",
+   "report": false
+  },
+  {
+   "role": "데일리 프리토킹",
+   "period": "2026.08.01 ~ 2026.10.31",
+   "when": "월~금 22:00",
+   "type": "phone",
+   "report": false
+  },
+  {
+   "role": "여행 영어 회화",
+   "period": "2026.06.01 ~ 2026.11.30",
+   "when": "수 20:30",
+   "type": "video",
+   "report": false
+  },
+  {
+   "role": "Speaking Practice with YBM 중급",
+   "period": "2026.09.05 ~ 2026.12.26",
+   "when": "토 10:00",
+   "type": "video",
+   "report": false
+  }
+ ],
+ "holidays": {
+  "2026-01-01": "신정",
+  "2026-02-16": "설날연휴",
+  "2026-02-17": "설날",
+  "2026-02-18": "설날연휴",
+  "2026-03-02": "삼일절 대체",
+  "2026-05-05": "어린이날",
+  "2026-05-25": "부처님오신날 대체",
+  "2026-06-03": "지방선거일",
+  "2026-06-06": "현충일",
+  "2026-08-17": "광복절 대체",
+  "2026-09-24": "추석연휴",
+  "2026-09-25": "추석",
+  "2026-09-26": "추석연휴",
+  "2026-10-03": "개천절",
+  "2026-10-05": "개천절 대체",
+  "2026-10-09": "한글날",
+  "2026-12-25": "크리스마스"
+ },
+ "qaHistory": [
+  {
+   "date": "2026-09-10",
+   "title": "리스닝 파트 학습법 문의",
+   "content": "회화 수업 중 리스닝 파트를 더 효율적으로 연습하는 방법이 궁금합니다. 관련 자료도 추천해 주시면 감사하겠습니다."
+  },
+  {
+   "date": "2026-08-22",
+   "title": "수업 교재 관련 질문",
+   "content": "이번 주 교재 3번째 유닛에 나온 표현을 실제 대화에서 어떻게 활용하면 좋을지 여쭤봅니다."
+  }
+ ],
+ "satisfactionQuestions": [
+  "강사님과의 수업이 재미있으셨나요?",
+  "수업 내용에 대해 이해할 수 있도록, 강사님이 잘 설명해 주셨나요?",
+  "회원님의 발음과 문법 등에 대해, 강사님이 잘 교정해 주셨나요?",
+  "회원님의 발음과 문법 등에 대해, 강사님이 잘 교정해 주셨나요?",
+  "수업 시작시간과 종료시간은 잘 준수되었나요?",
+  "마지막으로, 현재의 강사님과 지속적으로 수업하기를 원하시나요?"
+ ],
+ "reviewPronunciation": [
+  {
+   "word": "taste"
+  },
+  {
+   "word": "noodles"
+  }
+ ],
+ "reviewGrammar": [
+  {
+   "orig": "She don't have any hobby these day.",
+   "fix": "She doesn't have any hobbies these days."
+  }
+ ],
+ "aiHistory": [
+  {
+   "date": "2026-09-29",
+   "lesson": "Lesson 12",
+   "popcorn": 420,
+   "result": "완료"
+  },
+  {
+   "date": "2026-09-24",
+   "lesson": "Lesson 11",
+   "popcorn": 380,
+   "result": "완료"
+  },
+  {
+   "date": "2026-09-17",
+   "lesson": "Lesson 10",
+   "popcorn": 510,
+   "result": "완료"
+  },
+  {
+   "date": "2026-09-10",
+   "lesson": "Lesson 9",
+   "popcorn": 290,
+   "result": "완료"
+  }
+ ],
+ "makeupBlocks": [
+  {
+   "key": "6-9",
+   "label": "06 - 09",
+   "start": 6
+  },
+  {
+   "key": "9-12",
+   "label": "09 - 12",
+   "start": 9
+  },
+  {
+   "key": "12-15",
+   "label": "12 - 15",
+   "start": 12
+  },
+  {
+   "key": "15-18",
+   "label": "15 - 18",
+   "start": 15
+  },
+  {
+   "key": "18-21",
+   "label": "18 - 21",
+   "start": 18
+  },
+  {
+   "key": "21-24",
+   "label": "21 - 24",
+   "start": 21
+  }
+ ],
+ "makeupTutors": [
+  "Sarah",
+  "Grace",
+  "James",
+  "Helen",
+  "Daniel",
+  "Emily"
+ ],
+ "attendance": {
+  "classWeekdays": [
+   2,
+   4
+  ],
+  "progressDone": 50,
+  "progressTotal": 120,
+  "attend": 46,
+  "postpone": 2,
+  "absent": 2
+ },
+ "upcomingCourses": [
+  {
+   "img": "https://upsisa.ybmsisa.com/e4u/YBMIngang/ADMIN/files/product/info/D805A4EE-36C7-4F3A-A85C-9430EB0EBBAC.jpg",
+   "name": "1:1 영어회화 필리핀 강사님",
+   "type": "phone",
+   "when": "월·수·금 10:00",
+   "plan": "주 5회 10분 · 6개월",
+   "deadline": "2026.08.30"
+  },
+  {
+   "img": "https://upsisa.ybmsisa.com/e4u/YBMIngang/ADMIN/files/product/info/D58A3D2F-BCCE-435F-87D7-176C464817B0.jpg",
+   "name": "1:1 비즈니스 영어회화",
+   "type": "video",
+   "when": "화·목 19:30",
+   "plan": "주 2회 25분 · 3개월",
+   "deadline": "2026.08.30"
+  }
+ ],
+ "doneCourses": [
+  {
+   "img": "https://upsisa.ybmsisa.com/e4u/YBMIngang/ADMIN/files/product/info/6DECE5EA-380F-4C9A-B246-1C7E3F183199.jpg",
+   "name": "비즈니스 영어회화",
+   "type": "phone",
+   "when": "월~금 10:00",
+   "plan": "주 5회 10분",
+   "period": "2026.07.07 ~ 2026.12.31",
+   "pct": 42,
+   "doneN": 50,
+   "total": 120,
+   "attend": 46,
+   "postpone": 2,
+   "absent": 2
+  }
+ ],
+ "coursePeriods": {
+  "Speaking Practice with YBM 초급": "2026.07.07 ~ 2026.12.31",
+  "Speaking Practice with YBM 초중급": "2026.09.01 ~ 2027.02.28",
+  "데일리 프리토킹": "2026.08.01 ~ 2026.10.31",
+  "여행 영어 회화": "2026.06.01 ~ 2026.11.30",
+  "Speaking Practice with YBM 중급": "2026.09.05 ~ 2026.12.26"
+ },
+ "routineTutors": [
+  {
+   "n": "Sarah Jenkins",
+   "m": "미국 · 비즈니스 회화",
+   "cur": true,
+   "edu": "University of Michigan · 경영학",
+   "car": "비즈니스 영어 강의 8년",
+   "intro": "회의 · 이메일 · 발표처럼 실제 업무 상황 위주로 수업해요."
+  },
+  {
+   "n": "Michael Brown",
+   "m": "캐나다 · 프리토킹",
+   "edu": "University of Toronto · 영문학",
+   "car": "성인 회화 강의 6년",
+   "intro": "편하게 대화하면서 자연스러운 표현을 익히도록 도와요."
+  },
+  {
+   "n": "Olivia Park",
+   "m": "미국 · 발음 교정",
+   "edu": "UCLA · 언어학",
+   "car": "발음 · 억양 코칭 5년",
+   "intro": "말할 때 자주 틀리는 발음을 하나씩 짚어 드려요."
+  },
+  {
+   "n": "Daniel Kim",
+   "m": "호주 · 초중급 회화",
+   "edu": "University of Sydney · 교육학",
+   "car": "초중급 회화 강의 4년",
+   "intro": "천천히, 쉬운 표현부터 차근차근 늘려 가요."
+  }
+ ],
+ "routinePastTutors": [
+  {
+   "n": "Grace Lee",
+   "m": "미국 · 비즈니스 회화",
+   "edu": "NYU · 커뮤니케이션",
+   "car": "비즈니스 영어 강의 7년",
+   "intro": "상황별 롤플레이로 실전 감각을 키워요."
+  },
+  {
+   "n": "James Wilson",
+   "m": "영국 · 프리토킹",
+   "off": true,
+   "edu": "University of Leeds · 사회학",
+   "car": "성인 회화 강의 5년",
+   "intro": "시사 주제로 생각을 영어로 말하는 연습을 해요."
+  }
+ ],
+ "routineStyles": [
+  [
+   "수업 방식",
+   [
+    "내가 주도",
+    "강사가 주도"
+   ]
+  ],
+  [
+   "대화 속도",
+   [
+    "천천히",
+    "원어민 속도"
+   ]
+  ],
+  [
+   "수업 방향",
+   [
+    "교재 위주",
+    "프리토킹 위주"
+   ]
+  ],
+  [
+   "피드백",
+   [
+    "실시간",
+    "수업 끝나고"
+   ]
+  ]
+ ],
+ "bookLevels": [
+  [
+   "전체",
+   ""
+  ],
+  [
+   "첫걸음",
+   "Level 1"
+  ],
+  [
+   "첫걸음 정복",
+   "Level 2"
+  ],
+  [
+   "초급",
+   "Level 3"
+  ],
+  [
+   "초중급",
+   "Level 4"
+  ],
+  [
+   "중급",
+   "Level 5"
+  ],
+  [
+   "중상급",
+   "Level 6"
+  ]
+ ],
+ "books": [
+  [
+   "생활회화",
+   [
+    [
+     "초급",
+     "Everyday English 1"
+    ],
+    [
+     "초중급",
+     "Everyday English 2"
+    ]
+   ]
+  ],
+  [
+   "비즈니스",
+   [
+    [
+     "중급",
+     "Business Talk Basics"
+    ],
+    [
+     "중급",
+     "Meetings & Presentations"
+    ]
+   ]
+  ],
+  [
+   "토픽회화",
+   [
+    [
+     "초중급",
+     "Topic Talk: Daily Life"
+    ]
+   ]
+  ]
+ ],
+ "bookUnits": [
+  "Greetings & Introductions",
+  "Talking about Work",
+  "Making Plans",
+  "Ordering Food",
+  "Asking for Directions",
+  "Shopping",
+  "Travel Plans"
+ ],
+ "attendanceSteps": [
+  [
+   0,
+   "시작이 반이에요!"
+  ],
+  [
+   3,
+   "작심삼일 극복!"
+  ],
+  [
+   7,
+   "루틴 자리잡기"
+  ],
+  [
+   14,
+   "대단한 열정!"
+  ],
+  [
+   30,
+   "습관의 완성"
+  ]
+ ],
+ "attendanceLessons": [
+  "Greetings & Introductions",
+  "Talking about Work",
+  "Making Plans",
+  "Ordering Food",
+  "Asking for Directions",
+  "Small Talk & Ice Breaking",
+  "Shopping",
+  "Travel Plans"
+ ],
+ "scheduleClasses": [
+  {
+   "day": -13,
+   "time": "19:30",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "absent"
+  },
+  {
+   "day": -10,
+   "time": "19:30",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "postponed"
+  },
+  {
+   "day": -1,
+   "time": "19:30",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "skip"
+  },
+  {
+   "day": 4,
+   "time": "07:00",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "upcoming"
+  },
+  {
+   "day": -6,
+   "time": "19:30",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "attended"
+  },
+  {
+   "day": -3,
+   "time": "19:30",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "attended"
+  },
+  {
+   "day": 0,
+   "time": "19:30",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "upcoming"
+  },
+  {
+   "day": 0,
+   "time": "07:00",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "upcoming",
+   "makeupOf": {
+    "day": -10,
+    "time": "19:30"
+   }
+  },
+  {
+   "day": 4,
+   "time": "19:30",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "upcoming",
+   "makeupOf": {
+    "day": -7,
+    "time": "10:00"
+   }
+  },
+  {
+   "day": 9,
+   "time": "19:30",
+   "subject": "Speaking Practice with YBM 초급",
+   "status": "upcoming"
+  },
+  {
+   "day": 2,
+   "time": "20:00",
+   "subject": "Speaking Practice with YBM 초중급",
+   "status": "upcoming"
+  },
+  {
+   "day": -7,
+   "time": "20:30",
+   "subject": "Speaking Practice with YBM 초중급",
+   "status": "absent"
+  },
+  {
+   "day": 4,
+   "time": "19:00",
+   "subject": "데일리 프리토킹",
+   "status": "upcoming"
+  },
+  {
+   "day": -7,
+   "time": "20:30",
+   "subject": "여행 영어 회화",
+   "status": "postponed"
+  }
+ ]
+}

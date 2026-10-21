@@ -1,0 +1,32 @@
+/* ==================================================================
+   base.css — 기본 — 리셋 · 문서 기본값 · 공통 유틸
+   ================================================================== */
+
+/* ---------- (from v1 reset.css) ---------- */
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{
+    margin:0; background:var(--surface-subtle); color:var(--text-primary);
+    font-family:'Pretendard Variable','Pretendard',-apple-system,'Noto Sans KR',sans-serif;
+  }
+button{font-family:inherit; font-size:inherit; color:inherit; border:none; background:none; padding:0; cursor:pointer; -webkit-appearance:none; appearance:none;}
+button:focus{outline:none;}
+button:focus-visible{outline:2px solid var(--brand-interactive); outline-offset:2px;}
+h1, h2, h3, h4, p{margin:0;}
+img{display:block; max-width:100%;}
+/* 2026-10-01 : 세로 스크롤바 숨김 (스크롤은 그대로 동작) */
+html, body, *{scrollbar-width:none; -ms-overflow-style:none;}
+*::-webkit-scrollbar{display:none; width:0; height:0;}
+
+/* ---------- (from v1 common.css) ---------- */
+[hidden]{display:none !important;}
+.num{font-family:"Plus Jakarta Sans","Pretendard Variable",sans-serif; font-variant-numeric:tabular-nums;}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; transition-duration:.15s !important;}
+}
+
+/* ---------- (from v1 motion.css) ---------- */
+/* ===== 인터랙션 레이어 (add_motion) ===== */
+button, a, [role="button"], [role="tab"]{-webkit-tap-highlight-color:transparent; touch-action:manipulation;}
+
+/* ---------- (from v1 sian4.css) ---------- */
+body{background:var(--s3-bg);}

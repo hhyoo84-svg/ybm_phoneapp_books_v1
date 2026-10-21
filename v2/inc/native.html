@@ -1,0 +1,79 @@
+<!-- ======================================================================
+     inc/native.html
+     앱 네이티브 화면 : 수업 콜 · 잠금화면 푸시 · 스플래시 · 업데이트/점검 공지 · 접근 권한 안내
+     사용 : 앱 전용 (실서비스는 네이티브로 구현, 화면 기준용)
+     CSS : shell.css
+     JS  : core.js, shell.js
+     ====================================================================== -->
+<!-- 33·34 수업 콜(VoIP) — CALL_010_N_PUSH · 네이티브 풀스크린. 강의실 진입 중에는 띄우지 않음 -->
+  <div class="call-screen" id="callScreen" data-state="ring" role="dialog" aria-modal="true" aria-labelledby="callName" hidden>
+    <div class="call-top">
+      <span class="call-app"><img src="images/logo-ybm-phone-lg.png" alt="YBM 전화화상"></span>
+      <span class="call-kind">화상 수업</span>
+    </div>
+    <div class="call-center">
+      <div class="call-eyebrow"><span class="call-time">19:30</span><span class="call-msg" id="callEyebrow">수업 시간이에요</span></div>
+      <div class="call-avatar"><i></i><i></i><svg class="call-spin" viewBox="0 0 100 100" aria-hidden="true"><circle class="trk" cx="50" cy="50" r="48"/><circle class="arc" cx="50" cy="50" r="48" pathLength="100" stroke-dasharray="24 76"/></svg><img src="images/tutor-avatar.jpg" alt=""></div>
+      <h2 class="call-name" id="callName">Sarah Jenkins</h2>
+      <p class="call-meta">Speaking Practice with YBM 초급</p>
+      <p class="call-lesson"><b>Lesson.01</b>Small Talk &amp; Ice Breaking</p>
+    </div>
+    <div class="call-actions">
+      <div class="call-act"><button type="button" class="call-btn decline" id="callDecline" aria-label="거절하기"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1L6.6 10.8z"/></svg></button>거절하기</div>
+      <div class="call-act"><button type="button" class="call-btn accept" id="callAccept" aria-label="통화하기"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1L6.6 10.8z"/></svg></button>통화하기</div>
+    </div>
+    <div class="call-connect">
+      <div class="call-progress"><i></i></div>
+      <button type="button" class="call-cancel" id="callCancel">취소</button>
+    </div>
+  </div>
+  <div class="call-toast" id="callToast" role="status" aria-live="polite"></div>
+
+<!-- 35~38 수업 전 알림 푸시 — NOTI_010~040 · 잠금화면에 뜬 앱 알림. 알림을 누르면 앱이 열리며 해당 화면으로 이동 -->
+  <div class="push-screen" id="pushScreen" role="dialog" aria-modal="true" aria-label="잠금화면 알림" hidden>
+    <div class="push-clock"><span class="push-date">10월 14일 화요일</span><span class="push-time" id="pushTime"></span></div>
+    <div class="push-list">
+      <button type="button" class="push-card" id="pushCard">
+        <span class="push-icon"><img src="images/push-icon.png" alt=""></span>
+        <span class="push-body">
+          <span class="push-head"><span>YBM 전화화상</span><span>지금</span></span>
+          <p class="push-title" id="pushTitle"></p>
+          <p class="push-text" id="pushText"></p>
+        </span>
+      </button>
+    </div>
+    <span class="push-home" aria-hidden="true"></span>
+  </div>
+
+<!-- 39 스플래시 — Splash_010_N_FULL · 1.5~2초 노출 후 클래스룸(또는 업데이트 팝업·로그인)으로 -->
+  <div class="splash" id="splash" role="img" aria-label="YBM 전화화상" hidden>
+    <img class="splash-logo" src="images/logo-ybm-phone-lg.png" alt="">
+    <div class="splash-foot"><span class="splash-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="splash-copy">© YBM NET</span></div>
+  </div>
+
+<!-- 40~43 업데이트 · 시스템 공지 — Onboarding_010_N_POP (스플래시 이후 버전·점검·공지 체크) -->
+  <div class="mic-test-overlay" id="noticeOverlay" hidden>
+    <div class="mic-test-card" role="alertdialog" aria-modal="true" aria-labelledby="noticeTitle">
+      <div class="modal-result" style="padding-top:2px;">
+        <span class="modal-result-icon" id="noticeIcon"></span>
+        <h3 id="noticeTitle"></h3>
+        <div id="noticeBody"></div>
+      </div>
+      <div class="modal-foot" style="padding:22px 0 0; border-top:none; background:none;">
+        <button type="button" class="btn" data-variant="secondary" id="noticeSub">나중에 하기</button>
+        <button type="button" class="btn" data-variant="primary" id="noticeMain">업데이트 하기</button>
+      </div>
+      <div class="notice-skip" id="noticeSkip"><button type="button">오늘 하루 보지 않기</button><button type="button">일주일간 보지 않기</button></div>
+    </div>
+  </div>
+
+<!-- 44·45 접근 권한 안내 — Permission_010/020_N_FULL · [확인] 후 OS 권한 팝업 순서대로 요청 -->
+  <div class="perm" id="permScreen" role="dialog" aria-modal="true" aria-labelledby="permTitle" hidden>
+    <div class="perm-body">
+      <h2 class="perm-title" id="permTitle">편리한 수업을 위해<br>접근 권한을 허용해 주세요</h2>
+      <p class="perm-sub">정보통신망법에 따라 서비스에 꼭 필요한 항목만 요청해요.</p>
+      <div id="permGroups"></div>
+      <div class="perm-note"><p>선택 접근 권한은 허용하지 않아도<br>다른 기능은 이용할 수 있어요.</p><p><b>권한 변경</b> <span id="permPath"></span></p></div>
+    </div>
+    <div class="perm-foot"><button type="button" class="btn" data-variant="primary" id="permOk">확인</button></div>
+  </div>
