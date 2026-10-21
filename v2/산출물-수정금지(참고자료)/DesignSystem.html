@@ -805,6 +805,10 @@ body{display:flex; justify-content:center; height:100dvh; overflow:hidden;}
   .course-swiper{cursor:grab;}
 }
 .course-swiper.dragging{cursor:grabbing; scroll-snap-type:none; user-select:none;}
+/* 강좌 스와이프 : 아래 내용(입장 카드 · 예습 · 리뷰 등)도 함께 넘어감 — 값은 js/classroom.js '수강중 강좌 스와이프' */
+#scrollArea > #liveCard, #scrollArea > .timeline{touch-action:pan-y pinch-zoom;}
+#scrollArea.pane-moving{overflow-x:clip;}
+#scrollArea.pane-moving > #liveCard, #scrollArea.pane-moving > .timeline{transform:translateX(var(--pane-x, 0)); filter:opacity(var(--pane-o, 1)); will-change:transform;}
 /* Tab — 클래스룸 탭은 3등분 + 움직이는 밑줄(.ind)이라 기본 탭의 간격·버튼별 밑줄을 끔 */
 .tabs.classroom-tabs{align-items:normal; gap:normal;}
 .tabs.classroom-tabs button{position:static;}

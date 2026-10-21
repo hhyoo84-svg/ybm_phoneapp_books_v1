@@ -49,7 +49,7 @@ v2/
 │  └─ demo/screen-states.js   ?screen=번호 상태 재현 — 실서비스에 넣지 않음
 ├─ data/demo.json       데모 데이터 24종 — API 응답으로 교체 대상
 ├─ images/              와옹이 wawong-N.png, 로고, 강사 아바타, 푸시 아이콘
-├─ app.src.html · build.py · bundle.py   조립 원본, app.html 빌드 · phone-ybmclass.html 생성 스크립트
+├─ app.src.html · build.py   조립 원본과 빌드 스크립트 (app.html · phone-ybmclass.html 생성)
 ├─ app.html · screens-list.html
 └─ 산출물-수정금지(참고자료)/   DesignSystem.html · phone-ybmclass.html · README.md
 ```
@@ -95,7 +95,7 @@ v2/
 ### 구조
 - **조각은 페이지당 한 번만 인클루드** — `popups.html`에만 id가 200개 가까이 있고, JS가 id로 요소를 찾습니다. 같은 조각을 두 번 넣으면 동작이 꼬입니다.
 - **일부 영역만 쓸 때는 해당 JS 파일도 뺄 것** — 없는 영역의 블록은 오류가 나도 다른 블록은 계속 돌지만, 콘솔에 `[YBMP] 블록이름` 오류가 남습니다.
-- **`app.html`, `phone-ybmclass.html`은 생성 파일** — 직접 고치지 말고 `inc/`, `app.src.html`, `data/demo.json`을 고친 뒤 `python3 build.py`(→ `app.html`), `python3 bundle.py`(→ `phone-ybmclass.html`, Pillow 필요) 순서로 다시 만듭니다.
+- **`app.html`, `phone-ybmclass.html`은 생성 파일** — 직접 고치지 말고 `inc/`, `app.src.html`, `data/demo.json`을 고친 뒤 `python3 build.py`로 다시 만듭니다. (`phone-ybmclass.html`은 Pillow가 있을 때만 함께 생성 — `pip install pillow`)
 - **CSS 영역 경계** — 단독 사용 시 깨지지 않도록 영역 간 덮어쓰기 규칙은 `components.css`·`base.css`로 옮겨 두었습니다. 파일 안의 `(from v1 xxx.css)` 표시는 원래 위치입니다.
 
 ### 앱 웹뷰

@@ -1,0 +1,66 @@
+<title>교재 시안 검토</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Noto+Sans+KR:wght@500;700&display=swap">
+<style>
+/* layout: 왼쪽 검토 옵션 패널 + 오른쪽 기기 프레임(iframe). 좁은 화면에서는 옵션이 위, 프레임이 아래 */
+:root{--bg:#e9ecf2;--panel:#ffffff;--fg:#171b26;--sub:#5d6475;--line:#dde2ea;--chip:#f1f3f7;--on:#171b26;--onfg:#fff;
+ --f-disp:"Plus Jakarta Sans","Noto Sans KR",system-ui,sans-serif;--f-body:"Noto Sans KR",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111318;--panel:#1b1e26;--fg:#e8ebf2;--sub:#a0a7b6;--line:#2b303b;--chip:#252a34;--on:#e8ebf2;--onfg:#111318;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111318;--panel:#1b1e26;--fg:#e8ebf2;--sub:#a0a7b6;--line:#2b303b;--chip:#252a34;--on:#e8ebf2;--onfg:#111318;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px}
+.wrap{display:grid;grid-template-columns:248px 1fr;gap:24px;max-width:1500px;margin:0 auto;min-height:100%}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:18px;align-self:start;position:sticky;top:20px}
+.panel h1{font:800 17px var(--f-disp);margin:0}
+.grp{display:flex;flex-direction:column;gap:8px}
+.grp>span{font:700 11.5px var(--f-disp);letter-spacing:.06em;color:var(--sub);text-transform:uppercase}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:0;background:var(--chip);color:var(--fg);font:600 13px var(--f-body);padding:8px 12px;border-radius:10px;cursor:pointer}
+.seg button.on{background:var(--on);color:var(--onfg)}
+.seg button:focus-visible,.sw:focus-visible{outline:2px solid #2b7cf0;outline-offset:2px}
+.sws{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sw{border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;color:var(--sub);font:600 11px var(--f-body);padding:0}
+.sw i{display:block;width:36px;height:36px;border-radius:50%;box-shadow:0 0 0 2px transparent;transition:box-shadow .15s}
+.sw.on i{box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--fg)}
+.sw.on{color:var(--fg)}
+.stage{display:flex;justify-content:center;align-items:flex-start;min-width:0;overflow-x:auto;padding-bottom:12px}
+.dev{flex:none;background:#0e1016;padding:12px;border-radius:44px;box-shadow:0 30px 60px -30px rgba(10,20,60,.55)}
+.dev iframe{display:block;border:0;background:#fff;border-radius:32px;width:390px;height:780px;max-width:100%}
+.dev.tab{border-radius:34px;padding:16px}
+.dev.tab iframe{width:820px;height:1080px;border-radius:20px}
+.note{margin:0;font-size:12.5px;line-height:1.55;color:var(--sub)}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}.panel{position:static}.dev.tab iframe{width:min(820px,calc(100vw - 64px))}}
+</style>
+
+<div class="wrap">
+  <aside class="panel" aria-label="검토 옵션">
+    <h1>교재 시안 검토</h1>
+    <div class="grp"><span>시안</span><div class="seg" data-g="file"><button class="on" data-v="index_mag.html">매거진형</button><button data-v="index_v5.html">리더형</button></div></div>
+    <div class="grp"><span>기기</span><div class="seg" data-g="device"><button class="on" data-v="phone">모바일</button><button data-v="tab">태블릿</button></div></div>
+    <div class="grp"><span>언어</span><div class="seg" data-g="lang"><button class="on" data-v="">EN</button><button data-v="zh">ZH</button><button data-v="ja">JA</button></div></div>
+    <div class="grp"><span>표시</span><div class="seg"><button class="on" data-t="photo">레슨 사진</button><button class="on" data-t="teacher">강사(TG)</button></div></div>
+    <div class="grp"><span>컬러</span><div class="sws" id="sws"></div></div>
+    <p class="note">옵션은 기기 화면 밖에서만 조정되고, 앱 화면에는 아무것도 겹치지 않아요.</p>
+  </aside>
+  <main class="stage"><div class="dev" id="dev"><iframe id="app" src="index_mag.html" title="교재 화면"></iframe></div></main>
+</div>
+
+<script>
+(function(){
+  var P=[["","Blue","#4AA8FF","#1C5FD8"],["purple","Purple","#8F7BF7","#5340D6"],["navy","Navy","#5A7BD8","#1F3888"],["teal","Teal","#2CCFC0","#0B8F8C"],
+         ["green","Green","#4CCB7A","#1E8E4E"],["orange","Orange","#FFB054","#E06F0C"],["coral","Coral","#FF8A7A","#D9473A"],["pink","Pink","#F98BC0","#CC3E84"]];
+  var st={lang:"",palette:"",photo:true,teacher:true};
+  var fr=document.getElementById("app"),dev=document.getElementById("dev"),sws=document.getElementById("sws");
+  sws.innerHTML=P.map(function(p,i){return '<button class="sw'+(i?'':' on')+'" data-v="'+p[0]+'" aria-label="'+p[1]+'"><i style="background:linear-gradient(135deg,'+p[2]+','+p[3]+')"></i>'+p[1]+'</button>'}).join("");
+  function send(k,v){try{fr.contentWindow.postMessage({type:"review",key:k,value:v},"*")}catch(e){}}
+  function sendAll(){send("lang",st.lang);send("palette",st.palette);send("photo",st.photo);send("teacher",st.teacher)}
+  fr.addEventListener("load",function(){setTimeout(sendAll,150)});
+  function pick(btns,b){btns.forEach(function(x){x.classList.toggle("on",x===b)})}
+  document.querySelectorAll(".seg[data-g]").forEach(function(g){var bs=g.querySelectorAll("button");
+    bs.forEach(function(b){b.addEventListener("click",function(){pick(bs,b);var v=b.dataset.v,k=g.dataset.g;
+      if(k==="file"){fr.src=v}else if(k==="device"){dev.classList.toggle("tab",v==="tab")}else{st[k]=v;send(k,v)}})})});
+  document.querySelectorAll("[data-t]").forEach(function(b){b.addEventListener("click",function(){var k=b.dataset.t;st[k]=!st[k];b.classList.toggle("on",st[k]);send(k,st[k])})});
+  var sb=sws.querySelectorAll(".sw");sb.forEach(function(b){b.addEventListener("click",function(){pick(sb,b);st.palette=b.dataset.v;send("palette",b.dataset.v)})});
+})();
+</script>

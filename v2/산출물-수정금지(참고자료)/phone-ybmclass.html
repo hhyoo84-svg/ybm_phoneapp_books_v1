@@ -806,6 +806,10 @@ body{display:flex; justify-content:center; height:100dvh; overflow:hidden;}
   .course-swiper{cursor:grab;}
 }
 .course-swiper.dragging{cursor:grabbing; scroll-snap-type:none; user-select:none;}
+/* 강좌 스와이프 : 아래 내용(입장 카드 · 예습 · 리뷰 등)도 함께 넘어감 — 값은 js/classroom.js '수강중 강좌 스와이프' */
+#scrollArea > #liveCard, #scrollArea > .timeline{touch-action:pan-y pinch-zoom;}
+#scrollArea.pane-moving{overflow-x:clip;}
+#scrollArea.pane-moving > #liveCard, #scrollArea.pane-moving > .timeline{transform:translateX(var(--pane-x, 0)); filter:opacity(var(--pane-o, 1)); will-change:transform;}
 /* Tab — 클래스룸 탭은 3등분 + 움직이는 밑줄(.ind)이라 기본 탭의 간격·버튼별 밑줄을 끔 */
 .tabs.classroom-tabs{align-items:normal; gap:normal;}
 .tabs.classroom-tabs button{position:static;}
@@ -4064,18 +4068,43 @@ YBMP.add(80, '수강중 강좌 스와이프', function(){
   var live = document.getElementById('liveCard');
   var cur = 0, t = null;
   function target(i){ var max = sw.scrollWidth - sw.clientWidth; return i === slides.length-1 ? max : Math.min(max, slides[i].offsetLeft - slides[0].offsetLeft); }
-  function setActive(idx){
+  function fillLive(idx){
+    document.getElementById('liveLessonTitle').textContent = slides[idx].getAttribute('data-lesson');
+    document.getElementById('liveLessonNum').textContent = slides[idx].getAttribute('data-lesson-num');
+    document.getElementById('liveWhen').textContent = slides[idx].getAttribute('data-when') || '';
+  }
+  /* instant : 아래 내용이 손가락을 따라 넘어가는 중이면(화면 밖으로 반쯤 나간 순간) 바로 바꾼다 */
+  function setActive(idx, instant){
     if (idx === cur) return; cur = idx;
     document.dispatchEvent(new CustomEvent('coursechange', {detail: idx}));
     dots.forEach(function(d,i){ d.classList.toggle('on', i===idx); d.setAttribute('aria-selected', i===idx ? 'true':'false'); });
+    if (instant){ fillLive(idx); return; }
     live.classList.add('swapping');
-    setTimeout(function(){
-      document.getElementById('liveLessonTitle').textContent = slides[idx].getAttribute('data-lesson');
-      document.getElementById('liveLessonNum').textContent = slides[idx].getAttribute('data-lesson-num');
-      document.getElementById('liveWhen').textContent = slides[idx].getAttribute('data-when') || '';
-      live.classList.remove('swapping');
-    }, 180);
+    setTimeout(function(){ fillLive(idx); live.classList.remove('swapping'); }, 180);
   }
+
+  /* 강좌 아래 내용(입장 카드 · 예습 · 리뷰 · 리포트 …)도 강좌명과 같은 거리만큼 함께 넘어간다.
+     내용은 강좌마다 따로 있지 않고 한 벌을 바꿔 끼우는 구조라, 반쯤 넘어간 순간 내용을 바꾸고
+     반대쪽에서 들어오게 그린다. 이동 중에만 #scrollArea.pane-moving 으로 transform 을 건다. */
+  var area = document.getElementById('scrollArea');
+  var timeline = area && area.querySelector(':scope > .timeline');
+  var panes = [live, timeline].filter(Boolean);
+  var raf = 0;
+  function nearest(x){ var n = 0, bd = 1e9; slides.forEach(function(sl,i){ var d = Math.abs(target(i) - x); if (d < bd){ bd = d; n = i; } }); return n; }
+  function follow(){
+    raf = 0; if (!area) return;
+    var x = sw.scrollLeft, n = nearest(x), off = x - target(n);
+    var nb = Math.max(0, Math.min(slides.length - 1, n + (off >= 0 ? 1 : -1)));
+    var w = Math.abs(target(nb) - target(n)) || sw.clientWidth;
+    var p = Math.max(-0.5, Math.min(0.5, off / w));
+    if (n !== cur) setActive(n, true);
+    if (Math.abs(p) < 0.004){ area.classList.remove('pane-moving'); area.style.removeProperty('--pane-x'); area.style.removeProperty('--pane-o'); return; }
+    area.classList.add('pane-moving');
+    area.style.setProperty('--pane-x', (-p * w).toFixed(1) + 'px');
+    area.style.setProperty('--pane-o', (1 - Math.abs(p) * 1.4).toFixed(3));
+  }
+  sw.addEventListener('scroll', function(){ if (!raf) raf = requestAnimationFrame(follow); }, {passive:true});
+
   sw.addEventListener('scroll', function(){
     clearTimeout(t);
     t = setTimeout(function(){
@@ -4114,6 +4143,39 @@ YBMP.add(80, '수강중 강좌 스와이프', function(){
       setTimeout(function(){ sw.removeEventListener('click', block, true); }, 60);
     }
   });
+
+  /* 터치 : 강좌명 아래 내용을 좌우로 밀어도 강좌가 넘어간다 (세로 스크롤은 그대로 — CSS touch-action:pan-y) */
+  if (!area || slides.length < 2) return;
+  var tg = null;
+  area.addEventListener('pointerdown', function(e){
+    if (e.pointerType === 'mouse' || !panes.some(function(pn){ return pn.contains(e.target); })) return;
+    tg = { id:e.pointerId, x:e.clientX, y:e.clientY, left:sw.scrollLeft, start:cur, mode:null, t:Date.now() };
+  });
+  area.addEventListener('pointermove', function(e){
+    if (!tg || e.pointerId !== tg.id) return;
+    var dx = e.clientX - tg.x, dy = e.clientY - tg.y;
+    if (!tg.mode){
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      tg.mode = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y';
+      if (tg.mode === 'x') sw.classList.add('dragging');
+    }
+    if (tg.mode === 'x') sw.scrollLeft = tg.left - dx;
+  });
+  function endTouch(e){
+    if (!tg || e.pointerId !== tg.id) return;
+    var g = tg; tg = null;
+    if (g.mode !== 'x') return;
+    var dx = e.clientX - g.x, fast = Math.abs(dx) / Math.max(1, Date.now() - g.t) > 0.45, idx = g.start;
+    if (dx < -sw.clientWidth * 0.2 || (fast && dx < -24)) idx = Math.min(slides.length - 1, g.start + 1);
+    else if (dx > sw.clientWidth * 0.2 || (fast && dx > 24)) idx = Math.max(0, g.start - 1);
+    sw.scrollTo({left: target(idx), behavior:'smooth'});
+    setTimeout(function(){ sw.classList.remove('dragging'); }, 450);
+    var block = function(ev){ ev.stopPropagation(); ev.preventDefault(); };   /* 밀기 직후 생기는 클릭은 무시 */
+    area.addEventListener('click', block, true);
+    setTimeout(function(){ area.removeEventListener('click', block, true); }, 60);
+  }
+  area.addEventListener('pointerup', endTouch);
+  area.addEventListener('pointercancel', endTouch);
 });
 
 YBMP.add(90, '강좌 스와이프 힌트', function(){

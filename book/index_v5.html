@@ -2894,6 +2894,22 @@
       .rc-msg-turn.me .rc-msg-bubble { border: 1px solid #e3e7ee !important; }
       .rc-guide, .rc-brainstorm { border: 1px solid #f3dfbd !important; }
       .rc-tg-guide { border: 1px solid #ddd5fb !important; }
+
+      /* 태블릿/PC 도구 메뉴: 화면 가운데 가로 띠 → 버튼 바로 아래에 붙는 세로 팝오버(아이콘 + 라벨 한 줄) */
+      @media (min-width: 640px) {
+        .rd-tools { left: auto !important; transform: none !important; right: max(24px, calc((100% - 1060px) / 2 + 24px)) !important; top: calc(100% + 4px) !important;
+          width: 188px !important; grid-template-columns: 1fr !important; gap: 2px; padding: 6px !important; border: 1px solid var(--line) !important; border-radius: 16px !important;
+          box-shadow: 0 16px 32px -14px rgba(14, 40, 105, 0.35) !important; clip-path: none !important; transform-origin: top right; transition: opacity 0.15s, transform 0.15s !important; }
+        .rd-tools:not(.open) { transform: translateY(-4px) !important; }
+        .rd-tools .hd-util-btn, .rd-tools .rd-print { flex-direction: row !important; justify-content: flex-start !important; gap: 12px !important; padding: 11px 12px !important; font: 600 14px var(--font-body) !important; }
+        .rd-tools .hd-util-btn .ic, .rd-tools .rd-print svg { width: 22px !important; height: 22px !important; }
+      }
+
+      /* 검토 옵션은 화면 밖(review.html)으로 이동 — 앱 안에서는 숨김 */
+      .rv-opt { display: none !important; }
+
+      /* 모바일 폭에서는 앱 내부가 스크롤되므로 스크롤바 자리 확보 불필요(기기 프레임 안 오른쪽 흰 줄 제거) */
+      @media (max-width: 639.98px) { html { scrollbar-gutter: auto !important; overflow-y: hidden !important; } }
     </style>
   </head>
   <body>
@@ -5085,6 +5101,17 @@
           else document.documentElement.removeAttribute("data-lang");
         });
       })();
+    </script>
+    <script>
+      // review.html(검토 화면)에서 보내는 옵션 메시지 수신 → 기존 검토 스위치 동작을 그대로 실행
+      window.addEventListener("message", function (e) {
+        var d = e.data; if (!d || d.type !== "review") return;
+        var opt = document.getElementById("rvOpt"); if (!opt) return;
+        var sel = { lang: '[data-l="' + d.value + '"]', palette: '[data-c="' + d.value + '"]', photo: "[data-p]", teacher: "[data-t]" }[d.key];
+        var b = sel && opt.querySelector(sel); if (!b) return;
+        if ((d.key === "photo" || d.key === "teacher") && b.classList.contains("on") === !!d.value) return;
+        b.click();
+      });
     </script>
   </body>
 </html>
