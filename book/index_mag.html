@@ -3037,6 +3037,9 @@
 
       /* 모바일 폭에서는 앱 내부가 스크롤되므로 스크롤바 자리 확보 불필요(기기 프레임 안 오른쪽 흰 줄 제거) */
       @media (max-width: 639.98px) { html { scrollbar-gutter: auto !important; overflow-y: hidden !important; } }
+
+      /* 모바일 폭 전체 채우기: 기존 .app max-width:430px 때문에 431~639px 기기(큰 폰·폴드 펼침 등)에서 좌우 여백이 생기던 문제 */
+      .app { max-width: none !important; }
     </style>
   </head>
   <body>
