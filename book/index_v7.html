@@ -3636,22 +3636,34 @@
           #0c0c0e 100%
         ) !important;
       }
+      /* 사진은 ::before 레이어에 cover로 깔아 비율 유지(찌그러짐/늘어짐 없음),
+         그 위에 어두운 그라데이션을 얹어 아래쪽 다크 배경(#0c0c0e)으로 자연스럽게 마무리 */
       .rc-cover.photo {
+        background: #0c0c0e !important;
+      }
+      .rc-cover.photo::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 62%;
+        z-index: 0;
+        pointer-events: none;
         background:
           linear-gradient(
             180deg,
-            rgba(10, 11, 14, 0.22) 0%,
-            rgba(10, 11, 14, 0.5) 30%,
-            #17181b 58%,
+            rgba(10, 11, 14, 0.38) 0%,
+            rgba(10, 11, 14, 0.12) 24%,
+            rgba(10, 11, 14, 0.5) 58%,
+            rgba(12, 12, 14, 0.86) 82%,
             #0c0c0e 100%
           ),
-          var(--lesson-photo) center top / cover no-repeat,
-          #0c0c0e !important;
-        background-size:
-          auto,
-          100% 62%,
-          auto !important;
-        background-repeat: no-repeat !important;
+          var(--lesson-photo) center top / cover no-repeat;
+      }
+      .rc-cover.photo .rc-cover-scroll {
+        position: relative;
+        z-index: 1;
       }
 
       /* 하단 목차: 흰 패널 안에 레슨 → 파트 목차 */
