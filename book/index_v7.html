@@ -3850,6 +3850,7 @@
         --brand-tint: #e4e3fa;
         --brand-wash: #f4f3fd;
         --selection-bg: #e4e3fa;
+        --accent: #6d68e4;
         --grad: linear-gradient(135deg, #2373f4 0%, #6d68e4 24%, #915dd2 46%, #a853be 64%, #b74baa 82%, #c04695 100%);
         /* 강사 가이드: 브랜드가 퍼플 계열이므로 팔레트 시작색 블루로 분리 */
         --tg-blue: #2373f4; --tg-blue-dark: #1a5ad0; --tg-tint-start: #eef4ff; --tg-tint-end: #e4edfe; --tg-tag-bg: #dce7fd;
@@ -3867,6 +3868,20 @@
       /* TIP 라벨/문장: 주변 한글 해석(.rc-wmean)과 같은 서체 체계로 */
       html .rc-tip-tag { font-size: 12px; font-weight: 700; color: var(--accent); background: var(--brand-wash); padding: 2px 8px; border-radius: 6px; letter-spacing: 0.02em; }
       html .rc-tip-text { font-size: 14px; font-weight: 500; line-height: 1.55; color: var(--sub); }
+    
+      /* 하단 버튼: 목록·다음은 진한 컬러(완료 버튼과 동일), 이전만 연하게 */
+      html .mg-dock .mg-list-btn, html .mg-dock .mg-arrow-group .mg-next {
+        background: var(--grad) !important; color: #fff !important; border: 0 !important;
+        box-shadow: 0 6px 14px -8px var(--brand-3) !important;
+      }
+      html .mg-dock .mg-list-btn:hover, html .mg-dock .mg-list-btn:focus-visible,
+      html .mg-dock .mg-arrow-group .mg-next:hover:not(:disabled), html .mg-dock .mg-arrow-group .mg-next:focus-visible {
+        background: var(--grad) !important; color: #fff !important; filter: brightness(1.06);
+      }
+      html .mg-dock .mg-arrow-group .mg-next:disabled { background: var(--grad) !important; opacity: 0.4; }
+      html .mg-dock .mg-arrow-group .mg-prev, html .mg-dock .mg-arrow-group .mg-prev:disabled {
+        background: var(--ft-tint) !important; color: var(--accent) !important; box-shadow: none !important;
+      }
     </style>
   </head>
   <body>
