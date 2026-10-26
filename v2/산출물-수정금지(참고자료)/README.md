@@ -12,7 +12,7 @@
 
 | 파일 | 용도 |
 |---|---|
-| `screens-list.html` | **화면 목록 (Screen Index)**. 69개 화면마다 기획안 ID·페이지, Figma 링크, 구현 파일을 함께 표시 |
+| `screens-list.html` | **화면 목록 (Screen Index)**. 79개 화면마다 기획안 ID·페이지, Figma 링크, 구현 파일을 함께 표시 |
 | `app.html` | 전체 조립본. 더블클릭으로 열림. `app.html?screen=번호`로 특정 화면 상태 재현 |
 
 **`산출물-수정금지(참고자료)/`** — 확인용 산출물입니다. 파일 하나만으로 열리며(CSS·JS·이미지 내장), 개발 작업은 위의 나눠진 파일 기준으로 해 주세요.
@@ -35,17 +35,20 @@ v2/
 │  ├─ schedule.html     스케줄 (#scheduleArea)
 │  ├─ shell-nav.html    하단 내비 (클래스룸 / 스케줄)                          [앱 전용]
 │  ├─ popups.html       공통 팝업 전체 (기본 hidden, JS로 열림)
-│  └─ native.html       수업 콜·푸시·스플래시·공지·권한 — 화면 기준용, 실서비스는 네이티브 구현 [앱 전용]
+│  ├─ native.html       수업 콜·푸시·스플래시·공지·권한 — 화면 기준용, 실서비스는 네이티브 구현 [앱 전용]
+│  └─ settings.html     설정(네이티브 기준) + 약관·개인정보·탈퇴·로그인 웹뷰 자리               [앱 전용]
 ├─ css/
 │  ├─ tokens.css        디자인 토큰 + 웹폰트. 브랜드 테마는 이 파일만 교체
 │  ├─ base.css          리셋 · 기본값
 │  ├─ components.css    공통 컴포넌트 (버튼·칩·탭·세그먼트·와옹이·인터랙션)
 │  ├─ shell.css         앱 셸 (화면 높이 고정·헤더·탭·하단 내비·네이티브)        [앱 전용]
-│  └─ classroom.css · schedule.css · popup.css   영역별 화면
+│  ├─ classroom.css · schedule.css · popup.css   영역별 화면
+│  └─ settings.css      설정 · 웹뷰 자리                                         [앱 전용]
 ├─ js/
 │  ├─ core.js           공통 (블록 등록·실행, 데모 데이터, 와옹이 이미지 맵 window.S3C, 인터랙션)
 │  ├─ classroom.js · schedule.js · popup.js     영역별 동작
 │  ├─ shell.js          수업 콜·푸시·스플래시·공지·권한                         [앱 전용]
+│  ├─ settings.js       설정 · 웹뷰 · 로그아웃                                   [앱 전용]
 │  └─ demo/screen-states.js   ?screen=번호 상태 재현 — 실서비스에 넣지 않음
 ├─ data/demo.json       데모 데이터 24종 — API 응답으로 교체 대상
 ├─ images/              와옹이 wawong-N.png, 로고, 강사 아바타, 푸시 아이콘
@@ -67,6 +70,7 @@ v2/
 <link rel="stylesheet" href="css/classroom.css">
 <link rel="stylesheet" href="css/schedule.css">
 <link rel="stylesheet" href="css/popup.css">
+<link rel="stylesheet" href="css/settings.css">     <!-- 앱 전용 -->
 
 <div class="stage">
   <!--#include virtual="/inc/shell-head.html"-->     <!-- 앱 전용 -->
@@ -74,6 +78,7 @@ v2/
   <!--#include virtual="/inc/schedule.html"-->
   <!--#include virtual="/inc/shell-nav.html"-->      <!-- 앱 전용 -->
   <!--#include virtual="/inc/popups.html"-->
+  <!--#include virtual="/inc/settings.html"-->      <!-- 앱 전용 -->
 </div>
 <!--#include virtual="/inc/native.html"-->           <!-- 앱 전용 -->
 
@@ -83,6 +88,7 @@ v2/
 <script src="js/schedule.js"></script>
 <script src="js/popup.js"></script>
 <script src="js/shell.js"></script>                   <!-- 앱 전용 -->
+<script src="js/settings.js"></script>                <!-- 앱 전용 -->
 <script>YBMP.boot();</script>
 ```
 
@@ -103,6 +109,11 @@ v2/
 - **`100dvh`** — iOS 15.4 / Android Chrome 108 미만 웹뷰는 지원하지 않습니다. 지원 범위가 더 낮다면 `100vh` 대체값이 필요합니다.
 - **안전 영역** — `env(safe-area-inset-*)`를 쓰므로 웹뷰에서 `viewport-fit=cover`가 적용돼야 노치·홈 인디케이터 여백이 맞습니다.
 - **애니메이션** — 기기에서 '동작 줄이기'(iOS)·'애니메이션 제거'(Android)가 켜져 있으면 `prefers-reduced-motion`에 따라 등장·캐릭터 애니메이션이 꺼집니다. 의도된 동작입니다.
+
+### 설정 · 웹뷰 (70~79)
+- **설정은 네이티브 구현 기준 시안**입니다. 토글 값 저장, OS 알림 권한 이동, 스토어 이동, 로그아웃 처리는 앱에서 구현합니다.
+- **이용약관 · 개인정보처리방침 · 회원탈퇴 · 로그인은 기존 웹페이지(W2)** 입니다. 화면의 점선 영역은 기존 페이지가 들어갈 자리 표시이고, 앱은 헤더(뒤로가기 + 제목)만 그립니다. 로그인은 헤더 없이 전체 화면입니다.
+- 확인 팝업은 공통 다이얼로그(`window.scDlgOpen`)를 씁니다. 와옹이 이미지는 `js/core.js`의 다이얼로그 제목 맵에서 정합니다.
 
 ### 웹(B2B·B2C) 삽입
 - **팝업은 `position:fixed`** — 사이트 헤더·GNB의 `z-index`와 겹치지 않는지 확인해 주세요.
@@ -127,7 +138,7 @@ v2/
 |---|---|
 | Design System | 파운데이션·컴포넌트 문서 (`DesignSystem.html`과 같은 내용) |
 | Component | 컴포넌트 원본 (`Purple DS`). **삭제·이동 금지 — 화면과 문서가 모두 이 원본을 참조** |
-| 시안 · 화면 | 69개 화면 (프레임 번호 = `screens-list.html` 번호) |
+| 시안 · 화면 | 79개 화면 (프레임 번호 = `screens-list.html` 번호) |
 | 캐릭터 | 와옹이 원본 |
 
 텍스트는 `Phone/` 텍스트 스타일(Pretendard)로 통일되어 있습니다.

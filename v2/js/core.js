@@ -323,7 +323,7 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   }
   var dlg = $('#scDlg'), dt = $('#scDlgTitle');
   if (dlg && dt){
-    var DLG = { '연기 신청':'hmm', '보강 신청':'plan', '연기 취소':'hmm', '보강 취소':'hmm', '안내사항':'point', '설정 가이드':'point', '장치 테스트 정보':'point' };
+    var DLG = { '연기 신청':'hmm', '보강 신청':'plan', '연기 취소':'hmm', '보강 취소':'hmm', '안내사항':'point', '설정 가이드':'point', '장치 테스트 정보':'point', '수업 콜 수신':'nervous', '알림 허용':'point', '알림 및 리마인더 권한 필요':'point' };
     var dc = document.createElement('img'); dc.className = 's3-c s3-dlg-c'; dc.alt = ''; dc.hidden = true;
     var card = $('.dialog-card', dlg); card.insertBefore(dc, card.firstChild);
     var fixD = function(){ var k = DLG[dt.textContent.trim()]; dc.hidden = !k; card.classList.toggle('s3-has-c', !!k); if (k && dc.getAttribute('data-k') !== k){ dc.setAttribute('data-k', k); dc.src = C[k]; } if (k){ dc.style.animation = 'none'; void dc.offsetWidth; dc.style.animation = ''; } };

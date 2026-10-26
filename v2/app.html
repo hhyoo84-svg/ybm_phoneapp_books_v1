@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="css/classroom.css">
 <link rel="stylesheet" href="css/schedule.css">
 <link rel="stylesheet" href="css/popup.css">
+<link rel="stylesheet" href="css/settings.css">     <!-- 앱 전용 -->
 </head>
 <body>
 
@@ -1119,6 +1120,134 @@
     </div>
   </div>
   <!-- [inc/popups.html] end -->
+
+  <!-- [inc/settings.html] start -->
+<!-- ======================================================================
+     inc/settings.html
+     설정(네이티브) + 설정에서 여는 웹뷰(이용약관 · 개인정보처리방침 · 회원탈퇴) + 로그인(웹뷰)
+     사용 : 앱 전용. 실서비스의 설정은 네이티브, 약관·탈퇴·로그인은 기존 웹페이지(W2)를 웹뷰로 띄운다
+     CSS : settings.css (+ popup.css 의 .modal · .lesson-sheet · 다이얼로그)
+     JS  : settings.js (다이얼로그는 popup.js 의 window.scDlgOpen)
+     ====================================================================== -->
+
+<!-- 70·71 설정 — Setting_010_N_FULL · 헤더 톱니 → 진입, 뒤로가기 → 들어온 화면(클래스룸/스케줄) -->
+  <div class="modal-overlay set-overlay" id="setOverlay" hidden>
+    <div class="modal set-page" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn set-back" data-type="back" id="setBack" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <span class="modal-title" id="setTitle">설정</span>
+      </div>
+      <div class="modal-body set-body">
+
+        <!-- 로그인 계정 -->
+        <section class="set-card set-account" aria-label="로그인 계정">
+          <span class="set-avatar" aria-hidden="true">홍</span>
+          <div class="set-account-txt"><b id="setUserName">홍길동 님</b><span id="setUserId">ybmnet1</span></div>
+          <button type="button" class="btn" data-variant="outlined" data-size="sm" id="setLogout">로그아웃</button>
+        </section>
+
+        <!-- 기기(OS) 알림이 꺼져 있을 때만 -->
+        <section class="set-osnoti" id="setOsNoti" hidden>
+          <span class="set-osnoti-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.7 3.9A6 6 0 0 1 18 9c0 3 .7 5 1.4 6.3M17 17H4.4C5.4 15.6 6 13.4 6 9c0-.6.1-1.1.2-1.6"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0M3 3l18 18"/></svg></span>
+          <div class="set-osnoti-txt"><b>기기 알림이 꺼져 있어요</b><p>기기 설정에서 알림을 허용해야 수업 알림을 받을 수 있어요.</p></div>
+          <button type="button" class="btn" data-variant="primary" data-size="sm" id="setOsNotiBtn">변경하기</button>
+        </section>
+
+        <!-- 알림 -->
+        <h3 class="set-label">알림</h3>
+        <ul class="set-card set-group">
+          <li class="set-row">
+            <div class="set-row-txt"><b id="setCallLb">수업 콜 수신</b><span>수업 시간에 강사님 전화를 앱으로 받아요</span></div>
+            <button type="button" class="set-switch on" role="switch" aria-checked="true" aria-labelledby="setCallLb" data-key="call"><i></i></button>
+          </li>
+          <li class="set-row">
+            <div class="set-row-txt"><b id="setClassLb">수업 시간 알림</b><span>수업 시작 전에 알려 드려요</span></div>
+            <button type="button" class="set-switch on" role="switch" aria-checked="true" aria-labelledby="setClassLb" data-key="class"><i></i></button>
+          </li>
+          <li class="set-row set-row-sub" id="setClassTimeRow">
+            <button type="button" class="set-pick" id="setClassTime" aria-haspopup="dialog"><span>알림 시간</span><b id="setClassTimeVal">10분 전</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+          </li>
+          <li class="set-row">
+            <div class="set-row-txt"><b id="setPreLb">사전 학습 알림</b><span>수업 40분 전에 알려 드려요</span></div>
+            <button type="button" class="set-switch" role="switch" aria-checked="false" aria-labelledby="setPreLb" data-key="pre"><i></i></button>
+          </li>
+          <li class="set-row">
+            <div class="set-row-txt"><b id="setBookLb">교재 미리보기 알림</b><span>수업 20분 전에 알려 드려요</span></div>
+            <button type="button" class="set-switch" role="switch" aria-checked="false" aria-labelledby="setBookLb" data-key="book"><i></i></button>
+          </li>
+        </ul>
+
+        <!-- 앱 정보 -->
+        <h3 class="set-label">앱 정보</h3>
+        <ul class="set-card set-group">
+          <li class="set-row">
+            <div class="set-row-txt"><b>버전 정보</b><span id="setVerTxt">현재 2.1.1 · 최신 2.1.2</span></div>
+            <button type="button" class="btn" data-variant="primary" data-size="sm" id="setUpdate">업데이트</button>
+            <span class="set-ver-ok" id="setVerOk" hidden>최신 버전이에요</span>
+          </li>
+        </ul>
+
+        <!-- 하단 링크 : 기존 웹페이지(W2) 웹뷰 -->
+        <nav class="set-links" aria-label="약관 및 계정">
+          <button type="button" data-web="terms">이용약관</button>
+          <button type="button" data-web="privacy">개인정보처리방침</button>
+          <button type="button" data-web="leave">회원탈퇴</button>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+<!-- 72 수업 시간 알림 · 시간 선택 — 바텀시트 (기본 10분 전) -->
+  <div class="lesson-sheet-overlay set-sheet" id="setTimeSheet" hidden>
+    <div class="lesson-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="setTimeTitle">
+      <div class="lesson-sheet-head">
+        <span></span>
+        <span class="lesson-sheet-title" id="setTimeTitle">수업 시간 알림</span>
+        <button type="button" class="icon-btn lesson-sheet-close" data-type="close" id="setTimeClose" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <ul class="set-opts" role="radiogroup" aria-labelledby="setTimeTitle" id="setTimeOpts">
+        <li><button type="button" role="radio" aria-checked="false" data-min="1">1분 전</button></li>
+        <li><button type="button" role="radio" aria-checked="false" data-min="3">3분 전</button></li>
+        <li><button type="button" role="radio" aria-checked="false" data-min="5">5분 전</button></li>
+        <li><button type="button" role="radio" aria-checked="true" data-min="10">10분 전</button></li>
+      </ul>
+    </div>
+  </div>
+
+<!-- 76~78 이용약관 · 개인정보처리방침 · 회원탈퇴 — Setting_020_W2_FULL · 기존 웹페이지를 웹뷰로, 뒤로가기 → 설정 -->
+  <div class="modal-overlay set-web" id="setWeb" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="setWebTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn set-back" data-type="back" id="setWebBack" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <span class="modal-title" id="setWebTitle">이용약관</span>
+      </div>
+      <div class="set-webview">
+        <div class="set-w2">
+          <span class="set-w2-tag">W2 · 기존 웹페이지</span>
+          <b id="setWebName">이용약관</b>
+          <p>이 영역에 기존 페이지를 웹뷰로 띄웁니다.<br>앱에서 새로 디자인하지 않습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 79 로그인 — Login_010_W2_FULL · 기존 B2C 로그인 페이지를 웹뷰로 (앱 헤더 없음). 로그아웃하면 이 화면으로 -->
+  <div class="set-login" id="setLogin" role="dialog" aria-modal="true" aria-label="로그인" hidden>
+    <div class="set-webview">
+      <div class="set-w2">
+        <span class="set-w2-tag">W2 · 기존 웹페이지</span>
+        <b>B2C 로그인</b>
+        <p>YBM Family 계정(아이디 · 비밀번호) 로그인 페이지를 웹뷰로 띄웁니다.</p>
+        <ul>
+          <li>아이디 저장 · 2단계 인증</li>
+          <li>아이디 찾기 · 비밀번호 재설정</li>
+          <li>회원가입</li>
+        </ul>
+        <button type="button" class="btn" data-variant="link" id="setLoginDemo">시안 확인용 : 로그인 후 클래스룸으로</button>
+      </div>
+    </div>
+  </div>
+  <!-- [inc/settings.html] end -->
 </div>
 
 <!-- [inc/native.html] start -->
@@ -1211,6 +1340,7 @@
 <script src="js/schedule.js"></script>
 <script src="js/popup.js"></script>
 <script src="js/shell.js"></script>
+<script src="js/settings.js"></script>
 <script>YBMP.boot();</script>
 <!-- 화면 목록(screens-list.html)에서 특정 화면 상태를 재현할 때만 필요 — 실서비스에는 넣지 않음 -->
 <script src="js/demo/screen-states.js"></script>

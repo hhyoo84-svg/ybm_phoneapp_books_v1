@@ -1,0 +1,89 @@
+/* ======================================================================
+   css/settings.css — 설정 · 약관/탈퇴 웹뷰 · 로그인 웹뷰  (앱 전용)
+   기본 셸은 popup.css 를 그대로 쓴다 : 풀스크린 .modal / 바텀시트 .lesson-sheet-* / 다이얼로그(#scDlg)
+   ====================================================================== */
+
+/* ---------- 공통 : 뒤로가기(왼쪽) ---------- */
+.set-back{grid-column:1; grid-row:1; justify-self:start;}
+.set-back:active{background:var(--surface-muted);}
+
+/* ---------- 70·71 설정 ---------- */
+.set-overlay .modal{background:var(--s3-bg);}
+.set-body{padding:16px 16px calc(32px + env(safe-area-inset-bottom, 0px)); display:flex; flex-direction:column;}
+.set-card{background:var(--surface-default); border-radius:var(--radius-16); box-shadow:0 0 0 1px var(--border-subtle), var(--shadow-xs);}
+.set-label{margin:24px 4px 8px; font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); color:var(--text-tertiary);}
+
+/* 로그인 계정 */
+.set-account{display:flex; align-items:center; gap:12px; padding:16px;}
+.set-avatar{flex:none; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(150deg, var(--brand-interactive), var(--brand-interactive-hover)); color:var(--brand-on-interactive);
+  font-size:var(--font-size-16); font-weight:var(--font-weight-bold);}
+.set-account-txt{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+.set-account-txt b{font-size:var(--font-size-16); font-weight:var(--font-weight-bold); color:var(--text-primary);}
+.set-account-txt span{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* 기기 알림 꺼짐 안내 */
+.set-osnoti{display:flex; align-items:center; gap:12px; margin-top:12px; padding:14px 14px 14px 16px; border-radius:var(--radius-16); background:var(--status-warning-weak);}
+.set-osnoti-ic{flex:none; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--surface-default); color:var(--text-warning);}
+.set-osnoti-ic svg{width:18px; height:18px;}
+.set-osnoti-txt{flex:1; min-width:0;}
+.set-osnoti-txt b{display:block; font-size:var(--font-size-14); font-weight:var(--font-weight-bold); color:var(--text-warning);}
+.set-osnoti-txt p{margin-top:2px; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); line-height:1.45; color:var(--text-secondary); word-break:keep-all;}
+
+/* 목록 행 */
+.set-group{list-style:none; margin:0; padding:0 16px;}
+.set-row{display:flex; align-items:center; gap:12px; min-height:72px; padding:14px 0;}
+.set-row + .set-row{border-top:1px solid var(--border-subtle);}
+.set-row-txt{flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;}
+.set-row-txt b{font-size:var(--font-size-16); font-weight:var(--font-weight-semibold); color:var(--text-primary);}
+.set-row-txt span{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); line-height:1.4; color:var(--text-tertiary); word-break:keep-all;}
+
+/* 수업 시간 알림 아래 : 알림 시간 선택 (토글이 꺼지면 숨김) */
+.set-row.set-row-sub{min-height:0; padding:0 0 14px; border-top:0;}
+.set-pick{width:100%; display:flex; align-items:center; gap:8px; padding:12px 12px 12px 14px; border-radius:var(--radius-12); background:var(--s3-bg); text-align:left;}
+.set-pick span{flex:1; font-size:var(--font-size-14); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
+.set-pick b{font-size:var(--font-size-14); font-weight:var(--font-weight-bold); color:var(--brand-text-link);}
+.set-pick svg{width:16px; height:16px; color:var(--text-tertiary);}
+.set-pick:active{background:var(--surface-muted);}
+
+/* 토글 — 스케줄 '보강 수업 알림'(.makeup-switch)과 같은 모양 */
+.set-switch{flex:none; position:relative; width:50px; height:30px; border-radius:var(--radius-full); background:var(--border-default); transition:background .2s ease;}
+.set-switch i{position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,.2); transition:transform .2s cubic-bezier(.3,1.2,.4,1);}
+.set-switch.on{background:linear-gradient(150deg, var(--brand-interactive), var(--brand-interactive-hover));}
+.set-switch.on i{transform:translateX(20px);}
+
+/* 버전 */
+.set-ver-ok{flex:none; font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); color:var(--brand-text-link);}
+
+/* 하단 링크 */
+.set-links{display:flex; justify-content:center; align-items:center; margin-top:28px;}
+.set-links button{position:relative; padding:10px 12px; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+.set-links button + button::before{content:""; position:absolute; left:0; top:50%; width:1px; height:11px; margin-top:-5.5px; background:var(--border-default);}
+.set-links button:active{color:var(--text-primary);}
+
+/* 72 알림 시간 바텀시트 : 설정 화면(.modal-overlay, z 60) 위에 */
+.set-sheet{z-index:70;}
+.set-opts{list-style:none; margin:0; padding:8px 8px 12px;}
+.set-opts button{width:100%; display:flex; align-items:center; justify-content:space-between; min-height:52px; padding:0 14px; border-radius:var(--radius-12);
+  font-size:var(--font-size-16); font-weight:var(--font-weight-medium); color:var(--text-primary); text-align:left;}
+.set-opts button::after{content:""; width:20px; height:20px; border-radius:50%; box-shadow:inset 0 0 0 1.5px var(--border-default);}
+.set-opts button[aria-checked="true"]{font-weight:var(--font-weight-bold); color:var(--brand-text-link); background:var(--brand-interactive-subtle);}
+.set-opts button[aria-checked="true"]::after{background:radial-gradient(circle, #fff 0 4px, transparent 4.5px), linear-gradient(150deg, var(--brand-interactive), var(--brand-interactive-hover)); box-shadow:none;}
+.set-opts button:active{background:var(--surface-muted);}
+
+/* ---------- 76~79 웹뷰(W2) : 기존 페이지가 들어갈 자리 표시 ---------- */
+.set-webview{flex:1; display:flex; padding:16px; background:var(--surface-default); overflow-y:auto;}
+.set-w2{flex:1; min-height:320px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:32px 20px; text-align:center;
+  border:1.5px dashed var(--border-default); border-radius:var(--radius-16); background:var(--surface-subtle); color:var(--text-tertiary);}
+.set-w2-tag{display:inline-flex; padding:3px 8px; border-radius:var(--radius-4); background:var(--surface-muted); font-size:var(--font-size-11); font-weight:var(--font-weight-bold); color:var(--text-secondary); letter-spacing:.02em;}
+.set-w2 b{font-size:var(--font-size-18); font-weight:var(--font-weight-bold); color:var(--text-primary);}
+.set-w2 p{font-size:var(--font-size-14); font-weight:var(--font-weight-medium); line-height:1.6; word-break:keep-all;}
+.set-w2 ul{margin:6px 0 0; padding:0; list-style:none; font-size:var(--font-size-13); line-height:1.8; color:var(--text-secondary);}
+.set-w2 .btn{margin-top:14px;}
+
+/* 79 로그인 : 앱 헤더 없이 화면 전체 (클래스룸 위) */
+.set-login{position:fixed; inset:0; z-index:85; display:flex; justify-content:center; background:var(--surface-default);}
+.set-login .set-webview{width:100%; max-width:390px; padding:calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));}
+@media (min-width:640px){
+  .set-login .set-webview{max-width:560px;}
+}

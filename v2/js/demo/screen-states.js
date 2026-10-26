@@ -127,6 +127,16 @@
         ,'67': async function(){ await sched(); await window.flowDemo('cancel-occupied'); }
         ,'68': async function(){ await sched(); await window.flowDemo('makeup-done'); }
         ,'69': async function(){ await sched(); await window.flowDemo('makeup-cancel'); }
+        ,'70': async function(){ window.setOpen({ osNoti:true, latest:false }); }
+        ,'71': async function(){ window.setOpen({ osNoti:false, latest:true }); }
+        ,'72': async function(){ window.setOpen(); await w(300); click('#setClassTime'); }
+        ,'73': async function(){ window.setOpen(); await w(300); click('#setOverlay .set-switch[data-key=call]'); }
+        ,'74': async function(){ window.setOpen({ osNoti:false, platform:'aos' }); await w(300); window.setAskOs(); }
+        ,'75': async function(){ window.setOpen({ osNoti:false, platform:'ios' }); await w(300); window.setAskOs(); }
+        ,'76': async function(){ window.setOpen(); await w(250); window.setWebOpen('terms'); }
+        ,'77': async function(){ window.setOpen(); await w(250); window.setWebOpen('privacy'); }
+        ,'78': async function(){ window.setOpen(); await w(250); window.setWebOpen('leave'); }
+        ,'79': async function(){ window.setLoginOpen(); }
       };
   window.addEventListener('load', async function(){
     await w(700);

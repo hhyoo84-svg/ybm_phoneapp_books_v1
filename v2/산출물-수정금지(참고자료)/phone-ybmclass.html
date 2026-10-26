@@ -2312,6 +2312,98 @@ body{display:flex; justify-content:center; height:100dvh; overflow:hidden;}
 @keyframes s3PawStep{0%{opacity:0; scale:.4;} 12%{opacity:1; scale:1.08;} 22%{scale:1;} 55%{opacity:.85;} 100%{opacity:0; scale:.9;}}
 
 </style>
+<style>/* css/settings.css */
+/* ======================================================================
+   css/settings.css — 설정 · 약관/탈퇴 웹뷰 · 로그인 웹뷰  (앱 전용)
+   기본 셸은 popup.css 를 그대로 쓴다 : 풀스크린 .modal / 바텀시트 .lesson-sheet-* / 다이얼로그(#scDlg)
+   ====================================================================== */
+
+/* ---------- 공통 : 뒤로가기(왼쪽) ---------- */
+.set-back{grid-column:1; grid-row:1; justify-self:start;}
+.set-back:active{background:var(--surface-muted);}
+
+/* ---------- 70·71 설정 ---------- */
+.set-overlay .modal{background:var(--s3-bg);}
+.set-body{padding:16px 16px calc(32px + env(safe-area-inset-bottom, 0px)); display:flex; flex-direction:column;}
+.set-card{background:var(--surface-default); border-radius:var(--radius-16); box-shadow:0 0 0 1px var(--border-subtle), var(--shadow-xs);}
+.set-label{margin:24px 4px 8px; font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); color:var(--text-tertiary);}
+
+/* 로그인 계정 */
+.set-account{display:flex; align-items:center; gap:12px; padding:16px;}
+.set-avatar{flex:none; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(150deg, var(--brand-interactive), var(--brand-interactive-hover)); color:var(--brand-on-interactive);
+  font-size:var(--font-size-16); font-weight:var(--font-weight-bold);}
+.set-account-txt{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+.set-account-txt b{font-size:var(--font-size-16); font-weight:var(--font-weight-bold); color:var(--text-primary);}
+.set-account-txt span{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* 기기 알림 꺼짐 안내 */
+.set-osnoti{display:flex; align-items:center; gap:12px; margin-top:12px; padding:14px 14px 14px 16px; border-radius:var(--radius-16); background:var(--status-warning-weak);}
+.set-osnoti-ic{flex:none; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--surface-default); color:var(--text-warning);}
+.set-osnoti-ic svg{width:18px; height:18px;}
+.set-osnoti-txt{flex:1; min-width:0;}
+.set-osnoti-txt b{display:block; font-size:var(--font-size-14); font-weight:var(--font-weight-bold); color:var(--text-warning);}
+.set-osnoti-txt p{margin-top:2px; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); line-height:1.45; color:var(--text-secondary); word-break:keep-all;}
+
+/* 목록 행 */
+.set-group{list-style:none; margin:0; padding:0 16px;}
+.set-row{display:flex; align-items:center; gap:12px; min-height:72px; padding:14px 0;}
+.set-row + .set-row{border-top:1px solid var(--border-subtle);}
+.set-row-txt{flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;}
+.set-row-txt b{font-size:var(--font-size-16); font-weight:var(--font-weight-semibold); color:var(--text-primary);}
+.set-row-txt span{font-size:var(--font-size-13); font-weight:var(--font-weight-medium); line-height:1.4; color:var(--text-tertiary); word-break:keep-all;}
+
+/* 수업 시간 알림 아래 : 알림 시간 선택 (토글이 꺼지면 숨김) */
+.set-row.set-row-sub{min-height:0; padding:0 0 14px; border-top:0;}
+.set-pick{width:100%; display:flex; align-items:center; gap:8px; padding:12px 12px 12px 14px; border-radius:var(--radius-12); background:var(--s3-bg); text-align:left;}
+.set-pick span{flex:1; font-size:var(--font-size-14); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
+.set-pick b{font-size:var(--font-size-14); font-weight:var(--font-weight-bold); color:var(--brand-text-link);}
+.set-pick svg{width:16px; height:16px; color:var(--text-tertiary);}
+.set-pick:active{background:var(--surface-muted);}
+
+/* 토글 — 스케줄 '보강 수업 알림'(.makeup-switch)과 같은 모양 */
+.set-switch{flex:none; position:relative; width:50px; height:30px; border-radius:var(--radius-full); background:var(--border-default); transition:background .2s ease;}
+.set-switch i{position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,.2); transition:transform .2s cubic-bezier(.3,1.2,.4,1);}
+.set-switch.on{background:linear-gradient(150deg, var(--brand-interactive), var(--brand-interactive-hover));}
+.set-switch.on i{transform:translateX(20px);}
+
+/* 버전 */
+.set-ver-ok{flex:none; font-size:var(--font-size-13); font-weight:var(--font-weight-semibold); color:var(--brand-text-link);}
+
+/* 하단 링크 */
+.set-links{display:flex; justify-content:center; align-items:center; margin-top:28px;}
+.set-links button{position:relative; padding:10px 12px; font-size:var(--font-size-13); font-weight:var(--font-weight-medium); color:var(--text-tertiary);}
+.set-links button + button::before{content:""; position:absolute; left:0; top:50%; width:1px; height:11px; margin-top:-5.5px; background:var(--border-default);}
+.set-links button:active{color:var(--text-primary);}
+
+/* 72 알림 시간 바텀시트 : 설정 화면(.modal-overlay, z 60) 위에 */
+.set-sheet{z-index:70;}
+.set-opts{list-style:none; margin:0; padding:8px 8px 12px;}
+.set-opts button{width:100%; display:flex; align-items:center; justify-content:space-between; min-height:52px; padding:0 14px; border-radius:var(--radius-12);
+  font-size:var(--font-size-16); font-weight:var(--font-weight-medium); color:var(--text-primary); text-align:left;}
+.set-opts button::after{content:""; width:20px; height:20px; border-radius:50%; box-shadow:inset 0 0 0 1.5px var(--border-default);}
+.set-opts button[aria-checked="true"]{font-weight:var(--font-weight-bold); color:var(--brand-text-link); background:var(--brand-interactive-subtle);}
+.set-opts button[aria-checked="true"]::after{background:radial-gradient(circle, #fff 0 4px, transparent 4.5px), linear-gradient(150deg, var(--brand-interactive), var(--brand-interactive-hover)); box-shadow:none;}
+.set-opts button:active{background:var(--surface-muted);}
+
+/* ---------- 76~79 웹뷰(W2) : 기존 페이지가 들어갈 자리 표시 ---------- */
+.set-webview{flex:1; display:flex; padding:16px; background:var(--surface-default); overflow-y:auto;}
+.set-w2{flex:1; min-height:320px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:32px 20px; text-align:center;
+  border:1.5px dashed var(--border-default); border-radius:var(--radius-16); background:var(--surface-subtle); color:var(--text-tertiary);}
+.set-w2-tag{display:inline-flex; padding:3px 8px; border-radius:var(--radius-4); background:var(--surface-muted); font-size:var(--font-size-11); font-weight:var(--font-weight-bold); color:var(--text-secondary); letter-spacing:.02em;}
+.set-w2 b{font-size:var(--font-size-18); font-weight:var(--font-weight-bold); color:var(--text-primary);}
+.set-w2 p{font-size:var(--font-size-14); font-weight:var(--font-weight-medium); line-height:1.6; word-break:keep-all;}
+.set-w2 ul{margin:6px 0 0; padding:0; list-style:none; font-size:var(--font-size-13); line-height:1.8; color:var(--text-secondary);}
+.set-w2 .btn{margin-top:14px;}
+
+/* 79 로그인 : 앱 헤더 없이 화면 전체 (클래스룸 위) */
+.set-login{position:fixed; inset:0; z-index:85; display:flex; justify-content:center; background:var(--surface-default);}
+.set-login .set-webview{width:100%; max-width:390px; padding:calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));}
+@media (min-width:640px){
+  .set-login .set-webview{max-width:560px;}
+}
+
+</style>     <!-- 앱 전용 -->
 </head>
 <body>
 
@@ -3418,6 +3510,134 @@ body{display:flex; justify-content:center; height:100dvh; overflow:hidden;}
     </div>
   </div>
   <!-- [inc/popups.html] end -->
+
+  <!-- [inc/settings.html] start -->
+<!-- ======================================================================
+     inc/settings.html
+     설정(네이티브) + 설정에서 여는 웹뷰(이용약관 · 개인정보처리방침 · 회원탈퇴) + 로그인(웹뷰)
+     사용 : 앱 전용. 실서비스의 설정은 네이티브, 약관·탈퇴·로그인은 기존 웹페이지(W2)를 웹뷰로 띄운다
+     CSS : settings.css (+ popup.css 의 .modal · .lesson-sheet · 다이얼로그)
+     JS  : settings.js (다이얼로그는 popup.js 의 window.scDlgOpen)
+     ====================================================================== -->
+
+<!-- 70·71 설정 — Setting_010_N_FULL · 헤더 톱니 → 진입, 뒤로가기 → 들어온 화면(클래스룸/스케줄) -->
+  <div class="modal-overlay set-overlay" id="setOverlay" hidden>
+    <div class="modal set-page" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn set-back" data-type="back" id="setBack" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <span class="modal-title" id="setTitle">설정</span>
+      </div>
+      <div class="modal-body set-body">
+
+        <!-- 로그인 계정 -->
+        <section class="set-card set-account" aria-label="로그인 계정">
+          <span class="set-avatar" aria-hidden="true">홍</span>
+          <div class="set-account-txt"><b id="setUserName">홍길동 님</b><span id="setUserId">ybmnet1</span></div>
+          <button type="button" class="btn" data-variant="outlined" data-size="sm" id="setLogout">로그아웃</button>
+        </section>
+
+        <!-- 기기(OS) 알림이 꺼져 있을 때만 -->
+        <section class="set-osnoti" id="setOsNoti" hidden>
+          <span class="set-osnoti-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.7 3.9A6 6 0 0 1 18 9c0 3 .7 5 1.4 6.3M17 17H4.4C5.4 15.6 6 13.4 6 9c0-.6.1-1.1.2-1.6"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0M3 3l18 18"/></svg></span>
+          <div class="set-osnoti-txt"><b>기기 알림이 꺼져 있어요</b><p>기기 설정에서 알림을 허용해야 수업 알림을 받을 수 있어요.</p></div>
+          <button type="button" class="btn" data-variant="primary" data-size="sm" id="setOsNotiBtn">변경하기</button>
+        </section>
+
+        <!-- 알림 -->
+        <h3 class="set-label">알림</h3>
+        <ul class="set-card set-group">
+          <li class="set-row">
+            <div class="set-row-txt"><b id="setCallLb">수업 콜 수신</b><span>수업 시간에 강사님 전화를 앱으로 받아요</span></div>
+            <button type="button" class="set-switch on" role="switch" aria-checked="true" aria-labelledby="setCallLb" data-key="call"><i></i></button>
+          </li>
+          <li class="set-row">
+            <div class="set-row-txt"><b id="setClassLb">수업 시간 알림</b><span>수업 시작 전에 알려 드려요</span></div>
+            <button type="button" class="set-switch on" role="switch" aria-checked="true" aria-labelledby="setClassLb" data-key="class"><i></i></button>
+          </li>
+          <li class="set-row set-row-sub" id="setClassTimeRow">
+            <button type="button" class="set-pick" id="setClassTime" aria-haspopup="dialog"><span>알림 시간</span><b id="setClassTimeVal">10분 전</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+          </li>
+          <li class="set-row">
+            <div class="set-row-txt"><b id="setPreLb">사전 학습 알림</b><span>수업 40분 전에 알려 드려요</span></div>
+            <button type="button" class="set-switch" role="switch" aria-checked="false" aria-labelledby="setPreLb" data-key="pre"><i></i></button>
+          </li>
+          <li class="set-row">
+            <div class="set-row-txt"><b id="setBookLb">교재 미리보기 알림</b><span>수업 20분 전에 알려 드려요</span></div>
+            <button type="button" class="set-switch" role="switch" aria-checked="false" aria-labelledby="setBookLb" data-key="book"><i></i></button>
+          </li>
+        </ul>
+
+        <!-- 앱 정보 -->
+        <h3 class="set-label">앱 정보</h3>
+        <ul class="set-card set-group">
+          <li class="set-row">
+            <div class="set-row-txt"><b>버전 정보</b><span id="setVerTxt">현재 2.1.1 · 최신 2.1.2</span></div>
+            <button type="button" class="btn" data-variant="primary" data-size="sm" id="setUpdate">업데이트</button>
+            <span class="set-ver-ok" id="setVerOk" hidden>최신 버전이에요</span>
+          </li>
+        </ul>
+
+        <!-- 하단 링크 : 기존 웹페이지(W2) 웹뷰 -->
+        <nav class="set-links" aria-label="약관 및 계정">
+          <button type="button" data-web="terms">이용약관</button>
+          <button type="button" data-web="privacy">개인정보처리방침</button>
+          <button type="button" data-web="leave">회원탈퇴</button>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+<!-- 72 수업 시간 알림 · 시간 선택 — 바텀시트 (기본 10분 전) -->
+  <div class="lesson-sheet-overlay set-sheet" id="setTimeSheet" hidden>
+    <div class="lesson-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="setTimeTitle">
+      <div class="lesson-sheet-head">
+        <span></span>
+        <span class="lesson-sheet-title" id="setTimeTitle">수업 시간 알림</span>
+        <button type="button" class="icon-btn lesson-sheet-close" data-type="close" id="setTimeClose" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <ul class="set-opts" role="radiogroup" aria-labelledby="setTimeTitle" id="setTimeOpts">
+        <li><button type="button" role="radio" aria-checked="false" data-min="1">1분 전</button></li>
+        <li><button type="button" role="radio" aria-checked="false" data-min="3">3분 전</button></li>
+        <li><button type="button" role="radio" aria-checked="false" data-min="5">5분 전</button></li>
+        <li><button type="button" role="radio" aria-checked="true" data-min="10">10분 전</button></li>
+      </ul>
+    </div>
+  </div>
+
+<!-- 76~78 이용약관 · 개인정보처리방침 · 회원탈퇴 — Setting_020_W2_FULL · 기존 웹페이지를 웹뷰로, 뒤로가기 → 설정 -->
+  <div class="modal-overlay set-web" id="setWeb" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="setWebTitle">
+      <div class="modal-head">
+        <button type="button" class="icon-btn set-back" data-type="back" id="setWebBack" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <span class="modal-title" id="setWebTitle">이용약관</span>
+      </div>
+      <div class="set-webview">
+        <div class="set-w2">
+          <span class="set-w2-tag">W2 · 기존 웹페이지</span>
+          <b id="setWebName">이용약관</b>
+          <p>이 영역에 기존 페이지를 웹뷰로 띄웁니다.<br>앱에서 새로 디자인하지 않습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 79 로그인 — Login_010_W2_FULL · 기존 B2C 로그인 페이지를 웹뷰로 (앱 헤더 없음). 로그아웃하면 이 화면으로 -->
+  <div class="set-login" id="setLogin" role="dialog" aria-modal="true" aria-label="로그인" hidden>
+    <div class="set-webview">
+      <div class="set-w2">
+        <span class="set-w2-tag">W2 · 기존 웹페이지</span>
+        <b>B2C 로그인</b>
+        <p>YBM Family 계정(아이디 · 비밀번호) 로그인 페이지를 웹뷰로 띄웁니다.</p>
+        <ul>
+          <li>아이디 저장 · 2단계 인증</li>
+          <li>아이디 찾기 · 비밀번호 재설정</li>
+          <li>회원가입</li>
+        </ul>
+        <button type="button" class="btn" data-variant="link" id="setLoginDemo">시안 확인용 : 로그인 후 클래스룸으로</button>
+      </div>
+    </div>
+  </div>
+  <!-- [inc/settings.html] end -->
 </div>
 
 <!-- [inc/native.html] start -->
@@ -3831,7 +4051,7 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   }
   var dlg = $('#scDlg'), dt = $('#scDlgTitle');
   if (dlg && dt){
-    var DLG = { '연기 신청':'hmm', '보강 신청':'plan', '연기 취소':'hmm', '보강 취소':'hmm', '안내사항':'point', '설정 가이드':'point', '장치 테스트 정보':'point' };
+    var DLG = { '연기 신청':'hmm', '보강 신청':'plan', '연기 취소':'hmm', '보강 취소':'hmm', '안내사항':'point', '설정 가이드':'point', '장치 테스트 정보':'point', '수업 콜 수신':'nervous', '알림 허용':'point', '알림 및 리마인더 권한 필요':'point' };
     var dc = document.createElement('img'); dc.className = 's3-c s3-dlg-c'; dc.alt = ''; dc.hidden = true;
     var card = $('.dialog-card', dlg); card.insertBefore(dc, card.firstChild);
     var fixD = function(){ var k = DLG[dt.textContent.trim()]; dc.hidden = !k; card.classList.toggle('s3-has-c', !!k); if (k && dc.getAttribute('data-k') !== k){ dc.setAttribute('data-k', k); dc.src = C[k]; } if (k){ dc.style.animation = 'none'; void dc.offsetWidth; dc.style.animation = ''; } };
@@ -6456,6 +6676,96 @@ YBMP.add(200, '접근 권한 안내', function(){
 });
 
 </script>
+<script>/* js/settings.js */
+/* ======================================================================
+   js/settings.js — 설정 · 약관/탈퇴 웹뷰 · 로그인 웹뷰  (앱 전용)
+   마크업 : inc/settings.html   스타일 : css/settings.css
+   다이얼로그는 popup.js 의 window.scDlgOpen 을 쓴다 (와옹이 캐릭터는 core.js DLG 맵에서 제목으로 지정)
+   실서비스 : 설정은 네이티브. 토글 값 저장 · OS 권한 이동 · 스토어 이동 · 웹뷰 URL 은 앱에서 처리
+   ====================================================================== */
+YBMP.add(300, '설정 · 약관 · 로그인', function(){
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var page = $('#setOverlay'); if (!page) return;
+  var web = $('#setWeb'), sheet = $('#setTimeSheet'), login = $('#setLogin');
+
+  function open(el){ el.hidden = false; requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.add('on'); }); }); }
+  function close(el){ el.classList.remove('on'); setTimeout(function(){ el.hidden = true; }, 220); }
+  function dlg(o){ if (window.scDlgOpen) window.scDlgOpen(o); }
+
+  /* ---------- 상태 : 기기 알림 · 버전 · 플랫폼 (실서비스는 앱이 넘겨줌) ---------- */
+  var S = { osNoti:true, latest:false, platform:'aos', cur:'2.1.1', last:'2.1.2' };
+  function paint(){
+    $('#setOsNoti').hidden = S.osNoti;
+    $('#setUpdate').hidden = S.latest;
+    $('#setVerOk').hidden = !S.latest;
+    $('#setVerTxt').textContent = S.latest ? '현재 ' + S.last : '현재 ' + S.cur + ' · 최신 ' + S.last;
+  }
+
+  /* ---------- 진입 · 뒤로가기 : 들어온 화면(클래스룸/스케줄) 그대로 ---------- */
+  document.addEventListener('click', function(e){ if (e.target.closest('.classroom-topbar-gear')) window.setOpen(); });
+  $('#setBack').addEventListener('click', function(){ close(page); });
+  window.setOpen = function(o){
+    if (o) Object.keys(o).forEach(function(k){ S[k] = o[k]; });
+    paint(); page.querySelector('.modal-body').scrollTop = 0; open(page);
+  };
+
+  /* ---------- 토글 ---------- */
+  function setSw(btn, on){ btn.classList.toggle('on', on); btn.setAttribute('aria-checked', String(on)); if (btn.dataset.key === 'class') $('#setClassTimeRow').hidden = !on; }
+  [].forEach.call(page.querySelectorAll('.set-switch'), function(btn){
+    btn.addEventListener('click', function(){
+      var on = !btn.classList.contains('on');
+      /* 수업 콜을 끌 때만 한 번 더 확인 — [알림 끄기]를 눌러야 꺼지고, 닫기·[계속 받기]는 켜 둔 그대로 */
+      if (btn.dataset.key === 'call' && !on){
+        dlg({ title:'수업 콜 수신', msg:'수업 콜 수신을 끄면 중요한 수업 안내나\n알림을 받지 못할 수 있어요.',
+          buttons:[{ text:'알림 끄기', ghost:true, fn:function(){ setSw(btn, false); } }, { text:'계속 받기' }] });
+        return;
+      }
+      setSw(btn, on);
+    });
+  });
+
+  /* ---------- 수업 시간 알림 · 시간 선택 (바텀시트) ---------- */
+  var opts = [].slice.call(sheet.querySelectorAll('[data-min]'));
+  $('#setClassTime').addEventListener('click', function(){ open(sheet); });
+  $('#setTimeClose').addEventListener('click', function(){ close(sheet); });
+  sheet.addEventListener('click', function(e){ if (e.target === sheet) close(sheet); });
+  opts.forEach(function(b){
+    b.addEventListener('click', function(){
+      opts.forEach(function(x){ x.setAttribute('aria-checked', String(x === b)); });
+      $('#setClassTimeVal').textContent = b.textContent;
+      setTimeout(function(){ close(sheet); }, 160);
+    });
+  });
+
+  /* ---------- 기기 알림 꺼짐 → [변경하기] : AOS 는 설정 앱으로, iOS 는 알림 허용 요청 ---------- */
+  function askOs(){
+    var done = function(){ S.osNoti = true; paint(); };
+    if (S.platform === 'ios') dlg({ title:'알림 허용', msg:'정확한 시간에 수업 알림을 받으려면\n알림을 허용해 주세요.',
+      buttons:[{ text:'취소', ghost:true }, { text:'허용', fn:done }] });
+    else dlg({ title:'알림 및 리마인더 권한 필요', msg:'정확한 시간에 알림을 보내려면\n‘알람 및 리마인더’ 권한이 필요해요.\n설정으로 이동해 권한을 허용해 주세요.',
+      buttons:[{ text:'취소', ghost:true }, { text:'설정으로 이동', fn:done }] });
+  }
+  $('#setOsNotiBtn').addEventListener('click', askOs);
+  window.setAskOs = askOs;
+
+  /* ---------- 버전 : [업데이트] → 스토어 (시안에서는 최신 상태로만 바꿈) ---------- */
+  $('#setUpdate').addEventListener('click', function(){ S.latest = true; paint(); });
+
+  /* ---------- 약관 · 개인정보 · 탈퇴 : 기존 웹페이지 웹뷰, 뒤로가기 → 설정 ---------- */
+  var WEB = { terms:'이용약관', privacy:'개인정보처리방침', leave:'회원탈퇴' };
+  window.setWebOpen = function(k){ $('#setWebTitle').textContent = $('#setWebName').textContent = WEB[k] || ''; web.querySelector('.set-webview').scrollTop = 0; open(web); };
+  [].forEach.call(page.querySelectorAll('[data-web]'), function(b){ b.addEventListener('click', function(){ window.setWebOpen(b.dataset.web); }); });
+  $('#setWebBack').addEventListener('click', function(){ close(web); });
+
+  /* ---------- 로그아웃 → 로그인(웹뷰). 기획안대로 확인 없이 바로 ---------- */
+  window.setLoginOpen = function(){ login.hidden = false; };
+  $('#setLogout').addEventListener('click', function(){ window.setLoginOpen(); page.hidden = true; page.classList.remove('on'); web.hidden = true; web.classList.remove('on'); });
+  $('#setLoginDemo').addEventListener('click', function(){ login.hidden = true; });
+
+  paint();
+});
+
+</script>
 <script>YBMP.boot();</script>
 <!-- 화면 목록(screens-list.html)에서 특정 화면 상태를 재현할 때만 필요 — 실서비스에는 넣지 않음 -->
 <script>/* js/demo/screen-states.js */
@@ -6588,6 +6898,16 @@ YBMP.add(200, '접근 권한 안내', function(){
         ,'67': async function(){ await sched(); await window.flowDemo('cancel-occupied'); }
         ,'68': async function(){ await sched(); await window.flowDemo('makeup-done'); }
         ,'69': async function(){ await sched(); await window.flowDemo('makeup-cancel'); }
+        ,'70': async function(){ window.setOpen({ osNoti:true, latest:false }); }
+        ,'71': async function(){ window.setOpen({ osNoti:false, latest:true }); }
+        ,'72': async function(){ window.setOpen(); await w(300); click('#setClassTime'); }
+        ,'73': async function(){ window.setOpen(); await w(300); click('#setOverlay .set-switch[data-key=call]'); }
+        ,'74': async function(){ window.setOpen({ osNoti:false, platform:'aos' }); await w(300); window.setAskOs(); }
+        ,'75': async function(){ window.setOpen({ osNoti:false, platform:'ios' }); await w(300); window.setAskOs(); }
+        ,'76': async function(){ window.setOpen(); await w(250); window.setWebOpen('terms'); }
+        ,'77': async function(){ window.setOpen(); await w(250); window.setWebOpen('privacy'); }
+        ,'78': async function(){ window.setOpen(); await w(250); window.setWebOpen('leave'); }
+        ,'79': async function(){ window.setLoginOpen(); }
       };
   window.addEventListener('load', async function(){
     await w(700);
