@@ -127,13 +127,14 @@
     { grp:'클래스룸', tab:'하단 탭1', subs:[
       { sub:'상단 탭', items:['01','02','03'] },
       { sub:'강의실 입장 버튼', items:['47','48','49'] },
-      { sub:'수강 중 · 레이어 팝업', items:['46','17','14','07','08','24','25','09','26','27','10','11','28','29','30','12','31','32','13','06','15','16','18'] }
+      { sub:'수강 중 · 상태', items:['84','85'] },
+      { sub:'수강 중 · 레이어 팝업', items:['46','17','14','07','08','24','25','09','26','27','80','10','11','28','29','30','12','31','32','13','06','15','16','18'] }
     ]},
     { grp:'스케줄', tab:'하단 탭2', subs:[
-      { sub:'주별 · 월별', items:['04','05','19'] },
-      { sub:'레이어 팝업', items:['20','22','23','68','69'] },
+      { sub:'주별 · 월별', items:['04','05','82','19'] },
+      { sub:'레이어 팝업', items:['20','83','22','23','68','69'] },
       { sub:'연기 · 연기 취소', items:['21','64','65','66','67'] },
-      { sub:'수업 루틴 변경', items:['50','51','52','53','54','55','56','57','58','59','60','61','62','63'] }
+      { sub:'수업 루틴 변경', items:['50','51','52','53','54','55','56','57','58','59','60','61','62','81','63'] }
     ]}
     ,{ grp:'설정', tab:'헤더 톱니', subs:[
       { sub:'설정 · 알림', items:['70','71','72','73','74','75'] },
@@ -156,7 +157,7 @@
     '25':{n:'학습질문 · 접수완료', id:'Classroom_022_WEB_LP', pg:'18p ②', way:'WEB', node:'2029-321', d:['[보내기] 완료 후 접수 안내와 [확인]']},
     '09':{n:'만족도', id:'Classroom_023_WEB_LP', pg:'19p ①②', way:'WEB', node:'2023-209', d:['강사 만족도 6문항, 1~5 점수(누른 번호까지 채워짐)','수강 기간 중 1회 참여 안내, [취소] [제출]']},
     '26':{n:'만족도 · 미응답', id:'Classroom_023_WEB_LP', pg:'19p ④', way:'WEB', node:'2029-338', d:['미참여 항목이 있을 때 "평가하지 않은 항목을 확인해 주세요."'], note:'시안은 상단 안내 + 문항별 \'미응답\' 칩으로 표현'},
-    '27':{n:'만족도 · 제출완료', id:'Classroom_023_WEB_LP', pg:'19p ③', way:'WEB', node:'2029-469', d:['"강사 만족도 평가가 완료되었습니다. 참여해 주셔서 감사합니다."'], note:'기획안의 "수업 시작 7일 이후 가능" · "이미 참여" 알럿은 아직 시안 없음'},
+    '27':{n:'만족도 · 제출완료', id:'Classroom_023_WEB_LP', pg:'19p ③', way:'WEB', node:'2029-469', d:['"강사 만족도 평가가 완료되었습니다. 참여해 주셔서 감사합니다."'], note:'"이미 참여"는 80번. "수업 시작 7일 이후 가능" 알럿은 아직 시안 없음(수업 시작일 데이터 연동 시 추가)'},
     '10':{n:'수업리뷰', id:'Classroom_030_WEB_FULL', pg:'21p ①②③', way:'WEB', node:'2023-316', d:['최신 수업 리뷰: 강의 정보, Feedback, Pronunciation, Grammar(LMS 연동)','[지난 수업 다시 듣기] → 기존 듣기 페이지']},
     '11':{n:'마이크테스트', id:'Classroom_031_WEB_LP', pg:'21p ④⑤', way:'WEB', node:'2023-405', d:['[마이크 테스트] → 테스트 팝업, 마이크 아이콘을 누르면 테스트 시작']},
     '28':{n:'마이크테스트 · 녹음중', id:'Classroom_031_WEB_LP', pg:'21p ⑤', way:'WEB', node:'2029-485', d:['마이크 아이콘이 바뀌며 녹음 중 표시(파형)']},
@@ -225,22 +226,39 @@
   P['77'] = {n:'개인정보처리방침', id:'Setting_020_W2_FULL', pg:'42p ②④', way:'W2', node:'', d:['설정 하단 [개인정보처리방침] → 기존 페이지 웹뷰 (member.ybmnet.co.kr/join/terms/ybmnet_indiv_new.html)','뒤로가기 → 설정'], note:'본문은 회원 사이트 개인정보처리방침 페이지를 그대로 띄움 — 신규 디자인 없음'};
   P['78'] = {n:'회원탈퇴', id:'Setting_020_W2_FULL', pg:'42p ③④', way:'W2', node:'', d:['설정 하단 [회원탈퇴] → 기존 탈퇴 페이지 웹뷰','뒤로가기 → 설정'], note:'본문은 기존 웹페이지 — 신규 디자인 없음'};
   P['79'] = {n:'로그인', id:'Login_010_W2_FULL', pg:'10p', way:'W2', node:'', d:['기존 B2C 로그인 페이지 웹뷰(YBM Family 아이디/비밀번호) — m.phone.ybmclass.com/common/login.asp','아이디 저장 · 2단계 인증 · 아이디 찾기 · 비밀번호 재설정 · 회원가입 링크','설정 [로그아웃] 후에도 이 화면으로'], note:'앱 헤더 없이 전체 화면 웹뷰 — 전화화상 모바일 로그인 페이지를 그대로 띄움. 아래 "시안 확인용" 버튼은 실서비스에 없음'};
+  /* 80~85 : HTML에는 이미 있던 상태에 번호만 붙임 — Figma 프레임은 필요할 때 추가 */
+  P['80'] = {n:'만족도 · 이미 참여', id:'Classroom_023_WEB_LP', pg:'19p ②', way:'WEB', node:'', d:['수강 기간 중 1회 참여 — 이미 제출했으면 문항 대신 완료 안내','"만족도 평가를 완료했어요 / 수강 기간 중 1회만 참여할 수 있어요." [확인]'], note:'기획안은 알럿 "이미 참여하셨습니다" — 시안은 팝업 안 완료 화면으로 표현. Figma 미작업'};
+  P['81'] = {n:'전화번호 변경 · 형식 오류', id:'Schedule_025_WEB_LP', pg:'35p ①', way:'WEB', node:'', d:['번호 형식이 틀린 채 [변경] 터치 시 알럿','"전화번호를 확인해 주세요 / 올바른 전화번호를 입력해 주세요." [확인]'], note:'Figma 미작업'};
+  P['82'] = {n:'스케줄 · 월간 +N', id:'Schedule_010_W1_FULL', pg:'13p, 29p ⑦', way:'W1', node:'', d:['하루에 수업이 여러 개인 날은 칩에 +N 표시','+N 칩 터치 → 그날 수업 시간 · 상태 말풍선, 바깥 터치나 스크롤 시 닫힘'], note:'Figma 미작업'};
+  P['83'] = {n:'연기보강현황 · 안내사항', id:'Schedule_030_WEB_LP', pg:'37p', way:'WEB', node:'', d:['연기/보강 현황 하단 [안내사항] → 다이얼로그','연기 가능 시간(수업 10분 전까지) · 보강 수업 신청 기간과 조건'], note:'Figma 미작업'};
+  P['84'] = {n:'TO-DO · 예습 완료 독려 문구', id:'Classroom_033_WEB_FULL', pg:'24p ① 표1', way:'WEB', node:'', d:['TO-DO 단계를 모두 마치면 진행 N/N, 독려 문구가 완료 문구로 바뀜','미완료(01): "수업의 몰입도를 높이는 스마트한 습관! …" (표1 1-1)','완료: "사전학습 완료! 꼼꼼하게 준비한 만큼 …" (표1 2-1)'], note:'표1의 단계 구성별 문구(1-2 · 1-3 · 2-2 · 2-3)는 아직 미반영 — 교재만 있는 강좌(2번 강좌)도 1-1 문구가 나옴. Figma 미작업'};
+  P['85'] = {n:'첨삭(주니어) 진입', id:'Classroom_024_W2_LP', pg:'20p', way:'W2', node:'', d:['주니어 과정에서만 월말 리포트 아래에 [주니어 첨삭] 한 줄 버튼','터치 → 기존 첨삭 페이지(m.my.ybmclass.com/classroom/pop_lecture_class_phone_engFix_list.asp)'], note:'첨삭 본문은 기존 웹페이지 — 신규 디자인 없음. 시안은 새 창으로 열림(앱에서는 웹뷰). Figma 미작업'};
   /* 기획안에만 있고 아직 시안이 없는 화면 */
   /* 기존 웹페이지를 그대로 불러오는 화면(W2) — 신규 디자인 없음 */
   var EXIST = [
-    ['Classroom_024_W2_LP','첨삭(주니어)','20p']
+    ['WebRTC_010_W2_FULL','강의실(구르미 · 외부 솔루션)','26p, 43p'],
+    ['Login_010_W2_FULL','로그인 하위(2단계 인증 · 아이디/비밀번호 찾기 · 회원가입)','10p'],
+    ['Setting_020_W2_FULL','회원탈퇴 본문 — URL 미정','42p']
   ];
   var TODO = [
-    
-    ['Classroom_011_W1_FULL','클래스룸 가로 UI','12p'],
-['Schedule_011/012_W1_FULL','스케줄 가로 UI','14–15p'],
+    ['Classroom_011_W1_FULL','클래스룸 가로 UI(태블릿, 시안 확정 후)','12p'],
+    ['Schedule_011/012_W1_FULL','스케줄 가로 UI(태블릿, 시안 확정 후)','14–15p'],
+    ['Splash_010_N_FULL','앱 아이콘(앱 이름 확정 후)','6p ①'],
+    ['Onboarding · 자동 로그인','온보딩 / 자동 로그인(구조도에만 있음)','4p'],
+    ['Classroom_023_WEB_LP','만족도 · 수업 시작 7일 이전 알럿','19p'],
+    ['Classroom_033_WEB_FULL','독려 문구 1-2 · 1-3 · 2-2 · 2-3(단계 구성별)','24p 표1']
+  ];
+  /* 기획안에 있지만 B2C 앱 시안 범위가 아닌 것 */
+  var OUT = [
+    ['NOTI · B2B','스마트연수원(B2B) 수업 푸시','48–49p'],
+    ['OS 시스템 UI','OS 권한 팝업(오디오 · 알림 · 카메라)','8–9p']
   ];
   var ORDER = []; TREE.forEach(function(g){ g.subs.forEach(function(s){ ORDER = ORDER.concat(s.items); }); });
 
   /* ---- 화면 : app.html?screen=NO 를 iframe으로 띄움 (상태 재현은 js/demo/screen-states.js) ---- */
   var ver = '4', SRC = 'app.html';
   /* 화면별 구현 파일 (v2 폴더 구조 기준) */
-  var AREA = {}; ['01','02','03','47','48','49'].forEach(function(n){ AREA[n] = 'classroom'; }); ['04','05','65'].forEach(function(n){ AREA[n] = 'schedule'; });
+  var AREA = {}; ['01','02','03','47','48','49'].forEach(function(n){ AREA[n] = 'classroom'; }); ['04','05','65','82'].forEach(function(n){ AREA[n] = 'schedule'; }); ['84','85'].forEach(function(n){ AREA[n] = 'classroom'; });
   for (var q = 33; q <= 45; q++) AREA[String(q)] = 'native';
   for (var q2 = 70; q2 <= 79; q2++) AREA[String(q2)] = 'settings';
   function files(no){ var a = AREA[no] || 'popup';
@@ -326,6 +344,9 @@
   h += '</details>';
   h += '<details class="more"><summary>기획안에만 있는 화면 ' + TODO.length + '</summary>';
   TODO.forEach(function(t){ h += '<div class="item off" aria-disabled="true"><span class="no">—</span><span class="nm">' + esc(t[1]) + ' · ' + t[2] + '</span><span class="id">' + esc(t[0]) + '</span></div>'; });
+  h += '</details>';
+  h += '<details class="more"><summary>범위 밖 · 시안 제외 ' + OUT.length + '</summary>';
+  OUT.forEach(function(t){ h += '<div class="item off" aria-disabled="true"><span class="no">—</span><span class="nm">' + esc(t[1]) + ' · ' + t[2] + '</span><span class="id">' + esc(t[0]) + '</span></div>'; });
   h += '</details>';
   side.innerHTML = h; sel.innerHTML = o;
   side.addEventListener('click', function(e){ var b = e.target.closest('.item[data-no]'); if (b) show(b.dataset.no); });

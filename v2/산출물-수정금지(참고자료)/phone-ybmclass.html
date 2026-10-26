@@ -6923,6 +6923,13 @@ YBMP.add(300, '설정 · 약관 · 로그인', function(){
         ,'77': async function(){ window.setOpen(); await w(250); window.setWebOpen('privacy'); }
         ,'78': async function(){ window.setOpen(); await w(250); window.setWebOpen('leave'); }
         ,'79': async function(){ window.setLoginOpen(); }
+        /* 80~85 : 이미 구현돼 있던 상태에 화면 번호만 붙임 (Figma 프레임 없음) */
+        ,'80': async function(){ await S['27'](); await w(300); click('#satDoneConfirmBtn'); await w(350); await sat(); }
+        ,'81': async function(){ await sched(); window.rtDemo('phone'); await w(400); var p = $('#rtPhone'); if (p) p.value = '0101234'; click('#rtMain'); }
+        ,'82': async function(){ await S['05'](); await w(300); var c = $('.month-cell-chip.has-more'); if (c){ c.scrollIntoView({ block:'center' }); await w(150); c.click(); } }
+        ,'83': async function(){ await S['20'](); await w(400); click('#pmInfoBtn'); }
+        ,'84': async function(){ document.querySelectorAll('#flow .classroom-step:not([hidden]) .classroom-popup-go').forEach(function(b){ b.click(); }); await w(200); var p = $('#prepEncourageText'); if (p) p.scrollIntoView({ block:'center' }); }
+        ,'85': async function(){ var c = $('#ctaCorrection'); if (c) c.scrollIntoView({ block:'center' }); }
       };
   window.addEventListener('load', async function(){
     await w(700);
