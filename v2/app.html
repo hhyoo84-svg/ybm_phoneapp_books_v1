@@ -1221,8 +1221,11 @@
         <button type="button" class="icon-btn set-back" data-type="back" id="setWebBack" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
         <span class="modal-title" id="setWebTitle">이용약관</span>
       </div>
-      <div class="set-webview">
-        <div class="set-w2">
+      <div class="set-webview" id="setWebView">
+        <!-- 이용약관 · 개인정보처리방침 : 회원 사이트 약관 페이지를 그대로 띄움 (주소는 js/settings.js WEB) -->
+        <iframe class="set-webframe" id="setWebFrame" title="" hidden></iframe>
+        <!-- 회원탈퇴 : 주소 확정 전 — 기존 탈퇴 페이지 자리 표시 -->
+        <div class="set-w2" id="setWebW2">
           <span class="set-w2-tag">W2 · 기존 웹페이지</span>
           <b id="setWebName">이용약관</b>
           <p>이 영역에 기존 페이지를 웹뷰로 띄웁니다.<br>앱에서 새로 디자인하지 않습니다.</p>
@@ -1233,19 +1236,12 @@
 
 <!-- 79 로그인 — Login_010_W2_FULL · 기존 B2C 로그인 페이지를 웹뷰로 (앱 헤더 없음). 로그아웃하면 이 화면으로 -->
   <div class="set-login" id="setLogin" role="dialog" aria-modal="true" aria-label="로그인" hidden>
-    <div class="set-webview">
-      <div class="set-w2">
-        <span class="set-w2-tag">W2 · 기존 웹페이지</span>
-        <b>B2C 로그인</b>
-        <p>YBM Family 계정(아이디 · 비밀번호) 로그인 페이지를 웹뷰로 띄웁니다.</p>
-        <ul>
-          <li>아이디 저장 · 2단계 인증</li>
-          <li>아이디 찾기 · 비밀번호 재설정</li>
-          <li>회원가입</li>
-        </ul>
-        <button type="button" class="btn" data-variant="link" id="setLoginDemo">시안 확인용 : 로그인 후 클래스룸으로</button>
-      </div>
+    <div class="set-webview has-frame">
+      <!-- 전화화상 모바일 로그인 페이지를 그대로 띄움 (주소는 js/settings.js LOGIN_URL) -->
+      <iframe class="set-webframe" id="setLoginFrame" title="로그인"></iframe>
     </div>
+    <!-- 시안 확인용 : 실제 로그인 대신 클래스룸으로 돌아가기 (실서비스에는 없음) -->
+    <button type="button" class="set-login-demo" id="setLoginDemo">시안 확인용 · 클래스룸으로</button>
   </div>
   <!-- [inc/settings.html] end -->
 </div>

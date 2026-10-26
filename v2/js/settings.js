@@ -73,13 +73,26 @@ YBMP.add(300, '설정 · 약관 · 로그인', function(){
   $('#setUpdate').addEventListener('click', function(){ S.latest = true; paint(); });
 
   /* ---------- 약관 · 개인정보 · 탈퇴 : 기존 웹페이지 웹뷰, 뒤로가기 → 설정 ---------- */
-  var WEB = { terms:'이용약관', privacy:'개인정보처리방침', leave:'회원탈퇴' };
-  window.setWebOpen = function(k){ $('#setWebTitle').textContent = $('#setWebName').textContent = WEB[k] || ''; web.querySelector('.set-webview').scrollTop = 0; open(web); };
+  /* url 이 있으면 그 페이지를 띄우고, 없으면(회원탈퇴) 기존 페이지 자리 표시 */
+  var WEB = {
+    terms:   { title:'이용약관',         url:'https://member.ybmnet.co.kr/join/terms/ybmnet_agree.html' },
+    privacy: { title:'개인정보처리방침', url:'https://member.ybmnet.co.kr/join/terms/ybmnet_indiv_new.html' },
+    leave:   { title:'회원탈퇴',         url:'' }
+  };
+  var frame = $('#setWebFrame'), w2 = $('#setWebW2');
+  window.setWebOpen = function(k){
+    var w = WEB[k] || { title:'', url:'' };
+    $('#setWebTitle').textContent = $('#setWebName').textContent = frame.title = w.title;
+    if (w.url){ if (frame.getAttribute('src') !== w.url) frame.src = w.url; } else frame.removeAttribute('src');
+    frame.hidden = !w.url; w2.hidden = !!w.url;
+    $('#setWebView').classList.toggle('has-frame', !!w.url); $('#setWebView').scrollTop = 0; open(web);
+  };
   [].forEach.call(page.querySelectorAll('[data-web]'), function(b){ b.addEventListener('click', function(){ window.setWebOpen(b.dataset.web); }); });
   $('#setWebBack').addEventListener('click', function(){ close(web); });
 
   /* ---------- 로그아웃 → 로그인(웹뷰). 기획안대로 확인 없이 바로 ---------- */
-  window.setLoginOpen = function(){ login.hidden = false; };
+  var LOGIN_URL = 'https://m.phone.ybmclass.com/common/login.asp?getSiteName=class&url=/phone/phone_main.asp&what=m.phone.ybmclass.com';
+  window.setLoginOpen = function(){ var f = $('#setLoginFrame'); if (!f.getAttribute('src')) f.src = LOGIN_URL; login.hidden = false; };
   $('#setLogout').addEventListener('click', function(){ window.setLoginOpen(); page.hidden = true; page.classList.remove('on'); web.hidden = true; web.classList.remove('on'); });
   $('#setLoginDemo').addEventListener('click', function(){ login.hidden = true; });
 

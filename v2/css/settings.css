@@ -80,6 +80,9 @@
 .set-w2 p{font-size:var(--font-size-14); font-weight:var(--font-weight-medium); line-height:1.6; word-break:keep-all;}
 .set-w2 ul{margin:6px 0 0; padding:0; list-style:none; font-size:var(--font-size-13); line-height:1.8; color:var(--text-secondary);}
 .set-w2 .btn{margin-top:14px;}
+/* 76·77 약관 페이지 : 웹뷰처럼 헤더 아래를 꽉 채움 */
+.set-webview.has-frame{padding:0;}
+.set-webframe{flex:1; width:100%; min-height:0; border:0; background:var(--surface-default);}
 
 /* 79 로그인 : 앱 헤더 없이 화면 전체 (클래스룸 위) */
 .set-login{position:fixed; inset:0; z-index:85; display:flex; justify-content:center; background:var(--surface-default);}
@@ -87,3 +90,6 @@
 @media (min-width:640px){
   .set-login .set-webview{max-width:560px;}
 }
+.set-login .set-webview.has-frame{padding:env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);}
+.set-login-demo{position:absolute; left:50%; bottom:calc(16px + env(safe-area-inset-bottom, 0px)); transform:translateX(-50%); z-index:1;
+  height:32px; padding:0 14px; border-radius:var(--radius-full); background:rgba(17,24,39,.78); color:#fff; font-size:var(--font-size-12); font-weight:var(--font-weight-semibold); white-space:nowrap;}

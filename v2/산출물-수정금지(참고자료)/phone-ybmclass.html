@@ -2395,6 +2395,9 @@ body{display:flex; justify-content:center; height:100dvh; overflow:hidden;}
 .set-w2 p{font-size:var(--font-size-14); font-weight:var(--font-weight-medium); line-height:1.6; word-break:keep-all;}
 .set-w2 ul{margin:6px 0 0; padding:0; list-style:none; font-size:var(--font-size-13); line-height:1.8; color:var(--text-secondary);}
 .set-w2 .btn{margin-top:14px;}
+/* 76·77 약관 페이지 : 웹뷰처럼 헤더 아래를 꽉 채움 */
+.set-webview.has-frame{padding:0;}
+.set-webframe{flex:1; width:100%; min-height:0; border:0; background:var(--surface-default);}
 
 /* 79 로그인 : 앱 헤더 없이 화면 전체 (클래스룸 위) */
 .set-login{position:fixed; inset:0; z-index:85; display:flex; justify-content:center; background:var(--surface-default);}
@@ -2402,6 +2405,9 @@ body{display:flex; justify-content:center; height:100dvh; overflow:hidden;}
 @media (min-width:640px){
   .set-login .set-webview{max-width:560px;}
 }
+.set-login .set-webview.has-frame{padding:env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);}
+.set-login-demo{position:absolute; left:50%; bottom:calc(16px + env(safe-area-inset-bottom, 0px)); transform:translateX(-50%); z-index:1;
+  height:32px; padding:0 14px; border-radius:var(--radius-full); background:rgba(17,24,39,.78); color:#fff; font-size:var(--font-size-12); font-weight:var(--font-weight-semibold); white-space:nowrap;}
 
 </style>     <!-- 앱 전용 -->
 </head>
@@ -3611,8 +3617,11 @@ body{display:flex; justify-content:center; height:100dvh; overflow:hidden;}
         <button type="button" class="icon-btn set-back" data-type="back" id="setWebBack" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
         <span class="modal-title" id="setWebTitle">이용약관</span>
       </div>
-      <div class="set-webview">
-        <div class="set-w2">
+      <div class="set-webview" id="setWebView">
+        <!-- 이용약관 · 개인정보처리방침 : 회원 사이트 약관 페이지를 그대로 띄움 (주소는 js/settings.js WEB) -->
+        <iframe class="set-webframe" id="setWebFrame" title="" hidden></iframe>
+        <!-- 회원탈퇴 : 주소 확정 전 — 기존 탈퇴 페이지 자리 표시 -->
+        <div class="set-w2" id="setWebW2">
           <span class="set-w2-tag">W2 · 기존 웹페이지</span>
           <b id="setWebName">이용약관</b>
           <p>이 영역에 기존 페이지를 웹뷰로 띄웁니다.<br>앱에서 새로 디자인하지 않습니다.</p>
@@ -3623,19 +3632,12 @@ body{display:flex; justify-content:center; height:100dvh; overflow:hidden;}
 
 <!-- 79 로그인 — Login_010_W2_FULL · 기존 B2C 로그인 페이지를 웹뷰로 (앱 헤더 없음). 로그아웃하면 이 화면으로 -->
   <div class="set-login" id="setLogin" role="dialog" aria-modal="true" aria-label="로그인" hidden>
-    <div class="set-webview">
-      <div class="set-w2">
-        <span class="set-w2-tag">W2 · 기존 웹페이지</span>
-        <b>B2C 로그인</b>
-        <p>YBM Family 계정(아이디 · 비밀번호) 로그인 페이지를 웹뷰로 띄웁니다.</p>
-        <ul>
-          <li>아이디 저장 · 2단계 인증</li>
-          <li>아이디 찾기 · 비밀번호 재설정</li>
-          <li>회원가입</li>
-        </ul>
-        <button type="button" class="btn" data-variant="link" id="setLoginDemo">시안 확인용 : 로그인 후 클래스룸으로</button>
-      </div>
+    <div class="set-webview has-frame">
+      <!-- 전화화상 모바일 로그인 페이지를 그대로 띄움 (주소는 js/settings.js LOGIN_URL) -->
+      <iframe class="set-webframe" id="setLoginFrame" title="로그인"></iframe>
     </div>
+    <!-- 시안 확인용 : 실제 로그인 대신 클래스룸으로 돌아가기 (실서비스에는 없음) -->
+    <button type="button" class="set-login-demo" id="setLoginDemo">시안 확인용 · 클래스룸으로</button>
   </div>
   <!-- [inc/settings.html] end -->
 </div>
@@ -6752,13 +6754,26 @@ YBMP.add(300, '설정 · 약관 · 로그인', function(){
   $('#setUpdate').addEventListener('click', function(){ S.latest = true; paint(); });
 
   /* ---------- 약관 · 개인정보 · 탈퇴 : 기존 웹페이지 웹뷰, 뒤로가기 → 설정 ---------- */
-  var WEB = { terms:'이용약관', privacy:'개인정보처리방침', leave:'회원탈퇴' };
-  window.setWebOpen = function(k){ $('#setWebTitle').textContent = $('#setWebName').textContent = WEB[k] || ''; web.querySelector('.set-webview').scrollTop = 0; open(web); };
+  /* url 이 있으면 그 페이지를 띄우고, 없으면(회원탈퇴) 기존 페이지 자리 표시 */
+  var WEB = {
+    terms:   { title:'이용약관',         url:'https://member.ybmnet.co.kr/join/terms/ybmnet_agree.html' },
+    privacy: { title:'개인정보처리방침', url:'https://member.ybmnet.co.kr/join/terms/ybmnet_indiv_new.html' },
+    leave:   { title:'회원탈퇴',         url:'' }
+  };
+  var frame = $('#setWebFrame'), w2 = $('#setWebW2');
+  window.setWebOpen = function(k){
+    var w = WEB[k] || { title:'', url:'' };
+    $('#setWebTitle').textContent = $('#setWebName').textContent = frame.title = w.title;
+    if (w.url){ if (frame.getAttribute('src') !== w.url) frame.src = w.url; } else frame.removeAttribute('src');
+    frame.hidden = !w.url; w2.hidden = !!w.url;
+    $('#setWebView').classList.toggle('has-frame', !!w.url); $('#setWebView').scrollTop = 0; open(web);
+  };
   [].forEach.call(page.querySelectorAll('[data-web]'), function(b){ b.addEventListener('click', function(){ window.setWebOpen(b.dataset.web); }); });
   $('#setWebBack').addEventListener('click', function(){ close(web); });
 
   /* ---------- 로그아웃 → 로그인(웹뷰). 기획안대로 확인 없이 바로 ---------- */
-  window.setLoginOpen = function(){ login.hidden = false; };
+  var LOGIN_URL = 'https://m.phone.ybmclass.com/common/login.asp?getSiteName=class&url=/phone/phone_main.asp&what=m.phone.ybmclass.com';
+  window.setLoginOpen = function(){ var f = $('#setLoginFrame'); if (!f.getAttribute('src')) f.src = LOGIN_URL; login.hidden = false; };
   $('#setLogout').addEventListener('click', function(){ window.setLoginOpen(); page.hidden = true; page.classList.remove('on'); web.hidden = true; web.classList.remove('on'); });
   $('#setLoginDemo').addEventListener('click', function(){ login.hidden = true; });
 
