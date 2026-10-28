@@ -1,0 +1,195 @@
+{
+  "course": {
+    "label": "전화영어 · 초급",
+    "title": "일상회화",
+    "titleEn": "Daily Life",
+    "desc": "매일 마주치는 순간을 자연스러운 영어로 말해보는 왕초보 회화 코스예요.",
+    "photo": null
+  },
+  "lesson": {
+    "number": 1,
+    "photo": null
+  },
+  "lessons": [
+    {
+      "title": "My Morning Routine",
+      "desc": "아침 일과 말하기"
+    },
+    {
+      "title": "Ordering Coffee",
+      "desc": "카페에서 주문하기"
+    },
+    {
+      "title": "Talking About Weather",
+      "desc": "날씨 표현 익히기"
+    },
+    {
+      "title": "Weekend Plans",
+      "desc": "주말 계획 말하기"
+    },
+    {
+      "title": "At the Grocery Store",
+      "desc": "장보기 표현"
+    }
+  ],
+  "parts": [
+    {
+      "type": "words",
+      "title": "Vocabulary",
+      "desc": "오늘의 핵심 단어를 소리 내어 읽고 뜻을 확인해 보세요.",
+      "teacher": "학생이 먼저 단어를 소리 내어 읽게 한 뒤 뜻을 스스로 유추해보게 하고, 필요할 때만 힌트를 주세요.",
+      "label": "핵심 단어 익히기",
+      "items": [
+        ["spice", "향신료, 양념"],
+        ["mild", "순한, 약한"],
+        ["allergic", "알레르기가 있는"],
+        ["routine", "(정해진) 일과, 루틴"]
+      ]
+    },
+    {
+      "type": "qa",
+      "title": "Q&A Warm-up",
+      "desc": "질문(A)과 답변(B)이 한 세트로 묶이는 구성이에요. 강사의 질문에 답해보세요.",
+      "teacher": "질문을 두 번 읽어주고, 학생이 완전한 문장으로 답하도록 유도하세요.",
+      "items": [
+        ["What time do you leave home?", "몇 시에 집에서 나가세요?", "I usually leave around eight.", "보통 8시쯤 나가요."],
+        ["How do you usually get to work?", "보통 어떻게 출근하세요?", "I take the subway, it’s about 30 minutes.", "지하철을 타요, 30분 정도 걸려요."],
+        ["Do you eat breakfast every morning?", "매일 아침을 드세요?", "Not always — I skip it when I’m in a hurry.", "항상은 아니에요 — 바쁠 땐 걸러요."],
+        ["What’s the first thing you do after waking up?", "일어나서 가장 먼저 하는 일이 뭐예요?", "I check my phone and then make some coffee.", "휴대폰을 확인하고 커피를 내려요."]
+      ]
+    },
+    {
+      "type": "drills",
+      "title": "Choose & Complete",
+      "desc": "알맞은 단어를 골라 빈칸을 채우고 문장을 완성해 보세요.",
+      "teacher": "빈칸을 채운 뒤 왜 그 단어를 골랐는지 이유를 말로 설명하게 해보세요.",
+      "items": [
+        ["아침 기상 시간 말하기", "I usually ( ) up at 7 AM.", "wake / get / take", "저는 보통 오전 7시에 일어나요."],
+        ["아침 식사 여부 말하기", "She ( ) breakfast every morning.", "has / take / do", "그녀는 매일 아침 아침 식사를 해요."],
+        ["집을 나서는 시간 말하기", "We are ( ) home by 8.", "leaving / leave / left", "우리는 8시까지 집을 나서요."],
+        ["옷 입는 속도 표현하기", "He ( ) dressed quickly.", "get / gets / getting", "그는 빠르게 옷을 입어요."]
+      ]
+    },
+    {
+      "type": "patterns",
+      "title": "Pattern Practice",
+      "desc": "TIP의 단어 순서를 참고해 빈 줄에 맞추어 스피킹 해보세요.",
+      "teacher": "패턴 문장을 먼저 함께 따라 말한 뒤, 학생이 자신의 상황으로 바꿔 말하게 해보세요.",
+      "items": [
+        ["I take", "a shower."],
+        ["I brush", "my teeth."],
+        ["I catch", "the bus."]
+      ]
+    },
+    {
+      "type": "topics",
+      "title": "Talk About You",
+      "desc": "주제에 관한 질문을 확인하고 강사님과 자유롭게 대화해 보세요.",
+      "teacher": "정답이 없는 질문이니 학생의 답변을 충분히 기다려주고, 표현만 자연스럽게 다듬어주세요.",
+      "label": "아침 루틴에 대해 이야기해 보세요",
+      "items": [
+        ["What time do you usually get up on weekdays?", "평일에는 보통 몇 시에 일어나세요?"],
+        ["Do you eat breakfast every day? Why or why not?", "매일 아침을 드세요? 이유는 무엇인가요?"],
+        ["What's the hardest part of your morning?", "아침에 가장 힘든 부분은 무엇인가요?"],
+        ["How do you feel right before you leave home?", "집을 나서기 직전엔 기분이 어떠세요?"]
+      ]
+    },
+    {
+      "type": "dialogue",
+      "title": "Main Dialogue",
+      "desc": "두 사람의 대화를 역할을 나누어 소리 내어 연습해 보세요.",
+      "teacher": "역할을 나눠 대화를 읽고, 두 번째에는 역할을 바꿔 다시 읽어보게 하세요.",
+      "items": [
+        ["teacher", "Good morning! What time do you usually wake up?", "좋은 아침이에요! 보통 몇 시에 일어나세요?"],
+        ["me", "I usually wake up around 6:30.", "저는 보통 6시 30분쯤 일어나요."],
+        ["teacher", "That's early! What do you do first?", "이르시네요! 가장 먼저 뭘 하세요?"],
+        ["me", "I drink a glass of water and stretch a little.", "물 한 잔 마시고 스트레칭을 조금 해요."],
+        ["teacher", "Sounds like a healthy routine!", "건강한 루틴이네요!"],
+        ["me", "Thanks! I try to keep it simple.", "감사해요! 최대한 단순하게 하려고 해요."]
+      ]
+    },
+    {
+      "type": "expressions",
+      "title": "Key Expressions",
+      "desc": "일상에서 자주 쓰는 표현을 뜻과 예문으로 익혀보세요.",
+      "teacher": "표현이 쓰이는 상황을 짧게 설명해주고, 학생이 자기 문장을 직접 만들어보게 하세요.",
+      "items": [
+        ["get out of bed", "잠자리에서 일어나다", "\"I get out of bed at seven every day.\"", "저는 매일 7시에 잠자리에서 일어나요."],
+        ["get ready", "준비하다, 채비하다", "\"It takes me twenty minutes to get ready.\"", "준비하는 데 20분이 걸려요."],
+        ["in a rush", "서둘러서, 급하게", "\"I’m always in a rush in the morning.\"", "저는 항상 아침에 서둘러요."],
+        ["on time", "제시간에", "\"I try to leave home on time.\"", "저는 제시간에 집을 나서려고 해요."]
+      ]
+    },
+    {
+      "type": "phrases",
+      "title": "Comprehension Check",
+      "desc": "위 지문의 주제와 내용을 충분히 이해하셨나요? 읽으신 내용을 간단히 요약해서 말씀해 보세요.",
+      "teacher": "본문을 다시 들춰보지 않고 먼저 답해보게 한 뒤 확인하세요.",
+      "items": [
+        ["다음과 같이 시작해보면 어떨까요?", ["This passage is about ~", "This paragraph is about ~"]],
+        ["조금 더 이어가 보시겠어요?", ["so ~", "then ~", "therefore ~", "as a result ~"]]
+      ]
+    },
+    {
+      "type": "reading",
+      "title": "Reading: Minji's Morning",
+      "desc": "지문을 읽고 이어지는 핵심 질문에 답해 보세요.",
+      "teacher": "문단별로 끊어 읽고, 이해가 됐는지 짧은 질문으로 확인하며 진행하세요.",
+      "passage": ["Minji wakes up at 6:30 every morning. She drinks a glass of water and stretches for five minutes. After that, she takes a quick shower and gets dressed. She usually has toast and coffee for breakfast before leaving for work at 8 o'clock.", "민지는 매일 아침 6시 30분에 일어납니다. 그녀는 물 한 잔을 마시고 5분간 스트레칭을 합니다. 그 후 빠르게 샤워를 하고 옷을 입습니다. 보통 토스트와 커피로 아침을 먹은 뒤 8시에 출근합니다."],
+      "items": [
+        ["What does Minji do right after she wakes up?", "민지는 일어나자마자 무엇을 하나요?"],
+        ["What time does Minji leave for work?", "민지는 몇 시에 출근하나요?"]
+      ]
+    },
+    {
+      "type": "describe",
+      "title": "Describe the Picture",
+      "desc": "사진을 보고 자유롭게 묘사해 보세요. 상단의 가이드를 참고하여 말씀하셔도 좋습니다.",
+      "teacher": "정답보다 학생이 관찰한 내용을 말로 표현하는 과정에 집중해주세요.",
+      "tests": ["Part 2 (Q3~4) of the test", "Part 3 (Q5~7) of the test"],
+      "label": "문장 구조 익히기 (Grammar Practice)",
+      "sentences": ["She is sitting at the table.", "She is drinking coffee.", "There is a plate on the table.", "She is wearing a blue shirt.", "The window is open.", "It's a sunny morning."],
+      "picture": {
+        "src": null,
+        "alt": "아침 식탁 사진"
+      },
+      "brainstorm": [
+        ["사진소개 (Intro)", ["이곳은 어디인가요? (Where is this place?)", "사진 속에 몇 명이 있나요? (How many people do you see?)", "무엇이 보이나요? (What do you see in this picture?)"]],
+        ["중심소개 (Center)", ["가운데 있는 사람은 무엇을 하고 있나요? (What is she doing?)", "테이블 위에 무엇이 있나요? (What is on the table?)"]],
+        ["주변/분위기 (Surrounding)", ["창문 밖 날씨는 어떤가요? (What is the weather like outside?)", "전체적인 분위기는 어떤가요? (How does the scene feel?)"]]
+      ]
+    },
+    {
+      "type": "respond",
+      "title": "Respond to Questions",
+      "desc": "상황을 확인하고 이어지는 질문에 순서대로 답해 보세요.",
+      "teacher": "질문을 듣고 바로 대답하는 순발력 훈련이니, 너무 오래 고민하지 않도록 템포를 유지하세요.",
+      "test": "Part 3 (Q5~7) of the test",
+      "firstQuestion": 5,
+      "scenario": ["Scenario & Directions", "Imagine that a friend is asking about your morning routine over the phone.", "친구가 전화로 당신의 아침 루틴에 대해 묻고 있다고 상상해 보세요."],
+      "items": [
+        ["What time do you usually wake up on weekdays?", "평일에는 보통 몇 시에 일어나세요?", "I usually wake up at (7 AM) on weekdays.", "저는 평일에 보통 (오전 7시)에 일어나요."],
+        ["What is the first thing you do after waking up?", "일어난 후 가장 먼저 하는 일은 무엇인가요?", "The first thing I do is (check my phone).", "일어나서 가장 먼저 하는 일은 (휴대폰을 확인하는 것)이에요."],
+        ["Do you think your morning routine is healthy? Why or why not?", "당신의 아침 루틴이 건강하다고 생각하세요? 이유는 무엇인가요?", "I think it is (pretty healthy) because (I eat breakfast every day).", "제 아침 루틴은 (꽤 건강하다고) 생각해요, (매일 아침을 먹기) 때문이에요."]
+      ]
+    },
+    {
+      "type": "survey",
+      "title": "Phone Survey",
+      "desc": "제공된 정보를 참고해 전화 설문 질문에 답해 보세요.",
+      "teacher": "실제 통화하듯 자연스러운 톤으로 진행하고, 마무리에 간단히 피드백을 주세요.",
+      "test": "Part 4 (Q8~10) of the test",
+      "firstQuestion": 8,
+      "scenario": ["Directions", "Hello, I'm calling about the morning wellness survey. Can I ask you a few questions?", "안녕하세요, 아침 웰빙 설문 조사로 전화드렸습니다. 몇 가지 질문 드려도 될까요?"],
+      "picture": {
+        "src": null,
+        "alt": "아침 웰빙 전화 설문"
+      },
+      "items": [
+        ["What time do you usually wake up on weekdays?", "I usually wake up at (7 AM) on weekdays.", "저는 평일에 보통 (오전 7시)에 일어나요."],
+        ["How long does it take you to get ready in the morning?", "It takes me about (20 minutes) to get ready.", "준비하는 데 약 (20분) 정도 걸려요."],
+        ["What's one thing you'd like to change about your morning routine?", "I'd like to (wake up earlier) in the morning.", "아침에 (더 일찍 일어나고) 싶어요."]
+      ]
+    }
+  ]
+}

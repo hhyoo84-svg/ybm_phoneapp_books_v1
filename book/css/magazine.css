@@ -1,0 +1,104 @@
+/* ==================================================================
+   magazine.css — 매거진형 화면 틀 — 헤더 · 히어로 · 본문 틀 · 강사 가이드 · 하단 바 · 파트 목록 · 표지
+   ================================================================== */
+.book { --p: 0; position: relative; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; background: var(--surface-default); }
+.book-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(76px + var(--safe-bottom)); scrollbar-width: none; }
+.book-scroll::-webkit-scrollbar { width: 0; }
+
+/* 6-1 헤더: [📖 LESSON 01] · (접히면 가운데 제목) · [프린트] — 사진 위에 겹침, 빈 영역은 터치 통과 */
+.book-header { position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-header); pointer-events: none; }
+.book-header-inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; max-width: var(--content-width); height: var(--header-height); margin: 0 auto; padding: 0 var(--gutter); }
+.book-header button { pointer-events: auto; }
+.book-header-title { min-width: 0; color: var(--text-on-dark); text-align: center; opacity: calc((var(--p) - 0.75) * 4); }   /* 히어로가 다 접힐 때 나타남 */
+.book-header-title small { display: block; font: 700 11px/1.4 var(--font); letter-spacing: 0.08em; opacity: 0.8; }
+.book-header-title b { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: 700 16px/1.4 var(--font); }
+.book.is-collapsed .book-header .glass-btn { background: rgba(255, 255, 255, 0.18); }
+.book.is-collapsed .book-header .glass-btn span { display: none; }   /* 접히면 아이콘만 → 가운데 제목 자리 */
+
+/* 6-3 히어로: 첫 화면은 사진 300px, 스크롤하면 56px 띠로 접힘(--p: 0 → 1, js/magazine.js에서 갱신) */
+.book-hero { position: sticky; top: calc(var(--header-height) - var(--hero-height)); z-index: var(--z-hero); height: var(--hero-height); overflow: hidden; color: var(--text-on-dark); background: var(--brand-gradient); }
+.book[data-photo] .book-hero { background: linear-gradient(180deg, rgba(10, 20, 50, 0.35) 0%, rgba(10, 20, 50, 0.08) 38%, rgba(10, 20, 50, 0.6) 100%), var(--lesson-photo) center 40% / cover no-repeat, var(--brand-strong); }
+.book-hero::after { content: ""; position: absolute; inset: 0; background: var(--brand-gradient); opacity: calc(var(--p) * 0.92); pointer-events: none; }                 /* 접힐수록 브랜드 컬러로 덮임 */
+.book-hero::before { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; z-index: 3; height: 25px; border-radius: var(--radius-24) var(--radius-24) 0 0; background: var(--surface-default); opacity: calc(1 - var(--p) * 4); } /* 본문 시트 라운드 */
+.book-hero-inner { position: absolute; z-index: 4; left: var(--text-inset); right: var(--text-inset); bottom: 46px; opacity: calc(1 - var(--p) * 1.6); } /* 글자 크기는 그대로, 흐려지며 헤더 제목으로 넘김 */
+.book-hero-eyebrow { display: block; font: 700 12px/1.4 var(--font); letter-spacing: 0.08em; opacity: 0.88; }
+.book-hero-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 6px 0 8px; font: 800 34px/1.15 var(--font); }
+.book-hero-desc { font: 400 14px/1.55 var(--font); opacity: 0.92; }
+
+/* 6-4 본문 틀: 좌우는 글자 시작선(--text-inset)만큼 */
+.book-main { position: relative; z-index: var(--z-main); min-height: calc(100dvh - var(--header-height) - 76px - var(--safe-bottom)); background: var(--surface-default); } /* 내용이 짧은 파트도 상단이 띠로 다 접힐 만큼은 스크롤됨 */
+.book-part-body { padding: 16px var(--text-inset) 0; }
+.book-part-body > :last-child { margin-bottom: 0; }
+
+/* 6-5 강사 가이드(TG) — 본문 맨 위, 본문 글자선(--text-inset)에 맞춤 */
+.book-teacher-guide { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; padding: 14px 16px; border-radius: var(--radius-16); background: var(--teacher-gradient); } /* 본문 첫 칸 · 지문 박스(.box)와 같은 폭 · 여백 */
+.book-teacher-guide-title { font: 700 11px/1.4 var(--font); color: var(--teacher-text); }
+.book-teacher-guide-text { font: 500 14px/1.6 var(--font); color: var(--text-body); }
+
+/* 6-6 하단 바(56px): [≡] | [가이드][번역][강사 가이드] ··· [‹][›] */
+.book-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-dock); display: flex; align-items: center; gap: 4px; padding: 6px calc(var(--gutter) - 10px) calc(6px + var(--safe-bottom)); border-top: 1px solid var(--border-default); background: var(--surface-default); } /* -10px: 아이콘 글자선을 16px 선에 맞춤 */
+.book-view-tools { display: flex; align-items: center; gap: 4px; }
+.book-view-tools::before { content: ""; width: 1px; height: 20px; margin: 0 4px 0 2px; background: var(--border-default); }   /* 이동 ↔ 보기 설정 구분선 */
+.book:not([data-teacher]) #bookTeacherBtn { display: none; }
+.book-pager { display: flex; margin-left: auto; }
+#bookNext { color: var(--brand-interactive); }
+
+/* 6-7 파트 목록(하단 바 위로 펼침) */
+.book-scrim { position: fixed; inset: 0; z-index: var(--z-scrim); background: var(--scrim); opacity: 0; pointer-events: none; transition: opacity 0.16s; }
+.book-scrim.is-open { opacity: 1; pointer-events: auto; }
+.book-partlist { position: fixed; left: var(--gutter); right: var(--gutter); bottom: calc(64px + var(--safe-bottom)); z-index: var(--z-partlist); max-width: 520px; max-height: min(64vh, 560px); margin: 0 auto; padding: 6px; overflow-y: auto; border-radius: var(--radius-18); background: var(--surface-default); box-shadow: var(--shadow-popover); opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.16s, transform 0.16s; }
+.book-partlist.is-open { opacity: 1; pointer-events: auto; transform: none; }
+.book-partlist button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border-radius: var(--radius-12); color: var(--text-primary); font: 500 16px/1.4 var(--font); text-align: left; }
+.book-partlist button:hover { background: var(--surface-hover); }
+.book-partlist i { width: 20px; font: 700 12px/1.4 var(--font); font-style: normal; font-variant-numeric: tabular-nums; color: var(--list-number); }
+.book-partlist .is-done i { color: var(--brand-interactive); }
+.book-partlist .is-current { background: var(--brand-subtle); color: var(--brand-interactive); font-weight: 700; }
+.book-partlist .is-current i { color: var(--brand-interactive); }
+.book-partlist .icon { width: 18px; height: 18px; margin-left: auto; color: var(--brand-interactive); opacity: 0; }
+.book-partlist .is-current .icon { opacity: 1; }
+
+/* 6-8 표지: 어두운 배경 + 상단 사진, 흰 카드 안에 레슨 → 파트 목차 */
+.book-cover { position: fixed; inset: 0; z-index: var(--z-cover); overflow-y: auto; background: linear-gradient(180deg, var(--cover-bg-top) 0%, var(--cover-bg) 100%); transform: translateX(-100%); transition: transform 0.32s cubic-bezier(0.3, 0.8, 0.3, 1); }
+.book[data-photo] .book-cover { background: var(--cover-bg); }
+.book[data-photo] .book-cover::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 62%; pointer-events: none; background: linear-gradient(180deg, rgba(10, 11, 14, 0.38) 0%, rgba(10, 11, 14, 0.12) 24%, rgba(10, 11, 14, 0.5) 58%, rgba(12, 12, 14, 0.86) 82%, var(--cover-bg) 100%), var(--lesson-photo) center top / cover no-repeat; }
+.book-cover.is-open { transform: none; }
+.book-cover-inner { position: relative; }
+.book-cover-top { position: fixed; top: 0; left: 0; right: 0; z-index: 5; display: flex; align-items: center; max-width: var(--content-width); height: var(--header-height); margin: 0 auto; padding: 0 var(--gutter); } /* 뒤로가기 = 헤더 [LESSON] 자리(여는 곳에서 닫음) */
+.book-cover-hero { display: flex; flex-direction: column; align-items: flex-start; padding: 100px calc(var(--gutter) + var(--card-padding)) 30px; color: var(--text-on-dark); } /* 표지 제목 = 아래 레슨 카드 글자선 */
+.book-cover-course { height: 30px; padding: 0 12px; border-radius: var(--radius-full); letter-spacing: 0; pointer-events: none; } /* .glass-btn 색의 라벨(라벨은 알약 유지) */
+.book-cover-title { margin-top: 18px; font: 800 34px/1.15 var(--font); }
+.book-cover-desc { margin-top: 14px; font: 400 14px/1.55 var(--font); color: rgba(255, 255, 255, 0.85); word-break: keep-all; }
+.book-lessons { width: calc(100% - var(--gutter) * 2); max-width: calc(var(--content-width) - var(--gutter) * 2); margin: 0 auto calc(16px + var(--safe-bottom)); padding: 22px var(--card-padding) 4px; border-radius: var(--radius-20); background: var(--surface-default); }
+.book-lessons-title { margin-bottom: 14px; font: 600 13px/1.4 var(--font); color: var(--brand-interactive); }
+.book-lesson { padding: 18px 0 20px; border-top: 1px dashed var(--border-default); }
+.book-lessons-title + .book-lesson { padding-top: 4px; border-top: 0; }
+.book-lesson-head { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; column-gap: 14px; align-items: center; width: 100%; text-align: left; }
+.book-lesson-number { font: 800 28px/1 var(--font); font-variant-numeric: tabular-nums; color: var(--lesson-muted-number); }
+.book-lesson-text b { display: block; font: 600 18px/1.35 var(--font); color: var(--lesson-muted-text); }
+.book-lesson-text span { display: block; margin-top: 2px; font: 500 14px/1.5 var(--font); color: var(--lesson-muted-desc); }
+.book-lesson-badge { padding: 6px 10px; border-radius: var(--radius-full); background: var(--lesson-muted-bg); color: var(--lesson-muted-text); font: 700 11px/1 var(--font); font-style: normal; white-space: nowrap; }
+.book-lesson.is-current .book-lesson-number { color: var(--brand-interactive); }
+.book-lesson.is-current .book-lesson-text b { color: var(--text-primary); }
+.book-lesson.is-current .book-lesson-text span { color: var(--text-tertiary); }
+.book-lesson.is-current .book-lesson-badge { background: var(--brand-interactive); color: var(--text-on-dark); }
+.book-lesson-parts { margin-top: 16px; padding-left: 62px; }
+.book-lesson-parts button { display: flex; align-items: center; gap: 14px; width: 100%; padding: 8px 0; color: var(--text-primary); font: 500 16px/1.4 var(--font); text-align: left; }
+.book-lesson-parts button:hover, .book-lesson-parts .is-current { color: var(--brand-interactive); }
+.book-lesson-parts .is-current { font-weight: 700; }
+.book-lesson-parts i { flex: none; width: 18px; font: 700 12px/1.4 var(--font); font-style: normal; font-variant-numeric: tabular-nums; color: var(--brand-interactive); }
+
+/* 태블릿 · PC (≥640px): 본문 760px 칼럼, 흰 바는 전체 폭 */
+@media (min-width: 640px) {
+  .book { display: block; height: auto; min-height: 100vh; overflow: visible; --hero-height: 320px; }
+  .book { --gutter: 24px; --card-padding: 28px; --text-inset: 52px; } /* 칼럼 바깥선 24 + 안쪽 28 */
+  .book-part-body { padding-top: 20px; }
+  .book-scroll { overflow: visible; padding-bottom: calc(76px + var(--safe-bottom)); }
+  .book-hero-inner { left: calc(max(0px, (100% - var(--content-width)) / 2) + var(--text-inset)); right: calc(max(0px, (100% - var(--content-width)) / 2) + var(--text-inset)); }
+  .book-hero-desc { font-size: 16px; }
+  .book-main { max-width: var(--content-width); min-height: calc(100vh - var(--header-height) - 76px - var(--safe-bottom)); margin: 0 auto; }
+  .book-dock { padding-left: calc(max(0px, (100% - var(--content-width)) / 2) + var(--gutter) - 10px); padding-right: calc(max(0px, (100% - var(--content-width)) / 2) + var(--gutter) - 10px); }
+  .book-partlist { max-width: calc(var(--content-width) - var(--gutter) * 2); }
+  .book-cover-hero { padding: 110px calc(max(0px, (100% - var(--content-width)) / 2) + var(--gutter) + var(--card-padding)) 34px; }
+  .book-cover-title { margin-top: 22px; }
+  .book-cover-desc { margin-top: 16px; font-size: 16px; }
+}

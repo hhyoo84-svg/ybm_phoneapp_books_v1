@@ -1,0 +1,16 @@
+<!-- ======================================================================
+     inc/magazine-body.html
+     히어로(레슨 사진 + 파트 제목) · 본문. 파트 12개는 JS가 data를 읽어 #bookMain에 그림
+     CSS : magazine.css · parts.css
+     JS  : parts.js(그리기) · magazine.js(이동 · 접힘)
+     ====================================================================== -->
+<div class="book-scroll" id="bookScroll">
+  <section class="book-hero" aria-live="polite">
+    <div class="book-hero-inner">
+      <span class="book-hero-eyebrow" id="bookHeroEyebrow"></span>
+      <h1 class="book-hero-title" id="bookHeroTitle"></h1>
+      <p class="book-hero-desc" id="bookHeroDesc"></p>
+    </div>
+  </section>
+  <main class="book-main" id="bookMain"><!-- 파트: js/parts.js Book.renderParts() --></main>
+</div>

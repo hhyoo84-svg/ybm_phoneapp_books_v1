@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>전화영어 교재 · 매거진형</title>
+<!-- 스타일 : 토큰 → 기본 → 공통 컴포넌트 → 매거진형 틀 → 파트 본문 -->
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/magazine.css">
+<link rel="stylesheet" href="css/parts.css">
+</head>
+<body>
+
+<!-- data-photo : 레슨 사진 사용(사진을 못 읽으면 JS가 뺌) · data-teacher : 강사 계정(데모로 켜 둠) -->
+<div class="book" id="book" data-photo data-teacher>
+  <!-- @include inc/magazine-header.html -->
+
+  <!-- @include inc/magazine-body.html -->
+
+  <!-- @include inc/magazine-dock.html -->
+
+  <!-- @include inc/magazine-cover.html -->
+
+  <div class="toast" id="bookToast" role="status"></div>
+</div>
+
+<!-- 레슨 데이터 (data/lesson-01.json) — 개발 시 API 응답으로 교체 -->
+<!-- @data data/lesson-01.json -->
+<!-- 스크립트 : core → parts → magazine 순서 고정 -->
+<script src="js/core.js"></script>
+<script src="js/parts.js"></script>
+<script src="js/magazine.js"></script>
+</body>
+</html>

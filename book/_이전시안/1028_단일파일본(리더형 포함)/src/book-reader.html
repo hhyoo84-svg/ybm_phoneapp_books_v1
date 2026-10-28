@@ -1,0 +1,965 @@
+<!doctype html>
+<!--
+  전화영어 교재 뷰어 · 리더형
+  ─────────────────────────────────────────────
+  · 이 파일은 소스입니다. build.py가 assets/의 사진·폰트를 넣어 dist/에 컬러별 배포용 단일 파일을 만듭니다.
+  · 구성: <style> 1 Fonts · 2 Tokens · 3 Themes · 4 Base · 5 Components · 6 Shell · 7 Parts · 8 Tablet(≥640) · 9 Motion
+          <script> 1 Content(레슨 데이터) · 2 Icons · 3 Templates · 4 App(상태·이동·메뉴·스크롤)
+  · 클래스: 공통 컴포넌트는 접두어 없이(.icon-btn .chip .badge .tag .box), 교재 전용은 book- 접두어
+  · 상태: is-open / is-on / is-active / is-playing / is-show 클래스, 표시 여부는 hidden 속성
+  · 컬러: 기본 purple, <html data-palette="coral|green"> (Book.set("palette", "coral")로도 변경)
+  · 옵션: .book[data-teacher] 강사 계정(학습 도구에 '강사 가이드' 노출)
+-->
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Daily Life 교재 리더</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" />
+    <style>
+      /* =========================================================
+         1. Fonts
+         Plus Jakarta Sans(영문·숫자) + Pretendard(한글) 한 벌. Pretendard는 한글·자모·주요 기호만 담은 서브셋
+         실서비스: 서브셋 대신 CDN 사용 권장
+         https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css
+         ========================================================= */
+      @font-face {
+        font-family: "Pretendard KR";
+        src: url("@@FONT_PRETENDARD@@") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: swap;
+        unicode-range: U+1100-11FF, U+3000-303F, U+3130-318F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF, U+FF00-FFEF, U+00B7, U+2026, U+2190-2193, U+2018-201D, U+203B;
+      }
+
+      /* =========================================================
+         2. Tokens
+         ========================================================= */
+      :root {
+        /* 2-1 Brand — 기본 purple(매거진형과 같은 값). 언어별 컬러는 3. Themes */
+        --brand-light: #2373f4;        /* 그라데이션 시작 */
+        --brand-interactive: #6d68e4;  /* 메인: 번호 · 버튼 · 링크 · 활성 아이콘 */
+        --brand-strong: #915dd2;       /* 진한 글자 · 강조 라벨 */
+        --brand-weak: #e4e3fa;         /* 선택 상태 */
+        --brand-subtle: #f4f3fd;       /* 넓은 면: 지문 · 시나리오 · 말풍선 · TIP */
+        --brand-gradient: linear-gradient(135deg, #2373f4 0%, #6d68e4 24%, #915dd2 46%, #a853be 64%, #b74baa 82%, #c04695 100%);
+        --intro-bg: #f5f4fb;           /* 파트 안내문 띠 */
+
+        /* 2-2 Text (웜그레이 · 진한 순) */
+        --text-primary: #1c1917;    /* 제목 · 단어 · 영어 문장 */
+        --text-body: #292524;       /* 읽는 문장(지문·대화·시나리오) */
+        --text-strong-muted: #44403c;
+        --text-secondary: #57534e;  /* 안내문 · TIP 텍스트 · B 답변 */
+        --text-tertiary: #6b655f;   /* 한글 해석 · 보조 라벨 */
+        --text-disabled: #a3a09c;
+
+        /* 2-3 Neutral UI (쿨그레이) — 칩 · 아이콘 · 컨트롤 */
+        --icon-default: #4b5466;
+        --chip-text: #5b6476;
+        --chip-bg: #f1f4f8;
+        --icon-strong: #3b4354;      /* 헤더 · 도구 아이콘 */
+        --list-number: #a8a5b5;
+
+        /* 2-4 Surface · Border */
+        --surface-default: #fff;
+        --surface-hover: #f7f6fc;
+        --border-default: #e7e5e4;
+        --border-subtle: #f5f5f4;
+        --scrim: rgba(20, 16, 50, 0.28);
+
+        /* 2-5 Tone — 답변 가이드(학생, 웜) · 강사 가이드(TG, 민트) */
+        --guide-gradient: linear-gradient(135deg, #fff8ee, #fff3e2);
+        --guide-text: #b45309;
+        --teacher-gradient: linear-gradient(135deg, #eafcf8, #dcf9f2);
+        --teacher-text: #0b8f7c;
+
+        /* 2-6 Typography — 서체는 한 벌, 자간은 4-11 fitLetterSpacing()이 한글/영문을 나눠 적용 */
+        --font: "Plus Jakarta Sans", "Pretendard KR", sans-serif;
+        --type-word: 800 22px/1.2 var(--font);           /* 단어 · 표현 */
+        --type-speak: 600 18px/1.6 var(--font);          /* 말해야 하는 문장(질문·Q&A·빈칸) */
+        --type-read: 400 18px/1.6 var(--font);           /* 읽는 문장(지문·대화·시나리오) */
+        --type-translation: 500 14px/1.5 var(--font);    /* 한글 해석 */
+        --type-label: 500 12px/1.4 var(--font);          /* 칩 · 소제목 */
+        --type-number: 700 14px/28.8px var(--font);      /* 번호(01 · Q5) — 첫 줄 문장과 같은 행간 */
+
+        /* 2-7 Radius · Shadow · Size */
+        --radius-6: 6px;
+        --radius-7: 7px;
+        --radius-12: 12px;
+        --radius-14: 14px;
+        --radius-16: 16px;   /* 박스 · 카드 */
+        --radius-18: 18px;
+        --radius-20: 20px;
+        --radius-24: 24px;
+        --radius-full: 999px;
+        --shadow-popover: 0 18px 40px -16px rgba(30, 20, 90, 0.45);
+        --header-height: 50px;
+        --band-height: 48px;
+        --card-padding: 20px;        /* 본문 좌우 여백 = 글자 시작선 (태블릿: 칼럼 안 52) */
+        --content-width: 760px;
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --lesson-photo: url("@@PHOTO_LESSON@@"); /* build.py가 assets/lesson-photo.jpg로 채움 */
+
+        /* 2-8 Layer */
+        --z-main: 5;
+        --z-scrim: 25;
+        --z-dock: 30;
+        --z-band: 30;
+        --z-header: 36;
+        --z-partlist: 40;
+        --z-cover: 49;
+        --z-toast: 60;
+      }
+
+      /* =========================================================
+         3. Themes — 언어별 컬러 3종. 브랜드 토큰만 교체
+            기본(속성 없음) = purple · <html data-palette="coral"> · <html data-palette="green">
+            언어 ↔ 컬러 배정은 미정(영어 · 중국어 · 일본어)
+         ========================================================= */
+      html[data-palette="coral"] { --brand-light: #dce8a5; --brand-interactive: #f06445; --brand-strong: #973479; --brand-weak: #fde4dc; --brand-subtle: #fff8f0;
+        --brand-gradient: linear-gradient(135deg, #973479 0%, #f06445 55%, #dce8a5 100%); --intro-bg: #f5f2ec; }
+      html[data-palette="green"] { --brand-light: #b5ee62; --brand-interactive: #0faa78; --brand-strong: #00a283; --brand-weak: #ddf3cf; --brand-subtle: #f9fcf6;
+        --brand-gradient: linear-gradient(135deg, #00a283 0%, #5ed83d 60%, #b5ee62 100%); --intro-bg: #f9fcf6; }
+
+      /* =========================================================
+         4. Base
+         ========================================================= */
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      html, body { height: 100%; }
+      html { overflow: hidden; }
+      body { background: var(--surface-default); color: var(--text-primary); font-family: var(--font); -webkit-font-smoothing: antialiased; overflow: hidden; }
+      button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+      button:disabled { cursor: default; }
+      button:focus { outline: none; }
+      button:focus-visible, [role="button"]:focus-visible { outline: 2px solid color-mix(in srgb, var(--brand-interactive) 45%, transparent); outline-offset: 2px; border-radius: 8px; }
+      ul, ol { list-style: none; }
+      svg { flex: none; }
+      [hidden] { display: none !important; }
+      ::selection { background: var(--brand-weak); color: var(--brand-interactive); }
+      .icon { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.3px; stroke-linecap: round; stroke-linejoin: round; }
+      .icon * { vector-effect: non-scaling-stroke; }   /* 크기와 상관없이 화면에서 1.3px */
+
+      /* =========================================================
+         5. Components (공통)
+         ========================================================= */
+      /* 5-1 아이콘 버튼 — 번역 · 듣기 · 답변 가이드 */
+      .icon-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; color: var(--icon-default); transition: color 0.15s; }
+      .icon-btn .icon { width: 19px; height: 19px; }
+      .icon-btn:hover, .icon-btn.is-active, .icon-btn.is-playing { color: var(--brand-interactive); }
+      .icon-btn .eq { display: none; align-items: flex-end; gap: 3px; height: 16px; }
+      .icon-btn.is-playing .icon { display: none; }
+      .icon-btn.is-playing .eq { display: inline-flex; }
+      .eq i { width: 3px; border-radius: 2px; background: currentColor; animation: eq 0.9s ease-in-out infinite; }
+      .eq i:nth-child(1) { height: 8px; }
+      .eq i:nth-child(2) { height: 16px; animation-delay: 0.15s; }
+      .eq i:nth-child(3) { height: 11px; animation-delay: 0.3s; }
+      @keyframes eq { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+      .actions { display: flex; align-items: center; flex: none; margin-left: auto; }   /* 한 줄 안 오른쪽 */
+      .actions-row { display: flex; justify-content: flex-end; margin-top: 10px; }        /* 항목 아래 오른쪽 */
+
+      /* 5-2 칩 — 섹션 소제목 · 항목 라벨 */
+      .chip { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: var(--radius-7); background: var(--chip-bg); color: var(--chip-text); font: var(--type-label); }
+
+      /* 5-3 번호 — 01 · Q5 (배경 없는 브랜드 컬러 숫자) */
+      .badge { display: inline-flex; flex: none; min-width: 26px; color: var(--brand-interactive); font: var(--type-number); font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .badge[data-type="question"] { min-width: 30px; }
+
+      /* 5-4 태그 — TIP */
+      .tag { display: inline-flex; align-items: center; flex: none; padding: 2px 8px; border-radius: var(--radius-6); background: var(--brand-subtle); color: var(--brand-interactive); font: 700 12px/1.4 var(--font); }
+
+      /* 5-5 면 박스 — 지문 · 시나리오 · 문장 목록 · 표현 예시 · 말풍선 공통 */
+      .box { padding: 14px 16px; border-radius: var(--radius-16); background: var(--brand-subtle); }
+
+
+      /* 5-6 토스트 */
+      .toast { position: fixed; top: 14px; left: 50%; z-index: var(--z-toast); padding: 9px 18px; border-radius: var(--radius-full); background: rgba(28, 25, 23, 0.9); color: #fff; font: 700 12px/1.4 var(--font); white-space: nowrap; opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(-10px); transition: opacity 0.2s, transform 0.2s; }
+      .toast.is-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+      /* =========================================================
+         6. Shell — 헤더 · 히어로 · 본문 틀 · 하단 도크 · 파트 목록 · 표지
+         ========================================================= */
+      .book { position: relative; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; background: var(--surface-default); }
+      .book-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(100px + var(--safe-bottom)); scrollbar-width: none; }
+      .book-scroll::-webkit-scrollbar { width: 0; }
+
+      /* 6-1 헤더(50px): Lesson 01 · [학습 도구] */
+      .book-header { position: relative; z-index: var(--z-header); flex: none; background: var(--surface-default); }
+      .book-header-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1060px; height: var(--header-height); margin: 0 auto; padding: 0 24px; }
+      .book-lesson-label { font: 800 14px/1 var(--font); }
+      .book-tools-btn { display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-full); color: var(--icon-strong); }
+      .book-tools-btn[aria-expanded="true"] { background: var(--brand-subtle); color: var(--brand-interactive); }
+      .book-tools-btn .icon-close, .book-tools-btn[aria-expanded="true"] .icon-grid { display: none; }
+      .book-tools-btn[aria-expanded="true"] .icon-close { display: block; }
+
+      /* 6-2 학습 도구(표지 · 가이드 · 번역 · 강사 가이드 · 프린트): 모바일은 헤더 아래 띠, 강사 계정이면 5칸 */
+      .book-tools { position: absolute; top: 100%; left: 0; right: 0; display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px 12px 10px; border-bottom: 1px solid var(--border-default); background: var(--surface-default); box-shadow: 0 14px 24px -18px rgba(30, 20, 90, 0.45); opacity: 0; clip-path: inset(0 0 100% 0); visibility: hidden; transition: clip-path 0.22s ease, opacity 0.15s, visibility 0s 0.22s; }
+      .book-tools.is-open { opacity: 1; clip-path: inset(0 0 -30px 0); visibility: visible; transition: clip-path 0.22s ease, opacity 0.15s; }
+      .book[data-teacher] .book-tools { grid-template-columns: repeat(5, 1fr); }
+      .book:not([data-teacher]) #bookTeacherBtn { display: none; }
+      .book-tool { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border-radius: var(--radius-12); color: var(--icon-strong); font: 600 12px/1.4 var(--font); white-space: nowrap; }
+      .book-tool:hover { background: var(--surface-hover); color: var(--text-primary); }
+      .book-tool.is-on { background: var(--brand-subtle); color: var(--brand-interactive); }
+
+      /* 6-3 파트 띠(48px): 그라데이션 위 가운데 파트 제목 ▾ — 누르면 파트 목록 */
+      .book-band { position: relative; z-index: var(--z-band); flex: none; background: var(--brand-gradient); }
+      .book-band-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; height: var(--band-height); padding: 0 20px; color: #fff; font: 800 18px/1 var(--font); }
+      .book-band-btn span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+      .book-band-btn .icon { width: 24px; height: 24px; padding: 4px; border-radius: 50%; background: #fff; color: var(--brand-interactive); box-shadow: 0 2px 6px -2px rgba(14, 40, 105, 0.35); transition: transform 0.2s; }
+      .book-band-btn[aria-expanded="true"] .icon { transform: rotate(180deg); }
+
+      /* 6-4 파트 목록(띠 아래로 펼침) */
+      .book-scrim { position: fixed; inset: 0; z-index: var(--z-scrim); background: var(--scrim); opacity: 0; pointer-events: none; transition: opacity 0.16s; }
+      .book-scrim.is-open { opacity: 1; pointer-events: auto; }
+      .book-partlist { position: absolute; top: calc(100% + 8px); left: 12px; right: 12px; max-width: 520px; max-height: min(70vh, 560px); margin: 0 auto; padding: 6px; overflow-y: auto; border-radius: var(--radius-18); background: var(--surface-default); box-shadow: var(--shadow-popover); opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 0.16s, transform 0.16s; }
+      .book-partlist.is-open { opacity: 1; pointer-events: auto; transform: none; }
+      .book-partlist button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border-radius: var(--radius-12); color: var(--text-primary); font: 500 16px/1.4 var(--font); text-align: left; }
+      .book-partlist button:hover { background: var(--surface-hover); }
+      .book-partlist i { width: 20px; font: 700 12px/1.4 var(--font); font-style: normal; font-variant-numeric: tabular-nums; color: var(--list-number); }
+      .book-partlist .is-done i { color: var(--brand-interactive); }
+      .book-partlist .is-current { background: var(--brand-subtle); color: var(--brand-interactive); font-weight: 700; }
+      .book-partlist .is-current i { color: var(--brand-interactive); }
+      .book-partlist .icon { width: 18px; height: 18px; margin-left: auto; color: var(--brand-interactive); opacity: 0; }
+      .book-partlist .is-current .icon { opacity: 1; }
+
+      /* 6-5 본문: 안내문 띠 + 파트 본문 */
+      .book-intro { padding: 18px var(--card-padding) 16px; background: var(--intro-bg); color: var(--text-secondary); font: 400 14px/1.6 var(--font); }
+      .book-part-body { padding: 24px var(--card-padding) 0; }
+      .book-part-body > :last-child { margin-bottom: 0; }
+
+      /* 6-6 강사 가이드(TG) — 본문 맨 위, 지문 박스와 같은 폭 */
+      .book-teacher-guide { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; padding: 12px 14px; border-radius: var(--radius-14); background: var(--teacher-gradient); }
+      .book-teacher-guide-title { font: 700 11px/1.4 var(--font); color: var(--teacher-text); }
+      .book-teacher-guide-text { font: 500 14px/1.6 var(--font); color: var(--text-body); }
+
+      /* 6-7 하단: [‹ 이전] [NEXT · PART 0n  다음 파트 제목  ›] — 버튼만 떠 있음 */
+      .book-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-dock); display: grid; grid-template-columns: auto 1fr; gap: 10px; padding: 12px 16px calc(12px + var(--safe-bottom)); pointer-events: none; }
+      .book-dock > * { pointer-events: auto; }
+      .book-prev { display: grid; place-items: center; width: 46px; min-height: 46px; border: 1px solid rgba(28, 25, 23, 0.1); border-radius: var(--radius-14); background: rgba(255, 255, 255, 0.92); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 2px 8px -4px rgba(28, 25, 23, 0.18); color: var(--text-secondary); }
+      .book-prev .icon { width: 16px; height: 16px; }
+      .book-prev:hover:not(:disabled) { border-color: var(--brand-interactive); color: var(--brand-interactive); }
+      .book-prev:active:not(:disabled) { transform: scale(0.95); }
+      .book-prev:disabled { opacity: 0.45; }
+      .book-next { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 46px; padding: 10px 18px; border-radius: var(--radius-14); background: var(--brand-interactive); box-shadow: 0 6px 16px -8px rgba(14, 40, 105, 0.35); color: #fff; text-align: left; }
+      .book-next.is-end { background: var(--brand-gradient); }
+      .book-next small { display: block; font: 700 11px/1.2 var(--font); letter-spacing: 0.06em; }
+      .book-next b { font: 800 16px/1.1 var(--font); }
+      .book-next .icon { width: 20px; height: 20px; }
+
+      /* 6-8 표지: 그라데이션 표지 면(Daily Life) + 흰 목차(Contents), 태블릿 이상은 좌우 펼침면 */
+      .book-cover { position: fixed; inset: 0; z-index: var(--z-cover); overflow-y: auto; background: var(--surface-default); transform: translateX(-100%); transition: transform 0.32s cubic-bezier(0.3, 0.8, 0.3, 1); }
+      .book-cover.is-open { transform: none; }
+      .book-cover-inner { display: flex; flex-direction: column; min-height: 100%; }
+      .book-cover-front { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 360px; padding: 14px 24px 28px; background: var(--brand-gradient); color: #fff; }
+      .book-cover-top { display: flex; align-items: center; justify-content: space-between; }
+      .book-cover-back { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%; background: rgba(255, 255, 255, 0.14); color: #fff; }
+      .book-cover-back .icon { width: 22px; height: 22px; }
+      .book-cover-level { font: 600 13px/1.4 var(--font); opacity: 0.9; }
+      .book-cover-title { font: 800 72px/0.92 var(--font); }
+      .book-cover-sub { display: flex; justify-content: space-between; margin-top: 32px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.45); font: 600 14px/1.4 var(--font); }
+      .book-toc { flex: 1; padding: 40px 24px calc(40px + var(--safe-bottom)); }
+      .book-toc-title { margin-bottom: 28px; font: 800 40px/1 var(--font); }
+      .book-toc-list { display: flex; flex-direction: column; gap: 26px; }
+      .book-toc-item { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: baseline; width: 100%; color: var(--text-primary); text-align: left; }
+      .book-toc-n { font: 500 13px/1.4 var(--font); font-variant-numeric: tabular-nums; color: #a3abb8; }
+      .book-toc-t { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+      .book-toc-t b { font: 700 19px/1.2 var(--font); color: #8a93a3; }
+      .book-toc-t em { font: 500 13px/1.2 var(--font); font-style: normal; color: #a3abb8; }
+      .book-toc-go { margin-top: 10px; font: 600 14px/1.4 var(--font); color: var(--brand-interactive); }
+      .book-toc-row.is-current .book-toc-n { font-weight: 700; color: var(--brand-interactive); }
+      .book-toc-row.is-current .book-toc-t b { color: var(--text-primary); }
+      .book-toc-row.is-current .book-toc-t em { color: #6b7384; }
+      .book-toc-row.is-current .book-toc-item:hover .book-toc-go { text-decoration: underline; text-underline-offset: 3px; }
+
+      /* =========================================================
+         7. Parts — 파트 콘텐츠 블록
+         ========================================================= */
+      /* 7-1 공통: 항목 목록(구분선) · 소제목 · 시험 구간 라벨 · 해석 · TIP 줄 */
+      .book-list { display: flex; flex-direction: column; }
+      .book-list > .book-item { padding: 18px 0; border-bottom: 1px solid var(--border-default); }
+      .book-list > .book-item:last-child { border-bottom: 0; }
+      .book-list > .book-qa:last-child, .book-list > .book-question:last-child, .book-message:last-child { padding-bottom: 4px; } /* 문장형 목록의 마지막 여백 축소 */
+      .book-list > .chip { align-self: flex-start; margin-bottom: 10px; }
+      .book-section-label { display: flex; margin-bottom: 10px; }
+      .book-test-label { display: block; margin-bottom: 10px; font: 700 13px/19px var(--font); color: var(--brand-interactive); }
+      * + .book-test-label { margin-top: 36px; } /* 앞 블록 margin-bottom과 겹침 → 실제 간격 36px */
+      .book-test-label:first-child, .book-teacher-guide + .book-test-label { margin-top: 0; }
+      .book-translation { margin-top: 6px; font: var(--type-translation); color: var(--text-tertiary); animation: reveal 0.25s ease; }
+      @keyframes reveal { from { opacity: 0; transform: translateY(-2px); } }
+      .book-tip { display: flex; align-items: center; gap: 7px; margin-top: 8px; }
+      .book-tip-text { flex: 1; min-width: 0; font: 500 14px/1.55 var(--font); color: var(--text-secondary); }
+      .book-head { display: flex; align-items: center; gap: 8px; min-height: 40px; margin-bottom: 4px; }
+      .book-head .badge { line-height: 1; }
+      .book-indent { padding-left: 32px; }
+
+      /* 7-2 단어 · 표현 (Part 1 · 7) */
+      .book-word-text { flex: 1; min-width: 0; font: var(--type-word); }
+      .book-word .book-translation { margin-top: 8px; }
+      .book-example { margin-top: 9px; font: italic var(--type-read); color: var(--text-tertiary); }
+
+      /* 7-3 Q&A (Part 2) */
+      .book-qa-row { display: flex; align-items: flex-start; gap: 8px; }
+      .book-qa-lines { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
+      .book-qa-line { display: flex; align-items: flex-start; gap: 7px; }
+      .book-qa-speaker { flex: none; width: 18px; font: 700 14px/28.8px var(--font); color: var(--brand-interactive); }
+      .book-qa-line[data-speaker="b"] .book-qa-speaker { color: var(--text-secondary); opacity: 0.85; }
+      .book-qa-text-col { flex: 1; min-width: 0; }
+      .book-qa-text { min-width: 0; font: var(--type-speak); }
+      .book-qa-line[data-speaker="b"] .book-qa-text { color: var(--text-secondary); }
+      .book-qa .book-translation { margin-top: 5px; }
+
+      /* 7-4 빈칸 · 패턴 (Part 3 · 4) */
+      .book-sentence { font: var(--type-speak); text-wrap: pretty; }
+      .book-blank { display: inline-block; min-width: 38px; height: 1em; margin: 0 1px; border-bottom: 2px solid var(--brand-interactive); vertical-align: baseline; }
+      .book-drill .book-translation, .book-pattern-answer { margin-top: 8px; }
+      .book-pattern { cursor: pointer; }
+      .book-pattern-row { display: flex; align-items: flex-start; gap: 8px; }
+      .book-pattern-body { flex: 1; min-width: 0; }
+      .book-speakline { margin-bottom: 14px; }
+      .book-speakline span { display: inline-block; width: 100%; height: 32px; border-bottom: 2px solid var(--brand-interactive); }
+
+      /* 7-5 질문 카드 (Part 5 · 9 · 11 · 12) */
+      .book-question-row { display: flex; align-items: flex-start; gap: 10px; }
+      .book-question-body { flex: 1; min-width: 0; }
+      .book-question-text { font: var(--type-speak); }
+      .book-question-text.is-hidden-question { font: italic var(--type-read); color: var(--text-secondary); }
+      .book-question .book-translation, .book-passage .book-translation { margin-top: 8px; }
+      .book-reveal-btn { display: flex; align-items: center; gap: 4px; flex: none; padding: 4px 2px; color: var(--text-disabled); font: 600 12px/1.4 var(--font); white-space: nowrap; }
+      .book-reveal-btn .icon { width: 16px; height: 16px; stroke-width: 1.5; }
+
+      /* 7-6 답변 가이드 · 브레인스토밍 (학생용, 웜톤) */
+      .book-answer-guide { margin-top: 10px; padding: 12px 14px; border-radius: var(--radius-14); background: var(--guide-gradient); }
+      .book-answer-guide-title { margin-bottom: 6px; font: 700 11px/1.4 var(--font); color: var(--guide-text); }
+      .book-answer-guide-en { font: 600 16px/1.6 var(--font); color: var(--text-body); }
+      .book-answer-guide-kr { margin-top: 5px; font: 400 14px/1.5 var(--font); color: var(--text-tertiary); }
+      .book-brainstorm { margin-top: 14px; padding: 16px; border-radius: var(--radius-16); background: var(--guide-gradient); }
+      .book-brainstorm-title { margin-bottom: 12px; font: 700 13px/1.4 var(--font); color: var(--text-body); }
+      .book-brainstorm-group + .book-brainstorm-group { margin-top: 14px; }
+      .book-brainstorm-group h5 { margin-bottom: 6px; font: 700 11px/1.4 var(--font); color: var(--guide-text); }
+      .book-brainstorm-group p { margin-bottom: 4px; font: 500 14px/1.6 var(--font); color: var(--text-strong-muted); }
+
+      /* 7-7 대화 (Part 6) */
+      .book-dialogue { display: flex; flex-direction: column; gap: 12px; }
+      .book-message { display: flex; flex-direction: column; align-items: flex-start; max-width: 88%; }
+      .book-message[data-speaker="me"] { align-items: flex-end; margin-left: auto; }
+      .book-message-name { margin: 0 4px 4px; font: 700 12px/1.4 var(--font); color: var(--brand-strong); }
+      .book-message[data-speaker="me"] .book-message-name { color: var(--text-secondary); }
+      .book-message-bubble { display: flex; align-items: center; gap: 8px; border-radius: var(--radius-16) var(--radius-16) var(--radius-16) var(--radius-6); }
+      .book-message[data-speaker="me"] .book-message-bubble { border-radius: var(--radius-16) var(--radius-16) var(--radius-6) var(--radius-16); background: var(--chip-bg); }
+      .book-message-text { flex: 1; min-width: 0; }
+      .book-read { font: var(--type-read); color: var(--text-body); }
+      .book-message .book-translation { margin-top: 4px; }
+
+      /* 7-8 지문 · 표현 예시 · 문장 목록 · 시나리오 (Part 8 · 9 · 10 · 11 · 12) */
+      .book-passage { margin-bottom: 16px; }
+      .book-passage .book-read { white-space: pre-line; }
+      .book-passage .actions-row { margin-top: 14px; }
+      .book-phrases + .book-phrases { margin-top: 18px; }
+      .book-phrases .book-tip { margin-top: 0; }
+      .book-phrases .box { margin-top: 8px; border-radius: var(--radius-14); }
+      .book-phrases ul { display: flex; flex-direction: column; gap: 6px; }
+      .book-sentence-grid { display: grid; gap: 10px; margin-bottom: 16px; }
+      .book-scenario { margin-bottom: 20px; }
+      .book-box-label { display: flex; margin-bottom: 8px; font: 700 12px/1.4 var(--font); color: var(--text-tertiary); opacity: 0.7; }
+      .book-picture { display: block; width: 100%; aspect-ratio: 800 / 534; margin-bottom: 16px; border-radius: var(--radius-16); object-fit: cover; background: var(--lesson-photo) center / cover no-repeat; }
+
+      /* =========================================================
+         8. Tablet · PC (≥640px) — 창 전체 스크롤, 본문 760px 칼럼
+         ========================================================= */
+      @media (min-width: 640px) {
+        html { overflow-y: auto; scrollbar-gutter: stable; }
+        body { overflow: visible; }
+        .book { display: block; height: auto; min-height: 100vh; overflow: visible; --card-padding: 52px; } /* 칼럼 여백 24 + 본문 여백 28 */
+        .book-scroll { overflow: visible; padding-bottom: calc(108px + var(--safe-bottom)); }
+        .book-header { position: sticky; top: 0; }
+        .book-band { position: sticky; top: var(--header-height); }
+        .book-intro { max-width: calc(var(--content-width) - 104px); margin: 24px auto 0; padding: 12px 16px 16px; border-radius: var(--radius-16); font-size: 16px; }
+        .book-main { max-width: var(--content-width); margin: 0 auto; }
+        .book-part-body { padding-top: 28px; }
+        .icon-btn { width: 44px; height: 44px; }
+        .toast { top: 66px; }
+
+        /* 학습 도구: 버튼 바로 아래 세로 팝오버 */
+        .book-tools, .book[data-teacher] .book-tools { left: auto; right: max(24px, calc((100% - 1060px) / 2 + 24px)); top: calc(100% + 4px); grid-template-columns: 1fr; gap: 2px; width: 196px; padding: 6px; border: 0; border-radius: var(--radius-16); box-shadow: 0 16px 32px -14px rgba(14, 40, 105, 0.35); clip-path: none; transform: translateY(-4px); transition: opacity 0.15s, transform 0.15s, visibility 0s 0.15s; }
+        .book-tools.is-open, .book[data-teacher] .book-tools.is-open { clip-path: none; transform: none; transition: opacity 0.15s, transform 0.15s; }
+        .book-tool { flex-direction: row; gap: 12px; padding: 11px 12px; font-size: 14px; }
+        .book-tool .icon { width: 22px; height: 22px; }
+
+        .book-dock { left: 50%; right: auto; width: min(var(--content-width), 100%); padding: 14px 28px calc(14px + var(--safe-bottom)); transform: translateX(-50%); }
+
+        /* 단어 · 표현: 2열(마지막 줄 구분선 없음) */
+        .book-list[data-columns="2"] { display: grid; grid-template-columns: 1fr 1fr; column-gap: 36px; }
+        .book-list[data-columns="2"] > .chip { grid-column: 1 / -1; justify-self: start; }
+        .book-list[data-columns="2"] > .book-item:nth-last-child(2):nth-child(odd of .book-item) { border-bottom: 0; }
+        .book-sentence-grid { grid-template-columns: 1fr 1fr; }
+      }
+
+      /* 표지 펼침면(≥768px): 왼쪽 표지 고정, 오른쪽 목차 */
+      @media (min-width: 768px) {
+        .book-cover-inner { flex-direction: row; min-height: 100vh; }
+        .book-cover-front { position: sticky; top: 0; width: 44%; max-width: 480px; min-height: 100vh; padding: 28px 40px 44px; }
+        .book-cover-title { font-size: 112px; }
+        .book-toc { max-width: 640px; padding: 96px 64px 64px; }
+        .book-toc-title { margin-bottom: 44px; font-size: 56px; }
+        .book-toc-list { gap: 34px; }
+        .book-toc-item { grid-template-columns: 48px 1fr; }
+        .book-toc-t b { font-size: 24px; }
+      }
+
+      /* =========================================================
+         9. Motion
+         ========================================================= */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation: none !important; transition: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="book" id="book" data-teacher>
+      <!-- 헤더 -->
+      <header class="book-header">
+        <div class="book-header-inner">
+          <span class="book-lesson-label" id="bookLessonLabel"></span>
+          <button class="book-tools-btn" id="bookToolsBtn" aria-expanded="false" aria-controls="bookTools" aria-label="학습 도구 열기">
+            <svg class="icon icon-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5" /><rect x="14" y="4" width="6" height="6" rx="1.5" /><rect x="4" y="14" width="6" height="6" rx="1.5" /><path d="M17 14v6" /><path d="M14 17h6" /></svg>
+            <svg class="icon icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12" /><path d="M18 6 6 18" /></svg>
+          </button>
+        </div>
+        <nav class="book-tools" id="bookTools" aria-label="학습 도구">
+          <button class="book-tool" id="bookToolCover" data-icon="book">표지</button>
+          <button class="book-tool" id="bookToolGuide" data-icon="bulb" aria-pressed="false">가이드</button>
+          <button class="book-tool" id="bookToolTranslate" data-icon="globe" aria-pressed="false">번역</button>
+          <button class="book-tool" id="bookTeacherBtn" data-icon="teacher" aria-pressed="false" aria-label="Teacher Guide(강사 가이드)">강사 가이드</button>
+          <button class="book-tool" id="bookToolPrint" data-icon="print">프린트</button>
+        </nav>
+      </header>
+
+      <!-- 파트 띠 · 파트 목록 -->
+      <div class="book-band">
+        <button class="book-band-btn" id="bookDockList" aria-haspopup="listbox" aria-expanded="false" aria-controls="bookPartlist"><span id="bookBandTitle"></span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></button>
+        <div class="book-partlist" id="bookPartlist" role="listbox" aria-label="파트 목록"></div>
+      </div>
+      <div class="book-scrim" id="bookScrim"></div>
+
+      <!-- 본문(모바일은 이 영역이 스크롤, 태블릿 이상은 창 스크롤) -->
+      <div class="book-scroll" id="bookScroll">
+        <p class="book-intro" id="bookHeroDesc" aria-live="polite"></p>
+        <main class="book-main" id="bookMain"><!-- 파트 12개: JS 3 renderParts() --></main>
+      </div>
+
+      <!-- 하단 이동 -->
+      <nav class="book-dock" aria-label="파트 이동">
+        <button class="book-prev" id="bookPrev" aria-label="이전 파트" data-icon="left"></button>
+        <button class="book-next" id="bookNext"><span><small id="bookNextLabel"></small><b id="bookNextTitle"></b></span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path id="bookNextIcon" d="m9 18 6-6-6-6" /></svg></button>
+      </nav>
+
+      <!-- 표지 -->
+      <div class="book-cover" id="bookCover" aria-label="교재 표지">
+        <div class="book-cover-inner">
+          <section class="book-cover-front">
+            <div class="book-cover-top"><button class="book-cover-back" id="bookCoverBack" aria-label="교재로 돌아가기" data-icon="left"></button><span class="book-cover-level">Level 1</span></div>
+            <div>
+              <h2 class="book-cover-title">Daily<br />Life</h2>
+              <p class="book-cover-sub"><span>일상회화</span></p>
+            </div>
+          </section>
+          <section class="book-toc" aria-label="목차">
+            <h3 class="book-toc-title">Contents</h3>
+            <ol class="book-toc-list" id="bookLessons"><!-- 레슨 목차: JS 4-5 --></ol>
+          </section>
+        </div>
+      </div>
+
+      <div class="toast" id="bookToast" role="status"></div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        /* =========================================================
+           1. Content — 레슨 데이터 (실서비스에서는 서버 데이터로 교체)
+           ========================================================= */
+        var LESSON = {
+          number: "01",
+          lessons: [
+            ["My Morning Routine", "아침 일과 말하기"], ["Ordering Coffee", "카페에서 주문하기"], ["Talking About Weather", "날씨 표현 익히기"],
+            ["Weekend Plans", "주말 계획 말하기"], ["At the Grocery Store", "장보기 표현"],
+          ],
+          parts: [
+            { type: "words", title: "Vocabulary", desc: "오늘의 핵심 단어를 소리 내어 읽고 뜻을 확인해 보세요.",
+              teacher: "학생이 먼저 단어를 소리 내어 읽게 한 뒤 뜻을 스스로 유추해보게 하고, 필요할 때만 힌트를 주세요.",
+              label: "핵심 단어 익히기",
+              items: [["spice", "향신료, 양념"], ["mild", "순한, 약한"], ["allergic", "알레르기가 있는"], ["routine", "(정해진) 일과, 루틴"]] },
+            { type: "qa", title: "Q&A Warm-up", desc: "질문(A)과 답변(B)이 한 세트로 묶이는 구성이에요. 강사의 질문에 답해보세요.",
+              teacher: "질문을 두 번 읽어주고, 학생이 완전한 문장으로 답하도록 유도하세요.",
+              items: [
+                ["What time do you leave home?", "몇 시에 집에서 나가세요?", "I usually leave around eight.", "보통 8시쯤 나가요."],
+                ["How do you usually get to work?", "보통 어떻게 출근하세요?", "I take the subway, it’s about 30 minutes.", "지하철을 타요, 30분 정도 걸려요."],
+                ["Do you eat breakfast every morning?", "매일 아침을 드세요?", "Not always — I skip it when I’m in a hurry.", "항상은 아니에요 — 바쁠 땐 걸러요."],
+                ["What’s the first thing you do after waking up?", "일어나서 가장 먼저 하는 일이 뭐예요?", "I check my phone and then make some coffee.", "휴대폰을 확인하고 커피를 내려요."],
+              ] },
+            { type: "drills", title: "Choose & Complete", desc: "알맞은 단어를 골라 빈칸을 채우고 문장을 완성해 보세요.",
+              teacher: "빈칸을 채운 뒤 왜 그 단어를 골랐는지 이유를 말로 설명하게 해보세요.",
+              items: [
+                ["아침 기상 시간 말하기", "I usually ( ) up at 7 AM.", "wake / get / take", "저는 보통 오전 7시에 일어나요."],
+                ["아침 식사 여부 말하기", "She ( ) breakfast every morning.", "has / take / do", "그녀는 매일 아침 아침 식사를 해요."],
+                ["집을 나서는 시간 말하기", "We are ( ) home by 8.", "leaving / leave / left", "우리는 8시까지 집을 나서요."],
+                ["옷 입는 속도 표현하기", "He ( ) dressed quickly.", "get / gets / getting", "그는 빠르게 옷을 입어요."],
+              ] },
+            { type: "patterns", title: "Pattern Practice", desc: "TIP의 단어 순서를 참고해 빈 줄에 맞추어 스피킹 해보세요.",
+              teacher: "패턴 문장을 먼저 함께 따라 말한 뒤, 학생이 자신의 상황으로 바꿔 말하게 해보세요.",
+              items: [["I take", "a shower."], ["I brush", "my teeth."], ["I catch", "the bus."]] },
+            { type: "topics", title: "Talk About You", desc: "주제에 관한 질문을 확인하고 강사님과 자유롭게 대화해 보세요.",
+              teacher: "정답이 없는 질문이니 학생의 답변을 충분히 기다려주고, 표현만 자연스럽게 다듬어주세요.",
+              label: "아침 루틴에 대해 이야기해 보세요",
+              items: [
+                ["What time do you usually get up on weekdays?", "평일에는 보통 몇 시에 일어나세요?"],
+                ["Do you eat breakfast every day? Why or why not?", "매일 아침을 드세요? 이유는 무엇인가요?"],
+                ["What's the hardest part of your morning?", "아침에 가장 힘든 부분은 무엇인가요?"],
+                ["How do you feel right before you leave home?", "집을 나서기 직전엔 기분이 어떠세요?"],
+              ] },
+            { type: "dialogue", title: "Main Dialogue", desc: "두 사람의 대화를 역할을 나누어 소리 내어 연습해 보세요.",
+              teacher: "역할을 나눠 대화를 읽고, 두 번째에는 역할을 바꿔 다시 읽어보게 하세요.",
+              items: [
+                ["teacher", "Good morning! What time do you usually wake up?", "좋은 아침이에요! 보통 몇 시에 일어나세요?"],
+                ["me", "I usually wake up around 6:30.", "저는 보통 6시 30분쯤 일어나요."],
+                ["teacher", "That's early! What do you do first?", "이르시네요! 가장 먼저 뭘 하세요?"],
+                ["me", "I drink a glass of water and stretch a little.", "물 한 잔 마시고 스트레칭을 조금 해요."],
+                ["teacher", "Sounds like a healthy routine!", "건강한 루틴이네요!"],
+                ["me", "Thanks! I try to keep it simple.", "감사해요! 최대한 단순하게 하려고 해요."],
+              ] },
+            { type: "expressions", title: "Key Expressions", desc: "일상에서 자주 쓰는 표현을 뜻과 예문으로 익혀보세요.",
+              teacher: "표현이 쓰이는 상황을 짧게 설명해주고, 학생이 자기 문장을 직접 만들어보게 하세요.",
+              items: [
+                ["get out of bed", "잠자리에서 일어나다", "\"I get out of bed at seven every day.\"", "저는 매일 7시에 잠자리에서 일어나요."],
+                ["get ready", "준비하다, 채비하다", "\"It takes me twenty minutes to get ready.\"", "준비하는 데 20분이 걸려요."],
+                ["in a rush", "서둘러서, 급하게", "\"I’m always in a rush in the morning.\"", "저는 항상 아침에 서둘러요."],
+                ["on time", "제시간에", "\"I try to leave home on time.\"", "저는 제시간에 집을 나서려고 해요."],
+              ] },
+            { type: "phrases", title: "Comprehension Check", desc: "위 지문의 주제와 내용을 충분히 이해하셨나요? 읽으신 내용을 간단히 요약해서 말씀해 보세요.",
+              teacher: "본문을 다시 들춰보지 않고 먼저 답해보게 한 뒤 확인하세요.",
+              items: [
+                ["다음과 같이 시작해보면 어떨까요?", ["This passage is about ~", "This paragraph is about ~"]],
+                ["조금 더 이어가 보시겠어요?", ["so ~", "then ~", "therefore ~", "as a result ~"]],
+              ] },
+            { type: "reading", title: "Reading: Minji's Morning", desc: "지문을 읽고 이어지는 핵심 질문에 답해 보세요.",
+              teacher: "문단별로 끊어 읽고, 이해가 됐는지 짧은 질문으로 확인하며 진행하세요.",
+              passage: ["Minji wakes up at 6:30 every morning. She drinks a glass of water and stretches for five minutes. After that, she takes a quick shower and gets dressed. She usually has toast and coffee for breakfast before leaving for work at 8 o'clock.",
+                "민지는 매일 아침 6시 30분에 일어납니다. 그녀는 물 한 잔을 마시고 5분간 스트레칭을 합니다. 그 후 빠르게 샤워를 하고 옷을 입습니다. 보통 토스트와 커피로 아침을 먹은 뒤 8시에 출근합니다."],
+              items: [["What does Minji do right after she wakes up?", "민지는 일어나자마자 무엇을 하나요?"], ["What time does Minji leave for work?", "민지는 몇 시에 출근하나요?"]] },
+            { type: "describe", title: "Describe the Picture", desc: "사진을 보고 자유롭게 묘사해 보세요. 상단의 가이드를 참고하여 말씀하셔도 좋습니다.",
+              teacher: "정답보다 학생이 관찰한 내용을 말로 표현하는 과정에 집중해주세요.",
+              tests: ["Part 2 (Q3~4) of the test", "Part 3 (Q5~7) of the test"],
+              label: "문장 구조 익히기 (Grammar Practice)",
+              sentences: ["She is sitting at the table.", "She is drinking coffee.", "There is a plate on the table.", "She is wearing a blue shirt.", "The window is open.", "It's a sunny morning."],
+              picture: "아침 식탁 사진",
+              brainstorm: [
+                ["사진소개 (Intro)", ["이곳은 어디인가요? (Where is this place?)", "사진 속에 몇 명이 있나요? (How many people do you see?)", "무엇이 보이나요? (What do you see in this picture?)"]],
+                ["중심소개 (Center)", ["가운데 있는 사람은 무엇을 하고 있나요? (What is she doing?)", "테이블 위에 무엇이 있나요? (What is on the table?)"]],
+                ["주변/분위기 (Surrounding)", ["창문 밖 날씨는 어떤가요? (What is the weather like outside?)", "전체적인 분위기는 어떤가요? (How does the scene feel?)"]],
+              ] },
+            { type: "respond", title: "Respond to Questions", desc: "상황을 확인하고 이어지는 질문에 순서대로 답해 보세요.",
+              teacher: "질문을 듣고 바로 대답하는 순발력 훈련이니, 너무 오래 고민하지 않도록 템포를 유지하세요.",
+              test: "Part 3 (Q5~7) of the test", firstQuestion: 5,
+              scenario: ["Scenario & Directions", "Imagine that a friend is asking about your morning routine over the phone.", "친구가 전화로 당신의 아침 루틴에 대해 묻고 있다고 상상해 보세요."],
+              items: [
+                ["What time do you usually wake up on weekdays?", "평일에는 보통 몇 시에 일어나세요?", "I usually wake up at (7 AM) on weekdays.", "저는 평일에 보통 (오전 7시)에 일어나요."],
+                ["What is the first thing you do after waking up?", "일어난 후 가장 먼저 하는 일은 무엇인가요?", "The first thing I do is (check my phone).", "일어나서 가장 먼저 하는 일은 (휴대폰을 확인하는 것)이에요."],
+                ["Do you think your morning routine is healthy? Why or why not?", "당신의 아침 루틴이 건강하다고 생각하세요? 이유는 무엇인가요?", "I think it is (pretty healthy) because (I eat breakfast every day).", "제 아침 루틴은 (꽤 건강하다고) 생각해요, (매일 아침을 먹기) 때문이에요."],
+              ] },
+            { type: "survey", title: "Phone Survey", desc: "제공된 정보를 참고해 전화 설문 질문에 답해 보세요.",
+              teacher: "실제 통화하듯 자연스러운 톤으로 진행하고, 마무리에 간단히 피드백을 주세요.",
+              test: "Part 4 (Q8~10) of the test", firstQuestion: 8,
+              scenario: ["Directions", "Hello, I'm calling about the morning wellness survey. Can I ask you a few questions?", "안녕하세요, 아침 웰빙 설문 조사로 전화드렸습니다. 몇 가지 질문 드려도 될까요?"],
+              picture: "아침 웰빙 전화 설문", // 전용 사진(photo-2.jpg)이 저장소에 없어 레슨 사진으로 대체
+              items: [
+                ["What time do you usually wake up on weekdays?", "I usually wake up at (7 AM) on weekdays.", "저는 평일에 보통 (오전 7시)에 일어나요."],
+                ["How long does it take you to get ready in the morning?", "It takes me about (20 minutes) to get ready.", "준비하는 데 약 (20분) 정도 걸려요."],
+                ["What's one thing you'd like to change about your morning routine?", "I'd like to (wake up earlier) in the morning.", "아침에 (더 일찍 일어나고) 싶어요."],
+              ] },
+          ],
+        };
+
+        /* =========================================================
+           2. Icons — data-icon="이름" 버튼에 자동으로 채움
+           ========================================================= */
+        var ICON_PATHS = {
+          globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+          speaker: '<path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/>',
+          bulb: '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0 -4 12.7 3.5 3.5 0 0 1 1.5 2.8 .5 .5 0 0 0 .5 .5h4a.5 .5 0 0 0 .5 -.5 3.5 3.5 0 0 1 1.5 -2.8 7 7 0 0 0 -4 -12.7z"/>',
+          book: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+          print: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+          eye: '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>',
+          eyeOff: '<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/>',
+          teacher: '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+          list: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+          left: '<path d="m15 18-6-6 6-6"/>',
+          right: '<path d="m9 18 6-6-6-6"/>',
+          check: '<path d="M20 6 9 17l-5-5"/>',
+        };
+        function icon(name) {
+          return '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">' + ICON_PATHS[name] + "</svg>";
+        }
+        function fillIcons(root) {
+          root.querySelectorAll("[data-icon]").forEach(function (el) {
+            el.insertAdjacentHTML("afterbegin", icon(el.dataset.icon));
+          });
+        }
+
+        /* =========================================================
+           3. Templates — 파트 유형별 마크업
+           ========================================================= */
+        function pad(n) { return String(n).padStart(2, "0"); }
+        function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+        // 3-1 작은 조각
+        var ACTION = {
+          guide: '<button class="icon-btn" data-action="guide" aria-label="답변 가이드" aria-pressed="false">' + icon("bulb") + "</button>",
+          translate: '<button class="icon-btn" data-action="translate" aria-label="번역" aria-pressed="false">' + icon("globe") + "</button>",
+          listen: '<button class="icon-btn" data-action="listen" aria-label="음성 듣기">' + icon("speaker") + '<span class="eq"><i></i><i></i><i></i></span></button>',
+        };
+        function actions(names, cls) {
+          return '<div class="' + (cls || "actions") + '">' + names.map(function (n) { return ACTION[n]; }).join("") + "</div>";
+        }
+        function number(n) { return '<span class="badge" data-type="number">' + pad(n) + "</span>"; }
+        function question(n) { return '<span class="badge" data-type="question">Q' + n + "</span>"; }
+        function chip(text) { return '<p class="chip">' + esc(text) + "</p>"; }
+        function translation(text) { return '<p class="book-translation" hidden>' + esc(text) + "</p>"; }
+        function tip(text) { return '<div class="book-tip"><span class="tag">TIP</span><span class="book-tip-text">' + esc(text) + "</span></div>"; }
+        function answerGuide(en, kr) {
+          return '<div class="book-answer-guide" hidden><p class="book-answer-guide-title">답변 가이드</p><p class="book-answer-guide-en">A: ' + esc(en) + '</p><p class="book-answer-guide-kr">A: ' + esc(kr) + "</p></div>";
+        }
+        function questionCard(n, en, kr, extra, withGuide) {
+          return '<div class="book-item book-question">' +
+            '<div class="book-question-row">' + question(n) + '<div class="book-question-body"><p class="book-question-text">' + esc(en) + "</p>" + translation(kr) + "</div></div>" +
+            actions(withGuide ? ["guide", "translate", "listen"] : ["translate", "listen"], "actions-row") + (extra || "") + "</div>";
+        }
+        function scenarioBox(s) {
+          return '<div class="box book-scenario book-item-unit"><span class="book-box-label">' + esc(s[0]) + '</span><p class="book-read">' + esc(s[1]) + "</p>" + translation(s[2]) + actions(["translate", "listen"], "actions-row") + "</div>";
+        }
+
+        // 3-2 파트 유형
+        var RENDER = {
+          words: function (p) {
+            return '<div class="book-list" data-columns="2">' + chip(p.label) + p.items.map(function (w, i) {
+              return '<div class="book-item book-word"><div class="book-head">' + number(i + 1) + '<span class="book-word-text">' + esc(w[0]) + "</span>" + actions(["translate", "listen"]) + "</div>" +
+                '<div class="book-indent">' + translation(w[1]) + "</div></div>";
+            }).join("") + "</div>";
+          },
+          qa: function (p) {
+            return '<div class="book-list">' + p.items.map(function (q, i) {
+              function line(sp, en, kr) { return '<div class="book-qa-line" data-speaker="' + sp + '"><span class="book-qa-speaker">' + sp.toUpperCase() + ':</span><div class="book-qa-text-col"><p class="book-qa-text">' + esc(en) + "</p>" + translation(kr) + "</div></div>"; }
+              return '<div class="book-item book-qa"><div class="book-qa-row">' + number(i + 1) + '<div class="book-qa-lines">' + line("a", q[0], q[1]) + line("b", q[2], q[3]) + "</div></div>" + actions(["translate", "listen"], "actions-row") + "</div>";
+            }).join("") + "</div>";
+          },
+          drills: function (p) {
+            return '<div class="book-list">' + p.items.map(function (d, i) {
+              var sentence = esc(d[1]).replace("( )", '<span class="book-blank"></span>');
+              return '<div class="book-item book-drill"><div class="book-head">' + number(i + 1) + chip(d[0]) + actions(["translate", "listen"]) + "</div>" +
+                '<div class="book-indent"><p class="book-sentence">' + sentence + "</p>" + translation(d[3]) + tip(d[2]) + "</div></div>";
+            }).join("") + "</div>";
+          },
+          patterns: function (p) {
+            return '<div class="book-list">' + p.items.map(function (t, i) {
+              return '<div class="book-item book-pattern"><div class="book-pattern-row">' + number(i + 1) + '<div class="book-pattern-body">' +
+                '<p class="book-sentence book-speakline"><span></span></p>' + tip(t[0] + " / " + t[1]) +
+                '<p class="book-translation book-pattern-answer" hidden>' + esc(t[0] + " " + t[1]) + "</p></div></div></div>";
+            }).join("") + "</div>";
+          },
+          topics: function (p) {
+            return '<div class="book-section-label">' + chip(p.label) + '</div><div class="book-list">' + p.items.map(function (q, i) { return questionCard(i + 1, q[0], q[1]); }).join("") + "</div>";
+          },
+          dialogue: function (p) {
+            var NAME = { teacher: "Teacher", me: "Me" };
+            return '<div class="book-dialogue">' + p.items.map(function (m) {
+              return '<div class="book-message" data-speaker="' + m[0] + '"><p class="book-message-name">' + NAME[m[0]] + "</p>" +
+                '<div class="box book-message-bubble"><div class="book-message-text"><p class="book-read">' + esc(m[1]) + "</p>" + translation(m[2]) + "</div>" + actions(["translate", "listen"]) + "</div></div>";
+            }).join("") + "</div>";
+          },
+          expressions: function (p) {
+            return '<div class="book-list" data-columns="2">' + p.items.map(function (e, i) {
+              return '<div class="book-item book-word"><div class="book-head">' + number(i + 1) + '<span class="book-word-text">' + esc(e[0]) + "</span>" + actions(["translate", "listen"]) + "</div>" +
+                '<div class="book-indent">' + translation(e[1]) + '<p class="book-example">' + esc(e[2]) + "</p>" + translation(e[3]) + "</div></div>";
+            }).join("") + "</div>";
+          },
+          phrases: function (p) {
+            return p.items.map(function (g) {
+              return '<div class="book-phrases">' + tip(g[0]) + '<div class="box"><ul>' + g[1].map(function (t) { return '<li class="book-read">' + esc(t) + "</li>"; }).join("") + "</ul></div></div>";
+            }).join("");
+          },
+          reading: function (p) {
+            return '<div class="box book-passage book-item-unit"><p class="book-read">' + esc(p.passage[0]) + "</p>" + translation(p.passage[1]) + actions(["translate", "listen"], "actions-row") + "</div>" +
+              '<div class="book-list">' + p.items.map(function (q, i) { return questionCard(i + 1, q[0], q[1]); }).join("") + "</div>";
+          },
+          describe: function (p) {
+            var circled = "①②③④⑤⑥";
+            return '<span class="book-test-label">' + esc(p.tests[0]) + "</span>" + '<div class="book-section-label">' + chip(p.label) + "</div>" +
+              '<div class="box book-sentence-grid">' + p.sentences.map(function (s, i) { return '<div class="book-read">' + circled[i] + " " + esc(s) + "</div>"; }).join("") + "</div>" +
+              '<span class="book-test-label">' + esc(p.tests[1]) + "</span>" + '<div class="book-picture" role="img" aria-label="' + esc(p.picture) + '"></div>' +
+              '<div class="book-brainstorm" hidden><p class="book-brainstorm-title">Brainstorming</p>' + p.brainstorm.map(function (g) {
+                return '<div class="book-brainstorm-group"><h5>' + esc(g[0]) + "</h5>" + g[1].map(function (q) { return "<p>" + esc(q) + "</p>"; }).join("") + "</div>";
+              }).join("") + "</div>";
+          },
+          respond: function (p) {
+            return '<span class="book-test-label">' + esc(p.test) + "</span>" + scenarioBox(p.scenario) +
+              '<div class="book-list">' + p.items.map(function (q, i) { return questionCard(p.firstQuestion + i, q[0], q[1], answerGuide(q[2], q[3]), true); }).join("") + "</div>";
+          },
+          survey: function (p) {
+            return '<span class="book-test-label">' + esc(p.test) + "</span>" + scenarioBox(p.scenario) +
+              '<div class="book-picture" role="img" aria-label="' + esc(p.picture) + '"></div>' +
+              '<div class="book-list">' + p.items.map(function (q, i) {
+                return '<div class="book-item book-question" data-question="' + esc(q[0]) + '"><div class="book-question-row">' + question(p.firstQuestion + i) +
+                  '<p class="book-question-text book-question-body is-hidden-question">Listen to the question</p>' +
+                  '<button class="book-reveal-btn" type="button" data-reveal>' + icon("eye") + "<span>보기</span></button></div>" + answerGuide(q[1], q[2]) + "</div>";
+              }).join("") + "</div>";
+          },
+        };
+
+        function renderParts(main) {
+          main.innerHTML = LESSON.parts.map(function (p, i) {
+            return '<section class="book-part" data-part="' + (i + 1) + '" hidden><div class="book-part-body">' +
+              '<div class="book-teacher-guide" hidden><p class="book-teacher-guide-title">강사 가이드</p><p class="book-teacher-guide-text">' + esc(p.teacher) + "</p></div>" +
+              RENDER[p.type](p) + "</div></section>";
+          }).join("");
+        }
+
+        /* =========================================================
+           4. App
+           ========================================================= */
+        var $ = function (id) { return document.getElementById(id); };
+        var book = $("book"), scroll = $("bookScroll"), main = $("bookMain");
+        var state = { part: 1, total: LESSON.parts.length };
+        var isPhone = function () { return window.innerWidth < 640; };
+
+        renderParts(main);
+        $("bookLessonLabel").textContent = "Lesson " + LESSON.number;
+        fillIcons(document);
+        var parts = main.querySelectorAll(".book-part");
+        function currentPart() { return parts[state.part - 1]; }
+
+        // 4-1 토스트
+        var toastTimer;
+        function toast(msg) {
+          var t = $("bookToast");
+          clearTimeout(toastTimer);
+          t.textContent = msg;
+          t.classList.add("is-show");
+          toastTimer = setTimeout(function () { t.classList.remove("is-show"); }, 1400);
+        }
+
+        // 4-2 항목 단위 동작: 번역 · 듣기 · 답변 가이드 · 패턴 정답 · 설문 질문 보기
+        function unitOf(el) { return el.closest(".book-item, .book-item-unit, .book-message"); }
+        function setTranslation(unit, on) {
+          unit.querySelectorAll(".book-translation:not(.book-pattern-answer)").forEach(function (t) { t.hidden = !on; });
+          var b = unit.querySelector('[data-action="translate"]');
+          if (b) { b.classList.toggle("is-active", on); b.setAttribute("aria-pressed", on); }
+        }
+        function setGuide(unit, on) {
+          unit.querySelectorAll(".book-answer-guide").forEach(function (g) { g.hidden = !on; });
+          var b = unit.querySelector('[data-action="guide"]');
+          if (b) { b.classList.toggle("is-active", on); b.setAttribute("aria-pressed", on); }
+        }
+        function play(btn) {
+          clearTimeout(btn._timer);
+          btn.classList.add("is-playing");
+          btn._timer = setTimeout(function () { btn.classList.remove("is-playing"); }, 1800); // 실서비스: 오디오 재생 시간으로 교체
+        }
+        main.addEventListener("click", function (e) {
+          var btn = e.target.closest("[data-action], [data-reveal]");
+          if (btn) {
+            var unit = unitOf(btn);
+            if (btn.dataset.action === "translate") setTranslation(unit, !btn.classList.contains("is-active"));
+            else if (btn.dataset.action === "guide") setGuide(unit, !btn.classList.contains("is-active"));
+            else if (btn.dataset.action === "listen") play(btn);
+            else if (btn.hasAttribute("data-reveal")) {
+              var shown = btn.dataset.shown !== "1", line = unit.querySelector(".book-question-text");
+              btn.dataset.shown = shown ? "1" : "";
+              line.textContent = shown ? unit.dataset.question : "Listen to the question";
+              line.classList.toggle("is-hidden-question", !shown);
+              btn.innerHTML = icon(shown ? "eyeOff" : "eye") + "<span>" + (shown ? "숨김" : "보기") + "</span>";
+            }
+            return;
+          }
+          var pattern = e.target.closest(".book-pattern");               // 패턴 카드: 탭해서 정답 확인
+          if (pattern) { var a = pattern.querySelector(".book-pattern-answer"); a.hidden = !a.hidden; }
+        });
+
+        // 4-3 보기 설정 토글(학습 도구): 가이드 · 번역 · 강사 가이드(TG)
+        //     켠 상태는 다음 파트로 이어지고(global), 파트 안에서 항목별로 따로 끄고 켤 수도 있다.
+        var global = { guide: false, translate: false, teacher: false };
+        var TOAST = { guide: "가이드", translate: "번역", teacher: "강사 가이드" };
+        function applyToPart(part, key, on) {
+          part.dataset[key] = on ? "1" : "";
+          if (key === "guide") {
+            part.querySelectorAll(".book-item").forEach(function (u) { setGuide(u, on); });
+            part.querySelectorAll(".book-brainstorm").forEach(function (b) { b.hidden = !on; });
+          } else if (key === "translate") {
+            part.querySelectorAll(".book-item, .book-item-unit, .book-message").forEach(function (u) { setTranslation(u, on); });
+          } else if (key === "teacher") {
+            part.querySelector(".book-teacher-guide").hidden = !on;
+          }
+        }
+        function toggleTool(key) {
+          var on = currentPart().dataset[key] !== "1";
+          applyToPart(currentPart(), key, on);
+          global[key] = on;
+          toast(TOAST[key] + (on ? " 켜짐" : " 꺼짐"));
+          syncToolStates();
+        }
+        function syncToolStates() {
+          var d = currentPart().dataset;
+          [["bookToolGuide", d.guide], ["bookToolTranslate", d.translate], ["bookTeacherBtn", d.teacher]].forEach(function (x) {
+            var on = x[1] === "1";
+            $(x[0]).classList.toggle("is-on", on);
+            $(x[0]).setAttribute("aria-pressed", on);
+          });
+        }
+
+        // 4-4 헤더 학습 도구
+        function setTools(open) { $("bookTools").classList.toggle("is-open", open); $("bookToolsBtn").setAttribute("aria-expanded", open); }
+        $("bookToolsBtn").addEventListener("click", function (e) { e.stopPropagation(); setTools($("bookToolsBtn").getAttribute("aria-expanded") !== "true"); });
+        $("bookToolCover").addEventListener("click", function () { setTools(false); setCover(true); });
+        $("bookToolGuide").addEventListener("click", function () { toggleTool("guide"); });
+        $("bookToolTranslate").addEventListener("click", function () { toggleTool("translate"); });
+        $("bookTeacherBtn").addEventListener("click", function () { toggleTool("teacher"); revealTeacherGuide(); });
+        $("bookToolPrint").addEventListener("click", function () { window.print(); });
+        document.addEventListener("click", function (e) { if (!e.target.closest("#bookTools, #bookToolsBtn")) setTools(false); });
+        function revealTeacherGuide() {                                    // 켰는데 박스가 화면 위로 지나가 있으면 보이도록 올려줌
+          var box = currentPart().querySelector(".book-teacher-guide"), top = box.getBoundingClientRect().top, limit = $("bookDockList").getBoundingClientRect().bottom + 12;
+          if (box.hidden || top >= limit) return;
+          (isPhone() ? scroll : window).scrollBy({ top: top - limit, behavior: "smooth" });
+        }
+
+        // 4-5 표지 목차: 현재 레슨만 '이어서 학습' 링크, 나머지는 흐리게
+        function setCover(open) { $("bookCover").classList.toggle("is-open", open); }
+        $("bookLessons").innerHTML = LESSON.lessons.map(function (l, i) {
+          var tag = i ? "div" : 'button type="button" id="bookLessonCurrent"';
+          return '<li class="book-toc-row' + (i ? "" : " is-current") + '"><' + tag + ' class="book-toc-item"><span class="book-toc-n">' + pad(i + 1) + '</span><span class="book-toc-t"><b>' + esc(l[0]) + "</b><em>" + esc(l[1]) + "</em>" +
+            (i ? "" : '<span class="book-toc-go" id="bookContinue"></span>') + "</span></" + (i ? "div" : "button") + "></li>";
+        }).join("");
+        $("bookCoverBack").addEventListener("click", function () { setCover(false); });
+        $("bookLessonCurrent").addEventListener("click", function () { setCover(false); });
+
+        // 4-6 파트 목록(띠)
+        function setPartlist(open) {
+          $("bookPartlist").classList.toggle("is-open", open);
+          $("bookScrim").classList.toggle("is-open", open);
+          $("bookDockList").setAttribute("aria-expanded", open);
+        }
+        function renderPartlist() {
+          $("bookPartlist").innerHTML = LESSON.parts.map(function (p, i) {
+            var n = i + 1, cls = n === state.part ? "is-current" : n < state.part ? "is-done" : "";
+            return '<button role="option" data-part="' + n + '" class="' + cls + '" aria-selected="' + (n === state.part) + '"><i>' + pad(n) + "</i>" + esc(p.title) + icon("check") + "</button>";
+          }).join("");
+          $("bookContinue").textContent = "이어서 학습 · " + pad(state.part) + " " + LESSON.parts[state.part - 1].title + " →";
+        }
+        $("bookDockList").addEventListener("click", function () { setPartlist($("bookDockList").getAttribute("aria-expanded") !== "true"); });
+        $("bookScrim").addEventListener("click", function () { setPartlist(false); });
+        $("bookPartlist").addEventListener("click", function (e) {
+          var b = e.target.closest("[data-part]");
+          if (b) { go(+b.dataset.part); setPartlist(false); }
+        });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape") { setTools(false); setPartlist(false); } });
+
+        // 4-7 파트 이동
+        function go(n) {
+          if (n < 1 || n > state.total) return;
+          state.part = n;
+          parts.forEach(function (p, i) { p.hidden = i + 1 !== n; });
+          var p = LESSON.parts[n - 1], part = parts[n - 1];
+          Object.keys(global).forEach(function (key) {                  // 켜 둔 도구 상태를 새 파트에도 적용
+            if ((part.dataset[key] === "1") !== global[key]) applyToPart(part, key, global[key]);
+          });
+          $("bookBandTitle").textContent = p.title;
+          $("bookHeroDesc").textContent = p.desc;
+          $("bookPrev").disabled = n === 1;
+          var last = n === state.total;                                  // 마지막 파트: '오늘 학습을 마쳤어요'
+          $("bookNext").classList.toggle("is-end", last);
+          $("bookNextLabel").textContent = last ? "LESSON " + LESSON.number : "NEXT · PART " + pad(n + 1);
+          $("bookNextTitle").textContent = last ? "오늘 학습을 마쳤어요" : LESSON.parts[n].title;
+          $("bookNextIcon").setAttribute("d", last ? "M20 6 9 17l-5-5" : "m9 18 6-6-6-6");
+          renderPartlist();
+          syncToolStates();
+          setTools(false);
+          scroll.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        $("bookPrev").addEventListener("click", function () { go(state.part - 1); });
+        $("bookNext").addEventListener("click", function () { go(state.part + 1); });
+
+        // 4-8 모바일 좌우 스와이프: 왼쪽 = 다음, 오른쪽 = 이전
+        (function () {
+          var x0 = 0, y0 = 0, tracking = false, horizontal = false;
+          scroll.addEventListener("touchstart", function (e) {
+            tracking = isPhone() && e.touches.length === 1; horizontal = false;
+            if (tracking) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }
+          }, { passive: true });
+          scroll.addEventListener("touchmove", function (e) {
+            if (!tracking) return;
+            var dx = e.touches[0].clientX - x0, dy = e.touches[0].clientY - y0;
+            if (!horizontal && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) horizontal = true;
+            if (horizontal) e.preventDefault();
+          }, { passive: false });
+          scroll.addEventListener("touchend", function (e) {
+            if (!tracking || !horizontal) return;
+            tracking = false;
+            var dx = e.changedTouches[0].clientX - x0;
+            if (Math.abs(dx) >= 60) go(state.part + (dx < 0 ? 1 : -1));
+          }, { passive: true });
+        })();
+
+        // 4-9 옵션(앱 · 검토 화면에서 postMessage로 전달) — 컬러 · 강사
+        function set(key, value) {
+          var root = document.documentElement;
+          if (key === "palette") { if (value) root.setAttribute("data-" + key, value); else root.removeAttribute("data-" + key); }
+          if (key === "teacher") book.toggleAttribute("data-teacher", !!value);
+        }
+        window.addEventListener("message", function (e) { var d = e.data; if (d && d.type === "review") set(d.key, d.value); });
+
+        // 4-10 자간: 한글 -0.02em, 영문·숫자 0 (20px 이상 -0.02/-0.01em, 28px 이상 -0.03/-0.02em)
+        //      한 요소에 한글·영문이 섞이면 한글 구간만 <span class="ko">로 나눠 적용. 라벨처럼 + 자간(0.4px 초과)은 유지
+        var HANGUL = /[ᄀ-ᇿ㄰-㆏가-힣]/, HANGUL_RUN = /[ᄀ-ᇿ㄰-㆏가-힣]+/g;
+        function spacing(size, ko) {
+          if (size >= 28) return ko ? "-0.03em" : "-0.02em";
+          if (size >= 20) return ko ? "-0.02em" : "-0.01em";
+          return ko ? "-0.02em" : "0";
+        }
+        function fitElement(el) {
+          if (el.closest("svg, script, style") || el.classList.contains("ko")) return;
+          var texts = [].filter.call(el.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); });
+          if (!texts.length) return;
+          var cs = getComputedStyle(el), size = parseFloat(cs.fontSize);
+          if (parseFloat(cs.letterSpacing) > 0.4) return;
+          var all = texts.map(function (t) { return t.nodeValue; }).join(""), ko = HANGUL.test(all), mixed = ko && /[A-Za-z0-9]/.test(all);
+          if (!mixed || /flex|grid/.test(cs.display)) { el.style.setProperty("letter-spacing", spacing(size, ko), "important"); return; }
+          el.style.setProperty("letter-spacing", spacing(size, false), "important");
+          texts.forEach(function (t) {
+            if (!HANGUL.test(t.nodeValue)) return;
+            t.parentNode.replaceChild(document.createRange().createContextualFragment(
+              esc(t.nodeValue).replace(HANGUL_RUN, function (m) { return '<span class="ko" style="letter-spacing:' + spacing(size, true) + ' !important">' + m + "</span>"; })), t);
+          });
+        }
+        function fitLetterSpacing(root) {
+          if (root.nodeType === 3) root = root.parentElement;
+          if (!root || root.nodeType !== 1) return;
+          fitElement(root);
+          root.querySelectorAll("*").forEach(fitElement);
+        }
+        var fitQueue = [], fitObserver = new MutationObserver(function (list) {   // 텍스트가 바뀌면(히어로·토스트·질문 보기) 다시 적용
+          list.forEach(function (m) { fitQueue.push(m.type === "characterData" ? m.target : m.target); });
+          requestAnimationFrame(function () {
+            fitObserver.disconnect();
+            fitQueue.splice(0).forEach(function (n) { if (n.isConnected) fitLetterSpacing(n); });
+            observeText();
+          });
+        });
+        function observeText() { fitObserver.observe(book, { childList: true, subtree: true, characterData: true }); }
+
+        window.Book = { go: go, set: set };
+        go(1);
+        fitLetterSpacing(book);
+        observeText();
+      })();
+    </script>
+  </body>
+</html>

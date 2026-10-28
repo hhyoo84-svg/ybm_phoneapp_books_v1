@@ -1,0 +1,52 @@
+/* ==================================================================
+   components.css — 공통 컴포넌트 — 아이콘 버튼 · 칩 · 배지 · 태그 · 면 박스 · 글래스 버튼 · 바 버튼 · 토스트. 매거진형 · 리더형 공용
+   ================================================================== */
+/* 5-1 아이콘 버튼 — 번역 · 듣기 · 답변 가이드 */
+.icon-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; color: var(--icon-default); transition: color 0.15s; }
+.icon-btn:hover, .icon-btn.is-active, .icon-btn.is-playing { color: var(--brand-interactive); }
+.icon-btn .eq { display: none; align-items: flex-end; gap: 3px; height: 16px; }
+.icon-btn.is-playing .icon { display: none; }
+.icon-btn.is-playing .eq { display: inline-flex; }
+.eq i { width: 3px; border-radius: 2px; background: currentColor; animation: eq 0.9s ease-in-out infinite; }
+.eq i:nth-child(1) { height: 8px; }
+.eq i:nth-child(2) { height: 16px; animation-delay: 0.15s; }
+.eq i:nth-child(3) { height: 11px; animation-delay: 0.3s; }
+@keyframes eq { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+.actions { display: flex; align-items: center; flex: none; margin-left: auto; }   /* 한 줄 안 오른쪽 */
+.actions-row { display: flex; justify-content: flex-end; margin-top: 10px; }        /* 항목 아래 오른쪽 */
+
+/* 5-2 칩 — 섹션 소제목 · 항목 라벨 */
+.chip { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: var(--radius-7); background: var(--chip-bg); color: var(--chip-text); font: var(--type-label); }
+
+/* 5-3 배지 — 번호(01) · 문항(Q5) */
+.badge { display: inline-grid; place-items: center; flex: none; height: 28px; min-width: 28px; border-radius: var(--radius-full); background: var(--brand-weak); color: var(--brand-strong); font: var(--type-number); font-variant-numeric: tabular-nums; }
+.badge[data-type="number"] { width: 28px; margin-right: 4px; }
+.badge[data-type="question"] { min-width: 34px; padding: 0 9px; white-space: nowrap; }
+
+/* 5-4 태그 — TIP */
+.tag { display: inline-flex; align-items: center; flex: none; padding: 2px 8px; border-radius: var(--radius-6); background: var(--brand-subtle); color: var(--brand-interactive); font: 700 12px/1.4 var(--font); }
+
+/* 5-5 면 박스 — 지문 · 시나리오 · 문장 목록 · 표현 예시 · 말풍선 공통 */
+.box { padding: 14px 16px; border-radius: var(--radius-16); background: var(--brand-subtle); }
+
+/* 5-6 글래스 버튼 — 사진 · 어두운 배경 위 (헤더 레슨 · 프린트, 표지 뒤로가기, 표지 라벨) */
+.glass-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 40px; min-width: 40px; padding: 0 9px; border-radius: var(--radius-12); background: rgba(20, 22, 40, 0.28); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: var(--text-on-dark); font: 700 12px/1 var(--font); letter-spacing: 0.06em; white-space: nowrap; transition: background 0.15s; }
+.glass-btn:hover { background: rgba(20, 22, 40, 0.42); }
+.glass-btn .icon { width: 22px; height: 22px; stroke-width: 2; }   /* 본문 아이콘(24)과 같은 굵기 */
+.glass-btn span { padding-right: 3px; }
+
+/* 5-7 바 버튼 — 하단 바 아이콘(40px, 면 없이 색만). 켜고 끄는 버튼은 켜지면 연한 원형 면 */
+.bar-btn { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-12); color: var(--control-text); transition: background 0.15s, color 0.15s; }
+.bar-btn .icon { width: 24px; height: 24px; stroke-width: 2; }   /* 본문 아이콘과 같은 크기 · 굵기 */
+.bar-btn:hover:not(:disabled), .bar-btn[aria-expanded="true"] { color: var(--brand-interactive); }
+.bar-btn.is-on { background: var(--brand-subtle); color: var(--brand-interactive); }
+.bar-btn:disabled { opacity: 0.3; }
+
+/* 5-8 토스트 */
+.toast { position: fixed; top: 14px; left: 50%; z-index: var(--z-toast); padding: 9px 18px; border-radius: var(--radius-full); background: rgba(28, 25, 23, 0.9); color: var(--text-on-dark); font: 700 12px/1.4 var(--font); white-space: nowrap; opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(-10px); transition: opacity 0.2s, transform 0.2s; }
+.toast.is-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (min-width: 640px) {
+  .icon-btn { width: 44px; height: 44px; }
+  .toast { top: 66px; }
+}

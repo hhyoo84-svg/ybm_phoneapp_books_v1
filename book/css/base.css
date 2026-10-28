@@ -1,0 +1,27 @@
+/* ==================================================================
+   base.css — 리셋 · 기본값 · 아이콘 기본 크기
+   ================================================================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+html { overflow: hidden; }
+body { background: var(--surface-default); color: var(--text-primary); font-family: var(--font); -webkit-font-smoothing: antialiased; overflow: hidden; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+button:disabled { cursor: default; }
+button:focus { outline: none; }
+button:focus-visible, [role="button"]:focus-visible { outline: 2px solid color-mix(in srgb, var(--brand-interactive) 45%, transparent); outline-offset: 2px; border-radius: 8px; }
+ul, ol { list-style: none; }
+svg { flex: none; }
+[hidden] { display: none !important; }
+::selection { background: var(--brand-weak); color: var(--brand-interactive); }
+.icon { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 태블릿 · PC (≥640px): 창 전체 스크롤 */
+@media (min-width: 640px) {
+  html { overflow-y: auto; scrollbar-gutter: stable; }
+  body { overflow: visible; }
+}
+
+/* 동작 줄이기 설정 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
