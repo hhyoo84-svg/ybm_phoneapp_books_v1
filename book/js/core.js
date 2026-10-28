@@ -1,12 +1,11 @@
 /* ======================================================================
-   core.js — 공통 — Book 네임스페이스 · 데이터 · 유틸 · 아이콘 · 토스트 · 레슨 사진 · 컬러 · 자간
-   매거진형 · 리더형 공용. 화면 틀 동작은 magazine.js(또는 reader.js)에서만 다룬다
+   core.js — Book 네임스페이스 · 데이터 · 유틸 · 아이콘 · 토스트 · 레슨 사진 · 옵션 · 자간
    ====================================================================== */
 window.Book = window.Book || {};
 (function (B) {
   "use strict";
 
-  /* 데이터 : window.BOOK_DATA (data/lesson-NN.json) — 개발 시 API 응답으로 교체 */
+  /* 데이터 : window.BOOK_DATA (data/lesson-NN.json 형식) */
   B.data = window.BOOK_DATA || {};
 
   /* 유틸 */
@@ -15,7 +14,7 @@ window.Book = window.Book || {};
   B.esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
   B.isPhone = function () { return window.innerWidth < 640; };
 
-  /* 아이콘 : data-icon="이름" 요소에 자동으로 채움. 새 아이콘은 이 표에만 추가 (24×24, stroke) */
+  /* 아이콘 : data-icon="이름" (24×24, stroke) */
   var ICON_PATHS = {
     globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
     speaker: '<path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/>',
@@ -29,6 +28,8 @@ window.Book = window.Book || {};
     left: '<path d="m15 18-6-6 6-6"/>',
     right: '<path d="m9 18 6-6-6-6"/>',
     check: '<path d="M20 6 9 17l-5-5"/>',
+    close: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    expand: '<path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/>',
   };
   B.icon = function (name) { return '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">' + ICON_PATHS[name] + "</svg>"; };
   B.fillIcons = function (root) {
@@ -45,44 +46,43 @@ window.Book = window.Book || {};
     toastTimer = setTimeout(function () { t.classList.remove("is-show"); }, 1400);
   };
 
-  /* 레슨 사진 : images/lesson-photoN.jpg
-     우선순위  1) lesson.photo  2) course.photo  3) PHOTO.mode 규칙
-     mode      "sequence" 레슨 번호 순서대로 1 → count 반복 (기본 · 같은 레슨은 항상 같은 사진, 이웃 레슨은 다른 사진)
-               "random"   열 때마다 무작위
-     count     images/ 폴더에 있는 lesson-photo 개수. 사진을 추가하면 이 숫자만 바꾼다
-     사진을 못 읽으면 data-photo를 빼고 브랜드 그라데이션으로 표시 */
-  B.PHOTO = { dir: "images/", prefix: "lesson-photo", ext: ".jpg", count: 1, mode: "sequence" };
+  /* 이미지 경로 : 파일 이름만 쓰면 폴더를 붙임. 단일 파일에서는 내장 이미지로 바꿈 */
+  B.IMAGE_DIR = { lesson: "images/lesson/", content: "images/content/" };
+  B.imageUrl = function (name, kind) {
+    var url = /\//.test(name) ? name : B.IMAGE_DIR[kind] + name;
+    return (window.BOOK_IMAGES || {})[url] || url;
+  };
+
+  /* 레슨 사진(히어로 · 표지) : lesson.photo → course.photo → mode 규칙
+     mode   "sequence" 레슨 번호 순서로 1 → count 반복 · "random" 열 때마다 무작위
+     count  images/lesson/lesson-photoN.jpg 개수 */
+  B.PHOTO = { prefix: "lesson-photo", ext: ".jpg", count: 8, mode: "sequence" };
   B.photoUrl = function (lessonNo) {
     var d = B.data, P = B.PHOTO, fixed = (d.lesson && d.lesson.photo) || (d.course && d.course.photo);
-    if (fixed) return /\//.test(fixed) ? fixed : P.dir + fixed;
+    if (fixed) return B.imageUrl(fixed, "lesson");
     var n = P.mode === "random" ? 1 + Math.floor(Math.random() * P.count) : 1 + ((Math.max(1, lessonNo) - 1) % P.count);
-    return P.dir + P.prefix + n + P.ext;
+    return B.imageUrl(P.prefix + n + P.ext, "lesson");
   };
   B.applyPhoto = function (book, lessonNo) {
     var url = B.photoUrl(lessonNo), img = new Image();
-    url = (window.BOOK_IMAGES || {})[url] || url;               // 산출물 단일 파일에서만 내장 이미지로 바꿈
-    if (!/^data:/.test(url)) url = new URL(url, document.baseURI).href;  // 절대 경로로: CSS 변수 속 상대 경로는 css/ 기준으로 풀리기 때문
+    if (!/^data:/.test(url)) url = new URL(url, document.baseURI).href;  // CSS 변수 속 상대 경로는 css/ 기준으로 풀리므로 절대 경로로
     book.style.setProperty("--lesson-photo", 'url("' + url + '")');
     img.onload = function () { book.setAttribute("data-photo", ""); };
     img.onerror = function () { book.removeAttribute("data-photo"); };
     img.src = url;
   };
 
-  /* 옵션 : 앱(WebView) · 검토 화면에서 Book.set(key, value) 또는 postMessage({ type: "review", key, value })
-     palette  "" = purple(기본) · "coral" · "green"
-     teacher  강사 계정이면 true (하단 바에 '강사 가이드' 노출)
-     photo    false면 레슨 사진 없이 브랜드 그라데이션 */
+  /* 옵션 : Book.set(key, value) 또는 postMessage({ type: "book", key, value })
+     lang "en"(purple · 기본) · "zh"(coral) · "ja"(green) / teacher 강사 계정 / photo false면 사진 없이 그라데이션 */
   B.set = function (key, value) {
     var root = document.documentElement, book = B.$("book");
-    if (key === "palette") { if (value) root.setAttribute("data-palette", value); else root.removeAttribute("data-palette"); }
+    if (key === "lang") { if (value && value !== "en") root.setAttribute("data-lang", value); else root.removeAttribute("data-lang"); }
     if (key === "teacher") book.toggleAttribute("data-teacher", !!value);
     if (key === "photo") book.toggleAttribute("data-photo", !!value);
   };
-  window.addEventListener("message", function (e) { var d = e.data; if (d && d.type === "review") B.set(d.key, d.value); });
+  window.addEventListener("message", function (e) { var d = e.data; if (d && d.type === "book") B.set(d.key, d.value); });
 
-  /* 자간 : 한글 -0.02em, 영문·숫자 0 (20px 이상 -0.02/-0.01em, 28px 이상 -0.03/-0.02em)
-     한 요소에 한글·영문이 섞이면 한글 구간만 <span class="ko">로 나눠 적용. 라벨처럼 + 자간(0.4px 초과)은 유지
-     CSS에 letter-spacing을 따로 쓰지 않는다(+ 자간 라벨 제외) */
+  /* 자간 : 한글 -0.02em, 영문 0 (20px↑ -0.02/-0.01em, 28px↑ -0.03/-0.02em). 섞인 문장은 한글만 span.ko */
   var HANGUL = /[ᄀ-ᇿ㄰-㆏가-힣]/, HANGUL_RUN = /[ᄀ-ᇿ㄰-㆏가-힣]+/g;
   function spacing(size, ko) {
     if (size >= 28) return ko ? "-0.03em" : "-0.02em";
@@ -110,7 +110,7 @@ window.Book = window.Book || {};
     fitElement(root);
     root.querySelectorAll("*").forEach(fitElement);
   }
-  B.watchLetterSpacing = function (root) {                      // 처음 한 번 + 텍스트가 바뀔 때마다(히어로 · 토스트 · 질문 보기)
+  B.watchLetterSpacing = function (root) {
     var queue = [], observer = new MutationObserver(function (list) {
       list.forEach(function (m) { queue.push(m.target); });
       requestAnimationFrame(function () {

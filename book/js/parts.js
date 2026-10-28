@@ -1,6 +1,5 @@
 /* ======================================================================
-   parts.js — 파트 본문 — 유형별 템플릿 12종 · 항목 동작(번역 · 듣기 · 답변 가이드 · 정답 · 질문 보기) · 보기 설정 적용
-   매거진형 · 리더형 공용. 데이터 형식은 data/lesson-NN.json 의 parts[]
+   parts.js — 파트 템플릿 12종 · 항목 동작 · 보기 설정 적용
    ====================================================================== */
 (function (B) {
   "use strict";
@@ -31,14 +30,16 @@
   function scenarioBox(s) {
     return '<div class="box book-scenario book-item-unit"><span class="book-box-label">' + esc(s[0]) + '</span><p class="book-read">' + esc(s[1]) + "</p>" + translation(s[2]) + actions(["translate", "listen"], "actions-row") + "</div>";
   }
-  /* 본문 그림 : picture.src가 있으면 그 사진, 없으면 레슨 사진(--lesson-photo) */
+  /* 본문 그림 : images/content/ 의 picture.src (원본 비율 그대로, 누르면 크게 보기). src 없으면 레슨 사진 */
   function picture(pic) {
     return pic.src
-      ? '<img class="book-picture" src="' + esc(pic.src) + '" alt="' + esc(pic.alt) + '" loading="lazy" />'
+      ? '<button class="book-picture-zoom" type="button" data-zoom aria-label="크게 보기: ' + esc(pic.alt) + '">' +
+          '<img class="book-picture" src="' + esc(B.imageUrl(pic.src, "content")) + '" alt="' + esc(pic.alt) + '" loading="lazy" />' +
+          '<span class="glass-btn book-zoom-hint" aria-hidden="true">' + icon("expand") + "</span></button>"
       : '<div class="book-picture" role="img" aria-label="' + esc(pic.alt) + '"></div>';
   }
 
-  /* 파트 유형 — 새 유형은 여기에 추가하고 parts.css에 블록 스타일을 둔다 */
+  /* 파트 유형 */
   var RENDER = {
     words: function (p) {
       return '<div class="book-list" data-columns="2">' + chip(p.label) + p.items.map(function (w, i) {
@@ -114,7 +115,7 @@
     },
   };
 
-  /* 파트 그리기 : 파트마다 맨 위에 강사 가이드 박스(기본 숨김) */
+  /* 파트 그리기 (맨 위 강사 가이드 박스) */
   B.renderParts = function (main, parts) {
     main.innerHTML = parts.map(function (p, i) {
       return '<section class="book-part" data-part="' + (i + 1) + '" hidden><div class="book-part-body">' +
@@ -124,7 +125,7 @@
     return main.querySelectorAll(".book-part");
   };
 
-  /* 항목 단위 동작 : 번역 · 듣기 · 답변 가이드 · 패턴 정답 · 설문 질문 보기 */
+  /* 항목 동작 : 그림 크게 보기 · 번역 · 듣기 · 답변 가이드 · 패턴 정답 · 질문 보기 */
   function unitOf(el) { return el.closest(".book-item, .book-item-unit, .book-message"); }
   function setTranslation(unit, on) {
     unit.querySelectorAll(".book-translation:not(.book-pattern-answer)").forEach(function (t) { t.hidden = !on; });
@@ -139,10 +140,12 @@
   function play(btn) {
     clearTimeout(btn._timer);
     btn.classList.add("is-playing");
-    btn._timer = setTimeout(function () { btn.classList.remove("is-playing"); }, 1800); // 실서비스: 오디오 재생 시간으로 교체
+    btn._timer = setTimeout(function () { btn.classList.remove("is-playing"); }, 1800); // TODO: 실제 오디오 재생 시간
   }
   B.bindPartActions = function (main) {
     main.addEventListener("click", function (e) {
+      var zoom = e.target.closest("[data-zoom]");
+      if (zoom) { var img = zoom.querySelector("img"); B.zoom(img.src, img.alt); return; }
       var btn = e.target.closest("[data-action], [data-reveal]");
       if (btn) {
         var unit = unitOf(btn);
@@ -158,12 +161,12 @@
         }
         return;
       }
-      var pattern = e.target.closest(".book-pattern");               // 패턴 카드: 탭해서 정답 확인
+      var pattern = e.target.closest(".book-pattern");
       if (pattern) { var a = pattern.querySelector(".book-pattern-answer"); a.hidden = !a.hidden; }
     });
   };
 
-  /* 보기 설정(가이드 · 번역 · 강사 가이드)을 한 파트에 적용 — 켠 상태 유지는 화면 틀(magazine.js)이 관리 */
+  /* 보기 설정을 한 파트에 적용 */
   B.applyToPart = function (part, key, on) {
     part.dataset[key] = on ? "1" : "";
     if (key === "guide") {

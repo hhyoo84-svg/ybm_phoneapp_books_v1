@@ -1,16 +1,16 @@
 /* ======================================================================
-   magazine.js — 매거진형 화면 틀 — 시작 · 보기 설정 유지 · 헤더/하단 바 · 표지 · 파트 목록 · 파트 이동 · 히어로 접힘 · 스와이프
-   필요 : core.js · parts.js 다음에 읽는다
+   magazine.js — 시작 · 보기 설정 · 헤더/하단 바 · 표지 · 파트 목록 · 이동 · 히어로 접힘 · 스와이프
    ====================================================================== */
 (function (B) {
   "use strict";
   var $ = B.$, pad = B.pad, esc = B.esc, icon = B.icon;
   var D = B.data, book = $("book"), scroll = $("bookScroll"), main = $("bookMain");
-  var HEADER = 56;                                                    // --header-height
+  var HEADER = 56;                                                    // = --header-height
   var lessonNo = (D.lesson && D.lesson.number) || 1;
   var state = { part: 1, total: D.parts.length };
 
-  /* 시작 : 본문 · 레슨 라벨 · 표지 문구 · 아이콘 · 레슨 사진 */
+  /* 시작 */
+  if (!document.documentElement.hasAttribute("data-lang")) B.set("lang", D.course.lang);   // 언어별 컬러 (html 속성 우선)
   var parts = B.renderParts(main, D.parts);
   B.bindPartActions(main);
   $("bookLessonLabel").textContent = "LESSON " + pad(lessonNo);
@@ -21,9 +21,7 @@
   B.applyPhoto(book, lessonNo);
   function currentPart() { return parts[state.part - 1]; }
 
-  /* 보기 설정(하단 바) : 가이드 · 번역 · 강사 가이드
-     켠 상태는 파트를 넘겨도 유지되고, 사용자가 직접 끌 때만 꺼진다(global).
-     파트 안에서 항목별 아이콘으로 따로 끄고 켤 수도 있다. */
+  /* 보기 설정 : 가이드 · 번역 · 강사 가이드 — 켜면 파트를 넘겨도 유지, 직접 끌 때만 꺼짐 */
   var global = { guide: false, translate: false, teacher: false };
   var TOAST = { guide: "가이드", translate: "번역", teacher: "강사 가이드" };
   function toggleTool(key) {
@@ -48,13 +46,13 @@
   $("bookToolGuide").addEventListener("click", function () { toggleTool("guide"); });
   $("bookToolTranslate").addEventListener("click", function () { toggleTool("translate"); });
   $("bookTeacherBtn").addEventListener("click", function () { toggleTool("teacher"); revealTeacherGuide(); });
-  function revealTeacherGuide() {                                     // 켰는데 박스가 화면 위로 지나가 있으면 보이도록 올려줌
+  function revealTeacherGuide() {                                     // 박스가 화면 위로 지나가 있으면 보이게
     var box = currentPart().querySelector(".book-teacher-guide"), top = box.getBoundingClientRect().top, limit = HEADER + 12;
     if (box.hidden || top >= limit) return;
     (B.isPhone() ? scroll : window).scrollBy({ top: top - limit, behavior: "smooth" });
   }
 
-  /* 표지 : 레슨 목차(현재 레슨만 파트 목차 펼침, 나머지는 '예정') */
+  /* 표지 : 현재 레슨만 파트 목차 펼침 */
   function setCover(open) { $("bookCover").classList.toggle("is-open", open); }
   $("bookLessons").insertAdjacentHTML("beforeend", D.lessons.map(function (l, i) {
     var current = i + 1 === lessonNo, tag = current ? 'button type="button" id="bookLessonCurrent"' : "div";
@@ -69,7 +67,29 @@
     if (b) { go(+b.dataset.part); setCover(false); }
   });
 
-  /* 파트 목록(하단 바 위로 펼침) */
+  /* 그림 크게 보기 : 처음엔 화면에 맞춤, 누르면 그 지점 기준 2배 · 다시 누르면 맞춤 */
+  var viewer = $("bookViewer"), stage = $("bookViewerStage"), viewImg = $("bookViewerImg");
+  B.zoom = function (src, alt) {
+    viewImg.src = src;
+    viewImg.alt = alt;
+    viewImg.style.width = "";
+    viewer.classList.remove("is-zoomed");
+    viewer.hidden = false;
+    $("bookViewerClose").focus();
+  };
+  function closeViewer() { viewer.hidden = true; viewImg.removeAttribute("src"); }
+  viewImg.addEventListener("click", function (e) {
+    if (viewer.classList.contains("is-zoomed")) { viewer.classList.remove("is-zoomed"); viewImg.style.width = ""; return; }
+    var r = viewImg.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    viewImg.style.width = r.width * 2 + "px";
+    viewer.classList.add("is-zoomed");
+    stage.scrollLeft = viewImg.offsetWidth * fx - stage.clientWidth / 2;
+    stage.scrollTop = viewImg.offsetHeight * fy - stage.clientHeight / 2;
+  });
+  $("bookViewerClose").addEventListener("click", closeViewer);
+  stage.addEventListener("click", function (e) { if (e.target === stage) closeViewer(); });
+
+  /* 파트 목록 */
   function setPartlist(open) {
     $("bookPartlist").classList.toggle("is-open", open);
     $("bookScrim").classList.toggle("is-open", open);
@@ -90,7 +110,7 @@
     var b = e.target.closest("[data-part]");
     if (b) { go(+b.dataset.part); setPartlist(false); }
   });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setPartlist(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { setPartlist(false); closeViewer(); } });
 
   /* 파트 이동 */
   function go(n) {
@@ -98,7 +118,7 @@
     state.part = n;
     parts.forEach(function (p, i) { p.hidden = i + 1 !== n; });
     var p = D.parts[n - 1], part = parts[n - 1];
-    Object.keys(global).forEach(function (key) {                     // 켜 둔 보기 설정을 새 파트에도 적용
+    Object.keys(global).forEach(function (key) {
       if ((part.dataset[key] === "1") !== global[key]) B.applyToPart(part, key, global[key]);
     });
     $("bookHeroEyebrow").textContent = $("bookHeaderPart").textContent = "PART " + pad(n);
@@ -118,7 +138,7 @@
   $("bookPrev").addEventListener("click", function () { go(state.part - 1); });
   $("bookNext").addEventListener("click", function () { go(state.part + 1); });
 
-  /* 히어로 접힘 : 스크롤 0 → (히어로 높이 - 헤더 높이) 구간을 --p 0 → 1 로 */
+  /* 히어로 접힘 : --p 0 → 1 */
   var ticking = 0;
   function onScroll() {
     if (ticking) return;
@@ -127,13 +147,13 @@
       var y = Math.max(scroll.scrollTop, window.scrollY || 0), range = (B.isPhone() ? 300 : 320) - HEADER;
       var p = Math.min(y / range, 1);
       book.style.setProperty("--p", p.toFixed(3));
-      book.classList.toggle("is-collapsed", p >= 0.9);              // 헤더 버튼은 아이콘만, 가운데 제목 표시
+      book.classList.toggle("is-collapsed", p >= 0.9);
     });
   }
   scroll.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  /* 모바일 좌우 스와이프 : 왼쪽 = 다음, 오른쪽 = 이전 */
+  /* 모바일 스와이프 : 왼쪽 = 다음 */
   (function () {
     var x0 = 0, y0 = 0, tracking = false, horizontal = false;
     scroll.addEventListener("touchstart", function (e) {

@@ -1,11 +1,11 @@
 /* ==================================================================
-   tokens.css — 토큰 · 웹폰트 · 컬러 테마(purple 기본 / coral / green). 색 · 글자 · 간격 값은 이 파일에서만 정의
+   tokens.css — 토큰 · 웹폰트 · 컬러 테마
    ================================================================== */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* 2-1 Brand — 기본 purple. 언어별 컬러는 3. Themes에서 이 값만 바꾼다 */
+  /* Brand — 기본 purple */
   --brand-light: #2373f4;        /* 그라데이션 시작 */
   --brand-interactive: #6d68e4;  /* 메인: 버튼·번호·링크·활성 아이콘 */
   --brand-strong: #915dd2;       /* 진한 글자 · 번호 배지 글자 */
@@ -13,7 +13,7 @@
   --brand-subtle: #f4f3fd;       /* 넓은 면: 지문·시나리오·말풍선·TIP */
   --brand-gradient: linear-gradient(135deg, #2373f4 0%, #6d68e4 24%, #915dd2 46%, #a853be 64%, #b74baa 82%, #c04695 100%);
 
-  /* 2-2 Text (웜그레이 · 진한 순) */
+  /* Text (웜그레이 · 진한 순) */
   --text-primary: #1c1917;    /* 제목 · 단어 · 영어 문장 */
   --text-body: #292524;       /* 읽는 문장(지문·대화·시나리오) */
   --text-strong-muted: #44403c;
@@ -21,19 +21,20 @@
   --text-tertiary: #6b655f;   /* 한글 해석 · 보조 라벨 */
   --text-disabled: #a3a09c;
 
-  /* 2-3 Neutral UI (쿨그레이) — 칩 · 아이콘 · 컨트롤 */
+  /* Neutral UI (쿨그레이) — 칩 · 아이콘 · 컨트롤 */
   --icon-default: #4b5466;
   --chip-text: #5b6476;
   --chip-bg: #f1f4f8;
   --control-text: #343b4b;
   --list-number: #a8a5b5;
 
-  /* 2-4 Surface · Border */
+  /* Surface · Border */
   --surface-default: #fff;
   --surface-hover: #f7f6fc;
   --border-default: #e7e5e4;
   --border-subtle: #f5f5f4;
   --scrim: rgba(20, 16, 50, 0.28);
+  --viewer-bg: rgba(12, 12, 14, 0.94);   /* 이미지 크게 보기 배경 */
   --text-on-dark: #fff;          /* 사진 · 어두운 면 · 브랜드 면 위 글자 */
   --cover-bg-top: #1c1d21;       /* 표지 배경(사진 없을 때 위) */
   --cover-bg: #0c0c0e;           /* 표지 배경 */
@@ -42,13 +43,13 @@
   --lesson-muted-desc: #a3abba;   /* 표지: 예정 레슨 설명 */
   --lesson-muted-bg: #eef0f5;     /* 표지: 예정 배지 면 */
 
-  /* 2-5 Tone — 답변 가이드(학생, 웜) · 강사 가이드(TG, 블루) */
+  /* Tone — 답변 가이드 · 강사 가이드 */
   --guide-gradient: linear-gradient(135deg, #fff8ee, #fff3e2);
   --guide-text: #b45309;
   --teacher-gradient: linear-gradient(135deg, #eef4ff, #e4edfe);
   --teacher-text: #1a5ad0;
 
-  /* 2-6 Typography — 서체는 한 벌, 자간은 js/core.js fitLetterSpacing()이 한글/영문을 나눠 적용 */
+  /* Typography — 자간은 js/core.js가 적용 */
   --font: "Plus Jakarta Sans", "Pretendard Variable", Pretendard, sans-serif;
   --type-word: 800 22px/1.2 var(--font);           /* 단어 · 표현 */
   --type-speak: 600 18px/1.6 var(--font);          /* 말해야 하는 문장(질문·Q&A·빈칸) */
@@ -57,7 +58,7 @@
   --type-label: 500 12px/1.4 var(--font);          /* 칩 · 소제목 */
   --type-number: 700 12px/1 var(--font);           /* 번호 배지 */
 
-  /* 2-7 Radius · Shadow · Size */
+  /* Radius · Shadow · Size */
   --radius-6: 6px;
   --radius-7: 7px;
   --radius-12: 12px;
@@ -75,9 +76,9 @@
   --content-width: 760px;
   --hero-height: 300px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --lesson-photo: none;        /* 레슨 사진: js/core.js Book.photo()가 .book에 url(images/lesson-photoN.jpg)로 넣음 */
+  --lesson-photo: none;        /* js/core.js가 채움 */
 
-  /* 2-8 Layer */
+  /* Layer */
   --z-hero: 6;
   --z-main: 5;
   --z-scrim: 25;
@@ -85,15 +86,12 @@
   --z-header: 36;
   --z-partlist: 40;
   --z-cover: 49;
+  --z-viewer: 55;
   --z-toast: 60;
 }
 
-/* =========================================================
-   3. Themes — 언어별 컬러 3종. 브랜드 토큰만 교체
-      기본(속성 없음) = purple · <html data-palette="coral"> · <html data-palette="green">
-      언어 ↔ 컬러 배정은 미정(영어 · 중국어 · 일본어)
-   ========================================================= */
-html[data-palette="coral"] { --brand-light: #dce8a5; --brand-interactive: #f06445; --brand-strong: #973479; --brand-weak: #fde4dc; --brand-subtle: #fff8f0;
+/* 언어별 컬러 — 영어(기본) purple · 중국어 coral <html data-lang="zh"> · 일본어 green <html data-lang="ja"> */
+html[data-lang="zh"] { --brand-light: #dce8a5; --brand-interactive: #f06445; --brand-strong: #973479; --brand-weak: #fde4dc; --brand-subtle: #fff8f0;
   --brand-gradient: linear-gradient(135deg, #973479 0%, #f06445 55%, #dce8a5 100%); }
-html[data-palette="green"] { --brand-light: #b5ee62; --brand-interactive: #0faa78; --brand-strong: #00a283; --brand-weak: #ddf3cf; --brand-subtle: #f9fcf6;
+html[data-lang="ja"] { --brand-light: #b5ee62; --brand-interactive: #0faa78; --brand-strong: #00a283; --brand-weak: #ddf3cf; --brand-subtle: #f9fcf6;
   --brand-gradient: linear-gradient(135deg, #00a283 0%, #5ed83d 60%, #b5ee62 100%); }

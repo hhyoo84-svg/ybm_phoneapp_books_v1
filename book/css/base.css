@@ -15,13 +15,12 @@ svg { flex: none; }
 ::selection { background: var(--brand-weak); color: var(--brand-interactive); }
 .icon { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* 태블릿 · PC (≥640px): 창 전체 스크롤 */
+/* 태블릿 · PC (≥640px) */
 @media (min-width: 640px) {
   html { overflow-y: auto; scrollbar-gutter: stable; }
   body { overflow: visible; }
 }
 
-/* 동작 줄이기 설정 */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
