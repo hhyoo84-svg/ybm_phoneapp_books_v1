@@ -315,7 +315,7 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   iconTo($('#rtDoneOverlay .modal-result-icon'), 'great');
   iconTo($('#rtAlertOverlay .modal-result-icon'), 'point');
   iconTo($('#popupOverlay .popup-icon-wrap'), 'speak');
-  var NOTICE = function(t){ return /점검/.test(t) ? 'tired' : /버전|업데이트/.test(t) ? 'up' : 'point'; };
+  var NOTICE = function(t){ return /새 버전/.test(t) ? 'up' : 'point'; }; /* 40 선택 업데이트만 UP(wawong-23), 41 강제 업데이트 · 43 점검 · 42 공지는 wawong-2 */
   var ni = $('#noticeIcon'), nt = $('#noticeTitle');
   if (ni && nt){
     var fixN = function(){ var k = NOTICE(nt.textContent); var cur = $('.s3-c', ni); if (cur && cur.getAttribute('data-k') === k) return; ni.classList.add('s3-ci'); ni.innerHTML = img(k); };
@@ -323,7 +323,7 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   }
   var dlg = $('#scDlg'), dt = $('#scDlgTitle');
   if (dlg && dt){
-    var DLG = { '연기 신청':'hmm', '보강 신청':'plan', '연기 취소':'hmm', '보강 취소':'hmm', '안내사항':'point', '설정 가이드':'point', '장치 테스트 정보':'point', '수업 콜 수신':'nervous', '알림 허용':'point', '알림 및 리마인더 권한 필요':'point' };
+    var DLG = { '연기 신청':'hmm', '보강 신청':'plan', '연기 취소':'hmm', '보강 취소':'hmm', '안내사항':'point', '설정 가이드':'point', '장치 테스트 정보':'point', '수업 콜 수신':'point', '알림 허용':'point', '알림 및 리마인더 권한 필요':'point' };
     var dc = document.createElement('img'); dc.className = 's3-c s3-dlg-c'; dc.alt = ''; dc.hidden = true;
     var card = $('.dialog-card', dlg); card.insertBefore(dc, card.firstChild);
     var fixD = function(){ var k = DLG[dt.textContent.trim()]; dc.hidden = !k; card.classList.toggle('s3-has-c', !!k); if (k && dc.getAttribute('data-k') !== k){ dc.setAttribute('data-k', k); dc.src = C[k]; } if (k){ dc.style.animation = 'none'; void dc.offsetWidth; dc.style.animation = ''; } };
@@ -443,6 +443,6 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   /* 빈 화면(제공되는 내용이 없을 때) : 엎드린 캐릭터 + 문구 — 스케줄 · 질문 내역 · AI 히스토리 · 보강 시간 · 연기/스킵 현황 · 교재 없음 */
   var EMPTY = '.schedule-agenda-empty, .qa-history-empty, .ai-history-list-empty, .makeup-slot-empty, .makeup-status-empty, #rtBookList > .makeup-guide:only-child';
   var emptyQ = 0;
-  function fixEmpty(){ emptyQ = 0; [].forEach.call(document.querySelectorAll(EMPTY), function(e){ if (!e.querySelector('.s3-c')){ e.classList.add('s3-empty'); e.insertAdjacentHTML('afterbegin', img('tired')); } }); }
+  function fixEmpty(){ emptyQ = 0; [].forEach.call(document.querySelectorAll(EMPTY), function(e){ if (!e.querySelector('.s3-c')){ e.classList.add('s3-empty'); e.insertAdjacentHTML('afterbegin', img('point')); } }); }
   fixEmpty(); new MutationObserver(function(){ if (!emptyQ) emptyQ = requestAnimationFrame(fixEmpty); }).observe(document.body, { childList:true, subtree:true });
 });
