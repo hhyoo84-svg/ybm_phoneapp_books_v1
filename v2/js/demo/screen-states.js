@@ -144,6 +144,8 @@
         ,'83': async function(){ await S['20'](); await w(400); click('#pmInfoBtn'); }
         ,'84': async function(){ document.querySelectorAll('#flow .classroom-step:not([hidden]) .classroom-popup-go').forEach(function(b){ b.click(); }); await w(200); var p = $('#prepEncourageText'); if (p) p.scrollIntoView({ block:'center' }); }
         ,'85': async function(){ var c = $('#ctaCorrection'); if (c) c.scrollIntoView({ block:'center' }); }
+        /* 86 : 가로 UI — 1024px 이상에서 열어야 2단으로 보임(화면 목록이 자동으로 태블릿 가로로 전환) */
+        ,'86': sched
       };
   window.addEventListener('load', async function(){
     await w(700);
