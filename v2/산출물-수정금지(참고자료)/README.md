@@ -12,7 +12,7 @@
 
 | 파일 | 용도 |
 |---|---|
-| `screens-list.html` | **화면 목록 (Screen Index)**. 85개 화면마다 기획안 ID·페이지, Figma 링크, 구현 파일을 함께 표시 |
+| `screens-list.html` | **화면 목록 (Screen Index)**. 86개 화면마다 기획안 ID·페이지, Figma 링크, 구현 파일을 함께 표시 |
 | `app.html` | 전체 조립본. 더블클릭으로 열림. `app.html?screen=번호`로 특정 화면 상태 재현 |
 
 **`산출물-수정금지(참고자료)/`** — 확인용 산출물입니다. 파일 하나만으로 열리며(CSS·JS·이미지 내장), 개발 작업은 위의 나눠진 파일 기준으로 해 주세요.
@@ -43,10 +43,12 @@ v2/
 │  ├─ components.css    공통 컴포넌트 (버튼·칩·탭·세그먼트·와옹이·인터랙션)
 │  ├─ shell.css         앱 셸 (화면 높이 고정·헤더·탭·하단 내비·네이티브)        [앱 전용]
 │  ├─ classroom.css · schedule.css · popup.css   영역별 화면
+│  ├─ schedule-wide.css 스케줄 가로 UI (가로 폭 1024px 이상)
 │  └─ settings.css      설정 · 웹뷰 자리                                         [앱 전용]
 ├─ js/
 │  ├─ core.js           공통 (블록 등록·실행, 데모 데이터, 와옹이 이미지 맵 window.S3C, 인터랙션)
 │  ├─ classroom.js · schedule.js · popup.js     영역별 동작
+│  ├─ schedule-wide.js  스케줄 가로 UI — 월간 패널 · 주차 제목 (schedule.js 의 window.__scApi 사용)
 │  ├─ shell.js          수업 콜·푸시·스플래시·공지·권한                         [앱 전용]
 │  ├─ settings.js       설정 · 웹뷰 · 로그아웃                                   [앱 전용]
 │  └─ demo/screen-states.js   ?screen=번호 상태 재현 — 실서비스에 넣지 않음
@@ -69,6 +71,7 @@ v2/
 <link rel="stylesheet" href="css/shell.css">        <!-- 앱 전용 -->
 <link rel="stylesheet" href="css/classroom.css">
 <link rel="stylesheet" href="css/schedule.css">
+<link rel="stylesheet" href="css/schedule-wide.css">  <!-- 가로 UI -->
 <link rel="stylesheet" href="css/popup.css">
 <link rel="stylesheet" href="css/settings.css">     <!-- 앱 전용 -->
 
@@ -86,6 +89,7 @@ v2/
 <script src="js/core.js"></script>
 <script src="js/classroom.js"></script>
 <script src="js/schedule.js"></script>
+<script src="js/schedule-wide.js"></script>             <!-- 가로 UI -->
 <script src="js/popup.js"></script>
 <script src="js/shell.js"></script>                   <!-- 앱 전용 -->
 <script src="js/settings.js"></script>                <!-- 앱 전용 -->
@@ -120,6 +124,13 @@ v2/
 - 이미 구현돼 있던 상태에 화면 번호만 붙였습니다 — 만족도 이미 참여(80), 전화번호 형식 오류(81), 월간 +N(82), 안내사항(83), 예습 완료 독려 문구(84), 주니어 첨삭 진입(85). Figma 프레임은 없습니다.
 - 아직 시안이 없는 화면과 범위 밖 항목은 `screens-list.html` 왼쪽 아래 목록에 정리돼 있습니다.
 
+### 스케줄 가로 UI (86) — Schedule_011/012_W1_FULL
+- **화면 폭 1024px 이상**(태블릿 가로 · PC)에서만 적용됩니다. 그보다 좁으면 기존 스케줄 그대로입니다.
+- 가로 전용 코드는 `css/schedule-wide.css` · `js/schedule-wide.js`, 마크업은 `inc/schedule.html`의 `.schedule-wide-*`(주차 제목 · 월간 패널)입니다. 모바일에서는 CSS로 숨겨집니다.
+- 왼쪽 주간 · 수업 카드 · 팝업은 모바일과 같은 코드이고 배치만 바뀝니다. 오른쪽 월간은 한 달씩, 날짜를 누르면 왼쪽이 그 날짜로 이동합니다.
+- `schedule.js`에는 연결용으로 두 가지만 추가했습니다 — `window.__scApi`(선택일 · 날짜별 수업 · 공휴일 · 주간 고정)와 주간을 그릴 때 보내는 `scweekrender` 이벤트.
+- 화면 틀(`.stage`)은 스케줄 탭일 때만 1180px까지 넓어집니다(`:has()` 사용 — iOS 15.4 · Chrome 105 이상). 클래스룸 가로 UI(12p)는 아직 없어 세로 폭 그대로입니다.
+
 ### 웹(B2B·B2C) 삽입
 - **팝업은 `position:fixed`** — 사이트 헤더·GNB의 `z-index`와 겹치지 않는지 확인해 주세요.
 - **인코딩** — 모든 파일은 UTF-8입니다. ASP 페이지가 EUC-KR(코드페이지 949)이면 한글이 깨지니 변환하거나 코드페이지를 맞춰 주세요.
@@ -143,7 +154,7 @@ v2/
 |---|---|
 | Design System | 파운데이션·컴포넌트 문서 (`DesignSystem.html`과 같은 내용) |
 | Component | 컴포넌트 원본 (`Purple DS`). **삭제·이동 금지 — 화면과 문서가 모두 이 원본을 참조** |
-| 시안 · 화면 | 01~79 화면 (프레임 번호 = `screens-list.html` 번호). 80~85는 Figma 프레임 없음 |
+| 시안 · 화면 | 01~79 화면 (프레임 번호 = `screens-list.html` 번호). 80~86은 Figma 프레임 없음 |
 | 캐릭터 | 와옹이 원본 |
 
 텍스트는 `Phone/` 텍스트 스타일(Pretendard)로 통일되어 있습니다.

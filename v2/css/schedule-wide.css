@@ -1,0 +1,96 @@
+/* ======================================================================
+   css/schedule-wide.css — 스케줄 가로 UI (가로 폭 1024px 이상) · Schedule_011/012_W1_FULL (기획안 14~15p)
+   마크업 : inc/schedule.html 의 .schedule-wide-*   동작 : js/schedule-wide.js
+   - 1024px 미만(모바일 · 세로 태블릿)은 기존 schedule.css 그대로. 이 파일의 가로 전용 요소만 숨긴다
+   - 1024px 이상 : 스케줄 탭일 때만 화면 틀을 넓혀 왼쪽(주간 · 바로가기 · 수업 목록) / 오른쪽(월간 달력) 2단
+   - 수업 카드 · 날짜 묶음 디자인은 모바일과 동일 (배치만 변경)
+   ====================================================================== */
+
+/* ---------- 가로 전용 요소 : 기본 숨김 ---------- */
+.schedule-wide-week-head, .schedule-wide-month, .schedule-wide-count{display:none;}
+
+@media (min-width:1024px){
+  /* 화면 틀 : 스케줄 탭일 때만 넓게 (클래스룸 가로 UI는 별도 — 아직 세로 폭 그대로) */
+  .stage:has(#scheduleArea:not([hidden])){max-width:1180px;}
+
+  /* 2단 배치 : 상단 과정 띠는 전체 폭, 왼쪽 열 = 주간 카드 → 바로가기 → 수업 목록, 오른쪽 열 = 월간 달력 */
+  #scheduleArea:not([hidden]){display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:auto auto 1fr; column-gap:20px; row-gap:0; align-content:start; padding:0 24px 32px; scroll-snap-type:none;}
+  #scheduleArea > *{grid-column:1; min-width:0;}
+  #scheduleArea > .schedule-topbar-card{grid-row:2;}
+  #scheduleArea > .schedule-agenda-section{grid-row:3;}
+  #scheduleArea > .month-cell-tooltip{position:fixed;}
+
+  /* 과정 띠 : 얇게, 가운데 정렬, 스크롤 고정 해제 */
+  #scheduleArea .schedule-hero{grid-column:1 / -1; position:relative; top:auto; margin:0 -24px 20px; padding:16px 24px 18px !important;}
+
+  /* 주간 카드 : 흰 카드(라운드 12) 안에 제목 줄 + 날짜 줄 */
+  #scheduleArea .schedule-hero + .schedule-topbar-card{margin:0;}
+  #scheduleArea .schedule-topbar-card{margin:0; padding:0 !important; gap:0; background:none; border:0 !important;}
+  #scheduleArea .schedule-week-topbar{position:static; margin:0; padding:18px 18px 12px; background:var(--surface-default); border-radius:12px 12px 0 0;}
+  #scheduleArea .s3-strip-row{padding:0 12px 18px; background:var(--surface-default); border-radius:0 0 12px 12px;}
+  /* 주 이동 화살표 : 날짜 줄 양옆 → 카드 제목 줄 오른쪽 */
+  #scheduleArea .schedule-topbar-card{position:relative;}
+  #scheduleArea .s3-strip-row > .schedule-step{position:absolute; top:16px; width:30px; height:30px; box-shadow:inset 0 0 0 1px var(--border-default);}
+  #scheduleArea .s3-strip-row > #scPrevBtn{right:54px;}
+  #scheduleArea .s3-strip-row > #scNextBtn{right:18px;}
+  #scheduleArea .schedule-week-label-group{flex:1; gap:8px;}
+  #scheduleArea .schedule-week-topbar .schedule-month-trigger,
+  #scheduleArea .schedule-week-topbar .schedule-today-btn,
+  #scheduleArea .schedule-view-toggle,
+  #scheduleArea .schedule-month-calendar{display:none !important;}
+  .schedule-wide-week-head{display:flex; align-items:center; gap:8px; min-width:0;}
+  .schedule-wide-week-head b{font-size:var(--font-size-16); font-weight:var(--font-weight-bold); color:var(--text-primary); white-space:nowrap;}
+  .schedule-wide-week-range{padding:2px 7px; border-radius:4px; background:var(--surface-muted); font-size:var(--font-size-12); font-weight:var(--font-weight-semibold); color:var(--text-tertiary); font-variant-numeric:tabular-nums; white-space:nowrap;}
+
+  /* 바로가기 : 주간 카드 아래 두 칸 */
+  #scQuicklinks.s3-ql{flex-direction:row; gap:10px; margin:14px 0 0 !important;}
+  #scQuicklinks.s3-ql .schedule-quicklink-item{flex:1; min-height:40px; background:var(--surface-default) !important; font-size:var(--font-size-13) !important;}
+
+  /* 수업 목록 : 날짜 묶음 오른쪽 끝에 "총 N회 수업" */
+  #scheduleArea .schedule-agenda-section{padding-top:22px;}
+  #scheduleArea .schedule-agenda-list{gap:20px;}
+  .schedule-wide-count{display:block; margin-left:auto; order:3; font-size:var(--font-size-12); font-weight:var(--font-weight-semibold); color:var(--brand-text-link);}
+
+  /* ---------- 오른쪽 : 월간 달력 ---------- */
+  .schedule-wide-month{display:flex; flex-direction:column; grid-column:2 !important; grid-row:2 / 4; align-self:start; position:sticky; top:0;
+    padding:18px 18px 16px; border-radius:12px; background:var(--surface-default);}
+  .schedule-wide-month-head{display:flex; align-items:center; gap:8px; padding-bottom:14px;}
+  .schedule-wide-month-head .schedule-step-nav{margin-left:auto; gap:6px;}
+  .schedule-wide-month-head .schedule-step{box-shadow:inset 0 0 0 1px var(--border-default);}
+  .schedule-wide-month .schedule-today-btn{display:inline-flex;}
+  .schedule-wide-month .schedule-month-weekday-row{display:grid; grid-template-columns:repeat(7,1fr); padding:0 0 8px; border-bottom:1px solid var(--border-subtle);
+    font-size:var(--font-size-12); font-weight:var(--font-weight-semibold); text-align:center; color:var(--text-tertiary);}
+  .schedule-wide-month .schedule-month-weekday-row span.sun{color:var(--text-danger);}
+  .schedule-wide-month-grid{display:grid; grid-template-columns:repeat(7,minmax(0,1fr));}
+
+  /* 날짜 칸 : 숫자 · 공휴일 이름 · 수업 칩(여러 개면 세로로) */
+  .schedule-wide-month .schedule-month-cell{height:auto; min-height:84px; margin:0; padding:8px 1px 6px; gap:3px; border-radius:0; background:none !important;}
+  .schedule-wide-month .schedule-month-cell.is-blank{visibility:hidden;}
+  .schedule-wide-month .schedule-month-cell .month-cell-num{width:26px; height:26px; font-size:var(--font-size-14); border-radius:50%;}
+  .schedule-wide-month .schedule-month-cell.sun:not(.today) .month-cell-num{color:var(--text-danger);}
+  .schedule-wide-month .schedule-month-cell.selected:not(.today) .month-cell-num{background:none; box-shadow:inset 0 0 0 1.5px var(--brand-interactive); color:var(--brand-text-link);}
+  .schedule-wide-month .schedule-month-cell .month-cell-holiday-name{font-size:10px;}
+  .schedule-wide-month .schedule-month-cell:hover .month-cell-num{background:var(--surface-muted);}
+  .schedule-wide-month .schedule-month-cell.today:hover .month-cell-num{background:var(--brand-interactive);}
+  .schedule-wide-chips{display:flex; flex-direction:column; align-items:center; gap:3px; margin-top:2px; width:100%;}
+  .schedule-wide-chips .month-cell-chip{max-width:100%; padding:2px 3px; border-radius:4px; font-size:10px; font-weight:var(--font-weight-semibold); font-variant-numeric:tabular-nums; letter-spacing:-.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+
+  /* 상태 색 : 범례와 같은 4색 (+ 결석 · 취소) */
+  .schedule-wide-month .status-attended{--sw-bg:#E6F6EE; --sw-fg:#18864B;}
+  .schedule-wide-month .status-skip, .schedule-wide-month .status-postponed{--sw-bg:var(--status-warning-weak); --sw-fg:var(--text-warning);}
+  .schedule-wide-month .status-makeup{--sw-bg:var(--brand-interactive-subtle); --sw-fg:var(--brand-text-link);}
+  .schedule-wide-month .status-upcoming{--sw-bg:var(--status-info-weak); --sw-fg:var(--text-info);}
+  .schedule-wide-month .status-absent{--sw-bg:var(--status-negative-weak); --sw-fg:var(--text-danger);}
+  .schedule-wide-month .status-cancelled{--sw-bg:var(--surface-muted); --sw-fg:var(--text-tertiary);}
+  .schedule-wide-chips .month-cell-chip{background:var(--sw-bg); color:var(--sw-fg);}
+
+  /* 하단 : 범례 · 기준시간 · 연동 안내 */
+  .schedule-wide-month-foot{display:flex; align-items:center; gap:12px; padding:14px 2px 12px;}
+  .schedule-wide-legend{display:flex; flex-wrap:wrap; gap:4px 12px; margin:0; padding:0; list-style:none; font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
+  .schedule-wide-legend li{display:flex; align-items:center; gap:5px;}
+  .schedule-wide-legend li::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--sw-fg);}
+  .schedule-wide-tz{margin-left:auto; font-size:var(--font-size-12); color:var(--text-tertiary); white-space:nowrap;}
+  .schedule-wide-sync{display:flex; align-items:center; gap:8px; margin:0; padding:10px 12px; border-radius:8px; background:var(--surface-subtle); font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
+  .schedule-wide-sync::before{content:""; flex:none; width:7px; height:7px; border-radius:50%; background:var(--brand-interactive);}
+  .schedule-wide-sync .chip{margin-left:auto;}
+}
