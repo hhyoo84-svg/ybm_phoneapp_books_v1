@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/shell.css">
 <link rel="stylesheet" href="css/classroom.css">
 <link rel="stylesheet" href="css/schedule.css">
+<link rel="stylesheet" href="css/schedule-wide.css">
 <link rel="stylesheet" href="css/popup.css">
 <link rel="stylesheet" href="css/settings.css">     <!-- 앱 전용 -->
 </head>
@@ -288,8 +289,8 @@
      inc/schedule.html
      스케줄 내용 : 과정 헤더 · 년월/TODAY · 주간·월간 달력 · 일별 수업 목록 · 연기/보강 현황·루틴 변경 바로가기
      사용 : #scheduleArea
-     CSS : schedule.css (+ tokens/base/components)
-     JS  : core.js, schedule.js
+     CSS : schedule.css, schedule-wide.css(가로 UI) (+ tokens/base/components)
+     JS  : core.js, schedule.js, schedule-wide.js(가로 UI)
      ====================================================================== -->
   <!-- ===================== 스케줄 (시안2 구조 유지) ===================== -->
   <main class="scroll-area" id="scheduleArea" hidden>
@@ -357,6 +358,32 @@
         <svg class="schedule-quicklink-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
       </button>
     </div>
+
+    <!-- ===================== 가로 UI(1024px 이상) 전용 : 월간 달력 패널 — Schedule_011/012_W1_FULL (14~15p) =====================
+         모바일 · 세로 태블릿에서는 숨김(css/schedule-wide.css). 날짜를 누르면 왼쪽 주간 · 수업 목록이 그 날짜로 이동 -->
+    <aside class="schedule-wide-month" id="scWideMonth" aria-label="월간 달력">
+      <div class="schedule-wide-month-head">
+        <button type="button" class="schedule-month-trigger" id="scWideMonthLabel" aria-haspopup="dialog" aria-label="년월 선택">
+          <span class="month-label" id="scWideMonthText"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <button type="button" class="schedule-today-btn" id="scWideToday">TODAY</button>
+        <span class="schedule-step-nav">
+          <button type="button" class="schedule-step" id="scWidePrev" aria-label="이전 달"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button type="button" class="schedule-step" id="scWideNext" aria-label="다음 달"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        </span>
+      </div>
+      <div class="schedule-month-weekday-row">
+        <span class="sun">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="sat">토</span>
+      </div>
+      <div class="schedule-wide-month-grid" id="scWideMonthGrid"></div>
+      <div class="schedule-wide-month-foot">
+        <ul class="schedule-wide-legend">
+          <li class="status-attended">출석완료</li><li class="status-skip">SKIP/연기</li><li class="status-makeup">보강수업</li><li class="status-upcoming">수업예정</li>
+        </ul>
+        <span class="schedule-wide-tz">기준시간 KST (UTC+9)</span>
+      </div>
+    </aside>
 
   </main>
   <!-- [inc/schedule.html] end -->
@@ -1334,6 +1361,7 @@
 <script src="js/core.js"></script>
 <script src="js/classroom.js"></script>
 <script src="js/schedule.js"></script>
+<script src="js/schedule-wide.js"></script>
 <script src="js/popup.js"></script>
 <script src="js/shell.js"></script>
 <script src="js/settings.js"></script>

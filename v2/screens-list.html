@@ -98,6 +98,7 @@
     <div class="seg" role="group" aria-label="기기 크기">
       <button type="button" id="devMobile" aria-pressed="true">모바일 390</button>
       <button type="button" id="devTablet" aria-pressed="false">태블릿 768</button>
+      <button type="button" id="devWide" aria-pressed="false">태블릿 가로 1024</button>
     </div>
     <button type="button" class="nav-btn" id="prevBtn" aria-label="이전 화면">← 이전</button>
     <button type="button" class="nav-btn" id="nextBtn" aria-label="다음 화면">다음 →</button>
@@ -134,7 +135,8 @@
       { sub:'주별 · 월별', items:['04','05','82','19'] },
       { sub:'레이어 팝업', items:['20','83','22','23','68','69'] },
       { sub:'연기 · 연기 취소', items:['21','64','65','66','67'] },
-      { sub:'수업 루틴 변경', items:['50','51','52','53','54','55','56','57','58','59','60','61','62','81','63'] }
+      { sub:'수업 루틴 변경', items:['50','51','52','53','54','55','56','57','58','59','60','61','62','81','63'] },
+      { sub:'가로 UI (1024px 이상)', items:['86'] }
     ]}
     ,{ grp:'설정', tab:'헤더 톱니', subs:[
       { sub:'설정 · 알림', items:['70','71','72','73','74','75'] },
@@ -233,6 +235,8 @@
   P['83'] = {n:'연기보강현황 · 안내사항', id:'Schedule_030_WEB_LP', pg:'37p', way:'WEB', node:'', d:['연기/보강 현황 하단 [안내사항] → 다이얼로그','연기 가능 시간(수업 10분 전까지) · 보강 수업 신청 기간과 조건'], note:'Figma 미작업'};
   P['84'] = {n:'TO-DO · 예습 완료 독려 문구', id:'Classroom_033_WEB_FULL', pg:'24p ① 표1', way:'WEB', node:'', d:['TO-DO 단계를 모두 마치면 진행 N/N, 독려 문구가 완료 문구로 바뀜','미완료(01): "수업의 몰입도를 높이는 스마트한 습관! …" (표1 1-1)','완료: "사전학습 완료! 꼼꼼하게 준비한 만큼 …" (표1 2-1)'], note:'표1의 단계 구성별 문구(1-2 · 1-3 · 2-2 · 2-3)는 아직 미반영 — 교재만 있는 강좌(2번 강좌)도 1-1 문구가 나옴. Figma 미작업'};
   P['85'] = {n:'첨삭(주니어) 진입', id:'Classroom_024_W2_LP', pg:'20p', way:'W2', node:'', d:['주니어 과정에서만 월말 리포트 아래에 [주니어 첨삭] 한 줄 버튼','터치 → 기존 첨삭 페이지(m.my.ybmclass.com/classroom/pop_lecture_class_phone_engFix_list.asp)'], note:'첨삭 본문은 기존 웹페이지 — 신규 디자인 없음. 시안은 새 창으로 열림(앱에서는 웹뷰). Figma 미작업'};
+  /* 86 : 가로 UI — 화면 폭 1024px 이상에서만 2단 배치. 목록에서 열면 '태블릿 가로 1024'로 보여 줌 */
+  P['86'] = {n:'스케줄 · 가로 UI', id:'Schedule_011/012_W1_FULL', pg:'14–15p', way:'W1', node:'', wide:true, d:['화면 폭 1024px 이상(태블릿 가로 · PC)에서 왼쪽 주간 · 오른쪽 월간 2단 배치','왼쪽 : 주간은 모바일과 같음(년월 · TODAY · 날짜 줄 · 주 이동), 연기/보강 현황 · 수업 루틴 변경, 날짜별 수업 목록(2회 이상이면 "총 N회 수업") — 수업 목록만 스크롤','오른쪽 : 한 달 달력 — 하루 수업을 칩으로 모두 표시(출석 · SKIP/연기 · 보강 · 예정), 범례 · 기준시간 KST','달력 날짜를 누르면 왼쪽 주간 · 목록이 그 날짜로 이동, 년월 ▾는 기존 년월 선택 시트','수업 카드 · 팝업은 모바일과 동일(배치만 변경), 주간/월간 전환 버튼은 숨김'], note:'1024px 미만(모바일 · 세로 태블릿)은 기존 스케줄 그대로. 가로 전용 코드는 css/schedule-wide.css · js/schedule-wide.js에 분리'};
   /* 기존 웹페이지를 그대로 불러오는 화면(W2) — 신규 디자인 없음 */
   var EXIST = [
     ['WebRTC_010_W2_FULL','강의실(구르미 · 외부 솔루션)','26p, 43p'],
@@ -242,7 +246,6 @@
   /* 기획안에만 있고 아직 시안이 없는 화면 */
   var TODO = [
     ['Classroom_011_W1_FULL','클래스룸 가로 UI(태블릿, 시안 확정 후)','12p'],
-    ['Schedule_011/012_W1_FULL','스케줄 가로 UI(태블릿, 시안 확정 후)','14–15p'],
     ['앱 아이콘','앱 아이콘(앱 이름 확정 후)','6p ①'],
     ['Onboarding · 자동 로그인','온보딩 / 자동 로그인(구조도에만 있음)','4p'],
     ['Classroom_023_WEB_LP','만족도 · 수업 시작 7일 이전 알럿','19p'],
@@ -258,12 +261,13 @@
   /* ---- 화면 : app.html?screen=NO 를 iframe으로 띄움 (상태 재현은 js/demo/screen-states.js) ---- */
   var ver = '4', SRC = 'app.html';
   /* 화면별 구현 파일 (v2 폴더 구조 기준) */
-  var AREA = {}; ['01','02','03','47','48','49'].forEach(function(n){ AREA[n] = 'classroom'; }); ['04','05','65','82'].forEach(function(n){ AREA[n] = 'schedule'; }); ['84','85'].forEach(function(n){ AREA[n] = 'classroom'; });
+  var AREA = {}; ['01','02','03','47','48','49'].forEach(function(n){ AREA[n] = 'classroom'; }); ['04','05','65','82'].forEach(function(n){ AREA[n] = 'schedule'; }); ['84','85'].forEach(function(n){ AREA[n] = 'classroom'; }); AREA['86'] = 'schedule-wide';
   for (var q = 33; q <= 45; q++) AREA[String(q)] = 'native';
   for (var q2 = 70; q2 <= 79; q2++) AREA[String(q2)] = 'settings';
   function files(no){ var a = AREA[no] || 'popup';
     if (a === 'classroom') return ['inc/classroom.html', 'css/classroom.css', 'js/classroom.js'];
     if (a === 'schedule') return ['inc/schedule.html', 'css/schedule.css', 'js/schedule.js'];
+    if (a === 'schedule-wide') return ['inc/schedule.html', 'css/schedule-wide.css', 'js/schedule-wide.js', '+ schedule.css · schedule.js'];
     if (a === 'native') return ['inc/native.html', 'css/shell.css', 'js/shell.js'];
     if (a === 'settings') return ['inc/settings.html', 'css/settings.css', 'js/settings.js'];
     return ['inc/popups.html', 'css/popup.css', 'js/popup.js']; }
@@ -272,7 +276,7 @@
   /* ---- 화면 표시 ---- */
   var cur = null, dev = 'mobile', frame = null;
   var screenEl = document.getElementById('screen'), device = document.getElementById('device'), loading = document.getElementById('loading');
-  function size(){ return dev === 'mobile' ? { w:390, h:844 } : { w:768, h:1024 }; }
+  function size(){ return dev === 'mobile' ? { w:390, h:844 } : dev === 'wide' ? { w:1024, h:768 } : { w:768, h:1024 }; }
   function fit(){
     var s = size(), pad = dev === 'mobile' ? 24 : 32;
     screenEl.style.width = s.w + 'px'; screenEl.style.height = s.h + 'px';
@@ -283,6 +287,9 @@
   function show(no){
     if (!P[no]) return;
     cur = no;
+    /* 가로 UI 화면은 태블릿 가로(1024)로, 그 외 화면에서 가로였으면 태블릿(768)으로 */
+    if (P[no].wide && dev !== 'wide') setDev('wide', true);
+    else if (!P[no].wide && dev === 'wide') setDev('tablet', true);
     document.querySelectorAll('.item[data-no]').forEach(function(b){ b.setAttribute('aria-current', b.dataset.no === no ? 'true' : 'false'); });
     var cb = document.querySelector('.item[data-no="' + no + '"]'); if (cb) cb.scrollIntoView({ block:'nearest' });
     document.getElementById('mobSel').value = no;
@@ -355,9 +362,10 @@
   document.getElementById('prevBtn').addEventListener('click', function(){ step(-1); });
   document.getElementById('nextBtn').addEventListener('click', function(){ step(1); });
   document.addEventListener('keydown', function(e){ if (e.target.closest && e.target.closest('select,input,textarea')) return; if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); step(1); } if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); step(-1); } });
-  function setDev(d){ dev = d; device.classList.toggle('tablet', d === 'tablet'); document.getElementById('devMobile').setAttribute('aria-pressed', d === 'mobile'); document.getElementById('devTablet').setAttribute('aria-pressed', d === 'tablet'); fit(); if (cur) show(cur); }
+  function setDev(d, keep){ dev = d; device.classList.toggle('tablet', d !== 'mobile'); document.getElementById('devMobile').setAttribute('aria-pressed', d === 'mobile'); document.getElementById('devTablet').setAttribute('aria-pressed', d === 'tablet'); document.getElementById('devWide').setAttribute('aria-pressed', d === 'wide'); fit(); if (cur && !keep) show(cur); }
   document.getElementById('devMobile').addEventListener('click', function(){ setDev('mobile'); });
   document.getElementById('devTablet').addEventListener('click', function(){ setDev('tablet'); });
+  document.getElementById('devWide').addEventListener('click', function(){ setDev('wide'); });
   window.addEventListener('resize', fit);
   fit();
   var m = (location.hash || '').match(/^#(?:v[34])?s(\d\d)$/); if (m) m = [m[0], null, m[1]];
