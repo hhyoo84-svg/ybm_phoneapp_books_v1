@@ -48,7 +48,7 @@ v2/
 ├─ js/
 │  ├─ core.js           공통 (블록 등록·실행, 데모 데이터, 와옹이 이미지 맵 window.S3C, 인터랙션)
 │  ├─ classroom.js · schedule.js · popup.js     영역별 동작
-│  ├─ schedule-wide.js  스케줄 가로 UI — 월간 패널 · 주차 제목 (schedule.js 의 window.__scApi 사용)
+│  ├─ schedule-wide.js  스케줄 가로 UI — 월간 패널 (schedule.js 의 window.__scApi 사용)
 │  ├─ shell.js          수업 콜·푸시·스플래시·공지·권한                         [앱 전용]
 │  ├─ settings.js       설정 · 웹뷰 · 로그아웃                                   [앱 전용]
 │  └─ demo/screen-states.js   ?screen=번호 상태 재현 — 실서비스에 넣지 않음
@@ -126,7 +126,7 @@ v2/
 
 ### 스케줄 가로 UI (86) — Schedule_011/012_W1_FULL
 - **화면 폭 1024px 이상**(태블릿 가로 · PC)에서만 적용됩니다. 그보다 좁으면 기존 스케줄 그대로입니다.
-- 가로 전용 코드는 `css/schedule-wide.css` · `js/schedule-wide.js`, 마크업은 `inc/schedule.html`의 `.schedule-wide-*`(주차 제목 · 월간 패널)입니다. 모바일에서는 CSS로 숨겨집니다.
+- 가로 전용 코드는 `css/schedule-wide.css` · `js/schedule-wide.js`, 마크업은 `inc/schedule.html`의 `.schedule-wide-month`(월간 패널)입니다. 왼쪽 주간은 모바일과 같고 주간/월간 버튼만 숨깁니다. 모바일에서는 CSS로 숨겨집니다.
 - 화면 높이를 위아래 꽉 채우고, **스크롤은 왼쪽 수업 목록에만** 있습니다(과정 띠 · 주간 카드 · 월간 달력 고정). 월간 달력 칸은 화면 높이에 맞춰 늘고 줄며, 높이 800px 이하에서는 여백과 칸을 줄이고 공휴일 이름은 숨깁니다(날짜는 빨간색 유지).
 - 왼쪽 주간 · 수업 카드 · 팝업은 모바일과 같은 코드이고 배치만 바뀝니다. 오른쪽 월간은 한 달씩, 날짜를 누르면 왼쪽이 그 날짜로 이동합니다.
 - `schedule.js`에는 연결용으로 두 가지만 추가했습니다 — `window.__scApi`(선택일 · 날짜별 수업 · 공휴일 · 주간 고정)와 주간을 그릴 때 보내는 `scweekrender` 이벤트.

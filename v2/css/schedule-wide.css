@@ -7,7 +7,7 @@
    ====================================================================== */
 
 /* ---------- 가로 전용 요소 : 기본 숨김 ---------- */
-.schedule-wide-week-head, .schedule-wide-month, .schedule-wide-count{display:none;}
+.schedule-wide-month, .schedule-wide-count{display:none;}
 
 @media (min-width:1024px){
   /* 화면 틀 : 스케줄 탭일 때만 넓게 (클래스룸 가로 UI는 별도 — 아직 세로 폭 그대로) */
@@ -27,24 +27,13 @@
   /* 과정 띠 : 얇게, 가운데 정렬, 스크롤 고정 해제 */
   #scheduleArea .schedule-hero{grid-column:1 / -1; position:relative; top:auto; margin:0 -24px 20px; padding:16px 24px 18px !important;}
 
-  /* 주간 카드 : 흰 카드(라운드 12) 안에 제목 줄 + 날짜 줄 */
+  /* 주간 카드 : 내용은 모바일과 같음(년월 · TODAY · 날짜 줄 양옆 화살표), 흰 카드(라운드 12)로만 감쌈. 주간/월간 버튼은 숨김 */
   #scheduleArea .schedule-hero + .schedule-topbar-card{margin:0;}
   #scheduleArea .schedule-topbar-card{margin:0; padding:0 !important; gap:0; background:none; border:0 !important;}
   #scheduleArea .schedule-week-topbar{position:static; margin:0; padding:18px 18px 12px; background:var(--surface-default); border-radius:12px 12px 0 0;}
-  #scheduleArea .s3-strip-row{padding:0 12px 18px; background:var(--surface-default); border-radius:0 0 12px 12px;}
-  /* 주 이동 화살표 : 날짜 줄 양옆 → 카드 제목 줄 오른쪽 */
-  #scheduleArea .schedule-topbar-card{position:relative;}
-  #scheduleArea .s3-strip-row > .schedule-step{position:absolute; top:16px; width:30px; height:30px; box-shadow:inset 0 0 0 1px var(--border-default);}
-  #scheduleArea .s3-strip-row > #scPrevBtn{right:54px;}
-  #scheduleArea .s3-strip-row > #scNextBtn{right:18px;}
-  #scheduleArea .schedule-week-label-group{flex:1; gap:8px;}
-  #scheduleArea .schedule-week-topbar .schedule-month-trigger,
-  #scheduleArea .schedule-week-topbar .schedule-today-btn,
+  #scheduleArea .s3-strip-row{padding:0 8px 18px; background:var(--surface-default); border-radius:0 0 12px 12px;}
   #scheduleArea .schedule-view-toggle,
   #scheduleArea .schedule-month-calendar{display:none !important;}
-  .schedule-wide-week-head{display:flex; align-items:center; gap:8px; min-width:0;}
-  .schedule-wide-week-head b{font-size:var(--font-size-16); font-weight:var(--font-weight-bold); color:var(--text-primary); white-space:nowrap;}
-  .schedule-wide-week-range{padding:2px 7px; border-radius:4px; background:var(--surface-muted); font-size:var(--font-size-12); font-weight:var(--font-weight-semibold); color:var(--text-tertiary); font-variant-numeric:tabular-nums; white-space:nowrap;}
 
   /* 바로가기 : 주간 카드 아래 두 칸 */
   #scQuicklinks.s3-ql{flex-direction:row; gap:10px; margin:14px 0 0 !important;}
@@ -89,15 +78,12 @@
   .schedule-wide-month .status-cancelled{--sw-bg:var(--surface-muted); --sw-fg:var(--text-tertiary);}
   .schedule-wide-chips .month-cell-chip{background:var(--sw-bg); color:var(--sw-fg);}
 
-  /* 하단 : 범례 · 기준시간 · 연동 안내 */
-  .schedule-wide-month-foot{display:flex; align-items:center; gap:12px; padding:14px 2px 12px;}
+  /* 하단 : 범례 · 기준시간 */
+  .schedule-wide-month-foot{display:flex; align-items:center; gap:12px; padding:14px 2px 0;}
   .schedule-wide-legend{display:flex; flex-wrap:wrap; gap:4px 12px; margin:0; padding:0; list-style:none; font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
   .schedule-wide-legend li{display:flex; align-items:center; gap:5px;}
   .schedule-wide-legend li::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--sw-fg);}
   .schedule-wide-tz{margin-left:auto; font-size:var(--font-size-12); color:var(--text-tertiary); white-space:nowrap;}
-  .schedule-wide-sync{display:flex; align-items:center; gap:8px; margin:0; padding:10px 12px; border-radius:8px; background:var(--surface-subtle); font-size:var(--font-size-12); font-weight:var(--font-weight-medium); color:var(--text-secondary);}
-  .schedule-wide-sync::before{content:""; flex:none; width:7px; height:7px; border-radius:50%; background:var(--brand-interactive);}
-  .schedule-wide-sync .chip{margin-left:auto;}
 }
 
 /* 높이가 낮은 가로 화면(800px 이하) : 위쪽 여백 · 달력 칸을 줄여 한 화면에 들어오게 */
@@ -105,7 +91,6 @@
   #scheduleArea .schedule-hero{margin-bottom:14px; padding:10px 24px 12px !important;}
   #scheduleArea .schedule-week-topbar{padding:14px 18px 8px;}
   #scheduleArea .s3-strip-row{padding-bottom:12px;}
-  #scheduleArea .s3-strip-row > .schedule-step{top:12px;}
   #scQuicklinks.s3-ql{margin-top:10px !important;}
   #scQuicklinks.s3-ql .schedule-quicklink-item{min-height:36px;}
   .schedule-wide-month{padding:14px 16px 12px;}
@@ -116,6 +101,5 @@
   .schedule-wide-month .schedule-month-cell .month-cell-holiday-name{display:none;}
   .schedule-wide-chips{gap:2px; margin-top:0;}
   .schedule-wide-chips .month-cell-chip{padding:1px 3px; line-height:1.3;}
-  .schedule-wide-month-foot{padding:8px 2px 8px;}
-  .schedule-wide-sync{padding:7px 12px;}
+  .schedule-wide-month-foot{padding:8px 2px 0;}
 }

@@ -16,15 +16,6 @@ YBMP.add(290, '스케줄 가로 UI (≥1024)', function(){
   var LABEL = { upcoming:'예정', attended:'출석', postponed:'연기', absent:'결석', cancelled:'취소', skip:'SKIP' };
   var cursor = new Date(api.today.getFullYear(), api.today.getMonth(), 1);
 
-  function md(d){ return (d.getMonth() + 1) + '.' + d.getDate(); }
-  function addDays(d, n){ var x = new Date(d); x.setDate(x.getDate() + n); return x; }
-
-  /* 왼쪽 주간 카드 제목 : "10월 3주차 스케줄" + 기간 */
-  function paintWeekHead(sel, start){
-    $('scWideWeekTitle').textContent = (sel.getMonth() + 1) + '월 ' + Math.ceil(sel.getDate() / 7) + '주차 스케줄';
-    $('scWideWeekRange').textContent = md(start) + ' – ' + md(addDays(start, 6));
-  }
-
   /* 날짜 묶음에 수업이 2개 이상이면 "총 N회 수업" */
   function paintDayCount(){
     [].forEach.call(document.querySelectorAll('#scAgendaList .schedule-day-group'), function(g){
@@ -69,7 +60,6 @@ YBMP.add(290, '스케줄 가로 UI (≥1024)', function(){
   /* 주간이 다시 그려질 때마다(주 이동 · 날짜 선택 · 강좌 변경) 월간을 선택일의 달로 맞춤 */
   document.addEventListener('scweekrender', function(e){
     var sel = e.detail.selected;
-    paintWeekHead(sel, e.detail.weekStart);
     if (!mq.matches) return;
     paintDayCount();
     cursor = new Date(sel.getFullYear(), sel.getMonth(), 1);
