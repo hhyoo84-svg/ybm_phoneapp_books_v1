@@ -177,9 +177,16 @@ YBMP.add(30, '스케줄 달력 · 년월 피커 · 주간/월간 · 화면 전�
         btn.addEventListener('click', function(e){ e.stopPropagation(); if (window.scFlow) window.scFlow(btn.getAttribute('data-act'), list[idx]); });
       });
     });
+    /* 가로 UI(schedule-wide.js)가 주간 · 선택일 변경을 받아 월간 패널을 맞춘다 */
+    document.dispatchEvent(new CustomEvent('scweekrender', { detail:{ selected:scSelectedDate, weekStart:weekStart } }));
   }
 
-  window.__scApi = { list:function(){ return SC_CLASSES; }, refresh:function(){ scRefreshCurrentView(); }, course:function(){ return courses[scCourseIndex].role; }, wd:WD_LABEL, sameDay:sameDay };
+  window.__scApi = { list:function(){ return SC_CLASSES; }, refresh:function(){ scRefreshCurrentView(); }, course:function(){ return courses[scCourseIndex].role; }, wd:WD_LABEL, sameDay:sameDay,
+    /* 가로 UI(schedule-wide.js)용 : 날짜별 수업 · 공휴일 · 선택일 · 보기 모드 */
+    today:SC_TODAY, classesOn:function(d){ return scClassesOn(d); }, holiday:scHolidayName,
+    selected:function(){ return scSelectedDate; },
+    select:function(d){ scSelectedDate = stripTime(d); if (scViewMode !== 'week') scSetViewMode('week'); else { scRenderWeek(); scRenderTopLabel(); } },
+    weekMode:function(){ if (scViewMode !== 'week') scSetViewMode('week'); } };
 
   /* 월간 보기 — 팝업이 아니라 주간 보기와 같은 자리에서 전환된다. 날짜를 클릭하면 그 날이 포함된 주간 보기로 이동 */
   function scRenderMonth(){
