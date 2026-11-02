@@ -15,7 +15,7 @@ book/
 │  └─ content/ img-N.jpg         본문 그림 (data에서 지정)
 ├─ magazine.src.html · build.py   조립 원본 · 빌드
 ├─ magazine.html                   build.py 결과 (css/ js/ images/ 참조)
-└─ 산출물-수정금지(참고자료)/       단일 파일 3종(en · zh · ja) · 이 문서 · 개발_확인사항.md
+└─ 산출물-수정금지(참고자료)/       단일 파일 3종(en · zh · ja) · 이 문서 · 개발_확인사항.md · 데이터_매칭.md
 ```
 
 | 파일 | 범위 |
@@ -89,7 +89,7 @@ book/
 course   { lang, label, title, titleEn, desc, photo }   lang: en · zh · ja (컬러) · photo는 images/lesson/ 파일 이름
 lesson   { number, photo }                        현재 레슨 · photo는 images/lesson/ 파일 이름
 lessons  [ { title, desc } ]                      표지 레슨 목차 (현재 레슨만 파트 목차 펼침)
-parts    [ { type, title, desc, teacher, ... } ]  파트 12개, type별 필드는 parts.js RENDER 참고
+parts    [ { type, title, desc, teacher, ... } ]  파트 12개, type별 필드는 데이터_매칭.md
 ```
 
 - `type`: words · qa · drills · patterns · topics · dialogue · expressions · phrases · reading · describe · respond · survey
