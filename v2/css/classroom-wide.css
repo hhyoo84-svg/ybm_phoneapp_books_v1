@@ -1,0 +1,48 @@
+/* ======================================================================
+   css/classroom-wide.css — 클래스룸 가로 UI (가로 폭 1024px 이상) · Classroom_011_W1_FULL (기획안 12p)
+   마크업 : inc/classroom.html 그대로 (.classroom-side 묶음만 사용)
+   - 1024px 미만은 기존 classroom.css 그대로
+   - 1024px 이상 : 왼쪽(강좌 · 입장 카드 · 예습) / 오른쪽(리뷰 · 리포트 · 첨삭 · 질문/만족도) 2단
+   - 카드 디자인은 모바일과 동일 (배치만 변경)
+   ====================================================================== */
+
+@media (min-width:1024px){
+  /* 가로 UI 공통 화면 틀 : 화면 높이 꽉 채움, 폭은 1280까지 (스케줄 가로 UI와 같음) */
+  body{padding-block:0;}
+  .stage{max-width:1280px; height:100dvh; border-radius:0;}
+
+  /* 2단 배치 : 왼쪽 열 = 강좌 → 입장 카드 → 예습, 오른쪽 열 = 수업 후 영역(위에서부터 이어서) */
+  #scrollArea:not([hidden]){display:grid; grid-template-columns:minmax(0,1.42fr) minmax(0,1fr); grid-template-rows:max-content max-content 1fr; column-gap:32px; row-gap:20px; align-content:start; padding:32px 32px 40px;}
+  #scrollArea > *{grid-column:1; min-width:0;}
+  #scrollArea > .course-swiper-wrap{grid-row:1;}
+  /* 강좌명 줄 : 모바일의 좌우 넘침(옆 강좌 살짝 보이기) 없이 왼쪽 열 폭 안에서만 */
+  #scrollArea > .course-swiper-wrap{overflow:hidden;}
+  #scrollArea .course-swiper{margin:0; padding:0; scroll-padding:0;}
+  #scrollArea > #liveCard{grid-row:2;}
+  #scrollArea > .timeline{display:contents;}
+  #scrollArea #prepBlock{grid-column:1; grid-row:3; align-self:stretch; min-width:0; display:flex; flex-direction:column;}
+  #scrollArea #prepBlock > .classroom-diagram{flex:1;}
+  #scrollArea .classroom-side{display:flex; flex-direction:column; gap:20px; grid-column:2; grid-row:1 / 4; align-self:stretch; min-width:0;}
+  /* 왼쪽 예습 카드와 오른쪽 마지막 카드(질문/만족도)의 아래 끝을 맞춤 — 더 짧은 쪽이 늘어남 */
+  #scrollArea .classroom-side > .home-grid:last-child{flex:1;}
+  #scrollArea .classroom-side > .home-grid:last-child > *{height:auto;}
+  #scrollArea .classroom-side > *{margin:0;}
+  #scrollArea .classroom-side .home-grid{gap:16px;}
+
+  /* 예습 로드맵 : 넓어진 카드 폭에 맞춰 왼쪽 단계는 왼쪽, 오른쪽 단계는 오른쪽으로 벌리고 세로 간격을 줄여 한 화면에 */
+  #prepBlock .classroom-diagram{padding:26px 32px 30px !important;}
+  #prepBlock .classroom-diagram .classroom-flow{margin:22px 20px 0;}
+  #prepBlock .classroom-diagram .classroom-prep-encourage{padding:10px 14px;}
+  #prepBlock .classroom-diagram .classroom-prep-encourage p{font-size:var(--font-size-13);}
+  #prepBlock .classroom-step{gap:24px;}
+  #prepBlock .classroom-step + .classroom-step{margin-top:20px;}
+  #prepBlock .classroom-step[data-align="left"]{justify-content:flex-start;}
+  #prepBlock .classroom-step[data-align="right"]{justify-content:flex-start; padding-right:12px;}  /* row-reverse 라 flex-start = 오른쪽 */
+  #prepBlock .classroom-step[data-step-id="ai"]{padding-left:80px;}
+
+  /* 강좌 넘길 때 아래 내용이 같이 밀리는 효과는 세로 화면 전용 — 가로에서는 내용만 바뀜 */
+  #scrollArea.pane-moving > #liveCard{transform:none; filter:none;}
+
+  /* 예정 · 종료 목록 : 가로 시안 없음 — 가운데 정렬로 읽기 폭 유지 */
+  #upcomingArea .class-list, #doneArea .class-list{width:100%; max-width:720px; margin-inline:auto;}
+}

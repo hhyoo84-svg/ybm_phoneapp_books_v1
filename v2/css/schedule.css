@@ -478,7 +478,7 @@
 .schedule-hero .schedule-course-menu button.s3-on{color:var(--brand-interactive) !important; font-weight:700 !important; background:var(--brand-interactive-subtle);}
 .schedule-hero .schedule-course-menu button.s3-on::after{content:""; flex:none; width:18px; height:18px; background:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/contain no-repeat;}
 #scheduleArea .schedule-hero{padding-top:22px !important; padding-bottom:24px !important;}
-.s3-mnote{display:none; position:sticky; bottom:-32px; z-index:7; margin:12px -12px -32px; padding:12px 16px 14px; text-align:center; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); background:rgba(255,255,255,.6); border-top:1px solid var(--border-default, #ECEDF1);}
+.s3-mnote{display:none; position:sticky; bottom:-32px; z-index:7; margin:12px -12px -32px; padding:12px 16px 14px; text-align:center; background:none; pointer-events:none;}
 .s3-mnote > span{display:inline-block; max-width:100%; padding:11px 16px; border-radius:14px; background:rgba(20,20,28,.92); color:#fff; font-size:13px; font-weight:500; line-height:1.45; word-break:keep-all;}
 /* 상단 강좌명 띠 : 주간·월간 모두 상단 고정 */
 #scheduleArea .schedule-hero{position:sticky; top:-20px; z-index:8;}
@@ -486,7 +486,7 @@
 .schedule-day-head .schedule-day-today{order:2;}
 /* 월간 : 세로 스크롤 */
 /* 달 이름은 상단 연·월 표시가 대신 → 표 안에서는 달 사이 구분선만 */
-.s3-mhead{grid-column:1 / -1; height:25px; margin:6px 6px 0; border-top:1px solid var(--s3-line); font-size:0; color:transparent; overflow:hidden;}
+.s3-mhead{grid-column:1 / -1; height:25px; margin:6px 6px 0; border-top:0; font-size:0; color:transparent; overflow:hidden;}
 .s3-mhead:first-child{height:4px; margin:0; border-top:0;}
 /* 스크롤 시 달 단위로 딱 멈춤 : 한 달이 한 화면에 들어오도록 칸 높이 축소 */
 #scMonthGrid .schedule-month-cell.today.s3-pulse .month-cell-num{animation:s3TodayPulse 1s ease .35s 2;}
@@ -499,7 +499,7 @@
 .month-cell-chip.time-chip{position:relative; overflow:visible; font-size:11px !important; padding:2px 5px !important; letter-spacing:-.2px;}
 .month-cell-chip.time-chip.has-more b{position:absolute; top:-9px; right:-10px; min-width:15px; height:15px; padding:0 3px; margin:0 !important; border-radius:999px; background:var(--brand-interactive); color:#fff; font-size:9px; line-height:15px; text-align:center;}
 .s3-month .schedule-week-topbar{position:sticky; top:calc(var(--s3-hero-h,0px) - 20px); z-index:6; background:var(--surface-default); margin:-18px -8px 0; padding:18px 10px 10px;} /* 주간과 같은 상단 여백(18px) */
-.s3-month .schedule-month-weekday-row{position:sticky; top:calc(var(--s3-hero-h,0px) + 41px); z-index:5; background:var(--surface-default); margin:0 -8px; padding:4px 8px 8px; border-bottom:1px solid var(--s3-line);}
+.s3-month .schedule-month-weekday-row{position:sticky; top:calc(var(--s3-hero-h,0px) + 41px); z-index:5; background:var(--surface-default); margin:0 -8px; padding:4px 8px 8px;}
 #scMonthCalendar:not([hidden]) ~ * #scQuicklinks, .s3-month #scQuicklinks, .s3-month .schedule-month-foot{display:none !important;}
 
 /* ---------- 애니메이션 키프레임 ---------- */
