@@ -28,6 +28,9 @@
   #scrollArea .classroom-side > .home-grid:last-child{flex:1;}
   #scrollArea:has(#prepBlock .classroom-step[data-step-id="review"][data-active="true"]) .classroom-side > .home-grid:last-child,
   #scrollArea:has(#prepBlock .classroom-step[data-step-id="ai"][data-active="true"]) .classroom-side > .home-grid:last-child{flex:none;}
+  /* 카드가 안 늘어나는 상태에서는 오른쪽 열 전체도 왼쪽 열 높이에 강제로 맞추지 않음(그래야 밑에 빈 공백이 안 생김) */
+  #scrollArea:has(#prepBlock .classroom-step[data-step-id="review"][data-active="true"]) .classroom-side,
+  #scrollArea:has(#prepBlock .classroom-step[data-step-id="ai"][data-active="true"]) .classroom-side{align-self:start;}
   #scrollArea .classroom-side > .home-grid:last-child > *{height:auto;}
   #scrollArea .classroom-side > *{margin:0;}
   #scrollArea .classroom-side .home-grid{gap:16px;}
