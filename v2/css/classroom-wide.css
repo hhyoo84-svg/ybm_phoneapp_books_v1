@@ -24,7 +24,10 @@
   #scrollArea #prepBlock > .classroom-diagram{flex:1;}
   #scrollArea .classroom-side{display:flex; flex-direction:column; gap:20px; grid-column:2; grid-row:1 / 4; align-self:stretch; min-width:0;}
   /* 왼쪽 예습 카드와 오른쪽 마지막 카드(질문/만족도)의 아래 끝을 맞춤 — 더 짧은 쪽이 늘어남 */
+  /* 기본(교재 단계 활성 / 전체 완료 시)엔 맞춤, 사전학습·AI학습 팝업이 열려있는 중간 진행 상태에서는 강제로 늘리지 않음 */
   #scrollArea .classroom-side > .home-grid:last-child{flex:1;}
+  #scrollArea:has(#prepBlock .classroom-step[data-step-id="review"][data-active="true"]) .classroom-side > .home-grid:last-child,
+  #scrollArea:has(#prepBlock .classroom-step[data-step-id="ai"][data-active="true"]) .classroom-side > .home-grid:last-child{flex:none;}
   #scrollArea .classroom-side > .home-grid:last-child > *{height:auto;}
   #scrollArea .classroom-side > *{margin:0;}
   #scrollArea .classroom-side .home-grid{gap:16px;}
