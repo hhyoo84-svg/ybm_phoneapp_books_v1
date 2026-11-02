@@ -446,3 +446,15 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   function fixEmpty(){ emptyQ = 0; [].forEach.call(document.querySelectorAll(EMPTY), function(e){ if (!e.querySelector('.s3-c')){ e.classList.add('s3-empty'); e.insertAdjacentHTML('afterbegin', img('point')); } }); }
   fixEmpty(); new MutationObserver(function(){ if (!emptyQ) emptyQ = requestAnimationFrame(fixEmpty); }).observe(document.body, { childList:true, subtree:true });
 });
+
+/* 모바일 세로 고정 : 가능한 환경(안드로이드 설치형 · 전체화면)에서는 방향을 잠그고, 안 되는 환경(iOS · 일반 브라우저)은 가로로 돌리면 안내 화면(.rotate-guard, shell.css)이 가림 */
+(function(){
+  try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('portrait').catch(function(){}); } catch(e){}
+  function add(){
+    if (document.querySelector('.rotate-guard')) return;
+    var g = document.createElement('div'); g.className = 'rotate-guard'; g.setAttribute('role', 'alert');
+    g.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/></svg><p>화면을 세로로 돌려 주세요</p><small>이 화면은 세로 모드에서 사용할 수 있어요</small>';
+    document.body.appendChild(g);
+  }
+  if (document.body) add(); else document.addEventListener('DOMContentLoaded', add);
+})();

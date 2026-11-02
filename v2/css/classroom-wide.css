@@ -10,6 +10,8 @@
   /* 가로 UI 공통 화면 틀 : 화면 높이 꽉 채움, 폭은 1280까지 (스케줄 가로 UI와 같음) */
   body{padding-block:0;}
   .stage{max-width:1280px; height:100dvh; border-radius:0;}
+  /* 클래스룸(수강중 · 예정 · 종료)과 스케줄은 같은 폭 — 가로 전체를 꽉 채움 */
+  .stage:has(#scrollArea:not([hidden])), .stage:has(#upcomingArea:not([hidden])), .stage:has(#doneArea:not([hidden])), .stage:has(#scheduleArea:not([hidden])){max-width:none;}
 
   /* 2단 배치 : 왼쪽 열 = 강좌 → 입장 카드 → 예습, 오른쪽 열 = 수업 후 영역(위에서부터 이어서) */
   #scrollArea:not([hidden]){display:grid; grid-template-columns:minmax(0,1.42fr) minmax(0,1fr); grid-template-rows:max-content max-content 1fr; column-gap:32px; row-gap:20px; align-content:start; padding:32px 32px 40px;}

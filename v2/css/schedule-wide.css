@@ -10,8 +10,7 @@
 .schedule-wide-month, .schedule-wide-count{display:none;}
 
 @media (min-width:1024px){
-  /* 화면 틀 : 스케줄 탭일 때만 넓게 (클래스룸 가로 UI는 별도 — 아직 세로 폭 그대로) */
-  .stage:has(#scheduleArea:not([hidden])){max-width:1180px;}
+  /* 화면 틀 폭(전체 폭)은 classroom-wide.css 의 가로 UI 공통 규칙 */
   /* 화면 높이 꽉 채움 : 위아래 여백 · 높이 제한(920) 없이 */
   body:has(#scheduleArea:not([hidden])){padding-block:0;}
   .stage:has(#scheduleArea:not([hidden])){height:100dvh; border-radius:0;}
