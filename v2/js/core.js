@@ -340,8 +340,8 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
     var r = steps.querySelector('.s3-runner');
     if (!r){ r = document.createElement('span'); r.className = 's3-runner'; r.innerHTML = '<img alt="">'; steps.appendChild(r); steps.classList.add('s3-has-run'); }
     r.setAttribute('data-k', k); r.querySelector('img').src = C[k]; r.classList.remove('arrived');
-    r.style.transition = 'none'; r.style.left = '0%'; void r.offsetWidth; r.style.transition = '';
-    requestAnimationFrame(function(){ r.style.left = (ratio * 100) + '%'; setTimeout(function(){ r.classList.add('arrived'); }, 1300); });
+    r.style.transition = 'none'; r.style.left = '10%'; void r.offsetWidth; r.style.transition = '';
+    requestAnimationFrame(function(){ r.style.left = (10 + ratio * 80) + '%';  /* 구간 막대가 10%~90% 사이 */ setTimeout(function(){ r.classList.add('arrived'); }, 1300); });
     /* 출석 = 발바닥 도장 / 연기·SKIP = 시무룩 / 결석 = 울먹 (와옹이) */
     var MARK = { attend:'paw', postpone:'sad', skip:'sad', absent:'nervous' };
     /* 데모 : 이번 달에 결석 표시가 하나도 없으면 가장 앞의 지난 출석일을 결석으로 (결석 표현 확인용) */
@@ -361,7 +361,7 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   if (attOv) new MutationObserver(function(){ if (!attOv.hidden) setTimeout(decorateAtt, 30); }).observe(attOv, { attributes:true, attributeFilter:['hidden','class'] });
   document.addEventListener('click', function(e){
     var r = e.target.closest && e.target.closest('.s3-runner'); if (r){ hop(r.querySelector('img')); return; }
-    var b = e.target.closest && e.target.closest('.att-badge'); if (!b) return;
+    var b = e.target.closest && e.target.closest('.att-step'); if (!b) return;
     var md = b.querySelector('.att-medal'); if (!md) return;
     if (b.classList.contains('on')) hop(md); else { md.classList.remove('s3-shake'); void md.offsetWidth; md.classList.add('s3-shake'); }
   });

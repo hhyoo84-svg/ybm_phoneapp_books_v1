@@ -22,8 +22,8 @@
 .book-hero::before { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; z-index: 3; height: 25px; border-radius: var(--radius-24) var(--radius-24) 0 0; background: var(--surface-default); opacity: calc(1 - var(--p) * 4); }
 .book-hero-inner { position: absolute; z-index: 4; left: var(--text-inset); right: var(--text-inset); bottom: 46px; opacity: calc(1 - var(--p) * 1.6); }
 .book-hero-eyebrow { display: block; font: 700 12px/1.4 var(--font); letter-spacing: 0.08em; opacity: 0.88; }
-.book-hero-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 6px 0 8px; font: 800 34px/1.15 var(--font); }
-.book-hero-desc { font: 400 14px/1.55 var(--font); opacity: 0.92; }
+.book-hero-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 6px 0 8px; font: 800 34px/1.15 var(--font); letter-spacing: var(--tracking-xl); }
+.book-hero-desc { font: 400 14px/1.55 var(--font); opacity: 0.92; letter-spacing: var(--tracking-ko); }
 
 /* 본문 */
 .book-main { position: relative; z-index: var(--z-main); min-height: calc(100dvh - var(--header-height) - 76px - var(--safe-bottom)); background: var(--surface-default); }
@@ -32,8 +32,8 @@
 
 /* 강사 가이드 */
 .book-teacher-guide { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; padding: 14px 16px; border-radius: var(--radius-16); background: var(--teacher-gradient); }
-.book-teacher-guide-title { font: 700 11px/1.4 var(--font); color: var(--teacher-text); }
-.book-teacher-guide-text { font: 500 14px/1.6 var(--font); color: var(--text-body); }
+.book-teacher-guide-title { font: 700 11px/1.4 var(--font); color: var(--teacher-text); letter-spacing: var(--tracking-ko); }
+.book-teacher-guide-text { font: 500 14px/1.6 var(--font); color: var(--text-body); letter-spacing: var(--tracking-ko); }
 
 /* 하단 바 */
 .book-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-dock); display: flex; align-items: center; gap: 4px; padding: 6px calc(var(--gutter) - 10px) calc(6px + var(--safe-bottom)); border-top: 1px solid var(--border-default); background: var(--surface-default); }
@@ -65,18 +65,18 @@
 .book-cover-inner { position: relative; }
 .book-cover-top { position: fixed; top: 0; left: 0; right: 0; z-index: 5; display: flex; align-items: center; max-width: var(--content-width); height: var(--header-height); margin: 0 auto; padding: 0 var(--gutter); }
 .book-cover-hero { display: flex; flex-direction: column; align-items: flex-start; padding: 100px calc(var(--gutter) + var(--card-padding)) 30px; color: var(--text-on-dark); }
-.book-cover-course { height: 30px; padding: 0 12px; border-radius: var(--radius-full); letter-spacing: 0; pointer-events: none; }
-.book-cover-title { margin-top: 18px; font: 800 34px/1.15 var(--font); }
-.book-cover-desc { margin-top: 14px; font: 400 14px/1.55 var(--font); color: rgba(255, 255, 255, 0.85); word-break: keep-all; }
+.book-cover-course { height: 30px; padding: 0 12px; border-radius: var(--radius-full); letter-spacing: var(--tracking-ko); pointer-events: none; }
+.book-cover-title { margin-top: 18px; font: 800 34px/1.15 var(--font); letter-spacing: var(--tracking-xl); }
+.book-cover-desc { margin-top: 14px; font: 400 14px/1.55 var(--font); color: rgba(255, 255, 255, 0.85); word-break: keep-all; letter-spacing: var(--tracking-ko); }
 .book-lessons { width: calc(100% - var(--gutter) * 2); max-width: calc(var(--content-width) - var(--gutter) * 2); margin: 0 auto calc(16px + var(--safe-bottom)); padding: 22px var(--card-padding) 4px; border-radius: var(--radius-20); background: var(--surface-default); }
 .book-lessons-title { margin-bottom: 14px; font: 600 13px/1.4 var(--font); color: var(--brand-interactive); }
 .book-lesson { padding: 18px 0 20px; border-top: 1px dashed var(--border-default); }
 .book-lessons-title + .book-lesson { padding-top: 4px; border-top: 0; }
 .book-lesson-head { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; column-gap: 14px; align-items: center; width: 100%; text-align: left; }
-.book-lesson-number { font: 800 28px/1 var(--font); font-variant-numeric: tabular-nums; color: var(--lesson-muted-number); }
+.book-lesson-number { font: 800 28px/1 var(--font); font-variant-numeric: tabular-nums; color: var(--lesson-muted-number); letter-spacing: var(--tracking-lg); }
 .book-lesson-text b { display: block; font: 600 18px/1.35 var(--font); color: var(--lesson-muted-text); }
-.book-lesson-text span { display: block; margin-top: 2px; font: 500 14px/1.5 var(--font); color: var(--lesson-muted-desc); }
-.book-lesson-badge { padding: 6px 10px; border-radius: var(--radius-full); background: var(--lesson-muted-bg); color: var(--lesson-muted-text); font: 700 11px/1 var(--font); font-style: normal; white-space: nowrap; }
+.book-lesson-text span { display: block; margin-top: 2px; font: 500 14px/1.5 var(--font); color: var(--lesson-muted-desc); letter-spacing: var(--tracking-ko); }
+.book-lesson-badge { padding: 6px 10px; border-radius: var(--radius-full); background: var(--lesson-muted-bg); color: var(--lesson-muted-text); font: 700 11px/1 var(--font); font-style: normal; white-space: nowrap; letter-spacing: var(--tracking-ko); }
 .book-lesson.is-current .book-lesson-number { color: var(--brand-interactive); }
 .book-lesson.is-current .book-lesson-text b { color: var(--text-primary); }
 .book-lesson.is-current .book-lesson-text span { color: var(--text-tertiary); }

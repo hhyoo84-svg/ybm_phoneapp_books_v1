@@ -25,7 +25,7 @@ book/
 | css/components.css | .icon-btn .chip .badge .tag .box .glass-btn .bar-btn .toast |
 | css/magazine.css | 헤더 · 히어로 · 본문 · 강사 가이드 · 하단 바 · 파트 목록 · 표지 · 그림 크게 보기 |
 | css/parts.css | 파트 본문 12유형 |
-| js/core.js | Book 네임스페이스 · 유틸 · 아이콘 · 토스트 · 레슨 사진 · Book.set · 자간 |
+| js/core.js | Book 네임스페이스 · 유틸 · 아이콘 · 토스트 · 레슨 사진 · Book.set |
 | js/parts.js | 파트 템플릿 · 항목 동작 · 보기 설정 적용 |
 | js/magazine.js | 시작 · 보기 설정 유지 · 이동 · 표지 · 파트 목록 · 그림 크게 보기 · 히어로 접힘 · 스와이프 |
 
@@ -36,7 +36,7 @@ book/
 3. 컬러는 언어별 3종. 영어 purple(기본) · 중국어 coral `<html data-lang="zh">` · 일본어 green `<html data-lang="ja">`. 테마는 `--brand-*` 값만 바꾼다.
 4. 글자 크기는 11 · 12 · 13 · 14 · 16 · 18 · 20 · 22 · 28만 쓴다. 예외: 히어로 · 표지 제목 34. 소수점 크기 금지.
 5. 굵기는 400 · 500 · 600 · 700 · 800. 11–12px 글자에 800 금지.
-6. 서체는 `--font` 한 벌(Plus Jakarta Sans + Pretendard). 자간은 `core.js`가 넣으므로 CSS에 letter-spacing을 쓰지 않는다. 예외: 영문 대문자 라벨의 + 자간(글래스 버튼 · PART 표기).
+6. 서체는 `--font` 한 벌(Plus Jakarta Sans + Pretendard). 자간은 CSS로만 지정한다(JS · 인라인 style 금지). 영문 · 숫자는 0(기본), 한글 문구 요소는 `--tracking-ko`(-0.02em), 큰 글자는 `--tracking-lg-en` · `--tracking-lg` · `--tracking-xl`. 한글 · 영문이 섞인 문구는 한글 기준. 예외: 영문 대문자 라벨의 + 자간(글래스 버튼 · PART 표기).
 7. 클래스: 컴포넌트는 접두어 없음, 화면 · 파트는 `book-` 접두어. 상태는 `is-open · is-on · is-active · is-playing · is-show · is-current · is-done`, 보이기/숨기기는 `hidden` 속성.
 8. 화면 폭: 모바일 기준, 640px 이상 태블릿(본문 760px 칼럼). PC는 태블릿과 같다. 미디어 쿼리는 `min-width: 640px` 하나만 쓴다.
 9. 아이콘은 `core.js` ICON_PATHS에만 추가하고 `data-icon="이름"`으로 넣는다. 24×24, 선 2px. 예외: 질문 보기 버튼 16px · 1.5px.

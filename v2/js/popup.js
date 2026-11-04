@@ -1345,12 +1345,12 @@ YBMP.add(220, '수업 루틴 변경 · 교재 변경 · 전화번호 변경', fu
   };
 });
 
-/* 17p 출석현황 고도화 (add_attend) — 데모 값: 연속 5회, 최고 7회. 연속은 '수업한 날' 기준(연기·SKIP은 유지, 결석만 0) */
+/* 17p 출석현황 고도화 (add_attend) — 데모 값: 연속 5회. 연속은 '수업한 날' 기준(연기·SKIP은 유지, 결석만 0) */
 YBMP.add(230, '출석현황 고도화(연속 출석 · 배지 · 도장)', function(){
   var $ = function(id){ return document.getElementById(id); };
   var LOCK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" aria-hidden=\"true\"><rect x=\"5\" y=\"11\" width=\"14\" height=\"9\" rx=\"0\"/><path d=\"M8 11V8a4 4 0 0 1 8 0v3\"/></svg>", CHECK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 13l4 4L19 7\"/></svg>", FLAME = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"square\" stroke-linejoin=\"miter\" aria-hidden=\"true\"><path d=\"M12 3c.5 3.2 4.5 5 4.5 9.6A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.4c0-1.9 1-3.2 2-4 .2 1.5 1 2.4 2 2.7C11 9 11.2 6 12 3z\"/><path d=\"M8 20h8\"/></svg>";
   var STEPS = YBMP.demo.attendanceSteps;
-  var STREAK = 5, BEST = 7;
+  var STREAK = 5;
   var WD = ['일','월','화','수','목','금','토'];
   var LESSONS = YBMP.demo.attendanceLessons;
   var body = $('attBody'), panel = body.querySelector('.attendance-cal-panel');
@@ -1361,25 +1361,23 @@ YBMP.add(230, '출석현황 고도화(연속 출석 · 배지 · 도장)', funct
   if (prog) panel.appendChild(prog); if (stats) panel.appendChild(stats);
 
   function renderTop(){
-    $('attStreakN').textContent = STREAK; $('attBest').textContent = BEST;
-    var i = 0; while (i < STEPS.length - 1 && STREAK >= STEPS[i + 1][0]) i++;
+    $('attStreakN').textContent = STREAK;
+    /* 진행률(%)은 강좌 전체 횟수 기준. 배지 구간 = 시작 0% → 25% → 50% → 75% → 완강 100% */
+    var A = YBMP.demo.attendance, pct = Math.round(A.progressDone / A.progressTotal * 100);
+    var i = 0; while (i < STEPS.length - 1 && pct >= STEPS[i + 1][0]) i++;
     var next = STEPS[i + 1];
-    $('attStreakSub').innerHTML = next ? '다음 배지 <b>‘' + next[1] + '’</b>까지 <b>' + (next[0] - STREAK) + '회</b> 남았어요' : '모든 배지를 모았어요. 꾸준함이 최고의 실력이에요!';
-    var seg = 100 / (STEPS.length - 1), pos = next ? (i + (STREAK - STEPS[i][0]) / (next[0] - STEPS[i][0])) * seg : 100;
+    var left = next ? Math.ceil(A.progressTotal * next[0] / 100) - A.progressDone : 0;
+    $('attStreakSub').innerHTML = '진행률 <b>' + pct + '%</b> · ' + (next ? '다음 배지까지 <b>' + left + '회</b> 남았어요' : '모든 배지를 모았어요. 꾸준함이 최고의 실력이에요!');
     var wrap = $('attSteps'); wrap.querySelectorAll('.att-step').forEach(function(x){ x.remove(); });
     STEPS.forEach(function(st, k){
-      var on = STREAK >= st[0], isNext = next && k === i + 1;
+      var on = pct >= st[0], isNext = next && k === i + 1;
+      var face = k === 0 ? FLAME.replace('<svg', '<svg style="width:22px;height:22px"') : k === STEPS.length - 1 ? '<b>완강</b>' : '<b>' + st[0] + '</b><small>%</small>';
       var el = document.createElement('div'); el.className = 'att-step' + (on ? ' on' : '') + (isNext ? ' next' : '');
-      el.style.left = (k * seg) + '%';
-      el.innerHTML = '<i>' + (on ? CHECK : LOCK) + '</i><span>' + (st[0] ? st[0] + '회' : '시작') + '</span>';
+      el.innerHTML = '<span class="att-medal">' + face + (on ? '' : '<span class="lk">' + LOCK + '</span>') + '</span><span class="att-step-name">' + st[1] + '</span>';
       wrap.appendChild(el);
     });
     var fill = $('attStepsFill'); fill.style.transition = 'none'; fill.style.transform = 'scaleX(0)';
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){ fill.style.transition = ''; fill.style.transform = 'scaleX(' + (pos / 100) + ')'; }); });
-    $('attBadges').innerHTML = STEPS.map(function(st){
-      var on = STREAK >= st[0];
-      return '<div class="att-badge' + (on ? ' on' : '') + '"><span class="att-medal">' + (st[0] ? '<b>' + st[0] + '</b><small>회</small>' : FLAME.replace('<svg', '<svg style="width:24px;height:24px"')) + (on ? '' : '<span class="lk">' + LOCK + '</span>') + '</span><span>' + st[1] + '</span></div>';
-    }).join('');
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ fill.style.transition = ''; fill.style.transform = 'scaleX(' + (Math.min(pct, 100) / 100) + ')'; }); });
   }
   /* 달력 도장 : 지난 수업일 중 최근 STREAK회는 출석, 그 앞은 결석 1회·연기 1회 순으로 데모 */
   var info = {};

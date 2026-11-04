@@ -10,7 +10,7 @@
 .book-test-label { display: block; margin-bottom: 10px; font: 600 13px/19px var(--font); color: var(--brand-interactive); }
 * + .book-test-label { margin-top: 36px; }
 .book-test-label:first-child, .book-teacher-guide + .book-test-label { margin-top: 0; }
-.book-translation { margin-top: 6px; font: var(--type-translation); color: var(--text-tertiary); animation: reveal 0.25s ease; }
+.book-translation { margin-top: 6px; font: var(--type-translation); color: var(--text-tertiary); animation: reveal 0.25s ease; letter-spacing: var(--tracking-ko); }
 @keyframes reveal { from { opacity: 0; transform: translateY(-2px); } }
 .book-tip { display: flex; align-items: center; gap: 7px; margin-top: 8px; }
 .book-tip-text { flex: 1; min-width: 0; font: 500 14px/1.55 var(--font); color: var(--text-secondary); }
@@ -18,7 +18,7 @@
 .book-indent { padding-left: 32px; }
 
 /* 단어 · 표현 (Part 1 · 7) */
-.book-word-text { flex: 1; min-width: 0; font: var(--type-word); }
+.book-word-text { flex: 1; min-width: 0; font: var(--type-word); letter-spacing: var(--tracking-lg-en); }
 .book-word .book-translation { margin-top: 8px; }
 .book-example { margin-top: 9px; font: italic var(--type-read); color: var(--text-tertiary); }
 
@@ -37,6 +37,7 @@
 .book-sentence { font: var(--type-speak); text-wrap: pretty; }
 .book-blank { display: inline-block; min-width: 38px; height: 1em; margin: 0 1px; border-bottom: 2px solid var(--brand-interactive); vertical-align: baseline; }
 .book-drill .book-translation, .book-pattern-answer { margin-top: 8px; }
+.book-pattern-answer { letter-spacing: 0; }
 .book-pattern { cursor: pointer; }
 .book-pattern-row { display: flex; align-items: flex-start; gap: 8px; }
 .book-pattern-body { flex: 1; min-width: 0; }
@@ -50,18 +51,19 @@
 .book-question-text.is-hidden-question { font: italic var(--type-read); color: var(--text-secondary); }
 .book-question .book-translation, .book-passage .book-translation { margin-top: 8px; }
 .book-reveal-btn { display: flex; align-items: center; gap: 4px; flex: none; padding: 4px 2px; color: var(--text-disabled); font: 600 12px/1.4 var(--font); white-space: nowrap; }
+.book-reveal-btn span { letter-spacing: var(--tracking-ko); }
 .book-reveal-btn .icon { width: 16px; height: 16px; stroke-width: 1.5; }
 
 /* 답변 가이드 · 브레인스토밍 (학생용, 웜톤) */
 .book-answer-guide { margin-top: 10px; padding: 12px 14px; border-radius: var(--radius-14); background: var(--guide-gradient); }
-.book-answer-guide-title { margin-bottom: 6px; font: 700 11px/1.4 var(--font); color: var(--guide-text); }
+.book-answer-guide-title { margin-bottom: 6px; font: 700 11px/1.4 var(--font); color: var(--guide-text); letter-spacing: var(--tracking-ko); }
 .book-answer-guide-en { font: 600 16px/1.6 var(--font); color: var(--text-body); }
-.book-answer-guide-kr { margin-top: 5px; font: 400 14px/1.5 var(--font); color: var(--text-tertiary); }
+.book-answer-guide-kr { margin-top: 5px; font: 400 14px/1.5 var(--font); color: var(--text-tertiary); letter-spacing: var(--tracking-ko); }
 .book-brainstorm { margin-top: 14px; padding: 16px; border-radius: var(--radius-16); background: var(--guide-gradient); }
 .book-brainstorm-title { margin-bottom: 12px; font: 700 13px/1.4 var(--font); color: var(--text-body); }
 .book-brainstorm-group + .book-brainstorm-group { margin-top: 14px; }
-.book-brainstorm-group h5 { margin-bottom: 6px; font: 700 11px/1.4 var(--font); color: var(--guide-text); }
-.book-brainstorm-group p { margin-bottom: 4px; font: 500 14px/1.6 var(--font); color: var(--text-strong-muted); }
+.book-brainstorm-group h5 { margin-bottom: 6px; font: 700 11px/1.4 var(--font); color: var(--guide-text); letter-spacing: var(--tracking-ko); }
+.book-brainstorm-group p { margin-bottom: 4px; font: 500 14px/1.6 var(--font); color: var(--text-strong-muted); letter-spacing: var(--tracking-ko); }
 
 /* 대화 (Part 6) */
 .book-dialogue { display: flex; flex-direction: column; gap: 12px; }
@@ -81,6 +83,7 @@
 .book-passage .actions-row { margin-top: 14px; }
 .book-phrases + .book-phrases { margin-top: 18px; }
 .book-phrases .book-tip { margin-top: 0; }
+.book-phrases .book-tip-text { letter-spacing: var(--tracking-ko); }
 .book-phrases .box { margin-top: 8px; border-radius: var(--radius-14); }
 .book-phrases ul { display: flex; flex-direction: column; gap: 6px; }
 .book-sentence-grid { display: grid; gap: 10px; margin-bottom: 16px; }

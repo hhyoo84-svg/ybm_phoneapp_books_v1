@@ -176,5 +176,4 @@
 
   B.go = go;
   go(1);
-  B.watchLetterSpacing(book);
 })(window.Book);

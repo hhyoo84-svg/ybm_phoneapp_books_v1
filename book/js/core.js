@@ -1,5 +1,5 @@
 /* ======================================================================
-   core.js — Book 네임스페이스 · 데이터 · 유틸 · 아이콘 · 토스트 · 레슨 사진 · 옵션 · 자간
+   core.js — Book 네임스페이스 · 데이터 · 유틸 · 아이콘 · 토스트 · 레슨 사진 · 옵션
    ====================================================================== */
 window.Book = window.Book || {};
 (function (B) {
@@ -81,46 +81,4 @@ window.Book = window.Book || {};
     if (key === "photo") book.toggleAttribute("data-photo", !!value);
   };
   window.addEventListener("message", function (e) { var d = e.data; if (d && d.type === "book") B.set(d.key, d.value); });
-
-  /* 자간 : 한글 -0.02em, 영문 0 (20px↑ -0.02/-0.01em, 28px↑ -0.03/-0.02em). 섞인 문장은 한글만 span.ko */
-  var HANGUL = /[ᄀ-ᇿ㄰-㆏가-힣]/, HANGUL_RUN = /[ᄀ-ᇿ㄰-㆏가-힣]+/g;
-  function spacing(size, ko) {
-    if (size >= 28) return ko ? "-0.03em" : "-0.02em";
-    if (size >= 20) return ko ? "-0.02em" : "-0.01em";
-    return ko ? "-0.02em" : "0";
-  }
-  function fitElement(el) {
-    if (el.closest("svg, script, style") || el.classList.contains("ko")) return;
-    var texts = [].filter.call(el.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); });
-    if (!texts.length) return;
-    var cs = getComputedStyle(el), size = parseFloat(cs.fontSize);
-    if (parseFloat(cs.letterSpacing) > 0.4) return;
-    var all = texts.map(function (t) { return t.nodeValue; }).join(""), ko = HANGUL.test(all), mixed = ko && /[A-Za-z0-9]/.test(all);
-    if (!mixed || /flex|grid/.test(cs.display)) { el.style.setProperty("letter-spacing", spacing(size, ko), "important"); return; }
-    el.style.setProperty("letter-spacing", spacing(size, false), "important");
-    texts.forEach(function (t) {
-      if (!HANGUL.test(t.nodeValue)) return;
-      t.parentNode.replaceChild(document.createRange().createContextualFragment(
-        B.esc(t.nodeValue).replace(HANGUL_RUN, function (m) { return '<span class="ko" style="letter-spacing:' + spacing(size, true) + ' !important">' + m + "</span>"; })), t);
-    });
-  }
-  function fitLetterSpacing(root) {
-    if (root.nodeType === 3) root = root.parentElement;
-    if (!root || root.nodeType !== 1) return;
-    fitElement(root);
-    root.querySelectorAll("*").forEach(fitElement);
-  }
-  B.watchLetterSpacing = function (root) {
-    var queue = [], observer = new MutationObserver(function (list) {
-      list.forEach(function (m) { queue.push(m.target); });
-      requestAnimationFrame(function () {
-        observer.disconnect();
-        queue.splice(0).forEach(function (n) { if (n.isConnected) fitLetterSpacing(n); });
-        observe();
-      });
-    });
-    function observe() { observer.observe(root, { childList: true, subtree: true, characterData: true }); }
-    fitLetterSpacing(root);
-    observe();
-  };
 })(window.Book);

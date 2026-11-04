@@ -49,7 +49,7 @@
   --teacher-gradient: linear-gradient(135deg, #eef4ff, #e4edfe);
   --teacher-text: #1a5ad0;
 
-  /* Typography — 자간은 js/core.js가 적용 */
+  /* Typography — 자간: 영문 · 숫자 기본 0, 한글 문구는 --tracking-ko */
   --font: "Plus Jakarta Sans", "Pretendard Variable", Pretendard, sans-serif;
   --type-word: 800 22px/1.2 var(--font);           /* 단어 · 표현 */
   --type-speak: 600 18px/1.6 var(--font);          /* 말해야 하는 문장(질문·Q&A·빈칸) */
@@ -57,6 +57,10 @@
   --type-translation: 500 14px/1.5 var(--font);    /* 한글 해석 */
   --type-label: 500 12px/1.4 var(--font);          /* 칩 · 소제목 */
   --type-number: 700 12px/1 var(--font);           /* 번호 배지 */
+  --tracking-ko: -0.02em;      /* 한글 문구 (해석 · 안내 · 칩 · 가이드) */
+  --tracking-lg-en: -0.01em;   /* 영문 20px 이상 (단어) */
+  --tracking-lg: -0.02em;      /* 28px 숫자 (레슨 번호) */
+  --tracking-xl: -0.02em;      /* 34px 제목 (히어로 · 표지) */
 
   /* Radius · Shadow · Size */
   --radius-6: 6px;
