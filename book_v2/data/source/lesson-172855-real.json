@@ -1,0 +1,396 @@
+{
+  "course": {
+    "lang": "en",
+    "label": "전화영어",
+    "title": "워킹홀리데이 취업 인사이더",
+    "titleEn": "",
+    "desc": "",
+    "photo": null
+  },
+  "lesson": {
+    "number": 1,
+    "photo": null,
+    "closing": [
+      "You did a wonderful job today!<br>Enjoy the rest of your day and I will see you at the next class.<br><br>Bye-Bye!",
+      "수고하셨습니다.<br>클래스룸으로 이동하셔서 오늘 학습한 내용을<br>확인해보세요!"
+    ]
+  },
+  "lessons": [
+    {
+      "title": "Setting Up a Mobile Phone (Asking for Help)",
+      "desc": "핸드폰 개통 (도움 요청하기)"
+    },
+    {
+      "title": "Lesson 2",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 3",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 4",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 5",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 6",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 7",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 8",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 9",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 10",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 11",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 12",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 13",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 14",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 15",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 16",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 17",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 18",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 19",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 20",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 21",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 22",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 23",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 24",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 25",
+      "desc": ""
+    },
+    {
+      "title": "Lesson 26",
+      "desc": ""
+    }
+  ],
+  "parts": [
+    {
+      "title": "Vocabulary Check",
+      "desc": "그럼 먼저 단어의 스펠링과 뜻을 확인하며 읽어볼까요?<br>강사님과 함께 발음 또한 교정해봅니다.",
+      "teacher": "",
+      "blocks": [
+        {
+          "type": "words",
+          "items": [
+            [
+              "SIM card                                    \n                                ",
+              "유심"
+            ],
+            [
+              "Mobile plan                                    \n                                ",
+              "요금제"
+            ],
+            [
+              "Prepaid                                    \n                                ",
+              "선불"
+            ],
+            [
+              "Monthly plan                                    \n                                ",
+              "월 요금제"
+            ],
+            [
+              "BYOD (Bring Your Own Device) plan                                    \n                                ",
+              "자급제 요금제"
+            ],
+            [
+              "Data                                    \n                                ",
+              "데이터"
+            ],
+            [
+              "Contract                                    \n                                ",
+              "약정, 계약"
+            ],
+            [
+              "ID                                    \n                                ",
+              "신분증"
+            ],
+            [
+              "Activate                                    \n                                ",
+              "개통하다"
+            ],
+            [
+              "Set up                                    \n                                ",
+              "개통하다, 세팅하다"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Dialogue Speaking 1",
+      "desc": "이제 대화문에 대한 연습을 시작해볼까요?<br>강사님과 함께 역할을 바꿔가며 대화해봅니다.",
+      "teacher": "",
+      "blocks": [
+        {
+          "type": "dialogue",
+          "items": [
+            [
+              "gray",
+              "A",
+              "Hi, how can I help you today?"
+            ],
+            [
+              "blue",
+              "B",
+              "I’d like to set up a new SIM card, please."
+            ],
+            [
+              "gray",
+              "A",
+              "Sure. What kind of plan are you looking for?"
+            ],
+            [
+              "blue",
+              "B",
+              "I’m looking for a prepaid plan."
+            ],
+            [
+              "gray",
+              "A",
+              "Okay. Do you already have a phone?"
+            ],
+            [
+              "blue",
+              "B",
+              "Yes, I do. I have my own phone."
+            ],
+            [
+              "gray",
+              "A",
+              "Great. So you’re looking for a BYOD plan."
+            ],
+            [
+              "blue",
+              "B",
+              "Yes, that’s right."
+            ],
+            [
+              "gray",
+              "A",
+              "No problem. I can help you with that."
+            ],
+            [
+              "blue",
+              "B",
+              "Thank you."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Pattern Drill 1",
+      "desc": "이제 문장의 패턴에 대해 알아볼까요?<br>(Vocabulary Tip)의 단어 하나를 골라 빈칸을 채워가며 말해봅니다.",
+      "teacher": "",
+      "blocks": [
+        {
+          "type": "qa",
+          "items": [
+            [
+              "<font color=\"#05A0FF\">플랜 요청하기</font>\n\nQ: What kind of plan are you looking for?\n\nA: I’m looking for (           ).\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">Vocabulary Tip</span>\n- a prepaid plan \n- a monthly plan \n- a BYOD plan \n                                    \n                                </p>",
+              ""
+            ],
+            [
+              "<font color=\"#05A0FF\">개통 요청하기</font>\n\nQ: How can I help you today?\n\nA: I’d like to set up (           ).\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">Vocabulary Tip</span>\n- a new SIM card \n- a new mobile plan \n- a BYOD plan \n                                    \n                                </p>",
+              ""
+            ],
+            [
+              "<font color=\"#05A0FF\">본인 기기 여부 말하기</font>\n\nQ: Do you already have a phone?\n\nA: Yes, I do. I have (            ).\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">Vocabulary Tip</span>\n- my own phone \n- an iPhone \n- a Samsung phone \n                                    \n                                </p>",
+              ""
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Dialogue Speaking 2",
+      "desc": "이번에는 다른 패턴의 대화문을 연습해볼까요?<br>강사님과 함께 역할을 바꿔가며 대화해봅니다.",
+      "teacher": "",
+      "blocks": [
+        {
+          "type": "dialogue",
+          "items": [
+            [
+              "gray",
+              "A",
+              "Okay, I can help you with that. Do you have your ID with you?"
+            ],
+            [
+              "blue",
+              "B",
+              "Yes, I do."
+            ],
+            [
+              "gray",
+              "A",
+              "Great. Would you like to activate it today?"
+            ],
+            [
+              "blue",
+              "B",
+              "Yes, I’d like to activate it today."
+            ],
+            [
+              "gray",
+              "A",
+              "Are you looking for prepaid or monthly?"
+            ],
+            [
+              "blue",
+              "B",
+              "I’m looking for a monthly plan."
+            ],
+            [
+              "gray",
+              "A",
+              "Do you need a contract, or would you prefer no contract?"
+            ],
+            [
+              "blue",
+              "B",
+              "I’d prefer no contract."
+            ],
+            [
+              "gray",
+              "A",
+              "No problem. How much data do you need?"
+            ],
+            [
+              "blue",
+              "B",
+              "I need 10GB."
+            ],
+            [
+              "gray",
+              "A",
+              "Perfect. I can set that up for you now."
+            ],
+            [
+              "blue",
+              "B",
+              "Great, thank you."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Pattern Drill 2",
+      "desc": "이제 문장의 패턴에 대해 알아볼까요?<br>(Vocabulary Tip)의 단어 하나를 골라 빈칸을 채워가며 말해봅니다.",
+      "teacher": "",
+      "blocks": [
+        {
+          "type": "qa",
+          "items": [
+            [
+              "<font color=\"#05A0FF\">오늘 개통 요청하기</font>\n\nQ: Would you like to activate it today?\n\nA: Yes, I’d like to (           ).\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">Vocabulary Tip</span>\n- activate it today \n- start today \n- use it right away \n                                    \n                                </p>",
+              ""
+            ],
+            [
+              "<font color=\"#05A0FF\">플랜 종류 선택하기</font>\n\nQ: Are you looking for prepaid or monthly?\n\nA: I’m looking for (           ).\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">Vocabulary Tip</span>\n- prepaid \n- a monthly plan \n- a BYOD monthly plan \n                                    \n                                </p>",
+              ""
+            ],
+            [
+              "<font color=\"#05A0FF\">계약 조건 말하기</font>\n\nQ: Do you need a contract, or would you prefer no contract?\n\nA: I’d prefer (            ).\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">Vocabulary Tip</span>\n- no contract \n- a prepaid option \n- a flexible plan \n                                    \n                                </p>",
+              ""
+            ],
+            [
+              "<font color=\"#05A0FF\">데이터 필요량 말하기</font>\n\nQ: How much data do you need?\n\nA: I need (                                    ).\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">Vocabulary Tip</span>\n- 5GB \n- 10GB \n- unlimited data \n                                    \n                                </p>",
+              ""
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Talking about Yourself",
+      "desc": "마지막으로 자유로운 대화시간을 가져볼까요?<br>아래의 질문들에 답하며 강사님과 함께 대화를 이어가 봅니다.",
+      "teacher": "",
+      "blocks": [
+        {
+          "type": "qa",
+          "items": [
+            [
+              "Tutor (Agent): Hello! How can I help you today?\n\nStudent: (새로운 유심을 개통하고 싶다고 말하세요.)\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">예상 답변</span>\nI’d like to _____________.                                    \n                                </p>",
+              ""
+            ],
+            [
+              "Tutor (Agent): Sure! Do you already have a phone, or do you need to buy one?\n\nStudent: (내 기기가 있다고 대답하세요.)\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">예상 답변</span>\nYes, I do. I have _____________.                                    \n                                </p>",
+              ""
+            ],
+            [
+              "Tutor (Agent): Great, so you need a BYOD plan. Are you looking for prepaid or monthly? And do you need a contract?\n\nStudent: (월 요금제를 찾고 있으며, 약정은 없었으면 좋겠다고 말하세요.)\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">예상 답변</span>\nI’m looking for _____________. I’d prefer _____________.                                    \n                                </p>",
+              ""
+            ],
+            [
+              "Tutor (Agent): No problem, we have flexible plans here. How much data do you need?\n\nStudent: (데이터 무제한이 필요하다고 말하세요.)\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">예상 답변</span>\nI need _____________.                                    \n                                </p>",
+              ""
+            ],
+            [
+              "Tutor (Agent): Excellent. Would you like to activate it today?\n\nStudent: (오늘 개통하고 싶다고 말하세요.)\n<p style=\"font-size:15px; color:#A9A9A9\" ;=\"\"><span class=\"tip\">예상 답변</span>\nYes, I’d like to _____________.                                    \n                                </p>",
+              ""
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

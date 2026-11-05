@@ -1,0 +1,101 @@
+/* ==================================================================
+   tokens.css — 토큰 · 웹폰트 · 컬러 테마
+   ================================================================== */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Brand — 기본 purple */
+  --brand-light: #2373f4;        /* 그라데이션 시작 */
+  --brand-interactive: #6d68e4;  /* 메인: 버튼·번호·링크·활성 아이콘 */
+  --brand-strong: #915dd2;       /* 진한 글자 · 번호 배지 글자 */
+  --brand-weak: #e4e3fa;         /* 번호 배지 · 선택 상태 테두리 */
+  --brand-subtle: #f4f3fd;       /* 넓은 면: 지문·시나리오·말풍선·TIP */
+  --brand-gradient: linear-gradient(135deg, #2373f4 0%, #6d68e4 24%, #915dd2 46%, #a853be 64%, #b74baa 82%, #c04695 100%);
+
+  /* Text (웜그레이 · 진한 순) */
+  --text-primary: #1c1917;    /* 제목 · 단어 · 영어 문장 */
+  --text-body: #292524;       /* 읽는 문장(지문·대화·시나리오) */
+  --text-strong-muted: #44403c;
+  --text-secondary: #57534e;  /* 안내문 · TIP 텍스트 · B 답변 */
+  --text-tertiary: #6b655f;   /* 한글 해석 · 보조 라벨 */
+  --text-disabled: #a3a09c;
+
+  /* Neutral UI (쿨그레이) — 칩 · 아이콘 · 컨트롤 */
+  --icon-default: #4b5466;
+  --chip-text: #5b6476;
+  --chip-bg: #f1f4f8;
+  --control-text: #343b4b;
+  --list-number: #a8a5b5;
+
+  /* Surface · Border */
+  --surface-default: #fff;
+  --surface-hover: #f7f6fc;
+  --border-default: #e7e5e4;
+  --border-subtle: #f5f5f4;
+  --scrim: rgba(20, 16, 50, 0.28);
+  --viewer-bg: rgba(12, 12, 14, 0.94);   /* 이미지 크게 보기 배경 */
+  --text-on-dark: #fff;          /* 사진 · 어두운 면 · 브랜드 면 위 글자 */
+  --cover-bg-top: #1c1d21;       /* 표지 배경(사진 없을 때 위) */
+  --cover-bg: #0c0c0e;           /* 표지 배경 */
+  --lesson-muted-number: #d3d8e3; /* 표지: 예정 레슨 번호 */
+  --lesson-muted-text: #7b8497;   /* 표지: 예정 레슨 제목 · 배지 글자 */
+  --lesson-muted-desc: #a3abba;   /* 표지: 예정 레슨 설명 */
+  --lesson-muted-bg: #eef0f5;     /* 표지: 예정 배지 면 */
+
+  /* Tone — 답변 가이드 · 강사 가이드 */
+  --guide-gradient: linear-gradient(135deg, #fff8ee, #fff3e2);
+  --guide-text: #b45309;
+  --teacher-gradient: linear-gradient(135deg, #eef4ff, #e4edfe);
+  --teacher-text: #1a5ad0;
+
+  /* Typography — 자간: 영문 · 숫자 기본 0, 한글 문구는 --tracking-ko */
+  --font: "Plus Jakarta Sans", "Pretendard Variable", Pretendard, sans-serif;
+  --type-word: 800 22px/1.2 var(--font);           /* 단어 · 표현 */
+  --type-speak: 600 18px/1.6 var(--font);          /* 말해야 하는 문장(질문·Q&A·빈칸) */
+  --type-read: 400 18px/1.6 var(--font);           /* 읽는 문장(지문·대화·시나리오) */
+  --type-translation: 500 14px/1.5 var(--font);    /* 한글 해석 */
+  --type-label: 500 12px/1.4 var(--font);          /* 칩 · 소제목 */
+  --type-number: 700 12px/1 var(--font);           /* 번호 배지 */
+  --tracking-ko: -0.02em;      /* 한글 문구 (해석 · 안내 · 칩 · 가이드) */
+  --tracking-lg-en: -0.01em;   /* 영문 20px 이상 (단어) */
+  --tracking-lg: -0.02em;      /* 28px 숫자 (레슨 번호) */
+  --tracking-xl: -0.02em;      /* 34px 제목 (히어로 · 표지) */
+
+  /* Radius · Shadow · Size */
+  --radius-6: 6px;
+  --radius-7: 7px;
+  --radius-12: 12px;
+  --radius-14: 14px;
+  --radius-16: 16px;   /* 박스 · 카드 */
+  --radius-18: 18px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-full: 999px;
+  --shadow-popover: 0 18px 40px -16px rgba(30, 20, 90, 0.45);
+  --header-height: 56px;
+  --gutter: 16px;              /* 화면 ↔ 버튼 · 박스 바깥선 (태블릿 24) */
+  --card-padding: 20px;        /* 표지 레슨 카드 안쪽 여백 (태블릿 28) */
+  --text-inset: 20px;          /* 본문 · 히어로 글자 시작선 (태블릿: 칼럼 안 52) */
+  --content-width: 760px;
+  --hero-height: 300px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --lesson-photo: none;        /* js/core.js가 채움 */
+
+  /* Layer */
+  --z-hero: 6;
+  --z-main: 5;
+  --z-scrim: 25;
+  --z-dock: 30;
+  --z-header: 36;
+  --z-partlist: 40;
+  --z-cover: 49;
+  --z-viewer: 55;
+  --z-toast: 60;
+}
+
+/* 언어별 컬러 — 영어(기본) purple · 중국어 coral <html data-lang="zh"> · 일본어 green <html data-lang="ja"> */
+html[data-lang="zh"] { --brand-light: #dce8a5; --brand-interactive: #f06445; --brand-strong: #973479; --brand-weak: #fde4dc; --brand-subtle: #fff8f0;
+  --brand-gradient: linear-gradient(135deg, #973479 0%, #f06445 55%, #dce8a5 100%); }
+html[data-lang="ja"] { --brand-light: #b5ee62; --brand-interactive: #0faa78; --brand-strong: #00a283; --brand-weak: #ddf3cf; --brand-subtle: #f9fcf6;
+  --brand-gradient: linear-gradient(135deg, #00a283 0%, #5ed83d 60%, #b5ee62 100%); }
