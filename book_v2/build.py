@@ -36,7 +36,7 @@ def build_app():
     return out
 
 
-def used_images(data_file='data/lesson-01.json'):
+def used_images(data_file='data/lesson-172855.json'):
     """data 레슨이 쓰는 이미지 { 경로: 최대 가로 } — js/core.js 규칙과 같게"""
     d = json.loads(read(data_file))
     path = lambda name, folder: name if '/' in name else f'images/{folder}/{name}'

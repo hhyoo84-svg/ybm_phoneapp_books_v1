@@ -9,11 +9,7 @@
   },
   "lesson": {
     "number": 1,
-    "photo": null,
-    "closing": [
-      "You did a wonderful job today!<br>Enjoy the rest of your day and I will see you at the next class.<br><br>Bye-Bye!",
-      "수고하셨습니다.<br>클래스룸으로 이동하셔서 오늘 학습한 내용을<br>확인해보세요!"
-    ]
+    "photo": null
   },
   "lessons": [
     {

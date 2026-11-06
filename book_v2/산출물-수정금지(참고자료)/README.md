@@ -9,7 +9,7 @@ book_v2/
 ├─ inc/        HTML 조각 (magazine-header · magazine-body · magazine-dock · magazine-cover · magazine-viewer)
 ├─ css/        tokens → base → components → magazine → blocks  (이 순서로 읽음)
 ├─ js/         core → blocks → magazine                          (이 순서로 읽음)
-├─ data/       lesson-01.json 디자인 샘플 · lesson-172855.json 실교재 샘플(워킹홀리데이 L1) = API 응답 형식
+├─ data/       lesson-01.json 디자인 샘플 · lesson-172855.json 실교재 샘플(워킹홀리데이 L1, magazine.html 기본 데이터) = API 응답 형식
 ├─ images/
 │  ├─ lesson/  lesson-photoN.png  히어로 · 표지 사진 (돌려 씀)
 │  └─ content/ img-N.jpg         본문 그림 (data에서 지정)
