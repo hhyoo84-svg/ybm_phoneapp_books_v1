@@ -18,7 +18,7 @@
   }
   function number(n) { return '<span class="badge" data-type="number">' + pad(n) + "</span>"; }
   function question(n) { return '<span class="badge" data-type="question">Q' + n + "</span>"; }
-  function chip(text) { return '<p class="chip">' + esc(text) + "</p>"; }
+  function chip(text) { return text ? '<p class="chip">' + esc(text) + "</p>" : ""; }
   function translation(text) { return '<p class="book-translation" hidden>' + esc(text) + "</p>"; }
   function tip(text) { return '<div class="book-tip"><span class="tag">TIP</span><span class="book-tip-text">' + esc(text) + "</span></div>"; }
   function answerGuide(en, kr) {
@@ -41,10 +41,18 @@
       : '<div class="book-picture" role="img" aria-label="' + esc(pic.alt) + '"></div>';
   }
 
+  /* 문장 판단 : 문장 부호(. ? ! 。 ？ ！)로 끝나거나 40자를 넘으면 문장. 태그 · 공백은 빼고 셈 */
+  B.SENTENCE_LENGTH = 40;
+  function isSentence(html) {
+    var t = String(html || "").replace(/<[^>]*>/g, "").replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").trim();
+    return /[.?!。？！]["'”’)]?$/.test(t) || t.length > B.SENTENCE_LENGTH;
+  }
+
   /* 블록 템플릿 — 키 = block.type. 교재 타입(ybmlms 1–13) 대응은 데이터_매칭.md */
   var RENDER = {
-    words: function (p) {
-      return '<div class="book-list" data-columns="2">' + chip(p.label) + p.items.map(function (w, i) {
+    words: function (p) {                                            // 1타입 : 항목 중 하나라도 문장이면 블록 전체를 문장 크기 · 한 줄 배치
+      var sentence = p.items.some(function (w) { return isSentence(w[0]); });
+      return '<div class="book-list' + (sentence ? ' is-sentence"' : '" data-columns="2"') + ">" + chip(p.label) + p.items.map(function (w, i) {
         return '<div class="book-item book-word"><div class="book-head">' + number(i + 1) + '<span class="book-word-text rich">' + rich(w[0]) + "</span>" + actions(["translate", "listen"]) + "</div>" +
           '<div class="book-indent">' + (w[1] ? '<p class="book-translation rich" hidden>' + rich(w[1]) + "</p>" : "") + "</div></div>";
       }).join("") + "</div>";

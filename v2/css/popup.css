@@ -723,3 +723,5 @@
 @keyframes s3Stamp{0%{scale:1.9; opacity:0; rotate:-14deg;} 60%{scale:.9; opacity:1; rotate:4deg;} 100%{scale:1; rotate:0deg;}}
 @keyframes s3Shake{0%,100%{translate:0 0;} 20%{translate:-4px 0;} 40%{translate:4px 0;} 60%{translate:-3px 0;} 80%{translate:2px 0;}}
 @keyframes s3PawStep{0%{opacity:0; scale:.4;} 12%{opacity:1; scale:1.08;} 22%{scale:1;} 55%{opacity:.85;} 100%{opacity:0; scale:.9;}}
+/* 다크모드 : '원문' 칩 — 회색 글자(gray-500)가 회색 배경(gray-700) 위에서 흐려 글자색을 밝게 */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .review-sent.orig .review-sent-tag{color:var(--text-primary);} }

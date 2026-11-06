@@ -40,7 +40,10 @@
 
 /* ---------- (from v1 common.css) ---------- */
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --surface-default:var(--color-gray-950); --surface-subtle:var(--color-gray-900); --surface-muted:var(--color-gray-800); --surface-scrim:rgba(0,0,0,.6); --text-primary:var(--color-gray-50); --text-secondary:var(--color-gray-400); --text-tertiary:var(--color-gray-500); --text-warning:var(--color-orange-400); --text-danger:var(--color-red-400); --text-info:var(--color-blue-400); --border-default:var(--color-gray-700); --border-subtle:var(--color-gray-800); --border-error:var(--color-red-400); --neutral-bg:var(--color-gray-800); --status-warning-weak:var(--color-orange-950); --status-negative-weak:var(--color-red-950); --status-info-weak:var(--color-blue-950); --accent-green-weak:var(--color-green-950); --accent-blue-weak:var(--color-blue-950); --accent-red-weak:var(--color-red-950); --brand-interactive-subtle:var(--brand-950); color-scheme:dark; }
+  :root:not([data-theme="light"]){ --surface-default:var(--color-gray-950); --surface-subtle:var(--color-gray-900); --surface-muted:var(--color-gray-800); --surface-scrim:rgba(0,0,0,.6); --text-primary:var(--color-gray-50); --text-secondary:var(--color-gray-400); --text-tertiary:var(--color-gray-500); --text-warning:var(--color-orange-400); --text-danger:var(--color-red-400); --text-info:var(--color-blue-400); --border-default:var(--color-gray-700); --border-subtle:var(--color-gray-800); --border-error:var(--color-red-400); --neutral-bg:var(--color-gray-800); --status-warning-weak:var(--color-orange-950); --status-negative-weak:var(--color-red-950); --status-info-weak:var(--color-blue-950); --accent-green-weak:var(--color-green-950); --accent-blue-weak:var(--color-blue-950); --accent-red-weak:var(--color-red-950); --brand-interactive-subtle:var(--brand-950);
+    /* 앱 화면용 토큰(시안3) 다크 값 — 본문 배경 · 구분선 · 글자 · 말풍선/선택 배경 */
+    --s3-bg:var(--color-gray-900); --s3-line:var(--color-gray-800); --s3-ink:var(--color-gray-50); --brand-selection-bg:var(--brand-950); --brand-text-link:var(--brand-300);
+    color-scheme:dark; }
 }
 /* 예습 진도 칩 : 원형 진행 그래프(파이)가 진도에 따라 차오름 */
 @property --p{syntax:'<number>'; inherits:true; initial-value:0;}

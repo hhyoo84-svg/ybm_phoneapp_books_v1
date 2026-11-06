@@ -13,7 +13,7 @@
   /* 화면 틀 폭(전체 폭)은 classroom-wide.css 의 가로 UI 공통 규칙 */
   /* 화면 높이 꽉 채움 : 위아래 여백 · 높이 제한(920) 없이 */
   body:has(#scheduleArea:not([hidden])){padding-block:0;}
-  .stage:has(#scheduleArea:not([hidden])){height:100dvh; border-radius:0;}
+  .stage:has(#scheduleArea:not([hidden])){height:100vh; height:100dvh; border-radius:0;}
 
   /* 2단 배치 : 상단 과정 띠는 전체 폭, 왼쪽 열 = 주간 카드 → 바로가기 → 수업 목록, 오른쪽 열 = 월간 달력 */
   /* 스크롤은 왼쪽 수업 목록에만 — 과정 띠 · 주간 카드 · 월간 달력은 고정 */

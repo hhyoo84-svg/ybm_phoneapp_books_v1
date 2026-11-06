@@ -478,7 +478,11 @@
 .schedule-hero .schedule-course-menu button.s3-on{color:var(--brand-interactive) !important; font-weight:700 !important; background:var(--brand-interactive-subtle);}
 .schedule-hero .schedule-course-menu button.s3-on::after{content:""; flex:none; width:18px; height:18px; background:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/contain no-repeat;}
 #scheduleArea .schedule-hero{padding-top:22px !important; padding-bottom:24px !important;}
+/* ----------- 2026-11-04 · A 월간 보더·안내 문구 배경 제거(481·491·504줄) -------------------- */
 .s3-mnote{display:none; position:sticky; bottom:-32px; z-index:7; margin:12px -12px -32px; padding:12px 16px 14px; text-align:center; background:none; pointer-events:none;}
+/* ----------- 2026-11-05 · H 월간 하단 안내 칩 배경 -------------------- */
+/* 월간 : 하단 안내 칩이 달력 카드 끝에 걸쳐 뜨므로, 카드 아래 바닥색을 카드와 같게 — 배경이 끊겨 보이지 않게 (모바일·세로 태블릿) */
+@media (max-width:1023px){ .s3-is-month #scheduleArea{background:var(--surface-default);} .s3-is-month #scheduleArea .schedule-topbar-card{border-bottom-color:transparent !important;} }
 .s3-mnote > span{display:inline-block; max-width:100%; padding:11px 16px; border-radius:14px; background:rgba(20,20,28,.92); color:#fff; font-size:13px; font-weight:500; line-height:1.45; word-break:keep-all;}
 /* 상단 강좌명 띠 : 주간·월간 모두 상단 고정 */
 #scheduleArea .schedule-hero{position:sticky; top:-20px; z-index:8;}
@@ -506,6 +510,7 @@
 @keyframes s3Chev{0%,100%{translate:0 0;} 35%{translate:0 3px;} 60%{translate:0 -1px;}}
 @keyframes s3TodayPulse{0%,100%{box-shadow:0 0 0 0 rgba(93,75,232,.45);}50%{box-shadow:0 0 0 8px rgba(93,75,232,0);}}
 
+/* ----------- 2026-11-04 · A 반응형 스케줄 가로 UI -------------------- */
 /* ======================================================================
    [가로 UI · 스케줄] 태블릿 · PC 가로(1024px 이상) · Schedule_011/012_W1_FULL (기획안 14~15p)
    마크업 : inc/schedule.html 의 .schedule-wide-*   동작 : js/schedule.js 하단
@@ -521,7 +526,7 @@
   /* 화면 틀 폭(전체 폭)은 shell.css 하단의 가로 UI 공통 규칙 */
   /* 화면 높이 꽉 채움 : 위아래 여백 · 높이 제한(920) 없이 */
   body:has(#scheduleArea:not([hidden])){padding-block:0;}
-  .stage:has(#scheduleArea:not([hidden])){height:100dvh; border-radius:0;}
+  .stage:has(#scheduleArea:not([hidden])){height:100vh; height:100dvh; border-radius:0;}
 
   /* 2단 배치 : 상단 과정 띠는 전체 폭, 왼쪽 열 = 주간 카드 → 바로가기 → 수업 목록, 오른쪽 열 = 월간 달력 */
   /* 스크롤은 왼쪽 수업 목록에만 — 과정 띠 · 주간 카드 · 월간 달력은 고정 */

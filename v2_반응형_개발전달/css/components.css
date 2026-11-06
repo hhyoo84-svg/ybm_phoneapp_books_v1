@@ -86,6 +86,7 @@
 .mo-ind{position:absolute; bottom:0; left:0; width:100px; height:3px; border-radius:2px; pointer-events:none; transform-origin:0 50%; will-change:translate, scale; transition:translate .32s cubic-bezier(.2,.8,.2,1), scale .32s cubic-bezier(.2,.8,.2,1);}
 .mo-fade{position:fixed; left:0; right:0; height:44px; pointer-events:none; z-index:40; opacity:0; transition:opacity .25s ease;}
 .mo-fade.on{opacity:1;}
+/* ----------- 2026-11-04 · A 하단 흰 안개 숨김 -------------------- */
 /* 하단 흰 안개는 카드 위에서 뿌옇게 보여 사용 안 함 — 스크롤 안내는 ⌄ 버튼(.mo-more)이 대신함 */
 .mo-fade{display:none;}
 .mo-more{position:fixed; left:50%; z-index:41; width:36px; height:36px; margin-left:-18px; border-radius:50%; display:flex; align-items:center; justify-content:center;

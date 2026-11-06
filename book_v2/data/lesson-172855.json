@@ -171,6 +171,28 @@
               "개통하다, 세팅하다"
             ]
           ]
+        },
+        {
+          "type": "words",
+          "label": "문장 예시 (1타입 긴 문장)",
+          "items": [
+            [
+              "I'd like to activate a new SIM card for my phone.",
+              "제 휴대폰에 새 유심을 개통하고 싶어요."
+            ],
+            [
+              "Is there a monthly plan with unlimited data?",
+              "데이터 무제한 월 요금제가 있나요?"
+            ],
+            [
+              "How much does it cost to top up a prepaid plan?",
+              "선불 요금제를 충전하려면 얼마인가요?"
+            ],
+            [
+              "I brought my own device, so I only need a BYOD plan.",
+              "제 기기를 가져와서 자급제 요금제만 있으면 돼요."
+            ]
+          ]
         }
       ]
     },

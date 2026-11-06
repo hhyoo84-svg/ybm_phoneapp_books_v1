@@ -441,7 +441,7 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   var sp = document.getElementById('splash'); if (sp && !sp.querySelector('.s3-loader')) window.s3Loader(sp);
   /* 4) 빈 화면 */
   /* 빈 화면(제공되는 내용이 없을 때) : 엎드린 캐릭터 + 문구 — 스케줄 · 질문 내역 · AI 히스토리 · 보강 시간 · 연기/스킵 현황 · 교재 없음 */
-  var EMPTY = '.schedule-agenda-empty, .qa-history-empty, .ai-history-list-empty, .makeup-slot-empty, .makeup-status-empty, #rtBookList > .makeup-guide:only-child';
+  var EMPTY = '.course-empty, .course-slide.is-empty, .schedule-agenda-empty, .qa-history-empty, .ai-history-list-empty, .makeup-slot-empty, .makeup-status-empty, #rtBookList > .makeup-guide:only-child';
   var emptyQ = 0;
   function fixEmpty(){ emptyQ = 0; [].forEach.call(document.querySelectorAll(EMPTY), function(e){ if (!e.querySelector('.s3-c')){ e.classList.add('s3-empty'); e.insertAdjacentHTML('afterbegin', img('point')); } }); }
   fixEmpty(); new MutationObserver(function(){ if (!emptyQ) emptyQ = requestAnimationFrame(fixEmpty); }).observe(document.body, { childList:true, subtree:true });

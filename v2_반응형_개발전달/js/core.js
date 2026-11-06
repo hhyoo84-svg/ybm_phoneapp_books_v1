@@ -340,6 +340,7 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
     var r = steps.querySelector('.s3-runner');
     if (!r){ r = document.createElement('span'); r.className = 's3-runner'; r.innerHTML = '<img alt="">'; steps.appendChild(r); steps.classList.add('s3-has-run'); }
     r.setAttribute('data-k', k); r.querySelector('img').src = C[k]; r.classList.remove('arrived');
+    /* ----------- 2026-11-04 · C 출석현황 와옹이 달리기(343·364줄) -------------------- */
     r.style.transition = 'none'; r.style.left = '10%'; void r.offsetWidth; r.style.transition = '';
     requestAnimationFrame(function(){ r.style.left = (10 + ratio * 80) + '%';  /* 구간 막대가 10%~90% 사이 */ setTimeout(function(){ r.classList.add('arrived'); }, 1300); });
     /* 출석 = 발바닥 도장 / 연기·SKIP = 시무룩 / 결석 = 울먹 (와옹이) */
@@ -441,12 +442,14 @@ YBMP.add(290, '와옹이 캐릭터 시스템', function(){
   var sp = document.getElementById('splash'); if (sp && !sp.querySelector('.s3-loader')) window.s3Loader(sp);
   /* 4) 빈 화면 */
   /* 빈 화면(제공되는 내용이 없을 때) : 엎드린 캐릭터 + 문구 — 스케줄 · 질문 내역 · AI 히스토리 · 보강 시간 · 연기/스킵 현황 · 교재 없음 */
-  var EMPTY = '.schedule-agenda-empty, .qa-history-empty, .ai-history-list-empty, .makeup-slot-empty, .makeup-status-empty, #rtBookList > .makeup-guide:only-child';
+  /* ----------- 2026-11-05 · E 빈 화면 캐릭터 대상 추가 -------------------- */
+  var EMPTY = '.course-empty, .course-slide.is-empty, .schedule-agenda-empty, .qa-history-empty, .ai-history-list-empty, .makeup-slot-empty, .makeup-status-empty, #rtBookList > .makeup-guide:only-child';
   var emptyQ = 0;
   function fixEmpty(){ emptyQ = 0; [].forEach.call(document.querySelectorAll(EMPTY), function(e){ if (!e.querySelector('.s3-c')){ e.classList.add('s3-empty'); e.insertAdjacentHTML('afterbegin', img('point')); } }); }
   fixEmpty(); new MutationObserver(function(){ if (!emptyQ) emptyQ = requestAnimationFrame(fixEmpty); }).observe(document.body, { childList:true, subtree:true });
 });
 
+/* ----------- 2026-11-04 · B 모바일 세로 고정 -------------------- */
 /* 모바일 세로 고정 : 가능한 환경(안드로이드 설치형 · 전체화면)에서는 방향을 잠그고, 안 되는 환경(iOS · 일반 브라우저)은 가로로 돌리면 안내 화면(.rotate-guard, shell.css)이 가림 */
 (function(){
   try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('portrait').catch(function(){}); } catch(e){}

@@ -26,6 +26,11 @@
 /* 단어 · 표현 (Part 1 · 7) */
 .book-word-text { flex: 1; min-width: 0; font: var(--type-word); letter-spacing: var(--tracking-lg-en); }
 .book-word .book-translation { margin-top: 8px; }
+/* 1타입 긴 문장 : 2타입 문장과 같은 크기 · 굵기, 번호 · 버튼은 첫 줄에 맞춤 */
+.book-list.is-sentence .book-head { align-items: flex-start; }
+.book-list.is-sentence .book-head > .badge { margin-top: 6px; }
+.book-list.is-sentence .book-word-text { padding-top: 6px; font: var(--type-speak); font-weight: 500; letter-spacing: normal; text-wrap: pretty; }
+.book-list.is-sentence .book-word .book-translation { margin-top: 6px; }
 .book-example { margin-top: 9px; font: italic var(--type-read); color: var(--text-tertiary); }
 
 /* 2타입 듣고 해석하기 (qa) */
@@ -130,6 +135,7 @@ img.book-picture { aspect-ratio: auto; height: auto; background: none; }
 .rich-note { display: block; margin-top: 10px; font: 400 15px/1.6 var(--font); color: var(--text-secondary); }
 .rich b { font-weight: 700; }
 .rich sup { font-size: 0.6em; line-height: 0; }
+.rich-hint { color: var(--text-tertiary); font-weight: 400; letter-spacing: var(--tracking-ko); }   /* 괄호 속 한글 안내 (예: (…라고 말하세요.)) */
 .book-blank.is-wide { min-width: 72px; }
 
 /* 레슨 마무리 (lesson.closing) — 마지막 파트 끝 */

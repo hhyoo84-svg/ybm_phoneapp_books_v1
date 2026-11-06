@@ -287,13 +287,14 @@ YBMP.add(120, '클래스룸 탭(예정·종료 목록) · 출석현황 연결', 
   function chip(t){ return '<span class="chip type-chip '+t+'" data-size="small" data-tone="'+(t === 'video' ? 'brand' : 'neutral')+'">'+(t === 'video' ? VIDEO : PHONE)+(t === 'video' ? '화상' : '전화')+'</span>'; }
   function meta(c){ return '<div class="class-meta">'+chip(c.type)+'<span class="class-when">'+c.when+'</span><span class="class-plan">'+c.plan+'</span></div>'; }
   function head(c, cls){ return '<div class="class-course-img"><img src="'+(c.img||IMG)+'" alt=""><div class="class-course-img-scrim" aria-hidden="true"></div><h3 class="'+cls+'">'+c.name+'</h3></div>'; }
-  document.getElementById('clsUpcomingList').innerHTML = upcoming.map(function(c){
+  function emptyBox(t){ return '<section class="course-empty"><p>'+t+'</p></section>'; }
+  document.getElementById('clsUpcomingList').innerHTML = !upcoming.length ? emptyBox('예정된 과정이 없습니다.') : upcoming.map(function(c){
     return '<div class="class-upcoming-card">' + head(c, 'class-upcoming-title') +
       '<div class="class-upcoming-body">' + meta(c) +
         '<div class="class-kv class-kv-notice"><span class="class-kv-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg>수업 시작일을 설정하세요</span><span class="class-kv-value">'+c.deadline+'까지</span></div>' +
       '</div></div>';
   }).join('');
-  document.getElementById('clsDoneList').innerHTML = done.map(function(c){
+  document.getElementById('clsDoneList').innerHTML = !done.length ? emptyBox('종료된 과정이 없습니다.') : done.map(function(c){
     return '<div class="class-done-card">' + head(c, 'class-done-title') +
       '<div class="class-done-body">' + meta(c) +
         '<div class="class-kv"><span class="class-kv-label">수강기간</span><span class="class-kv-value">'+c.period+'</span></div>' +
@@ -334,6 +335,11 @@ YBMP.add(120, '클래스룸 탭(예정·종료 목록) · 출석현황 연결', 
   function applyCourse(idx){
     var sl = slides[idx]; if (!sl) return;
     if (corr) corr.hidden = sl.getAttribute('data-junior') !== '1';
+    /* 수강 중 과정 없음 : 슬라이드 안에 안내, 아래 입장 카드·예습·리뷰 영역은 숨김 */
+    var emp = sl.hasAttribute('data-empty'), sa = document.getElementById('scrollArea');
+    if (sa) sa.classList.toggle('is-empty', emp);
+    /* 빈 슬라이드는 키가 커서, 현재 슬라이드 높이에 맞춰 강좌 영역 높이를 조정 */
+    var swp = document.getElementById('courseSwiper'); if (swp) swp.style.height = emp ? sl.offsetHeight + 'px' : '';
   }
   document.addEventListener('coursechange', function(e){ applyCourse(e.detail); });
   applyCourse(0);
@@ -346,6 +352,7 @@ YBMP.add(270, '클래스룸 재배치(예습 로드맵 · 입장 카드 · 첨�
   var $ = function(s, r){ return (r || document).querySelector(s); };
   /* 1) 예습 : 1안 로드맵을 2안 예습 패널 자리에 */
     var block = $('#prepBlock');
+    var BOOK_URL = 'https://hhyoo84-svg.github.io/ybm_phoneapp_books_v1/book_v2/magazine.html';
   if (block){
     var flow = block.querySelector('#flow'), steps = [].slice.call(flow.querySelectorAll('.classroom-step')), path = flow.querySelector('svg.link path');
     function draw(){
@@ -372,7 +379,10 @@ YBMP.add(270, '클래스룸 재배치(예습 로드맵 · 입장 카드 · 첨�
       [].forEach.call(st.querySelectorAll('.classroom-step-title-chip, .classroom-step-done-chip'), function(c){ c.addEventListener('click', toggle); });
       [].forEach.call(st.querySelectorAll('.classroom-popup-go'), function(b){
         b.addEventListener('click', function(e){
-          e.stopPropagation(); st.setAttribute('data-completed', 'true'); st.setAttribute('data-active', 'false');
+          e.stopPropagation();
+          /* 교재 보기 : 신규 교재 화면(별도 페이지)을 새 창으로 연다 */
+          if (st.getAttribute('data-step-id') === 'lesson') window.open(BOOK_URL, '_blank', 'noopener');
+          st.setAttribute('data-completed', 'true'); st.setAttribute('data-active', 'false');
           var nx = steps[steps.indexOf(st) + 1]; if (nx && nx.getAttribute('data-completed') !== 'true') nx.setAttribute('data-active', 'true');
           refresh(); progress();
         });

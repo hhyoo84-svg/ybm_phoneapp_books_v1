@@ -1345,6 +1345,7 @@ YBMP.add(220, '수업 루틴 변경 · 교재 변경 · 전화번호 변경', fu
   };
 });
 
+/* ----------- 2026-11-04 · C 출석현황 수정(최고 기록 삭제) -------------------- */
 /* 17p 출석현황 고도화 (add_attend) — 데모 값: 연속 5회. 연속은 '수업한 날' 기준(연기·SKIP은 유지, 결석만 0) */
 YBMP.add(230, '출석현황 고도화(연속 출석 · 배지 · 도장)', function(){
   var $ = function(id){ return document.getElementById(id); };
@@ -1361,6 +1362,7 @@ YBMP.add(230, '출석현황 고도화(연속 출석 · 배지 · 도장)', funct
   if (prog) panel.appendChild(prog); if (stats) panel.appendChild(stats);
 
   function renderTop(){
+    /* ----------- 2026-11-04 · C renderTop 재작성 -------------------- */
     $('attStreakN').textContent = STREAK;
     /* 진행률(%)은 강좌 전체 횟수 기준. 배지 구간 = 시작 0% → 25% → 50% → 75% → 완강 100% */
     var A = YBMP.demo.attendance, pct = Math.round(A.progressDone / A.progressTotal * 100);

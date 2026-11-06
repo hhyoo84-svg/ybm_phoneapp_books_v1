@@ -338,6 +338,11 @@ svg { flex: none; }
 /* 단어 · 표현 (Part 1 · 7) */
 .book-word-text { flex: 1; min-width: 0; font: var(--type-word); letter-spacing: var(--tracking-lg-en); }
 .book-word .book-translation { margin-top: 8px; }
+/* 1타입 긴 문장 : 2타입 문장과 같은 크기 · 굵기, 번호 · 버튼은 첫 줄에 맞춤 */
+.book-list.is-sentence .book-head { align-items: flex-start; }
+.book-list.is-sentence .book-head > .badge { margin-top: 6px; }
+.book-list.is-sentence .book-word-text { padding-top: 6px; font: var(--type-speak); font-weight: 500; letter-spacing: normal; text-wrap: pretty; }
+.book-list.is-sentence .book-word .book-translation { margin-top: 6px; }
 .book-example { margin-top: 9px; font: italic var(--type-read); color: var(--text-tertiary); }
 
 /* 2타입 듣고 해석하기 (qa) */
@@ -442,6 +447,7 @@ img.book-picture { aspect-ratio: auto; height: auto; background: none; }
 .rich-note { display: block; margin-top: 10px; font: 400 15px/1.6 var(--font); color: var(--text-secondary); }
 .rich b { font-weight: 700; }
 .rich sup { font-size: 0.6em; line-height: 0; }
+.rich-hint { color: var(--text-tertiary); font-weight: 400; letter-spacing: var(--tracking-ko); }   /* 괄호 속 한글 안내 (예: (…라고 말하세요.)) */
 .book-blank.is-wide { min-width: 72px; }
 
 /* 레슨 마무리 (lesson.closing) — 마지막 파트 끝 */
@@ -572,7 +578,7 @@ window.Book = window.Book || {};
     // 줄 끝 · 줄 앞 공백 제거, 빈 줄은 하나로 합침(간격은 화면이 정함), 빈칸 ( ) · ___ 는 밑줄
     return html.replace(/[ \t\u00a0\u3000]+\n/g, "\n").replace(/\n[ \t\u00a0]+/g, "\n")
       .replace(/\n{2,}/g, "\n").replace(/(<span class="rich-note">)\n+/g, "$1").replace(/\n+(<\/span>)/g, "$1")
-      .replace(/\(\s*\)/g, '(<span class="book-blank"></span>)').replace(/_{3,}/g, '<span class="book-blank is-wide"></span>')
+      .replace(/\(([^()<>]*[\uac00-\ud7a3][^()<>]*)\)/g, '<span class="rich-hint">($1)</span>').replace(/\(\s*\)/g, '(<span class="book-blank"></span>)').replace(/_{3,}/g, '<span class="book-blank is-wide"></span>')
       .trim();
   };
 
@@ -668,7 +674,7 @@ window.Book = window.Book || {};
   }
   function number(n) { return '<span class="badge" data-type="number">' + pad(n) + "</span>"; }
   function question(n) { return '<span class="badge" data-type="question">Q' + n + "</span>"; }
-  function chip(text) { return '<p class="chip">' + esc(text) + "</p>"; }
+  function chip(text) { return text ? '<p class="chip">' + esc(text) + "</p>" : ""; }
   function translation(text) { return '<p class="book-translation" hidden>' + esc(text) + "</p>"; }
   function tip(text) { return '<div class="book-tip"><span class="tag">TIP</span><span class="book-tip-text">' + esc(text) + "</span></div>"; }
   function answerGuide(en, kr) {
@@ -691,10 +697,18 @@ window.Book = window.Book || {};
       : '<div class="book-picture" role="img" aria-label="' + esc(pic.alt) + '"></div>';
   }
 
+  /* 문장 판단 : 문장 부호(. ? ! 。 ？ ！)로 끝나거나 40자를 넘으면 문장. 태그 · 공백은 빼고 셈 */
+  B.SENTENCE_LENGTH = 40;
+  function isSentence(html) {
+    var t = String(html || "").replace(/<[^>]*>/g, "").replace(/&[a-z#0-9]+;/gi, " ").replace(/\s+/g, " ").trim();
+    return /[.?!。？！]["'”’)]?$/.test(t) || t.length > B.SENTENCE_LENGTH;
+  }
+
   /* 블록 템플릿 — 키 = block.type. 교재 타입(ybmlms 1–13) 대응은 데이터_매칭.md */
   var RENDER = {
-    words: function (p) {
-      return '<div class="book-list" data-columns="2">' + chip(p.label) + p.items.map(function (w, i) {
+    words: function (p) {                                            // 1타입 : 항목 중 하나라도 문장이면 블록 전체를 문장 크기 · 한 줄 배치
+      var sentence = p.items.some(function (w) { return isSentence(w[0]); });
+      return '<div class="book-list' + (sentence ? ' is-sentence"' : '" data-columns="2"') + ">" + chip(p.label) + p.items.map(function (w, i) {
         return '<div class="book-item book-word"><div class="book-head">' + number(i + 1) + '<span class="book-word-text rich">' + rich(w[0]) + "</span>" + actions(["translate", "listen"]) + "</div>" +
           '<div class="book-indent">' + (w[1] ? '<p class="book-translation rich" hidden>' + rich(w[1]) + "</p>" : "") + "</div></div>";
       }).join("") + "</div>";

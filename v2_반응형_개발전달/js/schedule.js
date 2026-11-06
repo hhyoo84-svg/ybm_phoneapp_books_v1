@@ -177,6 +177,7 @@ YBMP.add(30, '스케줄 달력 · 년월 피커 · 주간/월간 · 화면 전�
         btn.addEventListener('click', function(e){ e.stopPropagation(); if (window.scFlow) window.scFlow(btn.getAttribute('data-act'), list[idx]); });
       });
     });
+    /* ----------- 2026-11-04 · A 주간 다시 그릴 때 이벤트 · __scApi 확장(180~189줄) -------------------- */
     /* 가로 UI(schedule.js 하단)가 주간 · 선택일 변경을 받아 월간 패널을 맞춘다 */
     document.dispatchEvent(new CustomEvent('scweekrender', { detail:{ selected:scSelectedDate, weekStart:weekStart } }));
   }
@@ -541,6 +542,7 @@ YBMP.add(280, '스케줄 월간 TODAY · 안내 · 드롭다운', function(){
   }
 });
 
+/* ----------- 2026-11-04 · A 스케줄 가로 UI -------------------- */
 /* ======================================================================
    [가로 UI · 스케줄] 이 파일 하단 — 스케줄 가로 UI (가로 폭 1024px 이상) · Schedule_011/012_W1_FULL (기획안 14~15p)
    마크업 : inc/schedule.html 의 .schedule-wide-* (모바일에서는 CSS로 숨김)

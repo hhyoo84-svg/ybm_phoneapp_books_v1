@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>클래스룸 · 수강 중 과정 없음 (B2C)</title>
+<!-- 수강 중인 과정이 하나도 없을 때의 화면 (B2C) — 실서비스용 정적 마크업
+     · 스타일은 app.html 과 같은 CSS 를 그대로 사용 (tokens → base → components → shell → classroom)
+     · 상단 로고/탭, 하단 내비는 app.html(inc/shell-head.html, inc/shell-nav.html)과 동일
+     · 본문만 아래 .course-empty 로 교체 : 캐릭터(images/wawong-2.png) + 안내 문구 한 줄
+     · 예정 · 종료 탭도 같은 마크업에서 문구만 "예정된 과정이 없습니다." / "종료된 과정이 없습니다." 로 바꿔 사용 -->
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/shell.css">
+<link rel="stylesheet" href="css/classroom.css">
+<link rel="stylesheet" href="css/classroom-wide.css">
+</head>
+<body>
+
+<div class="stage">
+  <div class="topbar-sticky">
+    <header class="classroom-topbar">
+      <div class="classroom-logo">
+        <img class="classroom-logo-img" src="images/logo-ybm-phone.png" alt="와이비엠 전화화상"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="classroom-logo-fallback"><span class="y"></span><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+      </div>
+      <span class="classroom-topbar-title">클래스룸</span>
+      <div class="classroom-topbar-actions">
+      <button class="classroom-topbar-info" type="button">
+        과정 안내
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <button class="classroom-topbar-gear" type="button" aria-label="설정"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      </div>
+    </header>
+    <nav class="tabs classroom-tabs" data-variant="line" data-rc-tabs>
+      <button type="button" class="on" data-i="0">수강중</button>
+      <button type="button" data-i="1">예정</button>
+      <button type="button" data-i="2">종료</button>
+      <span class="ind"></span>
+    </nav>
+  </div>
+
+  <!-- ===== 수강중 : 과정 없음 ===== -->
+  <main class="scroll-area" id="scrollArea">
+    <section class="course-empty s3-empty">
+      <img class="s3-c pop" data-k="point" src="images/wawong-2.png" alt="">
+      <p>수강 중 과정이 없습니다.</p>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button type="button" class="nav-item active" data-nav="classroom">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h7A2.5 2.5 0 0 1 15 8.5v7A2.5 2.5 0 0 1 12.5 18h-7A2.5 2.5 0 0 1 3 15.5v-7Z"/><path d="M15 10.5l5.1-3a.9.9 0 0 1 1.4.75v7.5a.9.9 0 0 1-1.4.75l-5.1-3"/></svg>
+      클래스룸
+    </button>
+    <button type="button" class="nav-item" data-nav="schedule">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg>
+      스케줄
+    </button>
+  </nav>
+</div>
+
+</body>
+</html>

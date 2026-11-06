@@ -479,6 +479,8 @@
 .schedule-hero .schedule-course-menu button.s3-on::after{content:""; flex:none; width:18px; height:18px; background:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/contain no-repeat;}
 #scheduleArea .schedule-hero{padding-top:22px !important; padding-bottom:24px !important;}
 .s3-mnote{display:none; position:sticky; bottom:-32px; z-index:7; margin:12px -12px -32px; padding:12px 16px 14px; text-align:center; background:none; pointer-events:none;}
+/* 월간 : 하단 안내 칩이 달력 카드 끝에 걸쳐 뜨므로, 카드 아래 바닥색을 카드와 같게 — 배경이 끊겨 보이지 않게 (모바일·세로 태블릿) */
+@media (max-width:1023px){ .s3-is-month #scheduleArea{background:var(--surface-default);} .s3-is-month #scheduleArea .schedule-topbar-card{border-bottom-color:transparent !important;} }
 .s3-mnote > span{display:inline-block; max-width:100%; padding:11px 16px; border-radius:14px; background:rgba(20,20,28,.92); color:#fff; font-size:13px; font-weight:500; line-height:1.45; word-break:keep-all;}
 /* 상단 강좌명 띠 : 주간·월간 모두 상단 고정 */
 #scheduleArea .schedule-hero{position:sticky; top:-20px; z-index:8;}

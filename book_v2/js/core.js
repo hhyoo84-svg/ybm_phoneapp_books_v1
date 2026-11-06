@@ -42,7 +42,7 @@ window.Book = window.Book || {};
     // 줄 끝 · 줄 앞 공백 제거, 빈 줄은 하나로 합침(간격은 화면이 정함), 빈칸 ( ) · ___ 는 밑줄
     return html.replace(/[ \t\u00a0\u3000]+\n/g, "\n").replace(/\n[ \t\u00a0]+/g, "\n")
       .replace(/\n{2,}/g, "\n").replace(/(<span class="rich-note">)\n+/g, "$1").replace(/\n+(<\/span>)/g, "$1")
-      .replace(/\(\s*\)/g, '(<span class="book-blank"></span>)').replace(/_{3,}/g, '<span class="book-blank is-wide"></span>')
+      .replace(/\(([^()<>]*[\uac00-\ud7a3][^()<>]*)\)/g, '<span class="rich-hint">($1)</span>').replace(/\(\s*\)/g, '(<span class="book-blank"></span>)').replace(/_{3,}/g, '<span class="book-blank is-wide"></span>')
       .trim();
   };
 
