@@ -34,6 +34,9 @@
 .book-teacher-guide { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; padding: 14px 16px; border-radius: var(--radius-16); background: var(--teacher-gradient); }
 .book-teacher-guide-title { font: 700 11px/1.4 var(--font); color: var(--teacher-text); letter-spacing: var(--tracking-ko); }
 .book-teacher-guide-text { font: 500 14px/1.6 var(--font); color: var(--text-body); letter-spacing: var(--tracking-ko); }
+/* 파트 설명 TG (part.descTeacher) — 강사 가이드 켜면 본문 맨 위(파트 설명 바로 아래) */
+.book-desc-tg { margin-bottom: 12px; }
+.book-desc-tg + .book-teacher-guide { margin-top: 0; }
 
 /* 하단 바 */
 .book-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-dock); display: flex; align-items: center; gap: 4px; padding: 6px calc(var(--gutter) - 10px) calc(6px + var(--safe-bottom)); border-top: 1px solid var(--border-default); background: var(--surface-default); }
@@ -73,13 +76,11 @@
 .book-lesson { padding: 18px 0 20px; border-top: 1px dashed var(--border-default); }
 .book-lessons-title + .book-lesson { padding-top: 4px; border-top: 0; }
 .book-lesson-head { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; column-gap: 14px; align-items: center; width: 100%; text-align: left; }
-.book-lesson-number { font: 800 28px/1 var(--font); font-variant-numeric: tabular-nums; color: var(--lesson-muted-number); letter-spacing: var(--tracking-lg); }
-.book-lesson-text b { display: block; font: 600 18px/1.35 var(--font); color: var(--lesson-muted-text); }
-.book-lesson-text span { display: block; margin-top: 2px; font: 500 14px/1.5 var(--font); color: var(--lesson-muted-desc); letter-spacing: var(--tracking-ko); }
+.book-lesson-number { font: 800 28px/1 var(--font); font-variant-numeric: tabular-nums; color: var(--lesson-muted-text); letter-spacing: var(--tracking-lg); }
+.book-lesson-text b { display: block; font: 600 18px/1.35 var(--font); color: var(--text-primary); }
+.book-lesson-text > span { display: block; margin-top: 2px; font: 500 14px/1.5 var(--font); color: var(--text-tertiary); letter-spacing: var(--tracking-ko); }
 .book-lesson-badge { padding: 6px 10px; border-radius: var(--radius-full); background: var(--lesson-muted-bg); color: var(--lesson-muted-text); font: 700 11px/1 var(--font); font-style: normal; white-space: nowrap; letter-spacing: var(--tracking-ko); }
 .book-lesson.is-current .book-lesson-number { color: var(--brand-interactive); }
-.book-lesson.is-current .book-lesson-text b { color: var(--text-primary); }
-.book-lesson.is-current .book-lesson-text span { color: var(--text-tertiary); }
 .book-lesson.is-current .book-lesson-badge { background: var(--brand-interactive); color: var(--text-on-dark); }
 .book-lesson-parts { margin-top: 16px; padding-left: 62px; }
 .book-lesson-parts button { display: flex; align-items: center; gap: 14px; width: 100%; padding: 8px 0; color: var(--text-primary); font: 500 16px/1.4 var(--font); text-align: left; }

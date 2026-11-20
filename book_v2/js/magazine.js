@@ -60,7 +60,7 @@
   var HAS = {
     guide: ".book-answer-guide, .book-brainstorm",
     translate: ".book-translation:not(.book-pattern-answer)",
-    teacher: ".book-teacher-guide",
+    teacher: ".book-teacher-guide, .book-desc-tg, .book-answer-tg",
   };
   function syncToolStates() {
     var part = currentPart(), d = part ? part.dataset : {};
@@ -81,7 +81,7 @@
   $("bookToolTranslate").addEventListener("click", function () { toggleTool("translate"); });
   $("bookTeacherBtn").addEventListener("click", function () { toggleTool("teacher"); revealTeacherGuide(); });
   function revealTeacherGuide() {                                     // 박스가 화면 위로 지나가 있으면 보이게
-    var box = currentPart() && currentPart().querySelector(".book-teacher-guide");
+    var box = currentPart() && currentPart().querySelector(".book-desc-tg, .book-teacher-guide");
     if (!box || box.hidden) return;
     var top = box.getBoundingClientRect().top, limit = HEADER + 12;
     if (top >= limit) return;
@@ -90,13 +90,14 @@
 
   /* 표지 : 현재 레슨만 파트 목차 펼침 */
   function setCover(open) { $("bookCover").classList.toggle("is-open", open); }
+  var NO_HINT = { hint: false };                                     // 레슨명 : 괄호 속 한글도 제목 그대로 (예: [윈난(푸얼시)])
   function renderLessons() {
     var box = $("bookLessons");
     box.querySelectorAll(".book-lesson").forEach(function (el) { el.remove(); });
     box.insertAdjacentHTML("beforeend", (D.lessons || []).map(function (l, i) {
-      var current = i + 1 === lessonNo, tag = current ? 'button type="button" data-cover-close' : "div";
-      return '<div class="book-lesson' + (current ? " is-current" : "") + '"><' + tag + ' class="book-lesson-head"><span class="book-lesson-number">' + pad(i + 1) + "</span>" +
-        '<span class="book-lesson-text"><b>' + B.rich(l.title) + "</b>" + (l.desc ? '<span>' + B.rich(l.desc) + "</span>" : "") + '</span><em class="book-lesson-badge">' + (current ? "학습 중" : "예정") + "</em></" + (current ? "button" : "div") + ">" +
+      var current = i + 1 === lessonNo, attr = current ? "data-cover-close" : 'data-lesson="' + (i + 1) + '"';   // 모든 레슨 열림 : 순서 잠금 없음
+      return '<div class="book-lesson' + (current ? " is-current" : "") + '"><button type="button" class="book-lesson-head" ' + attr + '><span class="book-lesson-number">' + pad(i + 1) + "</span>" +
+        '<span class="book-lesson-text"><b>' + B.rich(l.title, NO_HINT) + "</b>" + (l.desc ? '<span>' + B.rich(l.desc, NO_HINT) + "</span>" : "") + "</span>" + (current ? '<em class="book-lesson-badge">학습 중</em>' : "") + "</button>" +
         (current ? '<ol class="book-lesson-parts" id="bookCoverParts" aria-label="파트 목차"></ol>' : "") + "</div>";
     }).join(""));
   }
@@ -104,8 +105,17 @@
   $("bookLessons").addEventListener("click", function (e) {
     var b = e.target.closest("[data-part]");
     if (b) { go(+b.dataset.part); setCover(false); return; }
-    if (e.target.closest("[data-cover-close]")) setCover(false);
+    if (e.target.closest("[data-cover-close]")) { setCover(false); return; }
+    var l = e.target.closest("[data-lesson]");
+    if (l) B.openLesson(+l.dataset.lesson);
   });
+  /* 다른 레슨 열기 : lessons[n-1].url이 있으면 그 데이터를 불러오고, 없으면 앱에 알림 (postMessage key "lesson") */
+  B.openLesson = function (n) {
+    var url = D.lessons && D.lessons[n - 1] && D.lessons[n - 1].url;
+    if (url) { B.load(url).then(function () { setCover(false); }).catch(function () {}); return; }
+    if (window.parent !== window) window.parent.postMessage({ type: "book", key: "lesson", value: n }, "*");
+    B.toast("Lesson " + pad(n) + " 데이터가 연결되지 않았어요");
+  };
 
   /* 그림 크게 보기 : 처음엔 화면에 맞춤, 누르면 그 지점 기준 2배 · 다시 누르면 맞춤 */
   var viewer = $("bookViewer"), stage = $("bookViewerStage"), viewImg = $("bookViewerImg");

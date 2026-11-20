@@ -3,6 +3,7 @@
    ================================================================== */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap');
 
 :root {
   /* Brand — 기본 purple */
@@ -99,3 +100,7 @@ html[data-lang="zh"] { --brand-light: #dce8a5; --brand-interactive: #f06445; --b
   --brand-gradient: linear-gradient(135deg, #973479 0%, #f06445 55%, #dce8a5 100%); }
 html[data-lang="ja"] { --brand-light: #b5ee62; --brand-interactive: #0faa78; --brand-strong: #00a283; --brand-weak: #ddf3cf; --brand-subtle: #f9fcf6;
   --brand-gradient: linear-gradient(135deg, #00a283 0%, #5ed83d 60%, #b5ee62 100%); }
+
+/* 언어별 서체 — 영문은 Plus Jakarta Sans 그대로, 일본어 · 중국어 글자만 각 언어 서체. 한글은 Pretendard */
+html[data-lang="ja"] { --font: "Plus Jakarta Sans", "Noto Sans JP", "Pretendard Variable", Pretendard, sans-serif; }
+html[data-lang="zh"] { --font: "Plus Jakarta Sans", "Noto Sans SC", "Pretendard Variable", Pretendard, sans-serif; }

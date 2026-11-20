@@ -128,65 +128,68 @@
           "items": [
             [
               "SIM card                                    \n                                ",
-              "유심"
+              "유심",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "Mobile plan                                    \n                                ",
-              "요금제"
+              "요금제",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "Prepaid                                    \n                                ",
-              "선불"
+              "선불",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "Monthly plan                                    \n                                ",
-              "월 요금제"
+              "월 요금제",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "BYOD (Bring Your Own Device) plan                                    \n                                ",
-              "자급제 요금제"
+              "자급제 요금제",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "Data                                    \n                                ",
-              "데이터"
+              "데이터",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "Contract                                    \n                                ",
-              "약정, 계약"
+              "약정, 계약",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "ID                                    \n                                ",
-              "신분증"
+              "신분증",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "Activate                                    \n                                ",
-              "개통하다"
+              "개통하다",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ],
             [
               "Set up                                    \n                                ",
-              "개통하다, 세팅하다"
+              "개통하다, 세팅하다",
+              "/s/,/z/ + s' (/iz/) 발음 익히기"
             ]
           ]
         },
         {
           "type": "words",
-          "label": "문장 예시 (1타입 긴 문장)",
           "items": [
             [
-              "I'd like to activate a new SIM card for my phone.",
-              "제 휴대폰에 새 유심을 개통하고 싶어요."
+              "I was born and raised in Kyung-ki.",
+              "저는 경기에서 태어나고 자랐습니다.",
+              "Q1. Let’s start the Interview now. Tell me a little about yourself"
             ],
             [
-              "Is there a monthly plan with unlimited data?",
-              "데이터 무제한 월 요금제가 있나요?"
-            ],
-            [
-              "How much does it cost to top up a prepaid plan?",
-              "선불 요금제를 충전하려면 얼마인가요?"
-            ],
-            [
-              "I brought my own device, so I only need a BYOD plan.",
-              "제 기기를 가져와서 자급제 요금제만 있으면 돼요."
+              "I live in a three-bedroom apartment.",
+              "저는 침실이 세 개 있는 아파트에 삽니다.",
+              "Q1. Let’s start the Interview now. Tell me a little about yourself"
             ]
           ]
         }
@@ -444,7 +447,8 @@
             ]
           ]
         }
-      ]
+      ],
+      "descTeacher": "[TG] Have the student read each sentence aloud first, then choose the word that fits the blank."
     },
     {
       "title": "Pattern Practice",
@@ -454,18 +458,9 @@
         {
           "type": "patterns",
           "items": [
-            [
-              "I take",
-              "a shower."
-            ],
-            [
-              "I brush",
-              "my teeth."
-            ],
-            [
-              "I catch",
-              "the bus."
-            ]
+            "<span class=\"tip\">Speaking Tip</span> I take / a shower.",
+            "<span class=\"tip\">Speaking Tip</span> I brush / my teeth.",
+            "<span class=\"tip\">Speaking Tip</span> I catch / the bus."
           ]
         }
       ]
@@ -480,20 +475,8 @@
           "label": "아침 루틴에 대해 이야기해 보세요",
           "items": [
             [
-              "What time do you usually get up on weekdays?",
-              "평일에는 보통 몇 시에 일어나세요?"
-            ],
-            [
-              "Do you eat breakfast every day? Why or why not?",
-              "매일 아침을 드세요? 이유는 무엇인가요?"
-            ],
-            [
-              "What's the hardest part of your morning?",
-              "아침에 가장 힘든 부분은 무엇인가요?"
-            ],
-            [
-              "How do you feel right before you leave home?",
-              "집을 나서기 직전엔 기분이 어떠세요?"
+              "Q1. What time do you usually get up on weekdays?\nQ2. Do you eat breakfast every day? Why or why not?\nQ3. What's the hardest part of your morning?\nQ4. How do you feel right before you leave home?",
+              "Q1. 평일에는 보통 몇 시에 일어나세요?\nQ2. 매일 아침을 드세요? 이유는 무엇인가요?\nQ3. 아침에 가장 힘든 부분은 무엇인가요?\nQ4. 집을 나서기 직전엔 기분이 어떠세요?"
             ]
           ]
         }
@@ -687,20 +670,21 @@
             [
               "What time do you usually wake up on weekdays?",
               "평일에는 보통 몇 시에 일어나세요?",
-              "I usually wake up at (7 AM) on weekdays.",
-              "저는 평일에 보통 (오전 7시)에 일어나요."
+              "A: I usually wake up at (7 AM) on weekdays.",
+              "A: 저는 평일에 보통 (오전 7시)에 일어나요.",
+              "[Model Answer]\nI usually wake up at 6:30 on weekdays because I start work at 8."
             ],
             [
               "What is the first thing you do after waking up?",
               "일어난 후 가장 먼저 하는 일은 무엇인가요?",
-              "The first thing I do is (check my phone).",
-              "일어나서 가장 먼저 하는 일은 (휴대폰을 확인하는 것)이에요."
+              "A: The first thing I do is (check my phone).",
+              "A: 일어나서 가장 먼저 하는 일은 (휴대폰을 확인하는 것)이에요."
             ],
             [
               "Do you think your morning routine is healthy? Why or why not?",
               "당신의 아침 루틴이 건강하다고 생각하세요? 이유는 무엇인가요?",
-              "I think it is (pretty healthy) because (I eat breakfast every day).",
-              "제 아침 루틴은 (꽤 건강하다고) 생각해요, (매일 아침을 먹기) 때문이에요."
+              "A: I think it is (pretty healthy) because (I eat breakfast every day).",
+              "A: 제 아침 루틴은 (꽤 건강하다고) 생각해요, (매일 아침을 먹기) 때문이에요."
             ]
           ]
         }
@@ -727,18 +711,19 @@
           "items": [
             [
               "What time do you usually wake up on weekdays?",
-              "I usually wake up at (7 AM) on weekdays.",
-              "저는 평일에 보통 (오전 7시)에 일어나요."
+              "A: I usually wake up at (7 AM) on weekdays.",
+              "A: 저는 평일에 보통 (오전 7시)에 일어나요.",
+              "[Model Answer]\nI usually wake up at 6:30 on weekdays because I start work at 8."
             ],
             [
               "How long does it take you to get ready in the morning?",
-              "It takes me about (20 minutes) to get ready.",
-              "준비하는 데 약 (20분) 정도 걸려요."
+              "A: It takes me about (20 minutes) to get ready.",
+              "A: 준비하는 데 약 (20분) 정도 걸려요."
             ],
             [
               "What's one thing you'd like to change about your morning routine?",
-              "I'd like to (wake up earlier) in the morning.",
-              "아침에 (더 일찍 일어나고) 싶어요."
+              "A: I'd like to (wake up earlier) in the morning.",
+              "A: 아침에 (더 일찍 일어나고) 싶어요."
             ]
           ]
         }

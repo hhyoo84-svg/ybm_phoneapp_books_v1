@@ -19,18 +19,28 @@
   function number(n) { return '<span class="badge" data-type="number">' + pad(n) + "</span>"; }
   function question(n) { return '<span class="badge" data-type="question">Q' + n + "</span>"; }
   function chip(text) { return text ? '<p class="chip">' + esc(text) + "</p>" : ""; }
-  function translation(text) { return '<p class="book-translation" hidden>' + esc(text) + "</p>"; }
-  function tip(text) { return '<div class="book-tip"><span class="tag">TIP</span><span class="book-tip-text">' + esc(text) + "</span></div>"; }
-  function answerGuide(en, kr) {
-    return '<div class="book-answer-guide" hidden><p class="book-answer-guide-title">답변 가이드</p><p class="book-answer-guide-en">A: ' + esc(en) + '</p><p class="book-answer-guide-kr">A: ' + esc(kr) + "</p></div>";
+  function translation(text) { return text ? '<p class="book-translation rich" hidden>' + rich(text) + "</p>" : ""; }
+  /* TIP : 칸에 TIP 표시(span.tip — 예: Speaking Tip)가 이미 있으면 화면이 TIP 태그를 또 붙이지 않음 */
+  function tip(text) {
+    if (!text) return "";
+    var html = rich(text);
+    return '<div class="book-tip">' + (/rich-tip/.test(html) ? "" : '<span class="tag">TIP</span>') + '<span class="book-tip-text rich">' + html + "</span></div>";
+  }
+  /* 답변 TG (강사 가이드) : 있으면 답변 가이드 아래. 강사 가이드 켜면 노출 */
+  function answerTeacher(text) {
+    return text ? '<div class="book-teacher-guide book-answer-tg" hidden><p class="book-teacher-guide-title">답변 TG</p><p class="book-teacher-guide-text rich">' + rich(text) + "</p></div>" : "";
+  }
+  function answerGuide(en, kr, tg) {
+    return (en ? '<div class="book-answer-guide" hidden><p class="book-answer-guide-title">답변 가이드</p><p class="book-answer-guide-en rich">' + rich(en) + "</p>" +
+      (kr ? '<p class="book-answer-guide-kr rich">' + rich(kr) + "</p>" : "") + "</div>" : "") + answerTeacher(tg);
   }
   function questionCard(n, en, kr, extra, withGuide) {
     return '<div class="book-item book-question">' +
-      '<div class="book-question-row">' + question(n) + '<div class="book-question-body"><p class="book-question-text">' + esc(en) + "</p>" + translation(kr) + "</div></div>" +
+      '<div class="book-question-row">' + question(n) + '<div class="book-question-body"><p class="book-question-text rich">' + rich(en) + "</p>" + translation(kr) + "</div></div>" +
       actions(withGuide ? ["guide", "translate", "listen"] : ["translate", "listen"], "actions-row") + (extra || "") + "</div>";
   }
   function scenarioBox(s) {
-    return '<div class="box book-scenario book-item-unit"><span class="book-box-label">' + esc(s[0]) + '</span><p class="book-read">' + esc(s[1]) + "</p>" + translation(s[2]) + actions(["translate", "listen"], "actions-row") + "</div>";
+    return '<div class="box book-scenario book-item-unit"><span class="book-box-label">' + esc(s[0]) + '</span><p class="book-read rich">' + rich(s[1]) + "</p>" + translation(s[2]) + actions(["translate", "listen"], "actions-row") + "</div>";
   }
   /* 본문 그림 : images/content/ 의 picture.src (원본 비율 그대로, 누르면 크게 보기). src 없으면 레슨 사진 */
   function picture(pic) {
@@ -50,10 +60,14 @@
 
   /* 블록 템플릿 — 키 = block.type. 교재 타입(ybmlms 1–13) 대응은 데이터_매칭.md */
   var RENDER = {
-    words: function (p) {                                            // 1타입 : 항목 중 하나라도 문장이면 블록 전체를 문장 크기 · 한 줄 배치
+    words: function (p) {                                            // 1타입 : 모바일 · 태블릿 모두 1단. 항목 중 하나라도 문장이면 블록 전체를 문장 크기
       var sentence = p.items.some(function (w) { return isSentence(w[0]); });
-      return '<div class="book-list' + (sentence ? ' is-sentence"' : '" data-columns="2"') + ">" + chip(p.label) + p.items.map(function (w, i) {
-        return '<div class="book-item book-word"><div class="book-head">' + number(i + 1) + '<span class="book-word-text rich">' + rich(w[0]) + "</span>" + actions(["translate", "listen"]) + "</div>" +
+      var prev = "";
+      return '<div class="book-list' + (sentence ? " is-sentence" : "") + '">' + chip(p.label) + p.items.map(function (w, i) {
+        // [영문, 해석, 내용 소제목(item_title)] : 같은 소제목이 이어지면 한 묶음 — 묶음 맨 위에 한 번만
+        var sub = w[2] && w[2] !== prev ? '<p class="chip book-word-sub rich">' + rich(w[2]) + "</p>" : "";
+        prev = w[2] || "";
+        return sub + '<div class="book-item book-word"><div class="book-head">' + number(i + 1) + '<span class="book-word-text rich">' + rich(w[0]) + "</span>" + actions(["translate", "listen"]) + "</div>" +
           '<div class="book-indent">' + (w[1] ? '<p class="book-translation rich" hidden>' + rich(w[1]) + "</p>" : "") + "</div></div>";
       }).join("") + "</div>";
     },
@@ -72,20 +86,23 @@
     },
     drills: function (p) {
       return '<div class="book-list">' + p.items.map(function (d, i) {
-        var sentence = esc(d[1]).replace("( )", '<span class="book-blank"></span>');
+        // 3타입 : [문항 소제목, 영문(빈칸 "( )"), 보기입력, 한글해석] — 보기입력은 정답 버튼 없이 바로 노출
         return '<div class="book-item book-drill"><div class="book-head">' + number(i + 1) + chip(d[0]) + actions(["translate", "listen"]) + "</div>" +
-          '<div class="book-indent"><p class="book-sentence">' + sentence + "</p>" + translation(d[3]) + tip(d[2]) + "</div></div>";
+          '<div class="book-indent"><p class="book-sentence rich">' + rich(d[1]) + "</p>" + translation(d[3]) + tip(d[2]) + "</div></div>";
       }).join("") + "</div>";
     },
     patterns: function (p) {
+      // 5타입 : 빈 줄 + Speaking Tip. 항목 = 예문 칸 그대로(문자열) 또는 [예문 앞, 예문 뒤]
       return '<div class="book-list">' + p.items.map(function (t, i) {
         return '<div class="book-item book-pattern"><div class="book-pattern-row">' + number(i + 1) + '<div class="book-pattern-body">' +
-          '<p class="book-sentence book-speakline"><span></span></p>' + tip(t[0] + " / " + t[1]) +
-          '<p class="book-translation book-pattern-answer" hidden>' + esc(t[0] + " " + t[1]) + "</p></div></div></div>";
+          '<p class="book-sentence book-speakline"><span></span></p>' + tip(typeof t === "string" ? t : t[0] + " / " + t[1]) + "</div></div></div>";
       }).join("") + "</div>";
     },
     topics: function (p) {
-      return '<div class="book-section-label">' + chip(p.label) + '</div><div class="book-list">' + p.items.map(function (q, i) { return questionCard(i + 1, q[0], q[1]); }).join("") + "</div>";
+      // 6타입 : 대화 내용 칸 그대로 (질문 번호는 칸에 쓴 대로, 화면 번호 없음)
+      return (p.label ? '<div class="book-section-label">' + chip(p.label) + "</div>" : "") + '<div class="book-list">' + p.items.map(function (q) {
+        return '<div class="book-item book-question book-topic"><p class="book-question-text rich">' + rich(q[0]) + "</p>" + translation(q[1]) + actions(["translate", "listen"], "actions-row") + "</div>";
+      }).join("") + "</div>";
     },
     dialogue: function (p) {                                         // 7타입 : [위치("gray" 왼쪽 · "blue" 오른쪽), 이름, 내용, 해석]
       return '<div class="book-dialogue">' + p.items.map(function (m) {
@@ -96,7 +113,7 @@
       }).join("") + "</div>";
     },
     expressions: function (p) {
-      return '<div class="book-list" data-columns="2">' + p.items.map(function (e, i) {
+      return '<div class="book-list">' + p.items.map(function (e, i) {
         return '<div class="book-item book-word"><div class="book-head">' + number(i + 1) + '<span class="book-word-text">' + esc(e[0]) + "</span>" + actions(["translate", "listen"]) + "</div>" +
           '<div class="book-indent">' + translation(e[1]) + '<p class="book-example">' + esc(e[2]) + "</p>" + translation(e[3]) + "</div></div>";
       }).join("") + "</div>";
@@ -121,15 +138,16 @@
       }).join("") + "</div>" : "");
     },
     respond: function (p) {
-      return scenarioBox(p.scenario) +
-        '<div class="book-list">' + p.items.map(function (q, i) { return questionCard(p.firstQuestion + i, q[0], q[1], answerGuide(q[2], q[3]), true); }).join("") + "</div>";
+      // 12타입 : scenarios = 상황 여러 개(정렬 순서대로) 또는 scenario 1개. items[] = [질문, 질문 해석, 답변가이드, 답변가이드 해석, 답변TG]
+      return (p.scenarios || [p.scenario]).filter(Boolean).map(scenarioBox).join("") + (p.items && p.items.length ?
+        '<div class="book-list">' + p.items.map(function (q, i) { return questionCard(p.firstQuestion + i, q[0], q[1], answerGuide(q[2], q[3], q[4]), !!q[2]); }).join("") + "</div>" : "");
     },
     survey: function (p) {
       return scenarioBox(p.scenario) + (p.picture ? picture(p.picture) : "") +
         '<div class="book-list">' + p.items.map(function (q, i) {
           return '<div class="book-item book-question" data-question="' + esc(q[0]) + '"><div class="book-question-row">' + question(p.firstQuestion + i) +
             '<p class="book-question-text book-question-body is-hidden-question">Listen to the question</p>' +
-            '<button class="book-reveal-btn" type="button" data-reveal>' + icon("eye") + "<span>보기</span></button></div>" + answerGuide(q[1], q[2]) + "</div>";
+            '<button class="book-reveal-btn" type="button" data-reveal>' + icon("eye") + "<span>보기</span></button></div>" + answerGuide(q[1], q[2], q[3]) + "</div>";
         }).join("") + "</div>";
     },
   };
@@ -142,6 +160,7 @@
   B.renderParts = function (main, parts) {
     main.innerHTML = parts.map(function (p, i) {
       return '<section class="book-part" data-part="' + (i + 1) + '" hidden><div class="book-part-body">' +
+        (p.descTeacher ? '<div class="book-teacher-guide book-desc-tg" hidden><p class="book-teacher-guide-title">파트 설명 TG</p><p class="book-teacher-guide-text rich">' + rich(p.descTeacher) + "</p></div>" : "") +
         (p.teacher ? '<div class="book-teacher-guide" hidden><p class="book-teacher-guide-title">강사 가이드</p><p class="book-teacher-guide-text">' + esc(p.teacher) + "</p></div>" : "") +
         (p.blocks || []).map(renderBlock).join("") + "</div></section>";
     }).join("");
@@ -155,8 +174,18 @@
     var b = unit.querySelector('[data-action="translate"]');
     if (b) { b.classList.toggle("is-active", on); b.setAttribute("aria-pressed", on); }
   }
+  /* 13타입 숨김 질문 : 보기 / 숨김 */
+  function setQuestion(unit, shown) {
+    var btn = unit.querySelector("[data-reveal]"), line = unit.querySelector(".book-question-text");
+    if (!btn) return;
+    btn.dataset.shown = shown ? "1" : "";
+    line.textContent = shown ? unit.dataset.question : "Listen to the question";
+    line.classList.toggle("is-hidden-question", !shown);
+    btn.innerHTML = icon(shown ? "eyeOff" : "eye") + "<span>" + (shown ? "숨김" : "보기") + "</span>";
+  }
   function setGuide(unit, on) {
     unit.querySelectorAll(".book-answer-guide").forEach(function (g) { g.hidden = !on; });
+    if (unit.hasAttribute("data-question")) setQuestion(unit, on);            // 13타입 : 가이드 켜면 질문도 함께 노출
     var b = unit.querySelector('[data-action="guide"]');
     if (b) { b.classList.toggle("is-active", on); b.setAttribute("aria-pressed", on); }
   }
@@ -175,17 +204,8 @@
         if (btn.dataset.action === "translate") setTranslation(unit, !btn.classList.contains("is-active"));
         else if (btn.dataset.action === "guide") setGuide(unit, !btn.classList.contains("is-active"));
         else if (btn.dataset.action === "listen") play(btn);
-        else if (btn.hasAttribute("data-reveal")) {
-          var shown = btn.dataset.shown !== "1", line = unit.querySelector(".book-question-text");
-          btn.dataset.shown = shown ? "1" : "";
-          line.textContent = shown ? unit.dataset.question : "Listen to the question";
-          line.classList.toggle("is-hidden-question", !shown);
-          btn.innerHTML = icon(shown ? "eyeOff" : "eye") + "<span>" + (shown ? "숨김" : "보기") + "</span>";
-        }
-        return;
+        else if (btn.hasAttribute("data-reveal")) setQuestion(unit, btn.dataset.shown !== "1");
       }
-      var pattern = e.target.closest(".book-pattern");
-      if (pattern) { var a = pattern.querySelector(".book-pattern-answer"); a.hidden = !a.hidden; }
     });
   };
 
@@ -198,8 +218,7 @@
     } else if (key === "translate") {
       part.querySelectorAll(".book-item, .book-item-unit, .book-message").forEach(function (u) { setTranslation(u, on); });
     } else if (key === "teacher") {
-      var tg = part.querySelector(".book-teacher-guide");
-      if (tg) tg.hidden = !on;
+      part.querySelectorAll(".book-teacher-guide").forEach(function (tg) { tg.hidden = !on; });   // 파트 설명 TG · 파트 TG · 답변 TG
     }
   };
 })(window.Book);

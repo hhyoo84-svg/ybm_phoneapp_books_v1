@@ -34,15 +34,16 @@ window.Book = window.Book || {};
     if (tag === "P" || tag === "DIV") return "\n" + inner + "\n";
     return inner;                                                                  // 그 외 태그 : 글자만
   }
-  B.rich = function (src) {
+  B.rich = function (src, opt) {                                       // opt.hint false : 괄호 속 한글 흐림 안 함 (제목 · 레슨명)
     if (src == null || src === "") return "";
     var t = document.createElement("template");
     t.innerHTML = String(src).replace(/&(emsp|ensp|nbsp|thinsp);/g, " ").replace(/\r\n?/g, "\n");
     var html = [].map.call(t.content.childNodes, cleanNode).join("");
     // 줄 끝 · 줄 앞 공백 제거, 빈 줄은 하나로 합침(간격은 화면이 정함), 빈칸 ( ) · ___ 는 밑줄
-    return html.replace(/[ \t\u00a0\u3000]+\n/g, "\n").replace(/\n[ \t\u00a0]+/g, "\n")
-      .replace(/\n{2,}/g, "\n").replace(/(<span class="rich-note">)\n+/g, "$1").replace(/\n+(<\/span>)/g, "$1")
-      .replace(/\(([^()<>]*[\uac00-\ud7a3][^()<>]*)\)/g, '<span class="rich-hint">($1)</span>').replace(/\(\s*\)/g, '(<span class="book-blank"></span>)').replace(/_{3,}/g, '<span class="book-blank is-wide"></span>')
+    html = html.replace(/[ \t\u00a0\u3000]+\n/g, "\n").replace(/\n[ \t\u00a0]+/g, "\n")
+      .replace(/\n{2,}/g, "\n").replace(/(<span class="rich-note">)\n+/g, "$1").replace(/\n+(<\/span>)/g, "$1");
+    if (!(opt && opt.hint === false)) html = html.replace(/\(([^()<>]*[\uac00-\ud7a3][^()<>]*)\)/g, '<span class="rich-hint">($1)</span>');
+    return html.replace(/\(\s*\)/g, '(<span class="book-blank"></span>)').replace(/_{3,}/g, '<span class="book-blank is-wide"></span>')
       .trim();
   };
 
